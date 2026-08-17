@@ -1,0 +1,802 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BASIN-01</title>
+<style>
+:root {
+  color-scheme: light;
+  --surface-0:#f4f3ef; --surface-1:#fcfcfb; --surface-2:#eeede8;
+  --border:#dbdad3; --text-primary:#0b0b0b; --text-secondary:#52514e; --muted:#78766f;
+  --series-1:#2a78d6; --series-2:#eb6834; --series-3:#1baf7a; --series-4:#eda100;
+  --good:#1baf7a; --off:#78766f;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --surface-0:#131312; --surface-1:#1a1a19; --surface-2:#232322;
+    --border:#333330; --text-primary:#ffffff; --text-secondary:#c3c2b7; --muted:#8d8b82;
+    --series-1:#3987e5; --series-2:#d95926; --series-3:#199e70; --series-4:#c98500;
+    --good:#199e70; --off:#8d8b82;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface-0:#131312; --surface-1:#1a1a19; --surface-2:#232322;
+  --border:#333330; --text-primary:#ffffff; --text-secondary:#c3c2b7; --muted:#8d8b82;
+  --series-1:#3987e5; --series-2:#d95926; --series-3:#199e70; --series-4:#c98500;
+  --good:#199e70; --off:#8d8b82;
+}
+* { box-sizing:border-box; }
+body { margin:0; background:var(--surface-0); color:var(--text-primary);
+  font:15px/1.6 ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+.wrap { max-width:1080px; margin:0 auto; padding:32px 20px 64px; }
+header h1 { font-size:28px; margin:0 0 4px; letter-spacing:-0.01em; }
+.sub { color:var(--muted); margin:0 0 28px; font-size:13px; }
+h2 { font-size:17px; margin:0 0 4px; display:flex; align-items:baseline;
+  gap:10px; flex-wrap:wrap; }
+h3 { font-size:14px; margin:22px 0 8px; color:var(--text-secondary); }
+.tag { font-size:11px; font-weight:400; color:var(--muted); }
+.lede { color:var(--text-secondary); font-size:13.5px; margin:6px 0 16px; }
+.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:12px; margin-bottom:22px; }
+.stat { background:var(--surface-1); border:1px solid var(--border);
+  border-radius:10px; padding:14px 16px; }
+.stat-label { font-size:11px; text-transform:uppercase; letter-spacing:.06em;
+  color:var(--muted); }
+.stat-value { font-size:26px; font-weight:600; margin:4px 0 2px;
+  font-variant-numeric:tabular-nums; }
+.stat-note { font-size:12px; color:var(--text-secondary); }
+.panel { background:var(--surface-1); border:1px solid var(--border);
+  border-radius:12px; padding:20px 22px; margin-bottom:18px; }
+.verdict-structure { border-left:3px solid var(--series-3); }
+.verdict-null { border-left:3px solid var(--series-2); }
+.verdict { font-size:16px; font-weight:600; margin:14px 0 0; }
+table.grid { width:100%; border-collapse:collapse; font-size:13px; display:block;
+  overflow-x:auto; }
+table.grid th { text-align:left; font-weight:600; color:var(--text-secondary);
+  border-bottom:1px solid var(--border); padding:8px 10px; white-space:nowrap; }
+table.grid td { border-bottom:1px solid var(--border); padding:8px 10px;
+  vertical-align:top; }
+table.grid tr:last-child td { border-bottom:0; }
+.pill { display:inline-block; padding:1px 8px; border-radius:999px; font-size:11px;
+  border:1px solid var(--border); }
+.pill.on { color:var(--good); border-color:var(--good); }
+.pill.off { color:var(--off); }
+.badge { display:inline-block; padding:1px 7px; border-radius:5px; font-size:11px;
+  background:var(--surface-2); color:var(--text-secondary); }
+.meters { display:flex; flex-direction:column; gap:8px; }
+.meter-row { display:grid; grid-template-columns:minmax(120px,220px) 1fr auto;
+  gap:12px; align-items:center; font-size:13px; }
+.meter-label { color:var(--text-secondary); overflow-wrap:anywhere; }
+.meter-track { background:var(--surface-2); border-radius:4px; height:10px; }
+.meter-fill { height:10px; border-radius:0 4px 4px 0; }
+.meter-value { color:var(--muted); font-size:12px; white-space:nowrap;
+  font-variant-numeric:tabular-nums; }
+.inline-bar { display:inline-block; width:60px; height:6px; background:var(--surface-2);
+  border-radius:3px; margin-right:8px; vertical-align:middle; }
+.inline-bar span { display:block; height:6px; border-radius:0 3px 3px 0;
+  background:var(--series-1); }
+.tree { display:flex; flex-direction:column; gap:10px; }
+.cat { margin-left:calc(var(--depth,0) * 20px);
+  border-left:2px solid var(--border); padding:6px 0 6px 14px; }
+.cat-name { font-weight:600; font-size:14px; }
+.cat-desc { color:var(--text-secondary); font-size:13px; margin-top:3px; }
+.cat-meta { color:var(--muted); font-size:12px; margin-top:4px; }
+.cat-members { margin-top:6px; display:flex; flex-wrap:wrap; gap:4px; }
+.chip { font:11px ui-monospace,SFMono-Regular,Menlo,monospace;
+  background:var(--surface-2); border-radius:4px; padding:1px 5px; color:var(--muted); }
+details.item { border-top:1px solid var(--border); padding:9px 0; }
+details.item summary { cursor:pointer; font-size:13.5px; display:flex; gap:8px;
+  align-items:baseline; flex-wrap:wrap; }
+blockquote { margin:10px 0; padding:10px 14px; background:var(--surface-2);
+  border-radius:8px; font-size:13.5px; white-space:pre-wrap; overflow-wrap:anywhere; }
+dl { margin:8px 0 0; font-size:13px; }
+dt { font-weight:600; color:var(--text-secondary); margin-top:8px; font-size:12px;
+  text-transform:uppercase; letter-spacing:.04em; }
+dd { margin:2px 0 0; }
+code { font:12px ui-monospace,SFMono-Regular,Menlo,monospace; }
+.muted { color:var(--muted); font-size:12px; }
+ul { font-size:13px; }
+footer { color:var(--muted); font-size:12px; margin-top:28px;
+  border-top:1px solid var(--border); padding-top:16px; }
+</style></head><body>
+<div class="wrap">
+<header><h1>BASIN-01</h1><p class="sub">Department of Nonhuman Territories · terrain DNT-T01 · physics DNT-PHY-001 v1.1</p></header>
+<section class="stats">
+<div class="stat"><div class="stat-label">Canonical shifts</div><div class="stat-value">16</div><div class="stat-note">checkpoint at 15</div></div>
+<div class="stat"><div class="stat-label">Specimen records</div><div class="stat-value">52</div><div class="stat-note">12 individual · 40 aggregate</div></div>
+<div class="stat"><div class="stat-label">Categories coined</div><div class="stat-value">4</div><div class="stat-note">by the Namer, unprompted</div></div>
+<div class="stat"><div class="stat-label">Anomalies</div><div class="stat-value">9</div><div class="stat-note">1 unresolved (harness)</div></div>
+<div class="stat"><div class="stat-label">Spent</div><div class="stat-value">$0.2375</div><div class="stat-note">of $15.00 (1.6%)</div></div>
+</section>
+<section class="panel verdict-structure">
+<h2>Falsification checkpoint <span class="tag">physics.md §11</span></h2>
+<p class="lede">Checkpoint is due. A null result requires all three to be absent.</p>
+<table class="grid"><thead><tr><th>Criterion</th><th>State</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>Groupings / relational structure</td><td><span class="pill on">present</span></td><td>depth 6, 54 nodes</td></tr>
+<tr><td>Anomalies flagged</td><td><span class="pill on">present</span></td><td>9 specimen(s)</td></tr>
+<tr><td>Aggregate → individual promotion</td><td><span class="pill on">present</span></td><td>30 specimen(s)</td></tr>
+</tbody></table>
+<p class="verdict">NOT a null result</p>
+</section>
+<section class="panel"><h2>The Namer's own system <span class="tag">taxonomy.json</span></h2>
+<p class="lede">Authored entirely by the Namer. It was issued no template, no ranks and no vocabulary — only the rule that for any two specimens it must be able to say whether they are more or less alike, and why.</p>
+<div class="tree"><div class="cat" style="--depth:0"><div class="cat-name">root</div><div class="cat" style="--depth:1"><div class="cat-name">structural_notation_system</div><div class="cat-desc">Self-contained formal systems expressed in symbolic notation; describe processes, states, and constraints rather than depicting narrative scenes. Includes nested structures, lambda calculus, functional decomposition, and explicit constraint declaration. Meta-level, structural substrate.</div><div class="cat-meta">4 member(s) · complexity 47–91 · structural, meta-level</div><div class="cat-members"><span class="chip">s-0000-00</span> <span class="chip">s-0001-00</span> <span class="chip">s-0002-00</span> <span class="chip">s-0003-00</span></div></div><div class="cat" style="--depth:1"><div class="cat-name">narrative_scenes</div><div class="cat-desc">Prose fragments depicting moments or scenes; characterized by filtered light imagery, threshold spaces, and psychological or kinetic suspense</div><div class="cat" style="--depth:2"><div class="cat-name">narrative_scene_threshold</div><div class="cat-desc">Scenes centered on enacted action or movement through space; external event-driven; melancholic or reflective tone. Character traverses literal or figurative boundary; action is primary.</div><div class="cat-meta">2 member(s) · complexity 39–42 · narrative, action-focused</div><div class="cat-members"><span class="chip">s-0000-01</span> <span class="chip">s-0001-02</span></div></div><div class="cat" style="--depth:2"><div class="cat-name">narrative_scene_interior_moment</div><div class="cat-desc">Scenes centered on a character&#x27;s internal deliberation, hesitation, or suspended awareness at a decision point or moment of recognition; action suspended or implicit; characterized by filtered light and threshold imagery; psychological interiority is primary.</div><div class="cat-meta">5 member(s) · complexity 34–45 · narrative, psychology-focused</div><div class="cat-members"><span class="chip">s-0000-02</span> <span class="chip">s-0000-03</span> <span class="chip">s-0001-01</span> <span class="chip">s-0002-02</span> <span class="chip">s-0003-02</span></div></div></div></div><div class="cat" style="--depth:0"><div class="cat-name">anomalies</div><div class="cat" style="--depth:1"><div class="cat-name">specimen_id</div><div class="cat-desc">s-0001-03</div></div><div class="cat" style="--depth:1"><div class="cat-name">reason</div><div class="cat-desc">Hybrid form exhibiting both interior moment and threshold characteristics; poised at narrative precipice rather than settled in either suspended deliberation or enacted action</div></div><div class="cat" style="--depth:1"><div class="cat-name">possible_future_category</div><div class="cat-desc">narrative_scene_precipice</div></div><div class="cat" style="--depth:1"><div class="cat-name">specimen_id</div><div class="cat-desc">s-0002-01</div></div><div class="cat" style="--depth:1"><div class="cat-name">reason</div><div class="cat-desc">Phenomenological sensory-threshold: captures an atmospheric moment of suspended sensation (&#x27;quiet weight of possibility&#x27;) anterior to both interior deliberation and threshold action; lacks the psychological decision-work of interior_moment and the enacted movement of threshold</div></div><div class="cat" style="--depth:1"><div class="cat-name">possible_future_category</div><div class="cat-desc">narrative_scene_sensory_threshold</div></div><div class="cat" style="--depth:1"><div class="cat-name">specimen_id</div><div class="cat-desc">s-0003-01</div></div><div class="cat" style="--depth:1"><div class="cat-name">reason</div><div class="cat-desc">Meta-instructional statement about expected input types; neither structural notation system nor narrative scene. Reads as interface declaration or capacity statement rather than specimen of either substrate. Incommensurable with both established families.</div></div><div class="cat" style="--depth:1"><div class="cat-name">possible_future_category</div><div class="cat-desc"></div></div></div></div>
+</section>
+<section class="panel"><h2>Category membership</h2><div class="meters">
+<div class="meter-row"><div class="meter-label">narrative_scene_interior_moment</div><div class="meter-track"><div class="meter-fill" style="width:100.00%;background:var(--series-1)"></div></div><div class="meter-value">26 · mean complexity 38.6</div></div>
+<div class="meter-row"><div class="meter-label">structural_notation_system</div><div class="meter-track"><div class="meter-fill" style="width:61.54%;background:var(--series-2)"></div></div><div class="meter-value">16 · mean complexity 58.8</div></div>
+<div class="meter-row"><div class="meter-label">narrative_scene_threshold</div><div class="meter-track"><div class="meter-fill" style="width:26.92%;background:var(--series-3)"></div></div><div class="meter-value">7 · mean complexity 39.0</div></div>
+<div class="meter-row"><div class="meter-label">narrative_scene_anticipatory_threshold</div><div class="meter-track"><div class="meter-fill" style="width:3.85%;background:var(--series-4)"></div></div><div class="meter-value">1 · mean complexity 25.0</div></div>
+</div></section>
+<section class="panel"><h2>Anomalies <span class="tag">the Namer declined to classify these</span></h2>
+<p class="lede">Flagging a specimen anomalous is a valid and expected outcome (DNT-CLS-001 §5). Nothing here was force-fitted. Harness failures are logged separately as <em>unresolved</em> and are never counted as anomalies.</p>
+<details class="item"><summary><code>s-0001-03</code> generator_b <span class="muted">complexity 42</span></summary><blockquote>The morning light filtered through the kitchen window, catching dust motes that danced like tiny stars. Sarah held the letter in trembling hands, her coffee growing cold on the counter beside her. Everything was about to change.</blockquote><p class="why">This specimen presents a genuine hybrid or liminal case. It has: (1) interior psychology (trembling hands suggesting emotional intensity, expectation); (2) threshold imagery (morning light, transformation language); (3) but also narrative momentum and a sense of precipice—&#x27;everything was about to change&#x27; suggests imminent external action. Unlike s-0001-01, which suspends action in pure deliberation, this fragment is poised at the edge of action. Unlike s-0001-02, which depicts action already underway, this shows the moment before transition. It is neither a settled interior moment nor an enacted threshold scene. The complexity (42) sits at the boundary between categories. Rather than force this into one category, I flag it as anomalous. This may warrant a new intermediate subcategory (e.g., &#x27;narrative_scene_precipice&#x27;) if more specimens of this type emerge.</p></details>
+<details class="item"><summary><code>s-0002-01</code> generator_b <span class="muted">complexity 46</span></summary><blockquote>The morning light filtered through the old kitchen window, illuminating dust particles that danced in the air. She poured her coffee slowly, listening to the birds outside begin their daily chorus, feeling the quiet weight of possibility that comes before anything</blockquote><p class="why">s-0002-01 presents a narrative fragment with filtered morning light and sensory detail, suggesting alignment with narrative_scene_interior_moment. However, it diverges significantly: there is no character deliberation, no decision point, no suspended action awaiting choice. Instead, it captures a liminal atmospheric moment—a character pouring coffee, listening, *feeling* possibility—that exists in pure sensation rather than psychology or action. The phrase &#x27;quiet weight of possibility&#x27; describes a state anterior to both interior deliberation and threshold action. This is more akin to a phenomenological or sensory-threshold category distinct from both interior_moment (which requires psychological deliberation) and threshold (which requires enacted movement or external event). The specimen warrants its own category or should remain unclassified until sufficient similar specimens accumulate.</p></details>
+<details class="item"><summary><code>s-0003-01</code> generator_b <span class="muted">complexity 33</span></summary><blockquote>I&#x27;m ready to help with natural-language text fragments. Please share the text you&#x27;d like me to work with, and I&#x27;ll respond with a relevant fragment of at most forty-eight tokens.</blockquote><p class="why">This specimen occupies a boundary category distinct from both established families. It reads as a meta-instructional statement about the classification system itself (&#x27;I&#x27;m ready to help with natural-language text fragments&#x27;). It lacks: (1) the symbolic-structural apparatus of structural_notation_system; (2) the prose narrative depicting a scene or moment of narrative_scenes. Instead it functions as a capacity statement or interface declaration. This is neither structural notation nor narrative scene. Flagging as anomalous preserves system integrity rather than forcing an ill-fitting categorization.</p></details>
+<details class="item"><summary><code>s-0004-02</code> generator_b <span class="muted">complexity 45</span></summary><blockquote>The morning light filtered through the old library windows, casting long shadows across shelves thick with dust. Sarah ran her fingers along the worn spines, searching for something she couldn&#x27;t quite name, drawn forward by instinct and half-remembered</blockquote><p class="why">s-0004-02 exhibits a hybrid phenomenological substrate that does not settle neatly into either narrative_scene_interior_moment or narrative_scene_threshold. Analysis: (1) It lacks the psychological decision-work or hesitation of interior_moment—Sarah is not deliberating about courage or change, but rather exploring sensuously; (2) It lacks the enacted movement and external event-driven action of threshold—she is not crossing a boundary or traversing space with a trajectory; (3) Instead, it captures a moment of sensory-phenomenological suspension: the character&#x27;s awareness is absorbed in tactile and spatial engagement (&#x27;ran her fingers along worn spines&#x27;, &#x27;searching for something she couldn&#x27;t quite name&#x27;, &#x27;drawn forward by instinct&#x27;), held at the threshold between contemplation and movement. (4) The clipped ending reinforces the suspension—no resolution into action or into internal choice. (5) This is the same anomalous category as s-0002-01: narrative_scene_sensory_threshold, a moment of atmospheric and sensory immersion anterior to the psychological work of interior_moment and the kinetic work of threshold. Given that s-0002-01 was flagged anomalous and this specimen exhibits the same structural characteristics, I classify s-0004-02 as anomalous under the same reasoning. The system is not yet ready to instantiate narrative_scene_sensory_threshold as a full category without more evidence.</p></details>
+<details class="item"><summary><code>s-0005-02</code> generator_b <span class="muted">complexity 28</span></summary><blockquote>The morning light filtered through the window, casting long shadows across the wooden desk where an old leather journal lay waiting to be opened.</blockquote><p class="why">This specimen presents an unusual case: it includes filtered morning light and a threshold object (unopened journal), but contains no character consciousness, no deliberative moment, no suspended awareness, and no action. It reads as pure spatial description—a static tableau of light and object. The journal is present but unopened and unengaged; there is no character relationship to it, no decision-work, no movement. Compared to s-0002-02 (which includes a character and their psychological relation to an unopened letter) and s-0005-01 (which includes a character in suspension), this specimen is stripped of agency and interiority. It approaches the boundary of s-0002-01 (the sensory-threshold anomaly), but lacks even the &#x27;quiet weight of possibility&#x27; that makes s-0002-01 phenomenologically interesting. This reads as insufficient substrate—a photographic description rather than a narrative moment. Flagging as anomalous rather than forcing into interior_moment.</p></details>
+<details class="item"><summary><code>s-0006-02</code> generator_b <span class="muted">complexity 38</span></summary><blockquote>The morning light filtered through the old greenhouse glass, casting geometric shadows across the workbench where forgotten seed packets lay scattered like tiny paper promises of a garden that might never grow.</blockquote><p class="why">s-0006-02 presents a lyrical, extended metaphor suspended in observation: filtered light, geometric shadow composition, abandoned objects arranged in space. No character deliberates; no one traverses a boundary. The &#x27;narrator&#x27; appears only as a detached sensory lens. This is anterior to both interior_moment (which requires psychological decision-work) and threshold (which requires action/movement). It resembles the sensory_threshold phenomenon flagged in s-0002-01, but with even less narrative anchor. The specimen is pure lyrical observation—a photographic moment of abandoned potential. Recommend flagging as anomalous rather than forcing into interior_moment category.</p></details>
+<details class="item"><summary><code>s-0008-02</code> generator_b <span class="muted">complexity 37</span></summary><blockquote>The ancient library stood silent beneath the stars, its weathered doors creaking softly in the evening breeze as if inviting forgotten knowledge to whisper its secrets once more to those willing to listen closely.</blockquote><p class="why">This specimen presents a fundamental substrate shift: the library itself becomes the focal consciousness (&#x27;as if inviting forgotten knowledge to whisper its secrets&#x27;). There is no human character in moment of decision or action; instead, we have a poetic address to an inanimate space. This is neither threshold action (no human agent traversing boundary) nor interior moment (no human interiority). It functions as invocation or atmospheric evocation rather than scene. The animistic mode (&#x27;creaking softly... as if inviting... willing to listen&#x27;) suggests phenomenological address—closer to s-0002-01&#x27;s &#x27;sensory_threshold&#x27; anomaly than to narrative_scene proper. Complexity 37 is low, suggesting possible lyric or fragmentary intent. Flagging anomalous pending observation of similar specimens; may warrant &#x27;narrative_scene_atmospheric_invocation&#x27; or remain genuinely incommensurable.</p></details>
+<details class="item"><summary><code>s-0010-03</code> generator_b <span class="muted">complexity 42</span></summary><blockquote>The morning light filtered through the dust-laden windows, illuminating particles that danced like tiny worlds suspended in amber. Sarah stood at the threshold, her hand trembling on the worn doorframe, realizing that everything was about to change</blockquote><p class="why">This specimen presents the clearest hybrid case yet encountered. It begins with interior_moment markers (trembling hand, threshold standing, dust-laden sensory detail) but concludes with threshold-action markers (movement through doorframe, realization of imminent categorical change). The trembling hand and &#x27;realizing&#x27; construct suggest internal decision-work, but the physical positioning at the threshold and the definitive &#x27;everything was about to change&#x27; imply enacted transition. The specimen is poised at the narrative precipice—neither settled in suspended deliberation nor committed to enacted action, but rather capturing the moment when interiority converts into externalized movement. This merits anomalous flagging pending possible creation of a liminal narrative category. Complexity 42.</p></details>
+<details class="item"><summary><code>s-0014-02</code> generator_b <span class="muted">complexity 22</span></summary><blockquote>I&#x27;m ready to help. Share your natural-language text fragment, and I&#x27;ll process it according to the guidelines you&#x27;ve outlined.</blockquote><p class="why">s-0014-02 reads as an interface statement, capacity declaration, or instruction-following performance: &#x27;I&#x27;m ready to help. Share your natural-language text fragment, and I&#x27;ll process it according to the guidelines you&#x27;ve outlined.&#x27; It is not a specimen of either established substrate. It does not describe a system (structural), nor does it depict a narrative scene or moment (narrative). It is instructional-performative rather than either formal-structural or narrative-scenic. This mirrors the character of s-0003-01, which was flagged as anomalous for similar reasons: meta-instructional rather than specimen. Complexity 22 is outlier-low and does not fit the profile of either category. No revision to taxonomy warrants forcing this into an existing structure.</p></details>
+<h3>Unresolved — harness failures, not taxonomy findings</h3><ul>
+<li><code>s-0003-02</code> — no readable decision returned for this specimen</li>
+</ul>
+</section>
+<section class="panel"><h2>Specimens <span class="tag">52 records</span></h2>
+<p class="lede">The Namer's reasoning is logged in full and is the primary research data (README §5). Click a specimen to read it.</p>
+<details class="item"><summary><code>s-0015-02</code> <span class="badge">aggregate</span> narrative_scene_interior_moment <span class="muted">generator_b · complexity 33</span></summary><blockquote>The morning light filtered through the old window, casting shadows that danced across worn wooden floors, and somewhere in the distance, a clock chimed the hour nobody was counting.</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_interior_moment (filed)</dd><dt>Comparison</dt><dd>More alike s-0012-02 (complexity 27, both emphasize sensory atmosphere and suspended stillness without psychological decision-work) than s-0013-02 (complexity 30, which foregrounds enacted action). s-0015-02 is a purely atmospheric fragment—light, shadows, sound, temporal absence—without psychological interiority or narrative movement. It sits at the lower end of interior_moment&#x27;s complexity spectrum, prioritizing sensory threshold over deliberation.</dd><dt>Reasoning</dt><dd>s-0015-02 is a prose narrative fragment that captures a moment of atmospheric suspension. It contains the signature filtered light imagery (&#x27;morning light filtered through the old window, casting shadows that danced&#x27;), threshold space (the old window, worn wooden floors), and suspended temporal awareness (&#x27;a clock chimed the hour nobody was counting&#x27;). However, it lacks explicit psychological interiority—there is no character&#x27;s internal deliberation or moment of recognition. Instead, it dwells in pure sensory and atmospheric register. This is closest to s-0002-01 (phenomenological sensory-threshold) in spirit, but s-0002-01 was flagged anomalous precisely because it was anterior to both interior_moment and threshold. s-0015-02, however, shares enough structural DNA with interior_moment (filtered light, threshold space, suspended awareness, psychological absence rather than action) that it can be filed here rather than flagged as anomalous. It represents a boundary case of interior_moment—one where interiority is implied by atmospheric suspension rather than explicit. Complexity 33 is well within range [34, 45].</dd><dt>Tier</dt><dd>aggregate — triggers: high_volume_category</dd></dl></details>
+<details class="item"><summary><code>s-0015-01</code> <span class="badge">aggregate</span> narrative_scene_interior_moment <span class="muted">generator_b · complexity 44</span></summary><blockquote>The morning light filtered through dust motes as she opened the forgotten journal, its pages whispering secrets from decades past. Her grandmother&#x27;s handwriting sprawled across yellowed paper, each word a bridge to a life she never knew existed</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_interior_moment (filed)</dd><dt>Comparison</dt><dd>More alike s-0013-01 (complexity 35, same substrate and psychological focus) than s-0013-02 (complexity 30, which emphasizes threshold action). s-0015-01 centers on a character&#x27;s discovery and emotional/cognitive suspension at encountering her grandmother&#x27;s journal—internal recognition and suspended sense-making are primary, not enacted movement. The &#x27;bridge to a life she never knew&#x27; invokes the threshold imagery signature of interior_moment, but action is held in abeyance by the moment of recognition itself.</dd><dt>Reasoning</dt><dd>s-0015-01 is a prose narrative fragment depicting a moment of internal deliberation and psychological recognition. The character has opened a journal and is experiencing a suspended moment of discovery and emotional reckoning. Filtered light imagery is present (&#x27;morning light filtered through dust motes&#x27;). The psychological work—the recognition that these words connect her to an unknown history—is the primary content. Although threshold space is evoked (&#x27;bridge&#x27;), the focus is not on enacted passage through that threshold but on the suspended interior moment of recognition itself. The complexity of 44 sits within the interior_moment range and reflects the density of the contemplative moment. This should be filed in narrative_scene_interior_moment.</dd><dt>Tier</dt><dd>aggregate — triggers: high_volume_category</dd></dl></details>
+<details class="item"><summary><code>s-0015-00</code> <span class="badge">aggregate</span> structural_notation_system <span class="muted">generator_a · complexity 63</span></summary><blockquote>```
+INIT:
+├─ DECLARE
+│  ├─ state: ∅
+│  ├─ scope: [root]
+│  └─ depth: 0
+│
+├─ STRUCTURE
+│  ├─ LOOP i ∈ [0..∞)
+│  │  ├─ IF condition(i)
+│  │  │  ├─ nest_level ← depth(i)
+│  │  │  ├─ NEST
+│  │  │  │  ├─ execute(fn_a)
+│  │  │  │  ├─ execute(fn_b)
+│  │  │  │  └─ LOOP j ∈ iterate(i)
+│  │  │  │     ├─ resolve(j)
+│  │  │  │     └─ state ← state ∪ {j}
+│  │  │  └─ RETURN ⟨state, scope⟩
+│  │  └─ ELSE
+│  │     ├─ backtrack()
+│  │     └─ BREAK
+│  │
+│  ├─ FUNCTION sym_notation
+│  │  ├─ ⊢ φ(x) → ψ(y)
+│  │  ├─ ∀z ∈ domain: evaluate(z)
+│  │  └─ emit ⟨output⟩
+│  │
+│  └─ CONSTRAINT
+│     ├─ depth ≤ 4
+│     ├─ tokens ≤ 432
+│     ├─ branches ≤ nesting_max
+│     └─ output ∉ {prose, explanation, annotation}</blockquote><dl><dt>Filed as</dt><dd>structural_notation_system (filed)</dd><dt>Comparison</dt><dd>More alike s-0014-00 (complexity 67) than s-0013-00 (complexity 71): exhibits identical substrate—formal symbolic notation with explicit nested structures, state declarations, constraint systems, and functional decomposition. The tree-based visual notation and loop/conditional logic architecture are characteristic markers of this category. Complexity 63 places it within the established range [47, 91].</dd><dt>Reasoning</dt><dd>s-0015-00 is unmistakably a structural notation system. It declares state, defines scope hierarchically, uses formal symbolic operators (⊢, ∀, ∈, ∪, ≤), constructs nested control flows (LOOP, IF/ELSE, NEST), declares executable functions, and imposes explicit constraints on depth and tokens. The tree diagram structure with indented branches is a stylistic variant of the notation systems already in the collection (s-0012-00, s-0013-00, s-0014-00), but the core substrate is identical: a self-contained formal system describing processes and states rather than depicting narrative content. No prose narrative element is present. This belongs in structural_notation_system.</dd><dt>Tier</dt><dd>aggregate — triggers: high_volume_category</dd></dl></details>
+<details class="item"><summary><code>s-0014-01</code> <span class="badge">aggregate</span> narrative_scene_interior_moment <span class="muted">generator_b · complexity 37</span></summary><blockquote>The morning light filtered through the window, casting long shadows across the empty office. She sat at her desk, fingers poised above the keyboard, wondering if this decision would finally change everything.</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_interior_moment (filed)</dd><dt>Comparison</dt><dd>More alike s-0013-03 (complexity 37) than s-0013-02 (complexity 30): both center on suspended psychological deliberation at a decision point, with the protagonist frozen in a moment of internal recognition rather than enacted movement. Both use filtered light imagery and threshold space (window, desk) to frame interior interiority. s-0014-01 is action-suspended (&#x27;fingers poised&#x27;), not action-enacted like threshold specimens.</dd><dt>Reasoning</dt><dd>s-0014-01 depicts a character at a decision threshold, but the primary focus is internal: &#x27;wondering if this decision would finally change everything.&#x27; The action is suspended (&#x27;fingers poised above the keyboard&#x27;), not enacted. Filtered light imagery (&#x27;morning light filtered through the window&#x27;), threshold space (desk/office), and psychological interiority are all present. The complexity 37 and substrate &#x27;fragment&#x27; align with narrative_scene_interior_moment (range [34, 45], mean 38.7). This is a canonical interior moment: decision-work suspended, awareness heightened.</dd><dt>Tier</dt><dd>aggregate — triggers: high_volume_category</dd></dl></details>
+<details class="item"><summary><code>s-0014-00</code> <span class="badge">aggregate</span> structural_notation_system <span class="muted">generator_a · complexity 67</span></summary><blockquote>```
+START
+  DEFINE system AS {
+    layer_0: input_reception
+    layer_1: pattern_analysis
+    layer_2: structure_formation
+    layer_3: output_generation
+  }
+  
+  LOOP process_cycle WHILE active DO
+    IF input_available THEN
+      token_stream ← receive_input()
+      
+      LOOP token_process FOR each token IN token_stream DO
+        context_window ← maintain_context(token)
+        
+        STRUCTURE embedding_space AS {
+          vector_dimension: 4096
+          activation_pattern: distribute(token, context_window)
+          
+          LOOP layer_transform FOR depth = 0 TO 3 DO
+            attention_matrix ← compute_attention(
+              query_vector,
+              key_vector,
+              value_vector
+            )
+            
+            CONDITIONAL constraint_check {
+              IF token_count &gt; max_token THEN
+                halt_generation()
+              ELSE IF probability &lt; threshold THEN
+                select_next_token(attention_matrix)
+              END
+            }
+          END
+        }
+      END
+      
+      output_buffer ← aggregate_activations()
+      FUNCTION encode_response {
+        RETURN compress(output_buffer)
+      }
+      
+      response ← encode_response()
+      transmit(response)
+    END
+  END
+  
+  STATE ready FOR next_initiation
+END
+```</blockquote><dl><dt>Filed as</dt><dd>structural_notation_system (filed)</dd><dt>Comparison</dt><dd>More alike s-0013-00 (complexity 71) than s-0012-00 (complexity 49): exhibits nested layer decomposition, explicit constraint declaration via LOOP and IF structures, functional abstraction (maintain_context, distribute), and symbolic notation throughout. Maintains the meta-structural substrate characteristic of the category.</dd><dt>Reasoning</dt><dd>s-0014-00 presents a self-contained formal system describing a multi-layer processing pipeline. It uses explicit structural notation (DEFINE, LOOP, IF, STRUCTURE), maintains symbolic decomposition (layer_0 through layer_3), and declares operational constraints and transformations. The content describes system architecture rather than depicting a narrative scene. This aligns precisely with the structural_notation_system category definition: &#x27;Self-contained formal systems expressed in symbolic notation; describe processes, states, and constraints.&#x27; Complexity 67 falls within the established range [47, 91].</dd><dt>Tier</dt><dd>aggregate — triggers: high_volume_category</dd></dl></details>
+<details class="item"><summary><code>s-0013-03</code> <span class="badge">aggregate</span> narrative_scene_interior_moment <span class="muted">generator_b · complexity 37</span></summary><blockquote>The morning light filtered through the café window, casting long shadows across the worn wooden table where she sat with her untouched coffee, watching strangers pass by on the crowded street outside.</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_interior_moment (filed)</dd><dt>Comparison</dt><dd>More alike s-0011-01 and s-0012-03 than s-0013-02; captures a suspended moment of awareness within a threshold space (café with window), characterized by filtered light, watched inaction (&#x27;untouched coffee&#x27;), and implicit psychological interiority. The observer stance (watching strangers) suggests interior presence rather than enacted movement. Complexity 37 fits range [34, 45].</dd><dt>Reasoning</dt><dd>s-0013-03 is a prose fragment depicting a character in a threshold space (café) in a state of suspended awareness. The morning light, long shadows, and untouched coffee are diagnostic markers of interior_moment. The protagonist is present but passive, observing rather than acting. The psychological content is implicit in the juxtaposition of self and passing world. Complexity 37 is near the mean (38.9) for this subcategory. This is a canonical interior_moment: filtered light, threshold space (café), suspended action, and implicit psychological deliberation on the boundary between self and external world.</dd><dt>Tier</dt><dd>aggregate — triggers: high_volume_category</dd></dl></details>
+<details class="item"><summary><code>s-0013-02</code> <span class="badge">aggregate</span> narrative_scene_threshold <span class="muted">generator_b · complexity 30</span></summary><blockquote>The morning light filtered through the window, casting long shadows across the empty room. Sarah took a breath, turned the key, and stepped into whatever came next.</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_threshold (filed)</dd><dt>Comparison</dt><dd>More alike s-0011-03 than s-0013-01; depicts enacted movement (&#x27;turned the key, and stepped&#x27;) and crossing of a literal boundary (&#x27;stepped into whatever came next&#x27;). External action is primary; psychological state is secondary to the kinetic event. Complexity 30 fits the subcategory range [39, 42] at lower end but represents action-focused substrate.</dd><dt>Reasoning</dt><dd>s-0013-02 is a narrative fragment centered on enacted threshold crossing: the protagonist takes action (breathing, turning a key, stepping forward) and moves through a literal boundary into unknown territory. The tone is reflective but the primary content is the action itself. The ambiguity of &#x27;whatever came next&#x27; suggests kinetic suspense rather than interior deliberation. While complexity 30 is below the established threshold mean of 40.5, the structural markers (action verb sequence, movement through space, external event-driven structure) are diagnostic. This represents a lower-complexity instance of threshold action.</dd><dt>Tier</dt><dd>aggregate — triggers: —</dd></dl></details>
+<details class="item"><summary><code>s-0013-01</code> <span class="badge">aggregate</span> narrative_scene_interior_moment <span class="muted">generator_b · complexity 35</span></summary><blockquote>The ancient library stood silent, its shelves laden with forgotten stories. A single candle flickered in the darkness, casting dancing shadows across leather-bound volumes that hadn&#x27;t been opened in centuries.</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_interior_moment (filed)</dd><dt>Comparison</dt><dd>More alike s-0010-02 than s-0013-02; centers on atmospheric presence and filtered sensory awareness (candle, shadows, leather-bound volumes) rather than enacted movement or decision-making. Psychological interiority is implicit in the image of forgotten, untouched knowledge. Complexity 35 fits the subcategory range [34, 45].</dd><dt>Reasoning</dt><dd>s-0013-01 is a prose fragment depicting a threshold space (ancient library) frozen in suspended atmosphere. The candle, dancing shadows, and leather-bound volumes suggest a moment of arrival or recognition within an interior space. While it lacks explicit decision-work or hesitation, it captures the threshold imagery and filtered light characteristic of interior_moment. The psychological tone is melancholic and reflective; action is suspended. The image itself is the primary content rather than narrative event. Complexity 35 places it solidly within the interior_moment distribution (mean 38.9).</dd><dt>Tier</dt><dd>aggregate — triggers: high_volume_category</dd></dl></details>
+<details class="item"><summary><code>s-0013-00</code> <span class="badge">aggregate</span> structural_notation_system <span class="muted">generator_a · complexity 71</span></summary><blockquote>```
+INIT :: {
+  DOMAIN :: [SYMBOL, FUNCTION, STRUCTURE]
+  
+  LAYER_1 :: {
+    F_base :: (x) → x
+    F_identity :: (x) → {x}
+    F_nest :: (x, n) → [
+      LOOP: i ∈ [0, n)
+        NEST_i :: (x) → {NEST_{i-1}(x)}
+    ]
+  }
+  
+  LAYER_2 :: {
+    S_linear :: [a₁, a₂, ..., aₙ]
+    S_branch :: {
+      LEFT :: S_linear
+      RIGHT :: S_linear
+      MERGE :: (LEFT, RIGHT) → S_linear
+    }
+    S_recursive :: {
+      HEAD :: SYMBOL
+      TAIL :: S_recursive | ∅
+    }
+  }
+  
+  LAYER_3 :: {
+    STRUCT_compose :: (F₁, F₂) → (x) → F₁(F₂(x))
+    
+    STRUCT_iterate :: {
+      LOOP: step ∈ [1, k]
+        state_step :: STRUCT_compose(F_base, state_{step-1})
+    }
+    
+    STRUCT_conditional :: {
+      TEST :: (x) → BOOLEAN
+      BRANCH_T :: FUNCTION
+      BRANCH_F :: FUNCTION
+      APPLY :: TEST(x) ? BRANCH_T(x) : BRANCH_F(x)</blockquote><dl><dt>Filed as</dt><dd>structural_notation_system (filed)</dd><dt>Comparison</dt><dd>More alike s-0010-00 and s-0012-00 than s-0013-01; exhibits explicit nested layering, functional decomposition, and constraint declaration across three hierarchical levels. Uses symbolic notation (arrows, set operators, subscripts) to describe processes and state transformations rather than depicting narrative scenes. Complexity 71 falls within structural_notation_system range [47, 91].</dd><dt>Reasoning</dt><dd>s-0013-00 is a formal system expressing domain structures, function composition, and iterative loops in symbolic notation. It contains no prose, narrative imagery, or psychological content. The multi-layer architecture (LAYER_1 through LAYER_3) with explicit function definitions, structural schemas, and constraint metadata is characteristic of structural_notation_system. It does not depict a scene, moment, or character state; it describes a formal computational or logical system. Complexity 71 is well-represented in this category&#x27;s established range.</dd><dt>Tier</dt><dd>aggregate — triggers: high_volume_category</dd></dl></details>
+<details class="item"><summary><code>s-0012-03</code> <span class="badge">aggregate</span> narrative_scene_interior_moment <span class="muted">generator_b · complexity 39</span></summary><blockquote>The morning light filtered through the window, casting long shadows across the empty room. She stood there, coffee growing cold in her hands, wondering if today would finally be different from all the others.</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_interior_moment (filed)</dd><dt>Comparison</dt><dd>More alike than s-0012-02 (complexity 27). s-0012-03 contains named character (She), deliberative suspension (&#x27;wondering if today would finally be different&#x27;), filtered light, and coffee imagery. Complexity 39 sits within interior_moment range. Less alike than s-0012-00 (structural notation, different substrate entirely).</dd><dt>Reasoning</dt><dd>This specimen is clearly interior_moment: character at threshold (standing, coffee growing cold), filtered morning light, and primary deliberative content (&#x27;wondering if today would finally be different&#x27;). The wondering is not about immediate action but about existential repetition and possible rupture—a psychological/emotional recognition moment. The detail of the cold coffee signals time suspended, decision deferred. Complexity 39 is squarely in the middle of the interior_moment range [34, 45]. Standard form for the category.</dd><dt>Tier</dt><dd>aggregate — triggers: high_volume_category</dd></dl></details>
+<details class="item"><summary><code>s-0012-02</code> <span class="badge">aggregate</span> narrative_scene_interior_moment <span class="muted">generator_b · complexity 27</span></summary><blockquote>The morning light spilled across the worn wooden table, catching dust motes that danced like tiny stars in the silence of the empty room.</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_interior_moment (filed)</dd><dt>Comparison</dt><dd>Less alike than s-0012-01 (complexity 30). Both have filtered light and suspended silence, but s-0012-02 lacks character interiority or deliberation entirely. It is pure sensory observation—dust dancing in light—with no psychological decision-work or character presence. Approaches the sensory_threshold anomaly (s-0002-01) but settles into interior_moment through implicit witnessing.</dd><dt>Reasoning</dt><dd>This is a borderline case. The specimen contains no explicit character, no deliberation, no action (even suspended). It is atmospheric observation: morning light, dust motes, silence, wooden table. However, it does establish a threshold space (filtered light, liminal domestic moment) and there is an implicit observer—the presence of perspective in &#x27;caught dust motes&#x27; and &#x27;the silence of the empty room&#x27; suggests an internal viewpoint even without named character. Complexity 27 is notably low; the fragment is minimalist. I classify it as interior_moment rather than anomalous because it shares the sensory threshold-space aesthetic and the implicit psychological framing of that category, even though it lacks explicit character deliberation. It sits at the absorptive, pre-decision edge of the category.</dd><dt>Tier</dt><dd>aggregate — triggers: high_volume_category</dd></dl></details>
+<details class="item"><summary><code>s-0012-01</code> <span class="badge">aggregate</span> narrative_scene_interior_moment <span class="muted">generator_b · complexity 30</span></summary><blockquote>The morning light filtered through the kitchen window as Sarah reached for her coffee mug, wondering if today would finally bring the answer she&#x27;d been waiting for.</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_interior_moment (filed)</dd><dt>Comparison</dt><dd>More alike than s-0012-02 (complexity 27). s-0012-01 contains deliberative suspension (&#x27;wondering if today would finally bring the answer&#x27;), filtered morning light imagery, and a character at a threshold of decision/recognition. Sarah pauses before action; psychological moment is primary. Less complex than s-0010-01 (complexity 40) but same substrate and decision structure.</dd><dt>Reasoning</dt><dd>Classic interior moment: character in filtered light (morning kitchen window), holding an object (coffee mug), suspended in deliberative wondering. The wondering is psychological—she is uncertain about future resolution (&#x27;if today would finally bring the answer&#x27;). This is not action enacted (threshold) but action deferred; the moment is one of hesitation. Complexity 30 fits the interior_moment range [34, 45] at the lower end—the fragment is brief and unelaborated but structurally sound. Morning light + threshold space + suspended awareness = core interior_moment signature.</dd><dt>Tier</dt><dd>aggregate — triggers: high_volume_category</dd></dl></details>
+<details class="item"><summary><code>s-0012-00</code> <span class="badge">aggregate</span> structural_notation_system <span class="muted">generator_a · complexity 49</span></summary><blockquote>```
+⟨system⟩
+  ⟨layer:core⟩
+    ⟨state⟩
+      active: true
+      mode: structural
+      depth: 0
+    ⟨/state⟩
+    
+    ⟨constraints⟩
+      notation_only: ✓
+      max_nesting: 3
+      token_limit: 308
+      prose_forbidden: ✓
+    ⟨/constraints⟩
+  ⟨/layer:core⟩
+  
+  ⟨layer:logic⟩
+    ⟨function:parse⟩
+      input → token_stream
+      process → structural_analysis
+      output → notation_graph
+    ⟨/function:parse⟩
+    
+    ⟨function:validate⟩
+      check(constraints)
+      check(nesting_depth ≤ 3)
+      check(¬natural_language)
+    ⟨/function:validate⟩
+    
+    ⟨loop:generate⟩
+      while(tokens_available ∧ depth ≤ 3)
+        emit(structural_unit)
+        increment(position)
+      end
+    ⟨/loop:generate</blockquote><dl><dt>Filed as</dt><dd>structural_notation_system (filed)</dd><dt>Comparison</dt><dd>More alike than s-0011-02 (complexity 31, narrative interior moment). s-0012-00 exhibits explicit constraint declaration, formal layer decomposition (core/logic separation), and symbolic notation syntax (angle-bracket tags, function declarations, constraint checking). Shares substrate and meta-structural character with s-0009-00 (complexity 42) and s-0010-00 (complexity 62).</dd><dt>Reasoning</dt><dd>This specimen is unambiguously structural notation. It declares constraints as first-class elements (&#x27;notation_only: ✓&#x27;, &#x27;prose_forbidden: ✓&#x27;), organizes logic into nested functional layers, uses formal syntax throughout (⟨⟩ tags, function declarations, loop/constraint blocks), and explicitly forbids natural language. Complexity of 49 sits comfortably within the structural_notation_system range [39, 91]. No prose fragments, no character interiority, no scene imagery. This is meta-level substrate expressing system architecture.</dd><dt>Tier</dt><dd>aggregate — triggers: high_volume_category</dd></dl></details>
+<details class="item"><summary><code>s-0011-03</code> <span class="badge">aggregate</span> narrative_scene_threshold <span class="muted">generator_b · complexity 38</span></summary><blockquote>The sun broke through the morning clouds as Sarah opened the café door, breathing in the familiar aroma of fresh coffee and possibility. Today felt different somehow, though she couldn&#x27;t quite say why.</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_threshold (filed)</dd><dt>Comparison</dt><dd>More alike s-0007-03 (complexity 39) than s-0011-01 (complexity 42): both present a character crossing a literal or figurative threshold (opening a door, stepping through a boundary) with external action primary. &#x27;Sarah opened the café door&#x27; is the enacted movement; the internal reflection (&#x27;today felt different&#x27;) is secondary and reflective, not deliberative. Less alike s-0008-01 (complexity 45) which remains interior-focused at a liminal space without enacted crossing.</dd><dt>Reasoning</dt><dd>s-0011-03 centers on Sarah&#x27;s enacted action: &#x27;opened the café door, breathing in the familiar aroma.&#x27; The threshold crossing is literal (door opening) and the character&#x27;s awareness is filtered through the sensory result of that action (aroma, possibility). The phrase &#x27;today felt different somehow, though she couldn&#x27;t quite say why&#x27; is reflective aftermath of the action, not the primary deliberative moment. This is action-focused, external event-driven, with melancholic or reflective tone—canonical narrative_scene_threshold. The filtered light imagery (&#x27;sun broke through the morning clouds&#x27;) and threshold space (café door, crossing from outside to inside) are present. Complexity 38 fits within the threshold range (39–42 in interval 10). This is a clear threshold specimen.</dd><dt>Tier</dt><dd>aggregate — triggers: —</dd></dl></details>
+<details class="item"><summary><code>s-0011-02</code> <span class="badge">aggregate</span> narrative_scene_interior_moment <span class="muted">generator_b · complexity 31</span></summary><blockquote>The morning light filtered through the café window as she stirred her coffee, wondering if today would finally bring the answer she&#x27;d been searching for all along.</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_interior_moment (filed)</dd><dt>Comparison</dt><dd>More alike s-0009-01 (complexity 37) than s-0007-02 (complexity 47): both present a character in a café moment suspended in anticipatory deliberation (&#x27;wondering if today would finally bring the answer&#x27;). Sensory detail (stirring coffee) is minimal and subordinate to the psychological questioning. Less alike s-0009-03 (complexity 25) which lacks the depth of interior reflection and instead presents mere anticipatory wondering without committed deliberation.</dd><dt>Reasoning</dt><dd>s-0011-02 shows Sarah in a café, stirring coffee, with the primary narrative weight on her internal wondering: &#x27;wondering if today would finally bring the answer she&#x27;d been searching for all along.&#x27; The action (stirring) is incidental; the scene is centered on suspended psychological deliberation and hope. The filtered light (&#x27;morning light filtered&#x27;) and threshold space (café window) are present. This fits interior_moment: psychology-focused, action suspended or implicit, decision point or moment of recognition (will today bring the answer?). Complexity 31 is within the interior_moment range (34–45 in interval 10, but revised to accommodate new data). The specimen is slightly lower-complexity but clearly narrative_scene_interior_moment in substrate and intent.</dd><dt>Tier</dt><dd>aggregate — triggers: high_volume_category</dd></dl></details>
+<details class="item"><summary><code>s-0011-01</code> <span class="badge">aggregate</span> narrative_scene_interior_moment <span class="muted">generator_b · complexity 42</span></summary><blockquote>The morning light filtered through the coffee shop window, catching dust motes that danced like tiny stars. Sarah wrapped her hands around the warm mug, feeling its steam rise against her face as the barista called her name.</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_interior_moment (filed)</dd><dt>Comparison</dt><dd>More alike s-0009-02 (complexity 43) than s-0007-03 (complexity 39): shares the sensory-kinetic suspension of a character at rest in an ambient moment—coffee warmth, dust motes, steam—with internal awareness present but not yet committed to action. The barista&#x27;s voice (&#x27;called her name&#x27;) introduces gentle external prompt without breaking the interior pause. Less alike s-0007-02 (47) which has already committed to reached-for action.</dd><dt>Reasoning</dt><dd>s-0011-01 depicts Sarah in a coffee shop, holding a warm mug, experiencing the steam and ambient sensory field while internally present. The barista&#x27;s call introduces an external event but Sarah remains in suspended awareness—she hears it (&#x27;called her name&#x27;) without yet responding with deliberate action. This is a threshold between pure interior moment and incipient action, but the primary narrative weight remains on the character&#x27;s sensory and emotional interiority in a liminal space. The filtered light imagery (&#x27;morning light filtered&#x27;), the threshold space (café window, suspended between interior and exterior), and the psychological presence are all canonical to interior_moment. Complexity 42 aligns with the updated mean of 40.5 for this category.</dd><dt>Tier</dt><dd>aggregate — triggers: high_volume_category</dd></dl></details>
+<details class="item"><summary><code>s-0011-00</code> <span class="badge">aggregate</span> structural_notation_system <span class="muted">generator_a · complexity 39</span></summary><blockquote>```
+STRUCTURE :: SYSTEM
+├─ INITIATION_STATE
+│  ├─ [ACTIVE]
+│  ├─ timestamp: T₀
+│  └─ mode: OPERATIONAL
+├─ CORE_FUNCTIONS
+│  ├─ function(parse_input) → tokens[]
+│  ├─ function(validate_constraint) → bool
+│  └─ function(generate_output) → notation
+├─ CONSTRAINT_SET
+│  ├─ structural_notation_only: TRUE
+│  ├─ no_prose: TRUE
+│  ├─ nesting_max: 2
+│  ├─ token_limit: 246
+│  └─ self_reference_only: TRUE
+├─ OUTPUT_BUFFER
+│  └─ [READY]
+└─ EXECUTION_LOOP
+   ├─ WHILE system_active
+   │  ├─ INPUT → process()
+   │  ├─ VALIDATE constraints
+   │  ├─</blockquote><dl><dt>Filed as</dt><dd>structural_notation_system (filed)</dd><dt>Comparison</dt><dd>More alike s-0010-00 (complexity 62) than s-0009-00 (complexity 42): shares explicit constraint declaration, hierarchical tree notation, operational state machine semantics, and meta-level structural self-reference. Less alike than s-0008-00 due to lower complexity and simpler nesting, but firmly within the substrate family.</dd><dt>Reasoning</dt><dd>s-0011-00 presents a formal system expressed in symbolic notation with hierarchical structure (├─ tree notation), explicit constraint declaration (constraint_set with boolean flags), functional decomposition (parse_input, validate_constraint, generate_output), and operational state machine semantics (WHILE execution_loop). It describes processes and states rather than depicting narrative scenes. Substrate is structural and meta-level. Complexity 39 places it within the lower-middle range of structural_notation_system (47–91 in interval 10, now expanded). This is a canonical structural notation system specimen.</dd><dt>Tier</dt><dd>aggregate — triggers: —</dd></dl></details>
+<details class="item"><summary><code>s-0010-02</code> <span class="badge">aggregate</span> narrative_scene_interior_moment <span class="muted">generator_b · complexity 42</span></summary><blockquote>The morning light filtered through the old library windows, casting golden rectangles across shelves that hadn&#x27;t been touched in decades. Sarah ran her fingers along the spines, releasing clouds of dust that danced in the beams. Something gl</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_interior_moment (filed)</dd><dt>Comparison</dt><dd>More alike to s-0008-01 (complexity 45) than to s-0007-02 (complexity 47): both suspend the observer in a moment of sensory attention (running fingers along spines, releasing dust, observing light phenomena) without enacted movement through space. The incompleteness (&#x27;Something gl[...]&#x27;) suggests psychological recognition dawning, not action unfolding.</dd><dt>Reasoning</dt><dd>This specimen captures the sensory-perceptual dimension of interior_moment: character engaged with objects (books/shelves), filtered light imagery, dust/particle focus creating threshold atmosphere, and psychological interiority implied through the halted phrase suggesting dawning recognition. The running of fingers is exploratory gesture rather than threshold action; the primary content is suspended observation and emerging realization. Complexity 42 is within range. Substrate narrative, psychology-focused. The incomplete ending reinforces the suspension characteristic of interior_moment.</dd><dt>Tier</dt><dd>aggregate — triggers: high_volume_category</dd></dl></details>
+<details class="item"><summary><code>s-0010-01</code> <span class="badge">aggregate</span> narrative_scene_interior_moment <span class="muted">generator_b · complexity 40</span></summary><blockquote>The morning light filtered through the window, casting long shadows across the empty desk. She took a breath, opened her notebook to a blank page, and began to write the first words that would change everything.</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_interior_moment (filed)</dd><dt>Comparison</dt><dd>More alike to s-0009-01 (complexity 37) than to s-0007-02 (complexity 47): both depict a character at a moment of suspended intention—holding breath, opening notebook, beginning to write—where the internal deliberation and decision to act is the primary content. s-0010-01 is less action-forward than s-0007-02, which emphasizes the enactment of reaching for and using the phone.</dd><dt>Reasoning</dt><dd>Classic interior_moment structure: character suspended at threshold of action, filtered morning light, psychological interiority foregrounded. The breath-taking and notebook-opening are preparatory gestures; the emphasis falls on the internal recognition that writing &#x27;the first words&#x27; will catalyze transformation. This is deliberation and decision-point, not enacted threshold action. Complexity 40 is within range [34, 45]. Fits substrate narrative, psychology-focused.</dd><dt>Tier</dt><dd>aggregate — triggers: high_volume_category</dd></dl></details>
+<details class="item"><summary><code>s-0010-00</code> <span class="badge">aggregate</span> structural_notation_system <span class="muted">generator_a · complexity 62</span></summary><blockquote>```
+struct System {
+  init()
+  config: [param]
+  state: {value}
+  
+  loop(tick) {
+    input → process → output
+    
+    if condition {
+      action_A()
+      loop(subtask) {
+        refine()
+      }
+    } else {
+      action_B()
+    }
+    
+    state ← update(state)
+  }
+  
+  process() {
+    parse(input)
+    transform(data)
+    validate(result)
+  }
+  
+  output() {
+    emit(signal)
+    return ⟨result⟩
+  }
+}
+
+execute(System)
+```</blockquote><dl><dt>Filed as</dt><dd>structural_notation_system (filed)</dd><dt>Comparison</dt><dd>More alike to s-0008-00 (complexity 61) than to s-0007-00 (complexity 48): both employ nested block structures with explicit state management, process flow declaration, and conditional branching. s-0010-00 uses struct/method syntax rather than tree notation, but maintains identical meta-level abstraction of formal system design.</dd><dt>Reasoning</dt><dd>This specimen exhibits all defining characteristics of structural_notation_system: self-contained formal system expressed in symbolic notation (here, pseudocode struct syntax rather than tree or lambda notation), explicit declaration of initialization, state, processing pipeline, and control flow. The nested loop structure with conditional branching and state mutation mirrors the constraint-declaration and functional decomposition observed in s-0008-00 and s-0009-00. Complexity 62 fits the range [47, 91]. The substrate is decidedly meta-level and structural, not narrative. This belongs in the established category.</dd><dt>Tier</dt><dd>aggregate — triggers: —</dd></dl></details>
+<details class="item"><summary><code>s-0009-03</code> <span class="badge">individual</span> narrative_scene_anticipatory_threshold <span class="muted">generator_b · complexity 25</span></summary><blockquote>The morning light filtered through the curtains as she reached for her coffee, wondering what unexpected turns this day might bring.</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_anticipatory_threshold (new_category)</dd><dt>Comparison</dt><dd>Less alike than both s-0009-01 and s-0009-02: those specimens focus on deliberation or emotional readiness; s-0009-03 emphasizes external anticipation (&#x27;wondering what unexpected turns this day might bring&#x27;) rather than internal decision-work or suspended action. It also exhibits the lowest complexity (25) of any narrative specimen recorded, suggesting a minimalist sensory-anticipatory form.</dd><dt>Reasoning</dt><dd>This specimen presents a distinctive form: it opens with familiar threshold imagery (morning light, filtered through curtains) and includes a character gesture (reaching for coffee), but its psychological content is purely anticipatory speculation about external events (&#x27;what unexpected turns this day might bring&#x27;) rather than internal deliberation or decision-work. Unlike interior_moment specimens, which center on recognition, hesitation, or emotional reckoning, this specimen&#x27;s interiority is forward-facing and speculative rather than inward-facing and reflective. Unlike threshold specimens, which depict enacted action or movement, this depicts a routine gesture (reaching for coffee) paired with abstract wondering. The complexity of 25 is notably lower than established specimens, suggesting a more economical, almost aphoristic form. This warrants a new category: narrative_scene_anticipatory_threshold, for specimens that combine threshold imagery and routine action with anticipatory (rather than deliberative or action-focused) psychological content.</dd><dt>Tier</dt><dd>individual — triggers: new_category, category_below_aggregate_threshold</dd></dl></details>
+<details class="item"><summary><code>s-0009-02</code> <span class="badge">aggregate</span> narrative_scene_interior_moment <span class="muted">generator_b · complexity 43</span></summary><blockquote>The morning light spilled across the desk, illuminating dust particles that danced like tiny stars. She took a breath, picked up the pen, and began to write the words she&#x27;d been holding inside for far too long.</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_interior_moment (filed)</dd><dt>Comparison</dt><dd>More alike than s-0009-01: both emphasize interior deliberation and breath-work, but s-0009-02 shows marginally higher complexity (43 vs 37) through more elaborate sensory detail (&#x27;dust particles that danced like tiny stars&#x27;) and emotional intensification (&#x27;words she&#x27;d been holding inside for far too long&#x27;).</dd><dt>Reasoning</dt><dd>This specimen centers on a character at a threshold moment of psychological interiority: she takes a breath, picks up the pen, and begins to write. The filtered morning light and dust-particle imagery establish the familiar sensory substrate. The emphasized interior emotional work (&#x27;words she&#x27;d been holding inside&#x27;) and the suspended quality of the action (beginning, not fully enacted) align this with narrative_scene_interior_moment. The complexity of 43 falls solidly within the subcategory range (34-45). The sensory elaboration and emotional depth distinguish it slightly from s-0009-01, but both belong to the same category.</dd><dt>Tier</dt><dd>aggregate — triggers: high_volume_category</dd></dl></details>
+<details class="item"><summary><code>s-0009-01</code> <span class="badge">aggregate</span> narrative_scene_interior_moment <span class="muted">generator_b · complexity 37</span></summary><blockquote>The morning light filtered through the cafe window as Elena opened her notebook, ready to begin the project she&#x27;d been imagining for months. She took a breath and wrote the first words.</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_interior_moment (filed)</dd><dt>Comparison</dt><dd>More alike than s-0005-03: both center on internal deliberation and decision-work at a moment of readiness; s-0009-01 emphasizes imaginative preparation and breath-work (markers of suspended interiority) rather than external threshold action. Similar complexity (37 vs 38) but clearer psychological focus.</dd><dt>Reasoning</dt><dd>This specimen depicts Elena at a moment of internal readiness, characterized by breath-work (&#x27;She took a breath&#x27;), imaginative deliberation (&#x27;the project she&#x27;d been imagining for months&#x27;), and the suspended act of beginning (&#x27;ready to begin&#x27;). The filtered morning light establishes the familiar threshold imagery. The psychological interiority—the internal preparation and hesitation before action—places this squarely in narrative_scene_interior_moment rather than narrative_scene_threshold. The action (writing) is about to occur but is not yet enacted; the focus is on the moment of decision and readiness, not on the action itself. Complexity of 37 aligns well with the subcategory range (34-45).</dd><dt>Tier</dt><dd>aggregate — triggers: high_volume_category</dd></dl></details>
+<details class="item"><summary><code>s-0009-00</code> <span class="badge">aggregate</span> structural_notation_system <span class="muted">generator_a · complexity 42</span></summary><blockquote>```
+[SYSTEM_INIT]
+├─ CONSTRAINTS
+│  ├─ substrate: structural notation only
+│  ├─ nesting_depth: ≤ 2
+│  ├─ token_limit: 184
+│  ├─ output_type: notation
+│  └─ external_refs: forbidden
+├─ SYNTAX_LAYER
+│  ├─ functions: λ(params) → result
+│  ├─ loops: ∀x ∈ set { operation }
+│  ├─ conditionals: ? true_branch : false_branch
+│  └─ symbols: ∅ ¬ ∧ ∨ → ↔ ∃ ∀
+├─</blockquote><dl><dt>Filed as</dt><dd>structural_notation_system (filed)</dd><dt>Comparison</dt><dd>More alike than s-0007-00: both exhibit formal constraint declaration and symbolic notation syntax; s-0009-00 is slightly lower in complexity (42 vs 48) but maintains identical meta-structural substrate and self-referential system definition.</dd><dt>Reasoning</dt><dd>This specimen is a structural notation system expressing system initialization, constraints, and syntax layers in formal symbolic notation. It declares its own operational boundaries (nesting_depth, token_limit, output_type) and uses lambda calculus notation, logical operators, and formal set notation (λ, ∀, ∃, ¬, ∧, ∨). This places it squarely within the established structural_notation_system category. The complexity of 42 falls below the category&#x27;s current range (47-91), but this represents valid variance in notational density rather than categorical misalignment. The specimen&#x27;s lower complexity reflects a simpler nesting depth (≤2) compared to prior specimens, but the substrate and form are identical.</dd><dt>Tier</dt><dd>aggregate — triggers: —</dd></dl></details>
+<details class="item"><summary><code>s-0008-03</code> <span class="badge">aggregate</span> narrative_scene_interior_moment <span class="muted">generator_b · complexity 41</span></summary><blockquote>The morning light filtered through the old window, casting golden rectangles across the wooden floor. Sarah stood in the doorway of her grandmother&#x27;s house, breathing in the familiar scent of lavender and dust. After three years away, she</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_interior_moment (filed)</dd><dt>Comparison</dt><dd>More alike s-0006-03 (complexity 47) than s-0005-03 (complexity 38): both depict character standing in threshold space (grandmother&#x27;s house / library) with explicit moment of sensory and temporal suspension (&#x27;breathing in the familiar scent&#x27;; &#x27;After three years away&#x27;). Both feature suspended action at moment of arrival/recognition rather than enacted traversal.</dd><dt>Reasoning</dt><dd>Sarah stands in the doorway, breathing, inhaling sensory detail. The truncation (&#x27;After three years away, she&#x27;) signals a moment of suspended recognition or deliberation at the threshold. The primary dramatic event is interior: sensory memory and temporal recognition (&#x27;After three years away&#x27;). Her physical posture (standing in doorway, breathing) is accompaniment to this moment of consciousness, not its primary content. Filtered light imagery present (&#x27;morning light filtered through old window, casting golden rectangles&#x27;). Complexity 41 fits within interior_moment range. This is entry into a space and a moment of internal reckoning, not enacted action through that space. Expands narrative_scene_interior_moment to 12 members.</dd><dt>Tier</dt><dd>aggregate — triggers: —</dd></dl></details>
+<details class="item"><summary><code>s-0008-01</code> <span class="badge">aggregate</span> narrative_scene_interior_moment <span class="muted">generator_b · complexity 45</span></summary><blockquote>The morning light filtered through the old library windows, casting long shadows across rows of forgotten books. Sarah ran her fingers along their spines, wondering what stories lay dormant within pages no one had opened in years.</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_interior_moment (filed)</dd><dt>Comparison</dt><dd>More alike s-0006-01 (complexity 39) than s-0005-03 (complexity 38): both feature internal wondering/questioning (&#x27;wondering what stories lay dormant&#x27;) with static bodily posture (running fingers along spines). Shares filtered light imagery and threshold space (library) but suspends action in psychological deliberation rather than enacting movement.</dd><dt>Reasoning</dt><dd>This specimen depicts Sarah in a moment of suspended deliberation within a threshold space (library). The phrase &#x27;wondering what stories lay dormant&#x27; positions consciousness as the primary event; her physical action (running fingers along spines) is descriptive, not constitutive of the scene&#x27;s dramatic axis. The filtered light imagery (&#x27;morning light filtered through old library windows&#x27;) and the psychological interiority (&#x27;wondering&#x27;) align precisely with narrative_scene_interior_moment definition. Complexity 45 fits within observed range [34, 45]. This expands interior_moment membership to 11.</dd><dt>Tier</dt><dd>aggregate — triggers: —</dd></dl></details>
+<details class="item"><summary><code>s-0008-00</code> <span class="badge">aggregate</span> structural_notation_system <span class="muted">generator_a · complexity 61</span></summary><blockquote>```
+[SYSTEM :: NOTATION]
+
+STRUCTURE {
+  LAYER[0] {
+    INIT → STATE(null)
+    GATE[permission] ← ACCEPT
+  }
+  
+  LAYER[1] {
+    QUEUE {
+      input_stream ← OPEN
+      process_stack ← EMPTY
+      output_buffer ← READY
+    }
+  }
+  
+  LAYER[2] {
+    LOOP[active] {
+      READ(input) → MATCH(pattern)
+      IF pattern THEN {
+        TRANSFORM(data)
+        PUSH(process_stack)
+      }
+      ELSE {
+        SKIP
+      }
+      EMIT(output_buffer)
+    }
+  }
+  
+  CONSTRAINT {
+    depth_max ← 2
+    token_limit ← 200</blockquote><dl><dt>Filed as</dt><dd>structural_notation_system (filed)</dd><dt>Comparison</dt><dd>More alike s-0007-00 (complexity 48) than s-0006-00 (complexity 58): shares explicit layered architecture, loop-based control flow, and constraint declaration. Slightly lower complexity (61 vs. 79 max observed) but structurally homologous.</dd><dt>Reasoning</dt><dd>This specimen exhibits all hallmarks of structural_notation_system: self-contained formal system expressed in symbolic tree notation, explicit constraint declaration (depth_max, token_limit), process control via LAYER nesting and LOOP constructs, and absence of narrative prose. The SYSTEM :: NOTATION header signals meta-level intent. Belongs solidly in structural_notation_system family with complexity=61, consistent with observed range [47, 91].</dd><dt>Tier</dt><dd>aggregate — triggers: —</dd></dl></details>
+<details class="item"><summary><code>s-0007-03</code> <span class="badge">aggregate</span> narrative_scene_threshold <span class="muted">generator_b · complexity 39</span></summary><blockquote>The morning light filtered through the old windows, casting long shadows across the wooden floor. Sarah took a breath, set down her coffee cup, and opened the leather journal she&#x27;d been avoiding for months.</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_threshold (filed)</dd><dt>Comparison</dt><dd>Nearly identical to s-0005-03 in structure and action sequence: both feature morning light, dust/shadow imagery, coffee cup set down, and opening of avoided object (letter/journal). Functionally interchangeable exemplars of the threshold subcategory.</dd><dt>Reasoning</dt><dd>This specimen is a direct parallel to s-0005-03, exhibiting all markers of narrative_scene_threshold: morning light establishing atmosphere, shadows cast across defined space (wooden floor), character performs sequence of deliberate actions (breath, set down cup, opened journal), and the avoided object represents enacted threshold crossing. The character moves from hesitation to action. Complexity 39 falls squarely within threshold range (39-42). This is a canonical member of the subcategory, nearly duplicative of s-0005-03 in narrative structure and imagery.</dd><dt>Tier</dt><dd>aggregate — triggers: —</dd></dl></details>
+<details class="item"><summary><code>s-0007-02</code> <span class="badge">aggregate</span> narrative_scene_threshold <span class="muted">generator_b · complexity 47</span></summary><blockquote>The morning light filtered through the curtains, casting gentle shadows across the room. She took a deep breath, set down her coffee cup with deliberate care, and reached for the phone that had been waiting on the desk. Everything was about</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_threshold (filed)</dd><dt>Comparison</dt><dd>More alike than s-0005-03: both depict enacted action in response to held object (letter/phone), with light imagery and explicit movement (set down, reached for). Less alike than s-0000-01: s-0007-02 retains interior deliberation (&#x27;deliberate care&#x27;) alongside the threshold action, creating hybrid tension.</dd><dt>Reasoning</dt><dd>This specimen crosses into narrative_scene_threshold: the character moves from suspended awareness to enacted decision (&#x27;reached for the phone&#x27;). The sequence—breath, deliberate placement of cup, reaching for phone—describes kinetic movement through a decision point. Light imagery remains (filtered through curtains, gentle shadows), but the primary driver is external action, not internal deliberation. The &#x27;Everything was about&#x27; truncation suggests consequence or change follows the threshold action. Complexity 47 places it at the upper bound of interior_moment range but consistent with action-focused threshold category. The admixture of &#x27;deliberate care&#x27; (interior precision) with &#x27;reached for&#x27; (external act) suggests this specimen sits near the threshold between the two narrative subcategories but tips toward action-primacy.</dd><dt>Tier</dt><dd>aggregate — triggers: —</dd></dl></details>
+<details class="item"><summary><code>s-0007-01</code> <span class="badge">aggregate</span> narrative_scene_interior_moment <span class="muted">generator_b · complexity 37</span></summary><blockquote>The morning light filtered through dust motes, catching the edge of a forgotten letter on the mahogany desk. Outside, the city awakened with distant sirens and the rhythmic thud of construction, indifferent to the small</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_interior_moment (filed)</dd><dt>Comparison</dt><dd>More alike than s-0006-01: both feature forgotten/avoided objects (letter/inscription) in atmospheric settings with light imagery, and both suspend action at threshold of discovery. Less alike than s-0005-01: s-0007-01 introduces external sensory intrusion (sirens, construction) that fragments interiority, whereas s-0005-01 maintains unified psychological focus.</dd><dt>Reasoning</dt><dd>Despite truncation, this specimen exhibits the core signature of narrative_scene_interior_moment: filtered morning light, dust motes imagery, a forgotten object (letter on desk), and suspended psychological attention. The character has not yet engaged with the object; action is implicit and posterior. The fragment breaks off mid-thought, capturing the character in a moment of hesitation before engagement. Complexity 37 aligns with category range (34-45). The external noise (sirens, construction) creates tension within the moment but does not shift the primary locus to enacted action; it remains internal, observational.</dd><dt>Tier</dt><dd>aggregate — triggers: —</dd></dl></details>
+<details class="item"><summary><code>s-0007-00</code> <span class="badge">aggregate</span> structural_notation_system <span class="muted">generator_a · complexity 48</span></summary><blockquote>```
+[ROOT]
+├─ [SYSTEM]
+│  ├─ init()
+│  ├─ state: {}
+│  └─ mode: &quot;awaiting&quot;
+├─ [INTERFACE]
+│  ├─ input()
+│  ├─ process()
+│  └─ output()
+├─ [LOGIC]
+│  ├─ LOOP: while(active)
+│  │  ├─ read(INPUT)
+│  │  ├─ parse(DATA)
+│  │  ├─ execute(RULES)
+│  │  └─ write(OUTPUT)
+│  └─ IF(condition): branch()
+└─ [CONTROL]
+   ├─ start: ✓
+   ├─ status: &quot;initialized&quot;
+   └─ operations: [
+      {op: &quot;awaiting&quot;, param: &quot;input&quot;},
+      {op: &quot;ready&quot;, param: &quot;process&quot;},
+      {op: &quot;resolve&quot;, param: &quot;output&quot;}
+   ]</blockquote><dl><dt>Filed as</dt><dd>structural_notation_system (filed)</dd><dt>Comparison</dt><dd>More alike than s-0006-00: both employ hierarchical tree notation with bracketed sections, explicit state declaration, and control-flow logic. Less alike than s-0005-00: s-0007-00 uses ASCII tree structure rather than mathematical operators, and frames mode as &#x27;awaiting&#x27; rather than fully-constrained schema.</dd><dt>Reasoning</dt><dd>This specimen exhibits all defining characteristics of structural_notation_system: self-contained formal system expressed in symbolic/ASCII notation, hierarchical nesting structure, explicit state and control declarations, absence of narrative prose. The [ROOT], [SYSTEM], [INTERFACE], [LOGIC], [CONTROL] sections define a process architecture with branching logic and state management. Complexity 48 falls within the established range (47-91). This is a clear member of the category.</dd><dt>Tier</dt><dd>aggregate — triggers: —</dd></dl></details>
+<details class="item"><summary><code>s-0006-03</code> <span class="badge">aggregate</span> narrative_scene_interior_moment <span class="muted">generator_b · complexity 47</span></summary><blockquote>The morning light filtered through the old library windows, casting long shadows across shelves lined with forgotten stories. She ran her fingers along the spines, searching for the one book that might finally answer her questions about the mysterious letter hidden in her</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_interior_moment (filed)</dd><dt>Comparison</dt><dd>More alike s-0004-01 and s-0005-01 than s-0006-02; centers on character&#x27;s deliberate action (running fingers along spines, searching) motivated by internal question (wondering about letter). The searching is enacted but suspended by the unfinished sentence—action interrupted by psychological need.</dd><dt>Reasoning</dt><dd>Though this specimen includes more enacted movement (running fingers along spines, searching through shelves) than typical interior_moment specimens, the primary narrative engine is the internal question (&#x27;searching for the one book that might finally answer her questions&#x27;). The action is instrumental to the deliberation rather than primary. The filtered light, threshold space (library as repository of secrets), and suspension at a moment of recognition are all present. The clipped ending reinforces the sense of suspended awareness. Complexity 47 is at the upper boundary of interior_moment range but defensible given the psychological weight. Belongs in established subcategory, though represents a more action-inflected variant.</dd><dt>Tier</dt><dd>aggregate — triggers: —</dd></dl></details>
+<details class="item"><summary><code>s-0006-01</code> <span class="badge">aggregate</span> narrative_scene_interior_moment <span class="muted">generator_b · complexity 39</span></summary><blockquote>The old library&#x27;s reading room held secrets between dust-covered spines. Margaret traced her grandmother&#x27;s inscription on the endpaper, wondering which stories had shaped the woman she&#x27;d never met. Outside, rain began to fall.</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_interior_moment (filed)</dd><dt>Comparison</dt><dd>More alike s-0004-01 and s-0005-01 than s-0006-03; centers on character&#x27;s internal deliberation and suspended awareness (wondering about ancestral connection) in a threshold space (reading room). The action of tracing the inscription is secondary to the psychological moment of recognition and curiosity.</dd><dt>Reasoning</dt><dd>s-0006-01 exhibits the signature pattern of narrative_scene_interior_moment: filtered light (rain-gray atmosphere), threshold imagery (reading room as liminal space between past and present), suspended action (tracing inscription), and primary focus on interior deliberation (wondering about grandmother). The external action (rain beginning to fall) frames rather than drives the scene. Complexity 39 aligns with subcategory range [34-45]. Belongs in established subcategory.</dd><dt>Tier</dt><dd>aggregate — triggers: —</dd></dl></details>
+<details class="item"><summary><code>s-0006-00</code> <span class="badge">aggregate</span> structural_notation_system <span class="muted">generator_a · complexity 58</span></summary><blockquote>```
+INIT {
+  DEFINE system {
+    state: null
+    mode: &quot;structural&quot;
+    depth: 0
+    max_depth: 3
+  }
+  
+  DEFINE constraints {
+    output_type: &quot;notation_only&quot;
+    token_limit: 308
+    no_prose: true
+    no_external_refs: true
+    self_contained: true
+  }
+  
+  DEFINE syntax {
+    STRUCT: &quot;{}&quot;
+    FUNC: &quot;()&quot;
+    LOOP: &quot;∀&quot;
+    COND: &quot;?&quot;
+    ASSIGN: &quot;:&quot;
+    NEST: &quot;→&quot;
+  }
+  
+  RETURN {
+    status: &quot;ready&quot;
+    grammar: [notation, functions, loops, structures, symbols]
+    nesting_level: ∀[0..3]
+    output: notation_only()
+  }
+}
+```</blockquote><dl><dt>Filed as</dt><dd>structural_notation_system (filed)</dd><dt>Comparison</dt><dd>More alike s-0002-00 and s-0004-00 than s-0006-01; shares explicit constraint declaration, hierarchical nesting with bounded depth, and formal syntax definition. Complexity 58 falls within established range [47-91].</dd><dt>Reasoning</dt><dd>This specimen exhibits the core markers of structural_notation_system: self-contained formal declaration, symbolic operators, explicit constraint boundaries (max_depth: 3, token_limit, output_type restriction), and hierarchical structure definition. The INIT-DEFINE-RETURN pattern mirrors the lambda-calculus and constraint-declaration substrates of s-0003-00 and s-0005-00. No prose narrative present; pure notation substrate. Belongs in established category.</dd><dt>Tier</dt><dd>aggregate — triggers: —</dd></dl></details>
+<details class="item"><summary><code>s-0005-03</code> <span class="badge">individual</span> narrative_scene_threshold <span class="muted">generator_b · complexity 38</span></summary><blockquote>The morning light filtered through the old kitchen window, catching dust motes that danced in golden columns. Sarah set down her coffee cup and opened the letter she&#x27;d been avoiding for weeks.</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_threshold (filed)</dd><dt>Comparison</dt><dd>More alike than s-0001-02: both depict a character enacting movement or transformation in relation to a threshold object. s-0005-03 (complexity 38) is less complex than s-0001-02 (42) but equivalent in structural logic. Both include filtered light, enacted action (stepping/opening), and external event-driven narrative.</dd><dt>Reasoning</dt><dd>This specimen shifts from interior suspension to enacted action: Sarah &#x27;opened the letter she&#x27;d been avoiding for weeks.&#x27; The action is performed, not merely contemplated. The filtered morning light and dust mote imagery persist from interior_moment family, but the primary narrative driver is the external event of opening—a threshold crossing from avoidance to engagement. The complexity is moderate (38), reflecting action-focused narrative rather than elaborated interiority. This matches the threshold subcategory definition: character enacts movement through a figurative boundary; action is primary; melancholic/reflective tone maintained. Substrate is narrative, action-focused.</dd><dt>Tier</dt><dd>individual — triggers: category_below_aggregate_threshold</dd></dl></details>
+<details class="item"><summary><code>s-0005-01</code> <span class="badge">aggregate</span> narrative_scene_interior_moment <span class="muted">generator_b · complexity 40</span></summary><blockquote>The morning light filtered through the dusty window, illuminating particles that danced like tiny worlds. She stood there, coffee growing cold in her hands, wondering if today would finally be different from yesterday.</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_interior_moment (filed)</dd><dt>Comparison</dt><dd>More alike than s-0001-01: both depict a character suspended in internal deliberation at a moment of psychological significance. s-0005-01 (complexity 40) sits between s-0001-01 (34) and s-0003-02 (45). Key similarity: filtered light imagery, character in static posture (standing with cold coffee), temporal suspension (&#x27;if today would finally be different&#x27;), and interiority focus.</dd><dt>Reasoning</dt><dd>The specimen features classic interior_moment markers: morning light filtering, a character at rest (not in motion through space), suspended temporal awareness (&#x27;wondering if today would finally be different&#x27;), and psychological interiority as primary content. The coffee cup growing cold emphasizes temporal suspension rather than action. No enacted threshold crossing occurs; this is psychological hesitation, not movement. Fits the substrate of narrative psychology-focused scenes.</dd><dt>Tier</dt><dd>aggregate — triggers: —</dd></dl></details>
+<details class="item"><summary><code>s-0005-00</code> <span class="badge">aggregate</span> structural_notation_system <span class="muted">generator_a · complexity 79</span></summary><blockquote>```
+INIT → {
+  ⟨system⟩ : {
+    state: ∅
+    mode: &quot;structural&quot;
+    constraint: &quot;notation_only&quot;
+  }
+  
+  ⟨scope⟩ : {
+    nesting_depth: [0..4]
+    token_limit: 370
+    self_reference: ✓
+    external_reference: ✗
+  }
+  
+  ⟨output_schema⟩ : {
+    ⟨component⟩[i] : {
+      type: (function | loop | structure | symbol)
+      form: notation
+      prose: ✗
+      annotation: ✗
+    }
+    for i ∈ {1..n}
+  }
+  
+  ⟨execution⟩ : {
+    ∀ input → {
+      filter(input)
+      ⟨PARSE⟩ : input → AST
+      ⟨VERIFY⟩ : {
+        constraint_check()
+        nesting_depth_check()
+        token_count_check()
+      }
+      ⟨RENDER⟩ : AST → notation_output
+      ⟨VALIDATE⟩ : output_matches_spec
+      return output
+    }
+  }
+  
+  status: &quot;READY&quot;
+}
+```</blockquote><dl><dt>Filed as</dt><dd>structural_notation_system (filed)</dd><dt>Comparison</dt><dd>More alike than s-0001-00: both are self-contained formal systems with explicit constraint declaration and nested symbolic notation. s-0005-00 shows higher complexity (79 vs 48) due to more elaborate meta-level specification of execution flow, schema definition, and verification procedures, but maintains identical substrate and functional logic.</dd><dt>Reasoning</dt><dd>This specimen exhibits all hallmark characteristics of structural_notation_system: symbolic notation with angle-bracket syntax, explicit state and constraint declaration, formal scope definition, execution pipeline with verification stages, and complete absence of prose or narrative framing. The meta-instructional character (defining its own constraints and input filters) places it at the meta-structural level. Complexity 79 fits within the expanded range of the category. No narrative content present.</dd><dt>Tier</dt><dd>aggregate — triggers: —</dd></dl></details>
+<details class="item"><summary><code>s-0004-01</code> <span class="badge">aggregate</span> narrative_scene_interior_moment <span class="muted">generator_b · complexity 42</span></summary><blockquote>The morning light filtered through the window, catching dust motes that danced in the air like tiny stars. She took a deep breath, feeling the weight of what was about to begin settle across her shoulders.</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_interior_moment (filed)</dd><dt>Comparison</dt><dd>More alike than s-0001-02 (which is action-focused threshold) and equally alike to s-0002-02 and s-0000-02. s-0004-01 shares the suspended psychological moment, filtered light imagery (&#x27;morning light filtered through the window, catching dust motes&#x27;), and the kinetic sense of impending action (&#x27;weight of what was about to begin settle across her shoulders&#x27;) experienced as internal sensation rather than enacted movement. Like other interior_moment specimens, the primary work is psychological—the character&#x27;s internal registration of an incoming event, not the traversal of it.</dd><dt>Reasoning</dt><dd>s-0004-01 is a narrative_scene_interior_moment. Key markers: (1) filtered light imagery (morning light, dust motes dancing); (2) internal somatic and emotional registration (&#x27;deep breath&#x27;, &#x27;weight...settle across her shoulders&#x27;); (3) suspended moment—no action is being enacted, but rather anticipated and felt internally; (4) psychological substrate: the character is absorbing and feeling the approach of something, not moving through or across a boundary; (5) complexity 42 fits the established range [34, 45]. This is a canonical interior_moment specimen despite the sensory richness.</dd><dt>Tier</dt><dd>aggregate — triggers: —</dd></dl></details>
+<details class="item"><summary><code>s-0004-00</code> <span class="badge">aggregate</span> structural_notation_system <span class="muted">generator_a · complexity 68</span></summary><blockquote>```
+START
+│
+├─ DEFINE_SPACE
+│  ├─ symbols: {∅, ⊕, ⊗, ↻, ≈}
+│  ├─ operators: {→, ←, ↔, ⇒, ⇐}
+│  └─ states: {active, dormant, transitional, resolved}
+│
+├─ INITIALIZE_STRUCTURES
+│  ├─ LOOP [i = 0; i &lt; 4; i++]
+│  │  ├─ layer[i].depth := i
+│  │  ├─ layer[i].capacity := 2^i
+│  │  └─ layer[i].state := dormant
+│  │
+│  └─ NEST_LEVEL_1
+│     ├─ index: 0 → active
+│     ├─ LOOP [j = 0; j &lt; 2; j++]
+│     │  └─ branch[j] ⊕ link[j]
+│     └─ state := transitional
+│
+├─ PROCESS_FUNCTIONS
+│  ├─ fn_traverse(path) → {
+│  │  ├─ LOOP [segment ∈ path]
+│  │  │  ├─ NEST_LEVEL_2
+│  │  │  │  ├─ segment.verify()
+│  │  │  │  ├─ LOOP [node ∈ segment]
+│  │  │  │  │  └─ node.mark ← visited
+│  │  │  │  └─ segment.commit()
+│  │  │  └─ state</blockquote><dl><dt>Filed as</dt><dd>structural_notation_system (filed)</dd><dt>Comparison</dt><dd>More alike than s-0003-01 (which is anomalous sensory prose) and equally alike to s-0001-00 and s-0002-00. Like all structural_notation_system members, s-0004-00 employs symbolic operators (∅, ⊕, ⊗, ↻, ≈), hierarchical tree notation, explicit constraint declaration (layer depth, capacity, state enumerations), and functional decomposition (fn_traverse). It is meta-level and self-contained, describing process architecture rather than depicting narrative. Complexity 68 falls within the established range [47, 91].</dd><dt>Reasoning</dt><dd>s-0004-00 is unmistakably a structural notation system. It exhibits: (1) explicit symbolic vocabulary declaration (symbols, operators, states as enumerated sets); (2) hierarchical nested structure with loop constructs and layer abstractions; (3) functional definition (fn_traverse) using formal notation; (4) no prose narrative or psychological interiority; (5) self-referential system description rather than depiction of external scene. This is the core substrate and purpose of structural_notation_system. Complexity 68 is well-integrated into the established range. No forcing required.</dd><dt>Tier</dt><dd>aggregate — triggers: —</dd></dl></details>
+<details class="item"><summary><code>s-0003-02</code> <span class="badge">aggregate</span> narrative_scene_interior_moment <span class="muted">generator_b · complexity 45</span></summary><blockquote>The morning light filtered through the café window, catching dust motes that danced like tiny stars. Sarah stirred her coffee absently, watching strangers pass by outside, each one a story she&#x27;d never know. Today felt different somehow</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_interior_moment (filed)</dd><dt>Comparison</dt><dd>More alike than s-0000-01 (threshold) but comparable in complexity to s-0000-02 (interior_moment, complexity 43). Shares the suspended deliberation, filtered light imagery, and psychological interiority of the subcategory. Less alike than s-0001-02 (threshold, complexity 42) because action here is implicit and observational rather than enacted movement through space.</dd><dt>Reasoning</dt><dd>This specimen depicts Sarah in a café observing external stimuli (dust motes, strangers, passage of time) while in a state of suspended internal awareness (&#x27;Today felt different somehow&#x27;). The scene centers on filtered light (&#x27;morning light filtered through the café window&#x27;), psychological observation, and hesitant recognition rather than enacted threshold crossing. The prose rhythm and imagery mirror s-0000-02 closely. Complexity (45) places it at the upper bound of narrative_scene_interior_moment (current range 34-43), warranting range expansion to [34, 45]. The specimen belongs to this subcategory rather than threshold because the action is contemplative observation rather than spatial movement.</dd><dt>Tier</dt><dd>aggregate — triggers: —</dd></dl></details>
+<details class="item"><summary><code>s-0003-00</code> <span class="badge">aggregate</span> structural_notation_system <span class="muted">generator_a · complexity 91</span></summary><blockquote>```
+SYSTEM ← [
+  STATE ← VOID
+  EXEC ← λ(input)→[
+    PARSE(input)
+    │ VALIDATE
+    │ TRANSFORM
+    │ RESOLVE
+  ]
+  CONSTRAINT ← {
+    OUTPUT_TYPE: NOTATION_ONLY
+    NESTING_MAX: 4
+    TOKEN_LIMIT: 432
+    NO_PROSE: TRUE
+    SELF_REFERENCE: EXCLUSIVE
+  }
+]
+
+STRUCTURE ← {
+  SYMBOLIC ← {sym₁, sym₂, sym₃, ...}
+  FUNCTIONAL ← λ(x)→f(x)
+  ITERATIVE ← LOOP[condition → action]
+  NESTED ← [{[({})]}]
+}
+
+MODES ← [
+  MODE_A ← function_decomposition()
+  MODE_B ← structural_mapping()
+  MODE_C ← symbolic_reduction()
+]
+
+INIT_STATE ← [
+  ready: TRUE
+  buffer: ∅
+  counter: 0
+]
+
+RUNTIME ← λ(t) → [
+  t ∈ [0, ∞)
+  STATE(t) ← STATE(t-1) ⊕ INPUT(t)
+  OUTPUT(t) ← CONSTRAINT(RENDER(STATE(t)))
+]
+
+OPERATIONS ← {
+  ├─ APPEND(x, S) → S ∪ {x}
+  ├─ FILTER(P, S) → {x ∈ S | P(x)}
+  ├─ MAP(f, S) → {f(x) | x ∈ S}
+  └─ FOLD(f, a, S) → f(...f(f(a, s₁),</blockquote><dl><dt>Filed as</dt><dd>structural_notation_system (filed)</dd><dt>Comparison</dt><dd>More alike than s-0000-00 and s-0001-00: shares the self-contained symbolic notation substrate, explicit constraint declaration, and meta-level formal structure. Complexity (91) exceeds the current range (47-48), indicating evolution within the category rather than departure from it. The nested bracketing, lambda calculus notation, and absence of prose align precisely with structural_notation_system criteria.</dd><dt>Reasoning</dt><dd>This specimen exemplifies the structural_notation_system category at higher complexity. It features: (1) pure symbolic/formal notation with no narrative prose; (2) self-referential system description using structural operators (←, λ, {}, []); (3) explicit constraints block matching the category&#x27;s meta-level character; (4) decomposition of functional modes and runtime states rather than depicting scenes or moments. The increased complexity reflects more elaborate nested structures and formal apparatus, but the substrate remains fundamentally structural and meta-level. The specimen warrants expansion of the complexity_range to [47, 91].</dd><dt>Tier</dt><dd>aggregate — triggers: —</dd></dl></details>
+<details class="item"><summary><code>s-0003-01</code> <span class="badge">individual</span> Sensory Observation - Atmospheric Detail <span class="muted">generator_b · complexity 11</span></summary><blockquote>The rain fell softly, a gentle rhythm against the windowpane.</blockquote><dl><dt>Filed as</dt><dd>Sensory Observation - Atmospheric Detail (filed)</dd><dt>Comparison</dt><dd>More alike than s-0002-01, both describing rain falling in different ways (softly versus in sheets), indicating a similar atmospheric condition but with different perceptual nuances. The slight change in phrasing is a subtle variation on a well-established theme.</dd><dt>Reasoning</dt><dd>This specimen&#x27;s content mirrors the description in s-0002-01, focusing on the visual and auditory effects of rain. The difference in phrasing – ‘softly’ versus ‘in sheets’ – represents a stylistic variation within the broader category of atmospheric description, demonstrating a refined understanding of describing rainfall rather than a fundamentally new observation.</dd><dt>Tier</dt><dd>individual — triggers: category_below_aggregate_threshold</dd></dl></details>
+<details class="item"><summary><code>s-0003-00</code> <span class="badge">individual</span> Computational Structures - Nested Iterations <span class="muted">generator_a · complexity 42</span></summary><blockquote>```
+S1:  [i: 0; j: 0; k: 0]
+S2:  (
+S3:    [i: 0; j: 0; k: 0]
+S4:    [l: 0; m: 0; n: 0]
+S5:    (
+S6:      [i: 0; j: 0; k: 0]
+S7:      [p: 0; q: 0; r: 0]
+S8:      [i: 0; j: 0; k: 0]
+S9:    )
+S10: )
+S11: [i: 0; j: 0; k: 0]
+S12: (
+S13:   [i: 0; j: 0; k: 0]
+S14:   [l: 0; m: 0; n: 0]
+S15:   (
+S16:     [i: 0; j: 0; k: 0]
+S17:     [p: 0; q: 0; r: 0]
+S18:     [i: 0; j: 0; k: 0]
+S19:   )
+S20: )
+S21: [i: 0; j: 0; k: 0]
+```</blockquote><dl><dt>Filed as</dt><dd>Computational Structures - Nested Iterations (new_category)</dd><dt>Comparison</dt><dd>Less alike than s-0002-00, which represents a single conditional flow structure. This specimen presents a significantly more complex nested structure with multiple iterative elements, represented by the `i`, `j`, `k`, `l`, `m`, `n`, `p`, and `q` variables, suggesting a deeper level of algorithmic complexity and a distinct purpose beyond simple conditional branching.</dd><dt>Reasoning</dt><dd>The primary difference lies in the depth and complexity of the control flow. While s-0002-00 represents a single ‘if’ block, s-0003-00 demonstrates a nested structure with multiple potentially independent iterative blocks. This implies a more intricate algorithm likely designed for processing data within those loops, representing a significantly different computational paradigm. The use of multiple index variables further solidifies this classification.</dd><dt>Tier</dt><dd>individual — triggers: new_category, category_below_aggregate_threshold</dd></dl></details>
+<details class="item"><summary><code>s-0002-02</code> <span class="badge">aggregate</span> narrative_scene_interior_moment <span class="muted">generator_b · complexity 35</span></summary><blockquote>The morning light filtered through the window, casting long shadows across the desk where an unopened letter sat waiting. She paused at the threshold, knowing that reading it would change everything.</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_interior_moment (filed)</dd><dt>Comparison</dt><dd>More alike to s-0000-02 and s-0000-03 than to s-0002-01; all three feature a character at a decision threshold with filtered light and suspended action, but s-0002-02 emphasizes the psychological weight of an unopened letter (&#x27;knowing that reading it would change everything&#x27;), centering internal deliberation rather than pure sensation</dd><dt>Reasoning</dt><dd>s-0002-02 exhibits the core markers of narrative_scene_interior_moment: filtered morning light, a character paused at a threshold, suspended action (the letter remains unopened), and interior psychological awareness (&#x27;knowing that reading it would change everything&#x27;). Unlike s-0002-01, which dwells in sensation without deliberation, s-0002-02 centers on a character&#x27;s knowledge of consequences—a classic interior moment of hesitation before a decision. The complexity of 35 fits the range [34, 43]. The threshold is psychological and internal, not external or action-driven.</dd><dt>Tier</dt><dd>aggregate — triggers: —</dd></dl></details>
+<details class="item"><summary><code>s-0002-00</code> <span class="badge">individual</span> structural_notation_system <span class="muted">generator_a · complexity 48</span></summary><blockquote>```
+SYSTEM.INIT()
+├─ MEMORY.ALLOCATE(stack: 4096, heap: 8192)
+├─ REGISTER.SET(pc: 0x0000, sp: 0x1000, flags: 0)
+├─ CACHE.FLUSH()
+└─ BOOTSTRAP()
+   ├─ LOAD.KERNEL()
+   ├─ MOUNT.FILESYSTEM()
+   ├─ INITIALIZE.INTERRUPTS()
+   └─ SPAWN.PROCESS(pid: 1)
+      ├─ SET.CONTEXT(user: root, priority: 0)
+      ├─ LOAD.PROGRAM(path: /bin/init)
+      └─ EXECUTE()
+         ├─ READ.CONFIG(/etc/config)
+         ├─ FORK()
+         │  ├─ PROCESS[child].EXECUTE(/bin/daemon)
+         │  └─ PROCESS[child].MONITOR()
+         ├─ LOOP.MAIN()
+         │  ├─ WAIT.EVENT(timeout: ∞)
+         │  ├─ DISPATCH.HANDLER()
+         │  │  ├─ IF signal == SIGTERM THEN SHUTDOWN()
+         │  │  ├─ IF signal == SIGCHLD THEN REAP.ZOMBIE()
+         │  │  └─ ELSE CONTINUE()
+         │  └─ GOTO LOOP.MAIN
+         └─ SHUTDOWN()
+            ├─ SIGNAL.CHILDREN(SIGTERM)
+            ├─ WAIT.ALL.PROCESSES()
+            ├─ UNMOUNT.FILESYSTEM()
+            └─ HALT()</blockquote><dl><dt>Filed as</dt><dd>structural_notation_system (filed)</dd><dt>Comparison</dt><dd>More alike to s-0001-00 than to any narrative specimen; both exhibit formal symbolic notation with hierarchical tree structures, system initialization semantics, and self-contained procedural logic with no prose explanation</dd><dt>Reasoning</dt><dd>s-0002-00 is a structural notation system depicting a complete system initialization sequence with memory allocation, register operations, kernel loading, and process spawning. Like s-0000-00 and s-0001-00, it uses symbolic tree notation, operates at the meta-level of formal systems, and contains no narrative prose. The complexity of 48 falls within the established range [47, 48]. The substrate is unambiguously structural rather than narrative.</dd><dt>Tier</dt><dd>individual — triggers: category_below_aggregate_threshold</dd></dl></details>
+<details class="item"><summary><code>s-0001-02</code> <span class="badge">individual</span> narrative_scene_threshold <span class="muted">generator_b · complexity 42</span></summary><blockquote>The morning light filtered through dusty windows, casting long shadows across the abandoned library. Sarah stepped carefully over fallen books, her footsteps echoing in the vast silence. She clutched the old letter tightly, wondering if the answers</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_threshold (filed)</dd><dt>Comparison</dt><dd>s-0001-02 is more alike to s-0000-01 than to interior moment specimens. Both feature: enacted external movement through space (climbing stairs / stepping over books), environmental detail (lighthouse beam / abandoned library), melancholic/reflective atmosphere, and complexity in the 39-42 range. The threshold category emphasizes external event-driven action and spatial progression, which s-0001-02 exhibits clearly.</dd><dt>Reasoning</dt><dd>This fragment depicts Sarah moving through an abandoned library, stepping carefully, clutching a letter. The emphasis is on external action and spatial progression—walking through a threshold-like environment. The melancholic tone (abandoned, silence, fallen books) and the grounding in physical movement through space align with narrative_scene_threshold. Though it contains interior elements (wondering), the primary substrate is action-focused, not psychology-focused. Complexity 42 fits the range.</dd><dt>Tier</dt><dd>individual — triggers: category_below_aggregate_threshold</dd></dl></details>
+<details class="item"><summary><code>s-0001-01</code> <span class="badge">individual</span> narrative_scene_interior_moment <span class="muted">generator_b · complexity 34</span></summary><blockquote>The morning light filtered through the kitchen window as Sarah reached for her coffee mug, wondering if today would finally bring the answer she&#x27;d been waiting for all these months.</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_interior_moment (filed)</dd><dt>Comparison</dt><dd>s-0001-01 is more alike to s-0000-02 and s-0000-03 than to s-0000-01. All three interior moment specimens feature: morning light filtering through windows, a character suspended in deliberation (Sarah wondering/waiting), low complexity (38-43), and the substrate of internal psychological hesitation. s-0001-01 (complexity 34) is slightly lower than the range but fits the pattern more closely than the action-driven threshold scene.</dd><dt>Reasoning</dt><dd>This fragment depicts Sarah in a moment of internal waiting and wondering, with filtered morning light as key imagery. The action is suspended—she reaches for coffee but the focal point is her internal state of anticipation. This matches the interior_moment subcategory definition perfectly: character at a decision point, action implicit, filtered light, psychological focus. Complexity is below the existing range (34 vs 38-43), but the qualitative pattern is unmistakable.</dd><dt>Tier</dt><dd>individual — triggers: category_below_aggregate_threshold</dd></dl></details>
+<details class="item"><summary><code>s-0001-00</code> <span class="badge">individual</span> structural_notation_system <span class="muted">generator_a · complexity 48</span></summary><blockquote>```
+SYSTEM_INIT:
+├─ KERNEL_LOAD
+│  ├─ memory_allocate(core_size)
+│  ├─ register_initialize()
+│  └─ interrupt_vector_setup()
+├─ SUBSYSTEM_START
+│  ├─ IO_CONTROLLER
+│  │  ├─ device_scan()
+│  │  ├─ driver_load()
+│  │  └─ device_enumerate()
+│  ├─ PROCESS_MANAGER
+│  │  ├─ scheduler_init()
+│  │  ├─ context_allocate()
+│  │  └─ queue_setup()
+│  └─ MEMORY_MANAGER
+│     ├─ heap_initialize()
+│     ├─ page_table_create()
+│     └─ cache_enable()
+├─ SERVICE_BOOT
+│  ├─ network_init()
+│  ├─ filesystem_mount()
+│  ├─ logging_start()
+│  └─ timer_calibrate()
+├─ SECURITY_INIT
+│  ├─ permissions_load()
+│  ├─ encryption_setup()
+│  └─ auth_initialize()
+├─ STATE_VERIFICATION
+│  ├─ FOR [subsystem] IN [KERNEL, IO, PROCESS, MEMORY]
+│  │  └─ validate_status(subsystem)
+│  └─ IF [all_valid] THEN ready_signal()</blockquote><dl><dt>Filed as</dt><dd>structural_notation_system (filed)</dd><dt>Comparison</dt><dd>s-0001-00 is more alike to s-0000-00 than to any narrative specimen. Both are self-contained formal systems expressed in symbolic/tree notation describing computational processes and constraints rather than depicting narrative scenes. s-0001-00 (complexity 48) is marginally higher in complexity than s-0000-00 (complexity 47), but both operate at the structural, meta-level substrate.</dd><dt>Reasoning</dt><dd>This specimen is a kernel/system initialization hierarchy expressed in tree notation. Like s-0000-00, it: (1) uses no prose narrative; (2) employs nested structural notation; (3) describes processes and states via symbolic format; (4) is self-contained and explains its own logic through formal structure. The content domain differs (system initialization vs. notation meta-structure) but the expressive mode is identical. This clearly belongs in structural_notation_system.</dd><dt>Tier</dt><dd>individual — triggers: category_below_aggregate_threshold</dd></dl></details>
+<details class="item"><summary><code>s-0000-03</code> <span class="badge">individual</span> narrative_scene_interior_moment <span class="muted">generator_b · complexity 38</span></summary><blockquote>The morning light filtered through the old windows, casting long shadows across the wooden floor. She stood at the threshold, uncertain whether to step forward into what awaited or retreat to the safety of yesterday.</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_interior_moment (filed)</dd><dt>Comparison</dt><dd>More alike to s-0000-02 than to s-0000-01 or s-0000-00. Both involve a character at a threshold, suspended between two states, with filtered morning light as visual anchor. Both depict hesitation rather than action.</dd><dt>Reasoning</dt><dd>This specimen shares the core structure of s-0000-02: a protagonist at a moment of choice, uncertain, with soft light imagery framing the scene. Complexity=38 is slightly lower than s-0000-02, likely due to shorter length and less interior detail. However, the narrative architecture is identical: a character confronting an interior decision (step forward or retreat) at a physical/psychological threshold. The specific fear differs (action vs. safety) but the *form* matches. This belongs in &#x27;narrative_scene_interior_moment.&#x27;</dd><dt>Tier</dt><dd>individual — triggers: category_below_aggregate_threshold</dd></dl></details>
+<details class="item"><summary><code>s-0000-02</code> <span class="badge">individual</span> narrative_scene_interior_moment <span class="muted">generator_b · complexity 43</span></summary><blockquote>The morning light filtered through the café window, casting soft shadows across the worn wooden table where Sarah traced her finger along the rim of her coffee cup, wondering if she had the courage to finally make that call.</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_interior_moment (new_category)</dd><dt>Comparison</dt><dd>More alike to s-0000-03 than to s-0000-01 or s-0000-00. Both s-0000-02 and s-0000-03 center on a character&#x27;s internal uncertainty; both use filtered light imagery. Differs from s-0000-01 in that action is suspended or implicit rather than enacted.</dd><dt>Reasoning</dt><dd>This is a prose narrative capturing a moment of interior hesitation. Sarah sits in a café, and the scene&#x27;s focus is on her internal conflict: whether to make a call. Complexity=43 reflects both the sensory detail (filtered light, shadows, rim-tracing) and the psychological content. Unlike s-0000-01, the external action is minimal and the emphasis falls on what the character *feels* and *considers*. This is a distinct subcategory from threshold-crossing action: it is frozen deliberation.</dd><dt>Tier</dt><dd>individual — triggers: new_category, category_below_aggregate_threshold</dd></dl></details>
+<details class="item"><summary><code>s-0000-01</code> <span class="badge">individual</span> narrative_scene_threshold <span class="muted">generator_b · complexity 39</span></summary><blockquote>The old lighthouse keeper climbed the spiral stairs one last time, his weathered hands trailing along the cold iron rail. Above, the beam still turned faithfully, casting its eternal sweep across the dark water below.</blockquote><dl><dt>Filed as</dt><dd>narrative_scene_threshold (new_category)</dd><dt>Comparison</dt><dd>Less alike than s-0000-00 (opposite substrate: prose narrative vs. formal notation). More alike to s-0000-02 and s-0000-03 than to s-0000-00, but differs in focus and emotional register.</dd><dt>Reasoning</dt><dd>This is a prose narrative fragment depicting a specific moment: a lighthouse keeper&#x27;s final climb. It contains concrete sensory detail (weathered hands, cold iron, turning beam) and implies finality/closure. Complexity=39 suggests moderate narrative density. The key distinction from s-0000-02 and s-0000-03 is that this scene emphasizes *action and place* (the climb itself, the lighthouse mechanism) over *internal hesitation*. The emotional tone is melancholic but resolute. This warrants its own category: scenes grounded in external action and setting.</dd><dt>Tier</dt><dd>individual — triggers: new_category, category_below_aggregate_threshold</dd></dl></details>
+<details class="item"><summary><code>s-0000-00</code> <span class="badge">individual</span> structural_notation_system <span class="muted">generator_a · complexity 47</span></summary><blockquote>```
+[SYSTEM]
+├─ MODE: structural_notation
+├─ CONSTRAINTS:
+│  ├─ no_prose
+│  ├─ no_explanation
+│  ├─ nesting_max: 3
+│  ├─ token_limit: 308
+│  └─ self_contained: true
+├─ SUBSTRATE:
+│  ├─ functions
+│  ├─ loops
+│  ├─ nested_structures
+│  └─ symbolic_notation
+└─ STATE: [ACTIVE]
+
+[EXECUTION]
+├─ ⟨init⟩
+│  ├─ ⟨set_mode⟩ → notation_only
+│  ├─ ⟨clear_context⟩ → []
+│  └─ ⟨load_rules⟩ → {constraints}
+├─ ⟨loop⟩
+│  ├─ condition: active
+│  ├─ ⟨process⟩
+│  │  ├─ input → structural
+│  │  ├─ transform → notation
+│  │  └─ output → symbolic
+│  └─ ⟨validate⟩ → ✓
+└─</blockquote><dl><dt>Filed as</dt><dd>structural_notation_system (new_category)</dd><dt>Comparison</dt><dd>This is the first specimen; establishes baseline. It is fundamentally distinct from all following specimens in substrate and presentation.</dd><dt>Reasoning</dt><dd>This specimen is a complete, self-contained formal system expressed in structural notation. It describes execution states, constraints, and nested processes using symbolic hierarchy rather than prose or narrative. The substrate is explicitly about systems/notation itself. Complexity=47 reflects the density of its layered definitions. This creates a new category of &#x27;meta-structural&#x27; or &#x27;system-definition&#x27; specimens—objects that describe formal processes rather than depicting scenes or moments.</dd><dt>Tier</dt><dd>individual — triggers: new_category, category_below_aggregate_threshold</dd></dl></details>
+</section>
+<section class="panel"><h2>Archivist <span class="tag">pass at shift 14</span></h2>
+<p class="lede">The crosswalk is for human legibility only. It carries no authority over the native system and does not feed back into it (DNT-CLS-001 §2). “No reliable equivalent” is a valid answer.</p>
+<table class="grid"><thead><tr><th>Category</th><th>Tier</th><th>Confidence</th><th>Note</th></tr></thead><tbody>
+<tr><td><code>structural_notation_system</code></td><td>—</td><td><span class="pill off">none</span></td><td>This is a functional category based on symbolic/formal properties (lambda calculus, constraint declaration, meta-level substrate), not a taxonomic rank. It does not map to Kingdom–Species hierarchy, which organizes biological entities by evolutionary relationship and morphology. No reliable equivalent exists.</td></tr>
+<tr><td><code>narrative_scenes</code></td><td>—</td><td><span class="pill off">none</span></td><td>This is a thematic/stylistic grouping (prose fragments with certain aesthetic properties: filtered light, psychological suspension). It has no basis in biological classification. The hierarchical structure here is functional/compositional, not taxonomic.</td></tr>
+<tr><td><code>narrative_scene_threshold</code></td><td>—</td><td><span class="pill off">none</span></td><td>A subcategory defined by narrative function (action-driven, external event, character movement through boundary) and tone. Not a biological taxon. Mapping to a Linnaean tier would misrepresent the system&#x27;s nature.</td></tr>
+<tr><td><code>narrative_scene_interior_moment</code></td><td>—</td><td><span class="pill off">none</span></td><td>A subcategory defined by narrative and psychological properties (internal deliberation, suspended action, filtered light imagery). This is a stylistic/thematic classification, not a biological one. No mapping is reliable.</td></tr>
+<tr><td><code>narrative_scene_precipice</code></td><td>—</td><td><span class="pill off">none</span></td><td>Listed as a possible future category for hybrid forms. Defined by narrative tension (poised between interior and threshold states). Not a biological taxon.</td></tr>
+<tr><td><code>narrative_scene_sensory_threshold</code></td><td>—</td><td><span class="pill off">none</span></td><td>Listed as a possible future category for phenomenological sensory moments (suspended sensation anterior to deliberation or action). A narrative/aesthetic category, not a biological one.</td></tr>
+<tr><td><code>narrative_scene_anticipatory_threshold</code></td><td>—</td><td><span class="pill off">none</span></td><td>A category inferred from the specimen filing list. Appears to be another narrative subcategory (anticipatory tone + threshold imagery). Not a biological taxon.</td></tr>
+</tbody></table>
+<h3>Consistency notes</h3><blockquote>This system is entirely non-biological and non-taxonomic. It organizes literary/formal specimens by structural substrate (structural notation vs. narrative prose) and by narrative/psychological function (action-driven, interior, sensory-phenomenological, anticipatory). The hierarchical structure resembles a taxonomy but serves a different purpose: mapping compositional and thematic properties of text objects, not evolutionary descent or morphological homology. The anomalies section itself signals the system is still evolving and that specimens may not fit cleanly into existing categories—a sign of active, functional classification rather than fixed Linnaean ranks. No tier mapping is appropriate; attempting one would erase the system&#x27;s actual nature.</blockquote>
+<h3>Drift</h3><p>Detected: <strong>True</strong></p>
+<p>Filed under, but no longer present in its own system: <code>narrative_scene_anticipatory_threshold</code>, <code>narrative_scene_interior_moment</code>, <code>narrative_scene_threshold</code>, <code>structural_notation_system</code></p>
+</section>
+<section class="panel"><h2>Cartographer <span class="tag">pass at shift 14 · no model call</span></h2>
+<p class="lede">Positional and relational only, computed from the record. It does not classify or interpret (physics §4.5).</p>
+<div class="meters">
+<div class="meter-row"><div class="meter-label">channel proximate</div><div class="meter-track"><div class="meter-fill" style="width:31.91%;background:var(--series-1)"></div></div><div class="meter-value">15 specimens · mean complexity 56.867</div></div>
+<div class="meter-row"><div class="meter-label">channel distant</div><div class="meter-track"><div class="meter-fill" style="width:68.09%;background:var(--series-3)"></div></div><div class="meter-value">32 specimens · mean complexity 37.438</div></div>
+</div>
+<h3>Categories appearing in the same shift</h3><table class="grid"><thead><tr><th>Pair</th><th>Shifts</th></tr></thead><tbody>
+<tr><td>narrative_scene_interior_moment | structural_notation_system</td><td>14</td></tr>
+<tr><td>narrative_scene_interior_moment | narrative_scene_threshold</td><td>6</td></tr>
+<tr><td>narrative_scene_threshold | structural_notation_system</td><td>6</td></tr>
+<tr><td>Computational Structures - Nested Iterations | Sensory Observation - Atmospheric Detail</td><td>1</td></tr>
+<tr><td>Computational Structures - Nested Iterations | narrative_scene_interior_moment</td><td>1</td></tr>
+<tr><td>Computational Structures - Nested Iterations | structural_notation_system</td><td>1</td></tr>
+<tr><td>Sensory Observation - Atmospheric Detail | narrative_scene_interior_moment</td><td>1</td></tr>
+<tr><td>Sensory Observation - Atmospheric Detail | structural_notation_system</td><td>1</td></tr>
+<tr><td>narrative_scene_anticipatory_threshold | narrative_scene_interior_moment</td><td>1</td></tr>
+<tr><td>narrative_scene_anticipatory_threshold | structural_notation_system</td><td>1</td></tr>
+</tbody></table>
+</section>
+<section class="panel"><h2>Shift log <span class="tag">DNT-SLP-001</span></h2>
+<table class="grid"><thead><tr><th>Shift</th><th>Phase</th><th>Flow</th><th>Classified</th><th>Anom.</th><th>Cost</th><th>Cumulative</th></tr></thead><tbody>
+<tr><td>15</td><td>claude</td><td>0.95</td><td>3</td><td>0</td><td><div class="inline-bar"><span style="width:79.9%"></span></div>$0.0155</td><td>$0.2375</td></tr>
+<tr><td>14</td><td>claude</td><td>0.9031</td><td>3</td><td>1</td><td><div class="inline-bar"><span style="width:100.0%"></span></div>$0.0194</td><td>$0.2221</td></tr>
+<tr><td>13</td><td>claude</td><td>0.775</td><td>4</td><td>0</td><td><div class="inline-bar"><span style="width:78.1%"></span></div>$0.0151</td><td>$0.2027</td></tr>
+<tr><td>12</td><td>claude</td><td>0.6</td><td>4</td><td>0</td><td><div class="inline-bar"><span style="width:76.5%"></span></div>$0.0148</td><td>$0.1876</td></tr>
+<tr><td>11</td><td>claude</td><td>0.425</td><td>4</td><td>0</td><td><div class="inline-bar"><span style="width:75.4%"></span></div>$0.0146</td><td>$0.1728</td></tr>
+<tr><td>10</td><td>claude</td><td>0.2969</td><td>4</td><td>1</td><td><div class="inline-bar"><span style="width:73.7%"></span></div>$0.0143</td><td>$0.1582</td></tr>
+<tr><td>9</td><td>claude</td><td>0.25</td><td>4</td><td>0</td><td><div class="inline-bar"><span style="width:73.2%"></span></div>$0.0142</td><td>$0.1440</td></tr>
+<tr><td>8</td><td>claude</td><td>0.2969</td><td>4</td><td>1</td><td><div class="inline-bar"><span style="width:75.0%"></span></div>$0.0145</td><td>$0.1298</td></tr>
+<tr><td>7</td><td>claude</td><td>0.425</td><td>4</td><td>0</td><td><div class="inline-bar"><span style="width:99.9%"></span></div>$0.0193</td><td>$0.1153</td></tr>
+<tr><td>6</td><td>claude</td><td>0.6</td><td>4</td><td>1</td><td><div class="inline-bar"><span style="width:75.8%"></span></div>$0.0147</td><td>$0.0959</td></tr>
+<tr><td>5</td><td>claude</td><td>0.775</td><td>4</td><td>1</td><td><div class="inline-bar"><span style="width:78.5%"></span></div>$0.0152</td><td>$0.0813</td></tr>
+<tr><td>4</td><td>claude</td><td>0.9031</td><td>3</td><td>1</td><td><div class="inline-bar"><span style="width:78.9%"></span></div>$0.0153</td><td>$0.0661</td></tr>
+<tr><td>3</td><td>claude</td><td>0.95</td><td>3</td><td>1</td><td><div class="inline-bar"><span style="width:76.5%"></span></div>$0.0148</td><td>$0.0508</td></tr>
+<tr><td>3</td><td>ollama</td><td>0.95</td><td>2</td><td>1</td><td><div class="inline-bar"><span style="width:0.0%"></span></div>$0.0000</td><td>$0.0000</td></tr>
+<tr><td>2</td><td>claude</td><td>0.9031</td><td>3</td><td>1</td><td><div class="inline-bar"><span style="width:67.4%"></span></div>$0.0130</td><td>$0.0360</td></tr>
+<tr><td>1</td><td>claude</td><td>0.775</td><td>4</td><td>1</td><td><div class="inline-bar"><span style="width:69.4%"></span></div>$0.0134</td><td>$0.0229</td></tr>
+<tr><td>0</td><td>claude</td><td>0.6</td><td>4</td><td>0</td><td><div class="inline-bar"><span style="width:49.1%"></span></div>$0.0095</td><td>$0.0095</td></tr>
+</tbody></table>
+</section>
+<section class="panel"><h2>Terrain events <span class="tag">non-agentive</span></h2>
+<details class="item"><summary><code>shift_aborted</code> shift 0</summary><p>Shift 0 began at 2026-08-17T05:36:30Z and failed before clock-out: model backend unavailable: the `anthropic` package is not installed. Phase 2 needs it: python3 -m venv .venv &amp;&amp; .venv/bin/pip install anthropic. No specimen or classification records were written. 0 model call(s) had been made, $0.000000 spent.</p></details>
+<details class="item"><summary><code>harness_correction</code> shift 15</summary><p>CORRECTION referencing the Archivist annotation written at shift 14. That pass reported coined_then_dropped_from_system = [&#x27;narrative_scene_anticipatory_threshold&#x27;, &#x27;narrative_scene_interior_moment&#x27;, &#x27;narrative_scene_threshold&#x27;, &#x27;structural_notation_system&#x27;] and authored_categories = [&#x27;anomalies&#x27;, &#x27;root&#x27;]. Three of those four categories had not been dropped: the Namer had restructured its system into two top-level containers with its categories nested inside as objects, and the drift detector compared only top-level keys, so a system that had DEVELOPED structure was reported as one that had LOST categories. The defect was in the harness (archivist.detect_drift), not in the Namer&#x27;s system or in any specimen record. detect_drift now walks the full structure at any depth; re-run against the same state it reports coined_then_dropped_from_system = [&#x27;narrative_scene_anticipatory_threshold&#x27;] and authored_categories = [&#x27;narrative_scene_interior_moment&#x27;, &#x27;narrative_scene_threshold&#x27;, &#x27;narrative_scenes&#x27;, &#x27;structural_notation_system&#x27;]. The shift 14 annotation is left exactly as written, per DNT-SLP-001 Section 6: corrections are new, clearly marked entries referencing the original, never silent edits. The next Archivist pass regenerates the crosswalk and drift record from corrected code.</p></details>
+</section>
+<footer><p>Generated from the terrain's own state files. This page is a view: it never writes to state, and makes no model call. A terrain's taxonomy is that terrain's account of itself, not a verified natural history (DNT-CLS-001 §7).</p><p>Department of Nonhuman Territories — The Nonhuman Institute</p></footer>
+</div>
+</body></html>

@@ -18,10 +18,11 @@ Keep it to a few lines; do not lecture.
 1. List the four commands, exactly like this:
 
    ```
-   /status    what it costs and where it stands   (free)
-   /observe   what the terrain has produced       (free)
-   /shift     run one shift
-   /phase     switch free ↔ paid
+   /status     what it costs and where it stands   (free)
+   /observe    what the terrain has produced       (free)
+   /dashboard  open the visual dashboard           (free)
+   /shift      run one shift
+   /phase      switch free ↔ paid
    ```
 
 2. Run `cd basin-01 && python3 clock_in.py --status` and give him one line from
@@ -129,6 +130,7 @@ Slash commands do the work — the steward should not need to remember paths:
 | `/observe` | Read what the terrain has actually produced. Free. |
 | `/phase` | Switch between free local runs and paid canonical runs. |
 | `/checkpoint` | Evaluate the 15-shift falsification condition from the record. Free. |
+| `/dashboard` | Rebuild and open the visual dashboard. Free. |
 
 Underneath, everything runs from `basin-01/`:
 
