@@ -132,6 +132,19 @@ MAX_OUTPUT_TOKENS_BY_ROLE: Dict[str, int] = {
     "cartographer": 600,
 }
 
+# Phase 1 only: a further ceiling on any single call, sized to what CPU
+# inference can finish inside OLLAMA_TIMEOUT_SECONDS.
+#
+# This is a hardware allowance, not a relaxation of the logging requirement.
+# STARTUP_GUIDE.md Section 2.5 is explicit that Phase 1 output is "disposable
+# test data, not canonical terrain history" — the phase exists to debug the
+# loop, not to produce records. The full-reasoning ceiling above applies
+# unchanged to canonical shifts, which run on a hosted model in seconds rather
+# than minutes. Phase 1 raised this to 1600 and shifts stopped finishing; the
+# governance requirement and the local hardware were in direct conflict, and
+# only the hardware side is negotiable.
+OLLAMA_OUTPUT_CEILING = 700
+
 # Ceiling on total tokens (input + output) a single shift may consume.
 # A shift that would cross this ends early rather than running unbounded
 # (STARTUP_GUIDE.md Section 4).
@@ -488,6 +501,8 @@ def output_cap_for_role(role: str, requested: Optional[int] = None) -> int:
     A role may ask for less than its cap. It can never obtain more.
     """
     cap = MAX_OUTPUT_TOKENS_BY_ROLE[role]
+    if PHASE == "ollama":
+        cap = min(cap, OLLAMA_OUTPUT_CEILING)
     if requested is None:
         return cap
     return max(1, min(int(requested), cap))

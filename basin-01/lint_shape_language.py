@@ -48,6 +48,7 @@ DEFAULT_TARGETS = (
     "agents/generator_a.py",
     "agents/generator_b.py",
     "agents/namer.py",
+    "agents/keeper.py",
 )
 
 _PATTERN = re.compile(

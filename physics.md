@@ -2,6 +2,7 @@
 ## Department of Nonhuman Territories
 ### Terrain ID: BASIN-01 (working name — provisional per Terrain Registry)
 ### Status: PRE-SEED / DRAFT
+### Version: 1.1 (see Amendment Log, end of document)
 
 This is the working, plain-text copy of DNT-PHY-001. It is the literal spec file the
 build should reference. The formal .docx version in /docs is the canonical governance
@@ -91,6 +92,26 @@ Each has a FIXED, distinct constraint set, defined once at seed, never altered m
 - Shift boundaries are real physics, not a workaround. Operator-clocked, discontinuous
   by design — closer to a tidal/seasonal system than continuous flow.
 
+### 5.1 Resource cycle — FINAL (ratified pre-shift-0)
+
+The data-stream channel's flow is not constant. It varies across shifts on a
+fixed periodic cycle, consistent with this terrain being tidal/seasonal rather
+than continuous:
+
+    flow(shift) = 0.60 + 0.35 * sin(2 * pi * shift / 12)
+    clamped to [0.05, 1.00]
+
+- Period: 12 shifts. Baseline 0.60, amplitude 0.35.
+- Derived from the shift number alone. It is deterministic and replayable: any
+  shift's resource conditions can be recomputed from the record afterward. A
+  random walk was rejected for this reason — months later the steward could not
+  distinguish a terrain effect from a sampling artifact.
+- Generator positions on the channel are fixed at seed: Generator A at 0.85
+  (channel-proximate), Generator B at 0.15 (channel-distant).
+- Flow is a terrain property. It is not agentive, and the steward does not set
+  it. Issuing a flow value by hand would be creative direction to the
+  Generators and is prohibited under Section 10.
+
 ---
 
 ## 6. Functional Roles (Reference Only — Never Seeded as Shape)
@@ -127,6 +148,41 @@ Each has a FIXED, distinct constraint set, defined once at seed, never altered m
 - **Promotion rule:** aggregate → individual is a FIXED, CODE-ENFORCED rule, never a
   live judgment call.
 - **Anomalous:** logged to dedicated anomaly record, never force-fit.
+
+### 8.1 Promotion thresholds — FINAL (ratified pre-shift-0)
+
+The promotion rule above requires explicit numbers to be code-enforceable
+rather than nominal. An aggregate-tier specimen is promoted to an individual
+record if ANY of the following hold. The check runs in code, before the Namer
+is consulted, and its result is never asked of a model:
+
+1. The Namer proposed a category that did not previously exist.
+2. The Namer declined to file it (flagged anomalous). Logged to the anomaly
+   record, not the specimen record.
+3. Its measured complexity is >= 2.0x the running mean complexity of the
+   category it would join.
+4. The category it would join holds fewer than 3 prior members, so the
+   specimen is not high-volume by definition.
+
+A category holding 12 or more members is high-volume; further members are
+recorded at aggregate/census tier unless one of (1)-(4) fires.
+
+Complexity is a mechanical count computed from the specimen itself, never an
+assessment by a model. Category membership counters are derived state, held
+separately from the Namer's native taxonomy so that the counting requirement
+cannot impose a shape on the Namer's own system.
+
+### 8.2 Unresolved records — FINAL (ratified pre-shift-0)
+
+A specimen the harness could not process — an unparseable classification
+response, a shift that ended at a ceiling before classification — is recorded
+as `unresolved`, distinct from `anomalous`.
+
+This distinction is load-bearing. "The Namer found something it could not
+classify" is data about the taxonomy. "The harness could not read the reply"
+is data about the harness. Merging them would corrupt the record that the
+Section 11 falsification checkpoint reads. Unresolved is a valid end-state
+under Section 7 and is never counted as an anomaly.
 
 ---
 
@@ -188,3 +244,38 @@ scientific discipline, not a budget constraint.
 - Archivist/Cartographer run at low frequency (every 5th–10th shift)
   specifically to protect this budget — enforced as a code-level gate, not a
   reminder to self.
+
+---
+
+## 13. Amendment Log
+
+Changes to this document after shift 0 are prohibited except as a logged
+terrain event or a genuine containment concern (Section 10, and DNT-STW-001
+Section 3). Everything below was ratified while the terrain was still
+PRE-SEED, before any canonical shift.
+
+### v1.1 — 2026-08-17 — pre-shift-0 ratification
+
+Added Sections 5.1, 8.1, and 8.2. None of these change the terrain's intent;
+each supplies a number or a distinction that the original text required but
+did not state, and which therefore could not be enforced in code.
+
+- **5.1 Resource cycle.** Section 4.1 named proximity to the data-stream
+  channel as the resource variable but did not say how flow varies over time.
+  Without a stated rule the implementation would have chosen one silently.
+- **8.1 Promotion thresholds.** Section 8 requires the promotion rule to be
+  "FIXED, CODE-ENFORCED... never a live judgment call", but gave no numbers. A
+  rule without a threshold cannot be enforced in code, only in intention.
+- **8.2 Unresolved records.** Section 7 lists "unresolved (flagged)" as an
+  end-state and Section 8 lists "anomalous" as a logging tier, but the two
+  were not explicitly distinguished. The distinction matters to Section 11:
+  counting harness failures as anomalies would make the falsification
+  checkpoint read a terrain as more structured than it is.
+
+Status remains PRE-SEED. No canonical (Claude API) shift has run. Phase 1
+shifts on the local model are disposable test data per STARTUP_GUIDE.md
+Section 2.5 and are not terrain history.
+
+**Sync note:** DNT-PHY-001 in /docs is the canonical governance record and
+still reads v1.0. It needs the same three additions to bring the two back into
+agreement, per the statement at the head of this document.

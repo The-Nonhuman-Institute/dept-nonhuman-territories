@@ -244,8 +244,17 @@ def _build_input(
     batch: Sequence[Dict[str, Any]],
     native: Any,
     recent: Sequence[Dict[str, Any]],
+    continuity_summary: Optional[str] = None,
 ) -> str:
     lines: List[str] = []
+
+    if continuity_summary:
+        # The Keeper's state-of-terrain summary. It reaches this role because
+        # this role reasons over history; it never reaches a Generator, where
+        # it would function as creative direction (see keeper.py).
+        lines.append("STATE OF THE ENVIRONMENT AT THE START OF THIS INTERVAL:")
+        lines.append(continuity_summary)
+        lines.append("")
 
     lines.append("YOUR CURRENT SYSTEM:")
     lines.append(json.dumps(native, indent=2) if native else "(empty — nothing recorded yet)")
@@ -426,6 +435,7 @@ def run(
     native: Any,
     recent_specimens: Sequence[Dict[str, Any]],
     category_stats: Dict[str, Any],
+    continuity_summary: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Classify this shift's emissions.
 
@@ -455,7 +465,7 @@ def run(
 
     try:
         result = config.generate(
-            prompt=_build_input(batch, native, recent_specimens),
+            prompt=_build_input(batch, native, recent_specimens, continuity_summary),
             role=ROLE,
             system=_system_prompt(),
             ledger=ledger,

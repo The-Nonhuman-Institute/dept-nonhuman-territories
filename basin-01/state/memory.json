@@ -3,32 +3,38 @@
   "terrain_name": "BASIN-01",
   "physics_document": "DNT-PHY-001",
   "seeded_at": "2026-08-17T04:07:55Z",
-  "last_committed_shift": 0,
-  "shifts_completed": 1,
+  "last_committed_shift": 1,
+  "shifts_completed": 2,
   "cumulative_cost_usd": 0.0,
   "resource": {
-    "flow": 0.6,
+    "flow": 0.775,
     "generator_a_position": 0.85,
     "generator_b_position": 0.15
   },
   "specimen_counts": {
-    "total": 4,
-    "individual_records": 2,
+    "total": 7,
+    "individual_records": 5,
     "aggregate_members": 0,
     "anomalous": 2
   },
   "category_stats": {
     "Algorithmic Core": {
-      "count": 1,
-      "mean_complexity": 26.0,
+      "count": 2,
+      "mean_complexity": 26.5,
       "first_seen_shift": 0,
-      "last_seen_shift": 0
+      "last_seen_shift": 1
     },
     "Sensory Observation": {
-      "count": 1,
+      "count": 2,
       "mean_complexity": 10.0,
       "first_seen_shift": 0,
-      "last_seen_shift": 0
+      "last_seen_shift": 1
+    },
+    "Sensory Observation - Atmospheric Detail": {
+      "count": 1,
+      "mean_complexity": 11.0,
+      "first_seen_shift": 1,
+      "last_seen_shift": 1
     }
   },
   "specimen_index": {
@@ -38,7 +44,8 @@
       "complexity": 26,
       "first_seen_shift": 0,
       "last_seen_shift": 0,
-      "end_state": null
+      "end_state": "dormant",
+      "resolved_at_shift": 1
     },
     "s-0000-01": {
       "source_role": "generator_b",
@@ -46,7 +53,8 @@
       "complexity": 10,
       "first_seen_shift": 0,
       "last_seen_shift": 0,
-      "end_state": null
+      "end_state": "dormant",
+      "resolved_at_shift": 1
     },
     "s-0000-02": {
       "source_role": "generator_b",
@@ -54,7 +62,8 @@
       "complexity": 10,
       "first_seen_shift": 0,
       "last_seen_shift": 0,
-      "end_state": null
+      "end_state": "dormant",
+      "resolved_at_shift": 1
     },
     "s-0000-03": {
       "source_role": "generator_b",
@@ -62,10 +71,50 @@
       "complexity": 9,
       "first_seen_shift": 0,
       "last_seen_shift": 0,
+      "end_state": "dormant",
+      "resolved_at_shift": 1
+    },
+    "s-0001-00": {
+      "source_role": "generator_a",
+      "substrate": "structural",
+      "complexity": 27,
+      "first_seen_shift": 1,
+      "last_seen_shift": 1,
+      "end_state": null
+    },
+    "s-0001-01": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 10,
+      "first_seen_shift": 1,
+      "last_seen_shift": 1,
+      "end_state": null
+    },
+    "s-0001-02": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 11,
+      "first_seen_shift": 1,
+      "last_seen_shift": 1,
+      "end_state": null
+    },
+    "s-0001-03": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 11,
+      "first_seen_shift": 1,
+      "last_seen_shift": 1,
       "end_state": null
     }
   },
-  "terrain_events": [],
+  "terrain_events": [
+    {
+      "shift": 1,
+      "logged_at": "2026-08-17T04:29:29Z",
+      "kind": "shift_aborted",
+      "detail": "Shift 1 began at 2026-08-17T04:16:28Z and failed before clock-out: model backend unavailable: local model exceeded the 600s timeout generating up to 1600 tokens. On CPU this is a hardware limit, not a fault: either raise OLLAMA_TIMEOUT_SECONDS or lower the role's output cap.. No specimen or classification records were written. 4 model call(s) had been made, $0.000000 spent."
+    }
+  ],
   "keeper_summary": null,
   "notes": "Steward may read this file freely. Steward may not edit taxonomy or specimen records directly (DNT-STW-001 Section 3).",
   "taxonomy_structure": {

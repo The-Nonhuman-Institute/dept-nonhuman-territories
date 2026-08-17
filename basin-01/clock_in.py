@@ -256,16 +256,27 @@ def run_shift(dry_run: bool = False) -> int:
 
     try:
         # -- Keeper: continuity across a discontinuous system ---------------
+        continuity_summary: Optional[str] = None
         keeper_module = _load_optional_role("keeper") if "keeper" in active else None
         if keeper_module is not None:
-            keeper_module.run(
+            keeper_outcome = keeper_module.run(
                 shift_number=shift_number,
                 writer=terrain_io.writer_for_role(transaction, "keeper"),
                 ledger=ledger,
                 memory=transaction.memory,
                 recent_specimens=terrain_io.read_recent_specimens(),
             )
-            print("keeper       : summary written")
+            if keeper_outcome.get("halt_reason"):
+                halts.append("keeper %s" % keeper_outcome["halt_reason"])
+            # Carried to the roles that reason over history. Deliberately NOT
+            # carried to the Generators: the calls below take no summary
+            # argument, so there is no wiring by which a description of prior
+            # output could reach a role that is only ever told its substrate
+            # and its constraint (see keeper.py).
+            continuity_summary = keeper_outcome.get("summary")
+            print("keeper       : %s"
+                  % ("summary written" if keeper_outcome.get("written")
+                     else "no summary this shift (previous retained)"))
 
         # -- Generators: self-initiating, no write capability ---------------
         emissions_a, halt_a = generator_a.run(shift_number, flow, ledger)
@@ -291,6 +302,7 @@ def run_shift(dry_run: bool = False) -> int:
             native=transaction.taxonomy.get("native", {}),
             recent_specimens=terrain_io.read_recent_specimens(),
             category_stats=transaction.memory.get("category_stats", {}),
+            continuity_summary=continuity_summary,
         )
         if outcome.get("halt_reason"):
             halts.append("namer %s" % outcome["halt_reason"])
