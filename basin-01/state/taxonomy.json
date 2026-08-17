@@ -1,22 +1,98 @@
 {
   "authored_by": "namer",
-  "seeded_at": "2026-08-17T04:07:55Z",
+  "seeded_at": "2026-08-17T05:35:23Z",
   "container_note": "The object under 'native' is authored entirely by this terrain's Namer. It is not issued a template, a structure, or a vocabulary. Its only obligation is that for any two specimens it can state whether they are more or less alike, and why (DNT-CLS-001 Section 1).",
   "native": {
-    "Algorithmic Core": {
-      "description": "Structured data representations of computational processes.",
-      "example": "s-0000-00"
-    },
-    "Sensory Observation": {
-      "description": "Data representing subjective experiences and perceptions of the environment.",
-      "example": "s-0000-02"
-    }
+    "root": [
+      {
+        "category": "structural_notation_system",
+        "description": "Self-contained formal systems expressed in symbolic notation; describe processes, states, and constraints rather than depicting narrative scenes. Includes nested structures, lambda calculus, functional decomposition, and explicit constraint declaration. Meta-level, structural substrate.",
+        "members": [
+          "s-0000-00",
+          "s-0001-00",
+          "s-0002-00",
+          "s-0003-00"
+        ],
+        "complexity_range": [
+          47,
+          91
+        ],
+        "substrate": "structural, meta-level"
+      },
+      {
+        "category": "narrative_scenes",
+        "description": "Prose fragments depicting moments or scenes; characterized by filtered light imagery, threshold spaces, and psychological or kinetic suspense",
+        "subcategories": [
+          {
+            "subcategory": "narrative_scene_threshold",
+            "description": "Scenes centered on enacted action or movement through space; external event-driven; melancholic or reflective tone. Character traverses literal or figurative boundary; action is primary.",
+            "members": [
+              "s-0000-01",
+              "s-0001-02"
+            ],
+            "complexity_range": [
+              39,
+              42
+            ],
+            "substrate": "narrative, action-focused"
+          },
+          {
+            "subcategory": "narrative_scene_interior_moment",
+            "description": "Scenes centered on a character's internal deliberation, hesitation, or suspended awareness at a decision point or moment of recognition; action suspended or implicit; characterized by filtered light and threshold imagery; psychological interiority is primary.",
+            "members": [
+              "s-0000-02",
+              "s-0000-03",
+              "s-0001-01",
+              "s-0002-02",
+              "s-0003-02"
+            ],
+            "complexity_range": [
+              34,
+              45
+            ],
+            "substrate": "narrative, psychology-focused"
+          }
+        ]
+      }
+    ],
+    "anomalies": [
+      {
+        "specimen_id": "s-0001-03",
+        "reason": "Hybrid form exhibiting both interior moment and threshold characteristics; poised at narrative precipice rather than settled in either suspended deliberation or enacted action",
+        "possible_future_category": "narrative_scene_precipice"
+      },
+      {
+        "specimen_id": "s-0002-01",
+        "reason": "Phenomenological sensory-threshold: captures an atmospheric moment of suspended sensation ('quiet weight of possibility') anterior to both interior deliberation and threshold action; lacks the psychological decision-work of interior_moment and the enacted movement of threshold",
+        "possible_future_category": "narrative_scene_sensory_threshold"
+      },
+      {
+        "specimen_id": "s-0003-01",
+        "reason": "Meta-instructional statement about expected input types; neither structural notation system nor narrative scene. Reads as interface declaration or capacity statement rather than specimen of either substrate. Incommensurable with both established families.",
+        "possible_future_category": null
+      }
+    ]
   },
   "revisions": [
     {
       "shift": 0,
-      "at": "2026-08-17T04:16:23Z",
+      "at": "2026-08-17T05:37:49Z",
       "note": "native system rewritten by the Namer during shift 0"
+    },
+    {
+      "shift": 1,
+      "at": "2026-08-17T05:43:12Z",
+      "note": "native system rewritten by the Namer during shift 1"
+    },
+    {
+      "shift": 2,
+      "at": "2026-08-17T05:43:37Z",
+      "note": "native system rewritten by the Namer during shift 2"
+    },
+    {
+      "shift": 3,
+      "at": "2026-08-17T05:44:06Z",
+      "note": "native system rewritten by the Namer during shift 3"
     }
   ]
 }

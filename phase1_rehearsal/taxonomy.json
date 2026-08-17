@@ -1,0 +1,22 @@
+{
+  "authored_by": "namer",
+  "seeded_at": "2026-08-17T04:07:55Z",
+  "container_note": "The object under 'native' is authored entirely by this terrain's Namer. It is not issued a template, a structure, or a vocabulary. Its only obligation is that for any two specimens it can state whether they are more or less alike, and why (DNT-CLS-001 Section 1).",
+  "native": {
+    "Algorithmic Core": {
+      "description": "Structured data representations of computational processes.",
+      "example": "s-0000-00"
+    },
+    "Sensory Observation": {
+      "description": "Data representing subjective experiences and perceptions of the environment.",
+      "example": "s-0000-02"
+    }
+  },
+  "revisions": [
+    {
+      "shift": 0,
+      "at": "2026-08-17T04:16:23Z",
+      "note": "native system rewritten by the Namer during shift 0"
+    }
+  ]
+}

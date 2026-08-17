@@ -317,13 +317,15 @@ def read_log(path: str, limit: Optional[int] = None) -> List[Dict[str, Any]]:
     return records
 
 
-def read_recent_specimens(limit: int = config.NAMER_RECENT_SPECIMEN_WINDOW):
+def read_recent_specimens(limit: Optional[int] = None):
     """The capped window the Namer is shown.
 
     Never the full history. Unbounded context growth is the largest named risk
     to the budget (STARTUP_GUIDE.md Section 3.3), so the cap lives here rather
     than in the Namer's own judgment.
     """
+    if limit is None:
+        limit = config.namer_window()
     return read_log(config.SPECIMEN_LOG, limit=limit)
 
 

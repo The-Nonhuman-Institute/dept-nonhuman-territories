@@ -33,7 +33,7 @@ from typing import Dict, List, Optional, Tuple
 #    runs. Nothing else in the terrain needs to change to swap phases.
 # ---------------------------------------------------------------------------
 
-PHASE = "ollama"          # "ollama" (Phase 1, zero cost) | "claude" (Phase 2)
+PHASE = "claude"          # "ollama" (Phase 1, zero cost) | "claude" (Phase 2)
 
 
 # ---------------------------------------------------------------------------
@@ -75,7 +75,7 @@ TERRAIN_NAME = "BASIN-01"
 
 OLLAMA_MODEL = "gemma3:4b"          # steward-selected; see build notes
 OLLAMA_ENDPOINT = "http://127.0.0.1:11434/api/generate"
-OLLAMA_TIMEOUT_SECONDS = 600      # CPU inference on the local model is slow;
+OLLAMA_TIMEOUT_SECONDS = 900      # CPU inference on the local model is slow;
                                   # this is a hardware allowance, not terrain physics
 
 CLAUDE_ROUTINE_MODEL = "claude-haiku-4-5"
@@ -143,7 +143,7 @@ MAX_OUTPUT_TOKENS_BY_ROLE: Dict[str, int] = {
 # than minutes. Phase 1 raised this to 1600 and shifts stopped finishing; the
 # governance requirement and the local hardware were in direct conflict, and
 # only the hardware side is negotiable.
-OLLAMA_OUTPUT_CEILING = 700
+OLLAMA_OUTPUT_CEILING = 420
 
 # Ceiling on total tokens (input + output) a single shift may consume.
 # A shift that would cross this ends early rather than running unbounded
@@ -242,6 +242,27 @@ AGGREGATE_TIER_CATEGORY_SIZE = 12
 # STARTUP_GUIDE.md Section 3.3. Full taxonomy is fine to include; full raw
 # specimen history is not.
 NAMER_RECENT_SPECIMEN_WINDOW = 12
+
+# Phase 1 only: a shorter window still.
+#
+# Local shifts showed input growing 869 -> 1161 -> 1859 tokens across three
+# shifts as history accumulated, with duration rising 508s -> 793s, and the
+# fourth shift timing out. On CPU the cost of a shift is TIME, and it compounds
+# exactly the way STARTUP_GUIDE.md Section 3.2 predicts cost will compound in
+# Phase 2. Left alone the local terrain becomes unrunnable after a handful of
+# shifts, which would remove the free rehearsal the whole phase exists to give.
+#
+# Phase 2 keeps the full window: a hosted model reads it in seconds for a
+# fraction of a cent, so there is no reason to degrade the Namer's context
+# where it actually matters.
+OLLAMA_NAMER_RECENT_SPECIMEN_WINDOW = 4
+
+
+def namer_window() -> int:
+    """How many recent specimen records the Namer is shown, per phase."""
+    if PHASE == "ollama":
+        return OLLAMA_NAMER_RECENT_SPECIMEN_WINDOW
+    return NAMER_RECENT_SPECIMEN_WINDOW
 
 
 # ---------------------------------------------------------------------------

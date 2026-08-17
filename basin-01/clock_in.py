@@ -53,6 +53,44 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "agents"))
 
 import config
+
+
+def _reexec_in_venv_if_needed() -> None:
+    """Re-run this script under the project venv when Phase 2 needs it.
+
+    Canonical shifts need the `anthropic` package, which lives in the project
+    virtual environment rather than the system interpreter. Without this, the
+    steward has to remember to type a different interpreter path for Phase 2
+    than for Phase 1 — an easy thing to get wrong, and a confusing failure when
+    it happens. `python3 clock_in.py` now works in both phases.
+    """
+    if config.PHASE != "claude":
+        return
+    try:
+        import anthropic  # noqa: F401
+        return
+    except ImportError:
+        pass
+
+    # Loop guard via the environment, not by comparing interpreter paths. A
+    # venv's bin/python is a symlink to the base interpreter, so realpath()
+    # reports the two as identical and a path comparison silently concludes it
+    # is already inside the venv when it is not.
+    if os.environ.get("BASIN01_VENV_REEXEC") == "1":
+        return
+
+    venv_python = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+        ".venv", "bin", "python",
+    )
+    if os.path.exists(venv_python):
+        environment = dict(os.environ)
+        environment["BASIN01_VENV_REEXEC"] = "1"
+        os.execve(venv_python, [venv_python] + sys.argv, environment)
+
+
+_reexec_in_venv_if_needed()
+
 import terrain_io
 
 import generator_a
