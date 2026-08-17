@@ -128,7 +128,12 @@ MAX_OUTPUT_TOKENS_BY_ROLE: Dict[str, int] = {
     # nominal; at Haiku rates the extra headroom costs ~$0.0025 per shift.
     "namer": 1600,
     "keeper": 400,
-    "archivist": 1200,
+    # Raised from 1200 when the persistence crosswalk (physics.md Section 5)
+    # was added to this role's required output: the reply grew and began
+    # truncating mid-JSON. The computed parts of the pass — drift, lineage
+    # capability, persistence wordings — are written before the model call and
+    # survive a truncation, but the crosswalk itself was being lost.
+    "archivist": 2400,
     "cartographer": 600,
 }
 
@@ -256,6 +261,13 @@ NAMER_RECENT_SPECIMEN_WINDOW = 12
 # fraction of a cent, so there is no reason to degrade the Namer's context
 # where it actually matters.
 OLLAMA_NAMER_RECENT_SPECIMEN_WINDOW = 4
+
+# How many distinct native persistence wordings the Archivist crosswalks per
+# pass. Bounded for the same reason the Namer's specimen window is bounded: the
+# terrain accumulates new wordings every shift, so an unbounded list makes the
+# required reply grow without limit and the pass eventually truncates. Raising
+# the output cap only delays that; bounding the input fixes it.
+ARCHIVIST_PERSISTENCE_WINDOW = 8
 
 
 def namer_window() -> int:

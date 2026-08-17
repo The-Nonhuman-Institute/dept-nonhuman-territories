@@ -137,6 +137,51 @@ def collect_labels(node: Any) -> Tuple[set, set]:
     return all_strings, labels
 
 
+def _salvage_objects(text: str, required_key: str) -> List[Dict[str, Any]]:
+    """Recover complete JSON objects carrying a given key, from a cut-off reply."""
+    recovered: List[Dict[str, Any]] = []
+    cursor = 0
+    while True:
+        start = text.find("{", cursor)
+        if start == -1:
+            break
+        depth, end, in_string, escaped = 0, -1, False, False
+        for position in range(start, len(text)):
+            character = text[position]
+            if in_string:
+                if escaped:
+                    escaped = False
+                elif character == "\\":
+                    escaped = True
+                elif character == '"':
+                    in_string = False
+                continue
+            if character == '"':
+                in_string = True
+            elif character == "{":
+                depth += 1
+            elif character == "}":
+                depth -= 1
+                if depth == 0:
+                    end = position
+                    break
+        if end == -1:
+            cursor = start + 1
+            continue
+        chunk = text[start : end + 1]
+        if ('"%s"' % required_key) in chunk:
+            try:
+                parsed = json.loads(chunk)
+            except ValueError:
+                parsed = None
+            if isinstance(parsed, dict) and parsed.get(required_key):
+                recovered.append(parsed)
+                cursor = end + 1
+                continue
+        cursor = start + 1
+    return recovered
+
+
 def detect_drift(
     native: Any,
     category_stats: Dict[str, Any],
@@ -205,6 +250,80 @@ def capability_record(
     return record
 
 
+def lineage_record(specimen_index: Dict[str, Any]) -> Dict[str, Any]:
+    """Capability drift per specimen/lineage, computed from parentage.
+
+    physics.md Section 4.4 and DNT-CLS-001 Section 4 both ask for capability
+    drift "per specimen/lineage", not only per category. Until replication mode
+    existed there were no lineages to follow; now there are.
+
+    Arithmetic, not a model question: a lineage is a chain of parent_id links,
+    and its drift is the change in measured complexity along that chain.
+    """
+    children: Dict[str, List[str]] = {}
+    for specimen_id, entry in specimen_index.items():
+        parent = entry.get("parent_id")
+        if parent:
+            children.setdefault(parent, []).append(specimen_id)
+
+    # A founder is any specimen with descendants but no parent of its own.
+    founders = [
+        specimen_id for specimen_id, entry in specimen_index.items()
+        if not entry.get("parent_id") and specimen_id in children
+    ]
+
+    lineages: Dict[str, Any] = {}
+    for founder in sorted(founders):
+        chain, cursor = [], founder
+        while cursor and cursor in specimen_index:
+            entry = specimen_index[cursor]
+            chain.append({
+                "specimen_id": cursor,
+                "generation": int(entry.get("generation", 0)),
+                "complexity": int(entry.get("complexity") or 0),
+                "shift": entry.get("first_seen_shift"),
+                "end_state": entry.get("end_state"),
+                "persistence_native": entry.get("persistence_native"),
+            })
+            descendants = sorted(children.get(cursor, []))
+            cursor = descendants[0] if descendants else None
+
+        complexities = [link["complexity"] for link in chain]
+        lineages[founder] = {
+            "length": len(chain),
+            "generations_reached": max(link["generation"] for link in chain),
+            "chain": chain,
+            "complexity_at_founding": complexities[0],
+            "complexity_at_latest": complexities[-1],
+            "capability_drift": complexities[-1] - complexities[0],
+            "still_active": any(link["end_state"] is None for link in chain),
+        }
+    return {
+        "lineages_found": len(lineages),
+        "lineages": lineages,
+        "note": (
+            "Capability drift tracked per lineage as its own axis, separate "
+            "from taxonomic rank (DNT-CLS-001 Section 4). Computed from "
+            "parentage; no model consulted."
+        ),
+    }
+
+
+def persistence_reported(specimen_index: Dict[str, Any]) -> Dict[str, int]:
+    """The Namer's own persistence wordings, counted verbatim.
+
+    physics.md Section 5 has the Namer assign specimen state natively, to be
+    crosswalked later. These are its words, gathered for the crosswalk — never
+    normalised or rewritten here.
+    """
+    counts: Dict[str, int] = {}
+    for entry in specimen_index.values():
+        wording = (entry.get("persistence_native") or "").strip()
+        if wording:
+            counts[wording] = counts.get(wording, 0) + 1
+    return counts
+
+
 # ---------------------------------------------------------------------------
 # 2. CROSSWALK INSTRUCTION
 # ---------------------------------------------------------------------------
@@ -225,6 +344,13 @@ def _system_prompt() -> str:
         "NEVER invent a Latin name or a two-part Latin binomial. Plain English "
         "only.\n"
         "\n"
+        "You will also be given the author's own wordings for how specimens "
+        "persist. Map each to one of three reference states — "
+        "stateless/ephemeral, persistent-singular, distributed — or to null "
+        "where no mapping is reliable. The author was never shown these three "
+        "terms; they are yours for translation only, and carry no authority "
+        "over its wording.\n"
+        "\n"
         '"No reliable equivalent" is a valid, expected and useful answer. If a '
         "category spans several tiers, or corresponds to nothing in the "
         "conventional structure, say so plainly. A forced mapping is worse "
@@ -241,12 +367,25 @@ def _system_prompt() -> str:
         "    }\n"
         "  ],\n"
         '  "consistency_notes": "<any place the system appears to contradict '
-        'itself, or empty>"\n'
-        "}" % (", ".join(LINNAEAN_TIERS),)
+        'itself, or empty>",\n'
+        '  "persistence_crosswalk": [\n'
+        "    {\n"
+        '      "native_wording": "<the wording exactly as given to you>",\n'
+        '      "reference_state": "stateless/ephemeral" | "persistent-singular" '
+        '| "distributed" | null,\n'
+        '      "note": "<one short sentence: why, or why no reliable '
+        'equivalent>"\n'
+        "    }\n"
+        "  ]\n"
+        "}\n"
+        "\n"
+        "Keep every note to one short sentence. A truncated reply loses the "
+        "whole crosswalk." % (", ".join(LINNAEAN_TIERS),)
     )
 
 
-def _build_input(native: Any, drift: Dict[str, Any], capability: Dict[str, Any]) -> str:
+def _build_input(native: Any, drift: Dict[str, Any], capability: Dict[str, Any],
+                 persistence: Optional[Dict[str, int]] = None) -> str:
     lines = ["THE SYSTEM TO TRANSLATE, EXACTLY AS ITS AUTHOR WROTE IT:"]
     lines.append(json.dumps(native, indent=2) if native else "(empty)")
     lines.append("")
@@ -257,6 +396,15 @@ def _build_input(native: Any, drift: Dict[str, Any], capability: Dict[str, Any])
             "  %s — %s member(s), mean complexity %s"
             % (label, entry.get("members", 0), entry.get("mean_complexity"))
         )
+    if persistence:
+        ranked = sorted(persistence.items(), key=lambda kv: -kv[1])
+        shown = ranked[: config.ARCHIVIST_PERSISTENCE_WINDOW]
+        lines.append("")
+        lines.append(
+            "THE AUTHOR'S OWN WORDINGS FOR HOW SPECIMENS PERSIST "
+            "(%d most frequent of %d):" % (len(shown), len(ranked)))
+        for wording, count in shown:
+            lines.append("  (%d) %s" % (count, wording))
     return "\n".join(lines)
 
 
@@ -283,10 +431,14 @@ def run(
     category_stats = memory.get("category_stats", {}) or {}
     drift = detect_drift(taxonomy_native, category_stats, previous_pass)
     capability = capability_record(category_stats, previous_pass)
+    specimen_index = memory.get("specimen_index", {}) or {}
+    lineages = lineage_record(specimen_index)
+    persistence = persistence_reported(specimen_index)
 
     outcome: Dict[str, Any] = {
         "drift": drift,
         "capability": capability,
+        "lineages": lineages,
         "crosswalk": None,
         "halt_reason": None,
     }
@@ -296,6 +448,9 @@ def run(
         "authored_categories": drift["authored_categories"],
         "drift": drift,
         "capability": capability,
+        "lineages": lineages,
+        "persistence_native_wordings": persistence,
+        "persistence_crosswalk": None,
         "crosswalk": None,
         "consistency_notes": None,
         "crosswalk_available": False,
@@ -303,7 +458,7 @@ def run(
 
     try:
         result = config.generate(
-            prompt=_build_input(taxonomy_native, drift, capability),
+            prompt=_build_input(taxonomy_native, drift, capability, persistence),
             role=ROLE,
             system=_system_prompt(),
             ledger=ledger,
@@ -319,6 +474,19 @@ def run(
 
     parsed = extract_json(result.text)
     if parsed is None:
+        # A reply cut off by the ceiling is valid JSON up to the cut. Recover
+        # the entries that completed rather than discarding real translation
+        # work over a missing bracket (same principle as namer.salvage).
+        recovered_cross = _salvage_objects(result.text, "category")
+        recovered_pers = _salvage_objects(result.text, "native_wording")
+        if recovered_cross or recovered_pers:
+            parsed = {
+                "crosswalk": recovered_cross,
+                "persistence_crosswalk": recovered_pers,
+                "consistency_notes": None,
+            }
+            payload["salvaged_from_truncated_response"] = True
+    if parsed is None:
         payload["crosswalk_note"] = (
             "No crosswalk this pass: the response could not be parsed. This is "
             "a harness failure, not a finding about the taxonomy."
@@ -333,6 +501,8 @@ def run(
         payload["crosswalk_available"] = True
         outcome["crosswalk"] = crosswalk
     payload["consistency_notes"] = parsed.get("consistency_notes") or None
+    if isinstance(parsed.get("persistence_crosswalk"), list):
+        payload["persistence_crosswalk"] = parsed["persistence_crosswalk"]
     payload["crosswalk_note"] = (
         "For human legibility only. Carries no authority over the native "
         "system and does not feed back into it (DNT-CLS-001 Section 2)."

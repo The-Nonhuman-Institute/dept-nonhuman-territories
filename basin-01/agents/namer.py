@@ -218,6 +218,10 @@ def _system_prompt() -> str:
         "Flagging a specimen anomalous is a valid and expected outcome. Do not "
         "force a specimen into a category to avoid it.\n"
         "\n"
+        "For each specimen also state how it persists, in your own words. You "
+        "are not given a set of persistence states to choose from; describe "
+        "what you observe.\n"
+        "\n"
         "Reply with JSON only, in this form:\n"
         "{\n"
         '  "classifications": [\n'
@@ -228,7 +232,9 @@ def _system_prompt() -> str:
         '      "comparison": "<whether this specimen is more or less alike '
         'than a named other specimen, and why>",\n'
         '      "reasoning": "<your full reasoning, at whatever length it '
-        'takes>"\n'
+        'takes>",\n'
+        '      "persistence": "<in your own words, how this specimen '
+        'persists>"\n'
         "    }\n"
         "  ],\n"
         '  "taxonomy": { }\n'
@@ -454,6 +460,7 @@ def run(
         "taxonomy_structure": measure_taxonomy_structure(native),
         "halt_reason": None,
         "parse_failed": False,
+        "records": [],
     }
 
     batch = [dict(e) for e in emissions]
@@ -549,6 +556,11 @@ def run(
             # research data (README.md Section 5).
             "reasoning": entry.get("reasoning", ""),
             "comparison": entry.get("comparison", ""),
+            # physics.md Section 5: specimen state is assigned by the Namer
+            # "natively" and crosswalked later. Stored exactly as written. The
+            # three reference terms are never issued to this role — doing so
+            # would hand it a template (DNT-CLS-001 Section 1).
+            "persistence_native": entry.get("persistence", ""),
             # A record recovered from a truncated response says so, so the log
             # never presents a partially-read reply as a clean one.
             "salvaged_from_truncated_response": salvaged,
@@ -580,8 +592,7 @@ def run(
 
         stats = update_category_stats(stats, category, int(record.get("complexity", 0)), shift_number)
 
-        writer.append_specimen(
-            {
+        specimen_record = {
                 "specimen_id": record["specimen_id"],
                 "source_role": record["source_role"],
                 "substrate": record["substrate"],
@@ -604,8 +615,9 @@ def run(
                     "output_tokens": record.get("output_tokens"),
                     "truncated": record.get("truncated"),
                 },
-            }
-        )
+        }
+        writer.append_specimen(specimen_record)
+        outcome["records"].append(specimen_record)
         outcome["classified"] += 1
         if tier == "individual":
             outcome["individual_records"] += 1

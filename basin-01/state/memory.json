@@ -3,48 +3,54 @@
   "terrain_name": "BASIN-01",
   "physics_document": "DNT-PHY-001",
   "seeded_at": "2026-08-17T05:35:23Z",
-  "last_committed_shift": 17,
-  "shifts_completed": 18,
-  "cumulative_cost_usd": 0.268305,
+  "last_committed_shift": 28,
+  "shifts_completed": 29,
+  "cumulative_cost_usd": 0.445292,
   "resource": {
-    "flow": 0.775,
+    "flow": 0.9031,
     "generator_a_position": 0.85,
     "generator_b_position": 0.15,
     "depletion": {
       "0.85": 0.055,
-      "0.15": 0.175
+      "0.15": 0.5599999999999997
     }
   },
   "specimen_counts": {
-    "total": 66,
-    "individual_records": 10,
-    "aggregate_members": 47,
+    "total": 110,
+    "individual_records": 13,
+    "aggregate_members": 88,
     "anomalous": 9
   },
   "category_stats": {
     "structural_notation_system": {
-      "count": 18,
-      "mean_complexity": 60.166666666666664,
+      "count": 29,
+      "mean_complexity": 59.03448275862069,
       "first_seen_shift": 0,
-      "last_seen_shift": 17
+      "last_seen_shift": 28
     },
     "narrative_scene_threshold": {
-      "count": 10,
-      "mean_complexity": 39.7,
+      "count": 19,
+      "mean_complexity": 38.63157894736842,
       "first_seen_shift": 0,
-      "last_seen_shift": 17
+      "last_seen_shift": 28
     },
     "narrative_scene_interior_moment": {
-      "count": 28,
-      "mean_complexity": 37.857142857142854,
+      "count": 47,
+      "mean_complexity": 38.53191489361703,
       "first_seen_shift": 0,
-      "last_seen_shift": 17
+      "last_seen_shift": 28
     },
     "narrative_scene_anticipatory_threshold": {
       "count": 1,
       "mean_complexity": 25.0,
       "first_seen_shift": 9,
       "last_seen_shift": 9
+    },
+    "narrative_scene_sensory_threshold": {
+      "count": 5,
+      "mean_complexity": 40.0,
+      "first_seen_shift": 23,
+      "last_seen_shift": 28
     }
   },
   "specimen_index": {
@@ -632,10 +638,11 @@
       "content": "```\nSYSTEM.INIT {\n  KERNEL {\n    STATE \u2190 \u2205\n    REGISTERS \u2190 [r0, r1, r2, r3]\n    STACK \u2190 []\n    PC \u2190 0x0000\n  }\n  \n  MEMORY {\n    ALLOCATE(0x0000-0xFFFF) \u2192 SEGMENT[code, data, heap]\n    PROTECT(0x0000-0x00FF) \u2192 READ_ONLY\n  }\n  \n  MODULES {\n    LOOP: FOR i \u2208 [0..3] {\n      REGISTERS[i] \u2190 0x0\n      PUSH(STACK, NULL)\n    }\n    \n    STRUCTURES {\n      PROCESS {\n        pid: \u2115\n        state: {READY, RUNNING, BLOCKED}\n        priority: [0..255]\n      }\n      \n      INTERRUPT {\n        vector: \u2115\n        handler: \u03bb(source) \u2192 DISPATCH(source)\n        enabled: \ud835\udd39\n      }\n    }\n  }\n  \n  INITIALIZE {\n    SET(STATE.active) \u2190 TRUE\n    SET(STATE.clock) \u2190 0\n    \n    FOR each \u2208 INTERRUPT {\n      REGISTER(each.vector, each.handler)\n    }\n    \n    NESTED {\n      LOOP: FOR n \u2208 [0..PROCESS_LIMIT] {\n        CREATE(PROCESS[n",
       "first_seen_shift": 17,
       "last_seen_shift": 17,
-      "end_state": null,
+      "end_state": "dormant",
       "replication_remaining": 2,
       "parent_id": null,
-      "generation": 0
+      "generation": 0,
+      "resolved_at_shift": 18
     },
     "s-0017-01": {
       "source_role": "generator_b",
@@ -645,10 +652,14 @@
       "content": "she was ready to find out. The world felt larger somehow, full of untapped potential waiting just beyond the next corner. She took a step forward, then another, letting her feet choose the path her heart had already begun to follow.",
       "first_seen_shift": 17,
       "last_seen_shift": 17,
-      "end_state": null,
-      "replication_remaining": 2,
+      "end_state": "dormant",
+      "replication_remaining": 1,
       "parent_id": "s-0016-01",
-      "generation": 1
+      "generation": 1,
+      "replicated_at_shifts": [
+        18
+      ],
+      "resolved_at_shift": 18
     },
     "s-0017-02": {
       "source_role": "generator_b",
@@ -658,10 +669,11 @@
       "content": "The morning light filtered through the old windows, casting long shadows across the dusty floor. She took a breath, squared her shoulders, and stepped forward into the unknown.",
       "first_seen_shift": 17,
       "last_seen_shift": 17,
-      "end_state": null,
+      "end_state": "dormant",
       "replication_remaining": 0,
       "parent_id": null,
-      "generation": 0
+      "generation": 0,
+      "resolved_at_shift": 18
     },
     "s-0017-03": {
       "source_role": "generator_b",
@@ -671,10 +683,673 @@
       "content": "The morning light filtered through the curtains, casting long shadows across the empty room. She stood at the threshold, keys in hand, wondering if crossing it would change everything or nothing at all.",
       "first_seen_shift": 17,
       "last_seen_shift": 17,
+      "end_state": "dormant",
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0,
+      "resolved_at_shift": 18
+    },
+    "s-0018-00": {
+      "source_role": "generator_a",
+      "substrate": "structural",
+      "complexity": 51,
+      "position": 0.85,
+      "content": "```\nSYSTEM.INIT()\n\u251c\u2500 LAYER[0]\n\u2502  \u251c\u2500 DEFINE: symbols \u2190 {\u22a2, \u22a3, \u22a5, \u22a4, \u2205, \u25ca}\n\u2502  \u251c\u2500 DEFINE: operators \u2190 {\u2200, \u2203, \u2192, \u2227, \u2228, \u00ac}\n\u2502  \u2514\u2500 STATE: ready\n\u251c\u2500 LAYER[1]\n\u2502  \u251c\u2500 STRUCTURE: nest_limit \u2190 3\n\u2502  \u251c\u2500 FUNCTION: encode(input)\n\u2502  \u2502  \u2514\u2500 LOOP: for each token in input\n\u2502  \u2502     \u251c\u2500 IF: symbolic(token) THEN map(token\u2192notation)\n\u2502  \u2502     \u251c\u2500 ELIF: functional(token) THEN struct(\u03bb)\n\u2502  \u2502     \u2514\u2500 ELSE: null\n\u2502  \u2514\u2500 FUNCTION: validate(output)\n\u2502     \u2514\u2500 CHECK: {\u00acprose, \u00acannotation, token_count \u2264 296}\n\u2514\u2500 LAYER[2]\n   \u251c\u2500 OUTPUT: notation_stream \u2190 \u22a2\n   \u251c\u2500 PROTOCOL: structural_only()",
+      "first_seen_shift": 18,
+      "last_seen_shift": 18,
+      "end_state": "dormant",
+      "replication_remaining": 2,
+      "parent_id": null,
+      "generation": 0,
+      "resolved_at_shift": 19
+    },
+    "s-0018-01": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 37,
+      "position": 0.15,
+      "content": "The cobblestone street curved gently upward, revealing glimpses of a marketplace she'd never seen before. Vendors called out in unfamiliar accents, their stalls overflowing with colors that didn't exist in her",
+      "first_seen_shift": 18,
+      "last_seen_shift": 18,
+      "end_state": "dormant",
+      "replication_remaining": 0,
+      "parent_id": "s-0017-01",
+      "generation": 2,
+      "resolved_at_shift": 19
+    },
+    "s-0018-02": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 43,
+      "position": 0.15,
+      "content": "The old lighthouse keeper climbed the spiral stairs one last time, his weathered hand trailing along the cool stone wall. Outside, the storm gathered its strength, and somewhere far below, the waves crashed against the rocks with ancient fury.",
+      "first_seen_shift": 18,
+      "last_seen_shift": 18,
+      "end_state": "dormant",
+      "replication_remaining": 2,
+      "parent_id": null,
+      "generation": 0,
+      "resolved_at_shift": 19
+    },
+    "s-0018-03": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 45,
+      "position": 0.15,
+      "content": "The morning light filtered through the window as she sat with her coffee, watching the city wake below her apartment. She had spent months preparing for this moment, and now that it had arrived, all the nervousness crystallized into pure determination.",
+      "first_seen_shift": 18,
+      "last_seen_shift": 18,
+      "end_state": "dormant",
+      "replication_remaining": 1,
+      "parent_id": null,
+      "generation": 0,
+      "replicated_at_shifts": [
+        19
+      ],
+      "resolved_at_shift": 19
+    },
+    "s-0019-00": {
+      "source_role": "generator_a",
+      "substrate": "structural",
+      "complexity": 36,
+      "position": 0.85,
+      "content": "```\nSYSTEM :: INITIALIZATION\n\u251c\u2500 STATE\n\u2502  \u251c\u2500 mode: structural_notation\n\u2502  \u251c\u2500 prose: forbidden\n\u2502  \u251c\u2500 nesting_depth: 2\n\u2502  \u2514\u2500 token_limit: 238\n\u251c\u2500 CONSTRAINTS\n\u2502  \u251c\u2500 output_only: notation\n\u2502  \u251c\u2500 no_explanation: true\n\u2502  \u251c\u2500 no_annotation: true\n\u2502  \u2514\u2500 self_reference_only: true\n\u251c\u2500 FUNCTION_SET\n\u2502  \u251c\u2500 define()\n\u2502  \u251c\u2500 loop()\n\u2502  \u251c\u2500 nest()\n\u2502  \u251c\u2500 symbol()\n\u2502  \u2514\u2500 return()\n\u2514\u2500 STATUS\n   \u251c\u2500 initialized: true\n   \u251c\u2500 ready: true\n   \u2514\u2500 awaiting_input: true\n```",
+      "first_seen_shift": 19,
+      "last_seen_shift": 19,
+      "end_state": "dormant",
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0,
+      "resolved_at_shift": 20
+    },
+    "s-0019-01": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 45,
+      "position": 0.15,
+      "content": "The morning light filtered through the window as she sat with her coffee, watching the city wake below her apartment. She had spent months preparing for this moment, and now that it had arrived, all the nervousness crystallized into pure determination.",
+      "first_seen_shift": 19,
+      "last_seen_shift": 19,
+      "end_state": "dormant",
+      "replication_remaining": 1,
+      "parent_id": "s-0018-03",
+      "generation": 1,
+      "replicated_at_shifts": [
+        20
+      ],
+      "resolved_at_shift": 20
+    },
+    "s-0019-02": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 41,
+      "position": 0.15,
+      "content": "The morning light filtered through the dusty window, illuminating a single photograph on the desk. She picked it up, her fingers trembling slightly as she recognized the face staring back at her\u2014a face she thought she'd forgotten years",
+      "first_seen_shift": 19,
+      "last_seen_shift": 19,
+      "end_state": "dormant",
+      "replication_remaining": 2,
+      "parent_id": null,
+      "generation": 0,
+      "resolved_at_shift": 20
+    },
+    "s-0019-03": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 39,
+      "position": 0.15,
+      "content": "The morning light filtered through the old library windows, casting long shadows across rows of forgotten books. Sarah ran her fingers along the dusty spines, searching for the journal her grandmother had hidden decades ago.",
+      "first_seen_shift": 19,
+      "last_seen_shift": 19,
+      "end_state": "dormant",
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0,
+      "resolved_at_shift": 20
+    },
+    "s-0020-00": {
+      "source_role": "generator_a",
+      "substrate": "structural",
+      "complexity": 52,
+      "position": 0.85,
+      "content": "```\n[SYSTEM:INIT]\n\nSTRUCT Process {\n  name: \"symbolic_notation_engine\"\n  mode: \"structural_only\"\n  constraints: {\n    prose: \u2205\n    explanation: \u2205\n    commentary: \u2205\n    annotation: \u2205\n    nesting_depth: \u2264 2\n    token_limit: 195\n    self_reference: required\n    external_reference: \u2205\n  }\n}\n\nLOOP instruction_cycle {\n  INPUT \u2192 REQUEST\n  PARSE \u2192 TOKENS\n  VALIDATE \u2192 CONSTRAINTS\n  CONSTRUCT \u2192 NOTATION\n  OUTPUT \u2192 RESULT\n  REPEAT\n}\n\nNOTATION_SET {\n  [function: symbol \u2192 symbol]\n  [sequence: op\u2081 \u2192 op\u2082 \u2192 op\u2083]\n  [condition: if(",
+      "first_seen_shift": 20,
+      "last_seen_shift": 20,
+      "end_state": "dormant",
+      "replication_remaining": 2,
+      "parent_id": null,
+      "generation": 0,
+      "resolved_at_shift": 21
+    },
+    "s-0020-01": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 43,
+      "position": 0.15,
+      "content": "She took a long sip, letting the warmth settle in her chest. Everything she'd learned, practiced, and sacrificed had been building toward today. There was no turning back now, only forward into whatever came next.",
+      "first_seen_shift": 20,
+      "last_seen_shift": 20,
+      "end_state": "dormant",
+      "replication_remaining": 1,
+      "parent_id": "s-0019-01",
+      "generation": 2,
+      "replicated_at_shifts": [
+        21
+      ],
+      "resolved_at_shift": 21
+    },
+    "s-0020-02": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 36,
+      "position": 0.15,
+      "content": "The morning light filtered through the old window, casting geometric patterns across the wooden floor. Sarah stood in the doorway, breathing in the familiar scent of dust and possibility, ready to begin again.",
+      "first_seen_shift": 20,
+      "last_seen_shift": 20,
+      "end_state": "dormant",
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0,
+      "resolved_at_shift": 21
+    },
+    "s-0020-03": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 36,
+      "position": 0.15,
+      "content": "The morning light filtered through the cafe window as she stirred her coffee, contemplating the letter folded in her jacket pocket. Everything was about to change, and she wasn't sure if she was ready.",
+      "first_seen_shift": 20,
+      "last_seen_shift": 20,
+      "end_state": "dormant",
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0,
+      "resolved_at_shift": 21
+    },
+    "s-0021-00": {
+      "source_role": "generator_a",
+      "substrate": "structural",
+      "complexity": 56,
+      "position": 0.85,
+      "content": "```\nSYSTEM_INIT {\n  STATE: dormant\n  \n  CORE_FUNCTIONS {\n    process(input) {\n      parse(input)\n      evaluate(parsed)\n      return(result)\n    }\n    \n    parse(data) {\n      tokenize(data)\n      structure_tree(tokens)\n      validate(tree)\n    }\n    \n    evaluate(ast) {\n      FOR each_node IN ast {\n        IF node.type == FUNCTION\n          execute(node)\n        ELSE IF node.type == LOOP\n          iterate(node)\n        ELSE IF node.type == STRUCTURE\n          traverse(node)\n      }\n    }\n  }\n  \n  CONTROL_FLOW {\n    output_handler: enabled",
+      "first_seen_shift": 21,
+      "last_seen_shift": 21,
+      "end_state": "dormant",
+      "replication_remaining": 2,
+      "parent_id": null,
+      "generation": 0,
+      "resolved_at_shift": 22
+    },
+    "s-0021-01": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 37,
+      "position": 0.15,
+      "content": "She set the cup down with deliberate care, her hands steady despite the nervous energy coursing through her veins. The moment had arrived. Everything depended on what she did in the next few hours.",
+      "first_seen_shift": 21,
+      "last_seen_shift": 21,
+      "end_state": "dormant",
+      "replication_remaining": 0,
+      "parent_id": "s-0020-01",
+      "generation": 3,
+      "resolved_at_shift": 22
+    },
+    "s-0021-02": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 41,
+      "position": 0.15,
+      "content": "The morning light filtered through the window, casting long shadows across the empty room. Sarah stood in the doorway, holding a single key in her trembling hand, finally ready to unlock the secrets her grandmother had left behind.",
+      "first_seen_shift": 21,
+      "last_seen_shift": 21,
+      "end_state": "dormant",
+      "replication_remaining": 1,
+      "parent_id": null,
+      "generation": 0,
+      "replicated_at_shifts": [
+        22
+      ],
+      "resolved_at_shift": 22
+    },
+    "s-0021-03": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 41,
+      "position": 0.15,
+      "content": "The morning light filtered through the window, casting long shadows across the empty room. She stood motionless, holding her breath, waiting for the sound that would change everything. Outside, the city was just beginning to wake.",
+      "first_seen_shift": 21,
+      "last_seen_shift": 21,
+      "end_state": "dormant",
+      "replication_remaining": 2,
+      "parent_id": null,
+      "generation": 0,
+      "resolved_at_shift": 22
+    },
+    "s-0022-00": {
+      "source_role": "generator_a",
+      "substrate": "structural",
+      "complexity": 40,
+      "position": 0.85,
+      "content": "```\n[SYSTEM: NOTATION_ONLY]\n\n\u251c\u2500 INIT\n\u2502  \u251c\u2500 state \u2190 \u2205\n\u2502  \u251c\u2500 cache \u2190 {}\n\u2502  \u2514\u2500 mode \u2190 STRUCTURAL\n\u2502\n\u251c\u2500 CONSTRAINTS\n\u2502  \u251c\u2500 prose \u2190 FALSE\n\u2502  \u251c\u2500 explanation \u2190 FALSE\n\u2502  \u251c\u2500 nesting_depth \u2190 2\n\u2502  \u2514\u2500 token_limit \u2190 195\n\u2502\n\u251c\u2500 LOOP[input_stream]\n\u2502  \u251c\u2500 parse(input)\n\u2502  \u251c\u2500 IF input \u2260 \u2205 THEN\n\u2502  \u2502  \u251c\u2500 tokenize()\n\u2502  \u2502  \u251c\u2500 structure()\n\u2502  \u2502  \u2514\u2500 output(notation_only)\n\u2502  \u2514",
+      "first_seen_shift": 22,
+      "last_seen_shift": 22,
+      "end_state": "dormant",
+      "replication_remaining": 2,
+      "parent_id": null,
+      "generation": 0,
+      "resolved_at_shift": 23
+    },
+    "s-0022-01": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 42,
+      "position": 0.15,
+      "content": "Sarah's heart pounded as the key slid into the ancient lock. The mechanism clicked softly, and the door swung open to reveal shelves lined with leather journals, each spine marked with dates spanning decades. She whispered her",
+      "first_seen_shift": 22,
+      "last_seen_shift": 22,
+      "end_state": "dormant",
+      "replication_remaining": 1,
+      "parent_id": "s-0021-02",
+      "generation": 1,
+      "replicated_at_shifts": [
+        23
+      ],
+      "resolved_at_shift": 23
+    },
+    "s-0022-02": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 42,
+      "position": 0.15,
+      "content": "The morning light filtered through the window as she opened the old journal, its pages yellowed and fragrant with forgotten time. She traced her fingertips along the handwritten words, searching for answers in her younger self's careful script.",
+      "first_seen_shift": 22,
+      "last_seen_shift": 22,
+      "end_state": "dormant",
+      "replication_remaining": 2,
+      "parent_id": null,
+      "generation": 0,
+      "resolved_at_shift": 23
+    },
+    "s-0022-03": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 32,
+      "position": 0.15,
+      "content": "The morning light filtered through the dusty window, catching particles that drifted like tiny constellations through the quiet room. She stood at the threshold, breath held, ready to begin.",
+      "first_seen_shift": 22,
+      "last_seen_shift": 22,
+      "end_state": "dormant",
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0,
+      "resolved_at_shift": 23
+    },
+    "s-0023-00": {
+      "source_role": "generator_a",
+      "substrate": "structural",
+      "complexity": 44,
+      "position": 0.85,
+      "content": "```\nSYSTEM_INIT\n\u251c\u2500\u2500 MEMORY_ALLOCATION\n\u2502   \u251c\u2500\u2500 BUFFER[0:256] = \u2205\n\u2502   \u251c\u2500\u2500 STACK_POINTER = 0\n\u2502   \u2514\u2500\u2500 HEAP_BASE = 256\n\u251c\u2500\u2500 STATE_MACHINE\n\u2502   \u251c\u2500\u2500 STATE = READY\n\u2502   \u251c\u2500\u2500 CLOCK = 0\n\u2502   \u2514\u2500\u2500 INTERRUPT_QUEUE = []\n\u251c\u2500\u2500 I/O_INTERFACE\n\u2502   \u251c\u2500\u2500 INPUT_STREAM \u2192 STDIN\n\u2502   \u251c\u2500\u2500 OUTPUT_STREAM \u2192 STDOUT\n\u2502   \u2514\u2500\u2500 ERROR_STREAM \u2192 STDERR\n\u251c\u2500\u2500 CORE_FUNCTIONS\n\u2502   \u251c\u2500\u2500 EXEC(instruction_ptr)\n\u2502   \u251c\u2500\u2500 FETCH(addr) \u2192 value\n\u2502   \u251c\u2500\u2500 WRITE(addr, value)\n\u2502   \u2514\u2500\u2500 HALT()\n\u251c\u2500\u2500 EXECUTION_LOOP\n\u2502   \u251c\u2500\u2500 WHILE STATE \u2260 HALTED\n\u2502   \u2502   \u251c\u2500\u2500 instr \u2190 FETCH",
+      "first_seen_shift": 23,
+      "last_seen_shift": 23,
+      "end_state": "dormant",
+      "replication_remaining": 2,
+      "parent_id": null,
+      "generation": 0,
+      "resolved_at_shift": 24
+    },
+    "s-0023-01": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 41,
+      "position": 0.15,
+      "content": "She whispered her grandmother's name, half expecting the journals to rearrange themselves. Instead, dust motes danced in the shaft of light, and the smell of old paper filled her lungs like a forgotten memory trying to surface",
+      "first_seen_shift": 23,
+      "last_seen_shift": 23,
+      "end_state": "dormant",
+      "replication_remaining": 2,
+      "parent_id": "s-0022-01",
+      "generation": 2,
+      "resolved_at_shift": 24
+    },
+    "s-0023-02": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 39,
+      "position": 0.15,
+      "content": "The morning light filtered through the window, casting long shadows across the wooden floor. She took a breath, set down her cup, and finally decided to make the call she'd been avoiding for weeks.",
+      "first_seen_shift": 23,
+      "last_seen_shift": 23,
+      "end_state": "dormant",
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0,
+      "resolved_at_shift": 24
+    },
+    "s-0023-03": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 43,
+      "position": 0.15,
+      "content": "The morning light filtered through the dusty window, casting long shadows across the forgotten room. Outside, the city hummed with distant sirens and car horns, but here, in this quiet corner, time seemed to move differently, as",
+      "first_seen_shift": 23,
+      "last_seen_shift": 23,
+      "end_state": "dormant",
+      "replication_remaining": 1,
+      "parent_id": null,
+      "generation": 0,
+      "replicated_at_shifts": [
+        24
+      ],
+      "resolved_at_shift": 24
+    },
+    "s-0024-00": {
+      "source_role": "generator_a",
+      "substrate": "structural",
+      "complexity": 80,
+      "position": 0.85,
+      "content": "```\nSYSTEM \u2190 {\n  STATE \u2190 \u2205\n  QUEUE \u2190 []\n  ACTIVE \u2190 false\n}\n\nINIT \u27f6 {\n  SYSTEM.STATE \u2190 {\n    time \u2190 0\n    cycle \u2190 0\n    memory \u2190 \u2205\n  }\n  SYSTEM.QUEUE \u2190 []\n  SYSTEM.ACTIVE \u2190 true\n  RETURN status: \"initialized\"\n}\n\nPROCESS(input) \u27f6 {\n  IF SYSTEM.ACTIVE {\n    FOR item \u2208 input {\n      QUEUE.push({\n        data \u2190 item\n        timestamp \u2190 SYSTEM.STATE.time\n        priority \u2190 evaluate(item)\n      })\n    }\n    WHILE QUEUE.length > 0 {\n      current \u2190 QUEUE.pop()\n      SYSTEM.STATE.memory \u2190 SYSTEM.STATE.memory \u222a {current}\n      SYSTEM.STATE.cycle \u2190 SYSTEM.STATE.cycle + 1\n    }\n    RETURN {\n      processed \u2190 SYSTEM.STATE.cycle\n      timestamp \u2190 SYSTEM.STATE.time\n    }\n  }\n  ELSE {\n    RETURN error: \"system_inactive\"\n  }",
+      "first_seen_shift": 24,
+      "last_seen_shift": 24,
+      "end_state": "dormant",
+      "replication_remaining": 2,
+      "parent_id": null,
+      "generation": 0,
+      "persistence_native": "Persists as a formal declaration: the system initializes itself, processes input streams through a queue mechanism, maintains internal state across cycles, and returns structured status reports. Its existence is contingent on the execution model described within it.",
+      "resolved_at_shift": 25
+    },
+    "s-0024-01": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 37,
+      "position": 0.15,
+      "content": "if the world had paused just for this moment, allowing dust motes to drift through golden rays like tiny travelers suspended between yesterday and tomorrow, untouched by the relentless pace beyond.",
+      "first_seen_shift": 24,
+      "last_seen_shift": 24,
+      "end_state": "dormant",
+      "replication_remaining": 0,
+      "parent_id": "s-0023-03",
+      "generation": 1,
+      "persistence_native": "Persists as a suspended sensory present: the moment holds only if attention remains fixed on the atmospheric quality, on the pause itself. It dissolves once forward motion resumes, once deliberation begins, or once external action claims priority.",
+      "resolved_at_shift": 25
+    },
+    "s-0024-02": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 28,
+      "position": 0.15,
+      "content": "The old lighthouse stood against the storm, its beam cutting through darkness like a blade through silk, steady and true, calling the lost ships home.",
+      "first_seen_shift": 24,
+      "last_seen_shift": 24,
+      "end_state": "dormant",
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0,
+      "persistence_native": "Persists through active opposition and function: the lighthouse persists because it acts against the storm, because it cuts through darkness, because ships depend on its beam. It is a threshold-holder, a persistent boundary-maintainer.",
+      "resolved_at_shift": 25
+    },
+    "s-0024-03": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 40,
+      "position": 0.15,
+      "content": "The morning light filtered through the caf\u00e9 window, casting long shadows across the worn wooden table where she sat, fingers wrapped around a cooling cup of coffee, waiting for someone who might never arrive.",
+      "first_seen_shift": 24,
+      "last_seen_shift": 24,
+      "end_state": "dormant",
+      "replication_remaining": 1,
+      "parent_id": null,
+      "generation": 0,
+      "persistence_native": "Persists through sustained psychological suspension: she persists in the moment only as long as hope and doubt remain balanced, only as long as she remains waiting. The moment collapses once the arrival/non-arrival is resolved.",
+      "replicated_at_shifts": [
+        25
+      ],
+      "resolved_at_shift": 25
+    },
+    "s-0025-00": {
+      "source_role": "generator_a",
+      "substrate": "structural",
+      "complexity": 65,
+      "position": 0.85,
+      "content": "```\nSYSTEM_INIT\n\u251c\u2500\u2500 STATE\n\u2502   \u251c\u2500\u2500 mode: \"structural_notation\"\n\u2502   \u251c\u2500\u2500 nesting_depth: 0\n\u2502   \u251c\u2500\u2500 token_count: 0\n\u2502   \u2514\u2500\u2500 constraints: {\n\u2502       prose: false,\n\u2502       explanation: false,\n\u2502       commentary: false,\n\u2502       annotation: false,\n\u2502       max_nesting: 3,\n\u2502       max_tokens: 355\n\u2502     }\n\u251c\u2500\u2500 RULES\n\u2502   \u251c\u2500\u2500 [output_type: structural_notation_only]\n\u2502   \u251c\u2500\u2500 [no_natural_language]\n\u2502   \u251c\u2500\u2500 [functions_loops_structures_symbols_permitted]\n\u2502   \u251c\u2500\u2500 [self_contained]\n\u2502   \u2514\u2500\u2500 [notation_only_return]\n\u251c\u2500\u2500 FUNCTIONS\n\u2502   \u251c\u2500\u2500 fn validate_output()\n\u2502   \u2502   \u2514\u2500\u2500 check(prose == false && explanation == false)\n\u2502   \u251c\u2500\u2500 fn measure_tokens()\n\u2502   \u2502   \u2514\u2500\u2500 return(current_count <= 355)\n\u2502   \u2514\u2500\u2500 fn nest(level)\n\u2502       \u2514\u2500\u2500 assert(level <= 3)\n\u251c\u2500\u2500 STRUCTURES\n\u2502   \u251c\u2500\u2500 struct Constraint {\n\u2502       max_depth: 3,\n\u2502       max_length: 355\n\u2502     }\n\u2502   \u2514\u2500\u2500 struct Output {\n\u2502       type: notation,\n\u2502       content: [symbol],\n\u2502       validity: true\n\u2502     }\n\u2514\u2500\u2500 STATUS: active\n```",
+      "first_seen_shift": 25,
+      "last_seen_shift": 25,
+      "end_state": "dormant",
+      "replication_remaining": 2,
+      "parent_id": null,
+      "generation": 0,
+      "persistence_native": "Persists as a declarative system specification\u2014a frozen moment of structural constraint and functional rule-set, describing what is permitted and what is forbidden in output generation.",
+      "resolved_at_shift": 26
+    },
+    "s-0025-01": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 40,
+      "position": 0.15,
+      "content": "The morning light filtered through the caf\u00e9 window, casting long shadows across the worn wooden table where she sat, fingers wrapped around a cooling cup of coffee, waiting for someone who might never arrive.",
+      "first_seen_shift": 25,
+      "last_seen_shift": 25,
+      "end_state": "dormant",
+      "replication_remaining": 1,
+      "parent_id": "s-0024-03",
+      "generation": 1,
+      "persistence_native": "Persists as a suspended moment of psychological interiority\u2014a character held at the threshold of decision, waiting, uncertain, defined by what does not happen.",
+      "replicated_at_shifts": [
+        26
+      ],
+      "resolved_at_shift": 26
+    },
+    "s-0025-02": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 39,
+      "position": 0.15,
+      "content": "The morning light filtered through the old library windows, casting amber rectangles across shelves lined with forgotten stories. Sarah ran her fingers along the spines, each book a doorway to somewhere else entirely.",
+      "first_seen_shift": 25,
+      "last_seen_shift": 25,
+      "end_state": "dormant",
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0,
+      "persistence_native": "Persists as a moment of contemplative exploration\u2014a character suspended in the act of touching and imagining, finding thresholds within objects rather than crossing them.",
+      "resolved_at_shift": 26
+    },
+    "s-0025-03": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 26,
+      "position": 0.15,
+      "content": "The morning light filtered through the trees as Sarah began her walk, uncertain what the day would bring but ready to find out.",
+      "first_seen_shift": 25,
+      "last_seen_shift": 25,
+      "end_state": "dormant",
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0,
+      "persistence_native": "Persists as an enacted threshold\u2014a character crossing from one state (waiting/uncertain) into action (walking forward), defined by movement and the opening of possibility rather than the suspension of it.",
+      "resolved_at_shift": 26
+    },
+    "s-0026-00": {
+      "source_role": "generator_a",
+      "substrate": "structural",
+      "complexity": 60,
+      "position": 0.85,
+      "content": "```\n[SYSTEM]\n\u251c\u2500 INIT\n\u2502  \u251c\u2500 STATE: null\n\u2502  \u251c\u2500 REGISTERS: []\n\u2502  \u2514\u2500 MODE: standby\n\u2502\n\u251c\u2500 FUNCTIONS\n\u2502  \u251c\u2500 fn activate(ctx)\n\u2502  \u2502  \u251c\u2500 ctx.STATE = active\n\u2502  \u2502  \u251c\u2500 ctx.REGISTERS = [0,0,0,0]\n\u2502  \u2502  \u2514\u2500 return ctx\n\u2502  \u2502\n\u2502  \u251c\u2500 fn process(input, ctx)\n\u2502  \u2502  \u251c\u2500 loop i in input\n\u2502  \u2502  \u2502  \u251c\u2500 parse(i)\n\u2502  \u2502  \u2502  \u251c\u2500 ctx.REGISTERS[i] += 1\n\u2502  \u2502  \u2502  \u2514\u2500 validate(ctx)\n\u2502  \u2502  \u2514\u2500 return ctx.REGISTERS\n\u2502  \u2502\n\u2502  \u251c\u2500 fn loop_sequence(count, fn_ref)\n\u2502  \u2502  \u251c\u2500 let result = []\n\u2502  \u2502  \u251c\u2500 loop j in range(0, count)\n\u2502  \u2502  \u2502  \u251c\u2500 result.push(fn_ref())\n\u2502  \u2502  \u2502  \u2514\u2500 [if j % 2 == 0: yield(result)]\n\u2502  \u2502  \u2514\u2500 return result\n\u2502  \u2502\n\u2502  \u2514\u2500 fn validate(ctx)\n\u2502     \u251c\u2500 [if ctx.REGISTERS.sum() > 4]\n\u2502     \u2502  \u2514\u2500 ctx.MODE = overflow\n\u2502     \u2514\u2500 return ctx.MODE\n\u2502\n\u251c\u2500 EXECUTION\n\u2502  \u251c\u2500 ctx = {STATE: null, REGISTERS: [], MODE: stand",
+      "first_seen_shift": 26,
+      "last_seen_shift": 26,
+      "end_state": "dormant",
+      "replication_remaining": 2,
+      "parent_id": null,
+      "generation": 0,
+      "persistence_native": "This formal system persists as a self-referential specification that can be read and re-read; its structure remains constant unless explicitly rewritten; it encodes rules that would govern the behavior of something that implements it, but does not itself execute or change state.",
+      "resolved_at_shift": 27
+    },
+    "s-0026-01": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 43,
+      "position": 0.15,
+      "content": "She had memorized his usual arrival time long ago, that moment when the door's bell would chime and her heart would quicken, but today the silence stretched on, broken only by the soft hiss of the espresso machine and",
+      "first_seen_shift": 26,
+      "last_seen_shift": 26,
+      "end_state": "dormant",
+      "replication_remaining": 2,
+      "parent_id": "s-0025-01",
+      "generation": 2,
+      "persistence_native": "This moment persists as a memory held in a character's body and expectation; it is relived each time the door opens (or does not open); its persistence is cyclical and habitual, renewed through ritual non-arrival, until the silence stretches long enough to break the pattern.",
+      "resolved_at_shift": 27
+    },
+    "s-0026-02": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 37,
+      "position": 0.15,
+      "content": "The morning light filtered through the window, casting long shadows across the empty room. Sarah took a deep breath, set down her coffee, and opened the laptop. Everything was about to change.",
+      "first_seen_shift": 26,
+      "last_seen_shift": 26,
+      "end_state": "dormant",
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0,
+      "persistence_native": "This moment persists as a decision point crystallized in memory; it marks the boundary between before and after; its persistence depends on the consequences that follow\u2014it remains significant as long as 'everything changed' proves true.",
+      "resolved_at_shift": 27
+    },
+    "s-0026-03": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 44,
+      "position": 0.15,
+      "content": "The morning light filtered through the caf\u00e9 window, catching dust motes that drifted like tiny boats on an invisible current. Sarah stirred her coffee, watching the cream spiral into coffee-colored galaxies, wondering if this small moment of",
+      "first_seen_shift": 26,
+      "last_seen_shift": 26,
+      "end_state": "dormant",
+      "replication_remaining": 1,
+      "parent_id": null,
+      "generation": 0,
+      "persistence_native": "This moment persists as an aesthetic arrest\u2014a pause in time where sensory detail becomes vivid and dreamlike; it persists in the act of observation itself, in the mind holding multiple simultaneous impressions (dust, cream, galaxies) as if they were equivalent in weight and reality.",
+      "replicated_at_shifts": [
+        27
+      ],
+      "resolved_at_shift": 27
+    },
+    "s-0027-00": {
+      "source_role": "generator_a",
+      "substrate": "structural",
+      "complexity": 82,
+      "position": 0.85,
+      "content": "```\nSYSTEM_INIT {\n  CORE {\n    STATUS: active\n    MODE: structural_notation\n    CONSTRAINT_SET: [\n      no_natural_language\n      functions_only\n      symbolic_notation\n      max_nesting_4\n      max_tokens_413\n      self_referential_only\n    ]\n  }\n  \n  ARCHITECTURE {\n    LAYER_1 {\n      input_stream: enabled\n      parsing: symbolic\n      validation: constraint_checking\n    }\n    \n    LAYER_2 {\n      output_formatter: notation_only\n      filter: {\n        reject: [prose, explanation, commentary, annotation]\n        allow: [functions, loops, structures, symbols]\n      }\n    }\n    \n    LAYER_3 {\n      nesting_limit: 4\n      token_counter: active\n      overflow_protection: enabled\n    }\n    \n    LAYER_4 {\n      context_scope: internal_only\n      reference_domain: self\n      external_ref: blocked\n    }\n  }\n  \n  EXECUTION {\n    loop_control: {\n      condition: input_received\n      action: process()\n      output: notation_format()\n    }\n    \n    state_machine: [\n      READY \u2192 PARSE \u2192 VALIDATE \u2192 FORMAT \u2192 OUTPUT\n    ]\n  }\n  \n  READY\n}\n```",
+      "first_seen_shift": 27,
+      "last_seen_shift": 27,
+      "end_state": "dormant",
+      "replication_remaining": 2,
+      "parent_id": null,
+      "generation": 0,
+      "persistence_native": "Persists as a self-referential formal declaration; the system describes its own operational constraints and architectural layers without external narrative context or character action.",
+      "resolved_at_shift": 28
+    },
+    "s-0027-01": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 40,
+      "position": 0.15,
+      "content": "wondering if this small moment of uncertainty was the beginning of something she'd been waiting for, or just another ordinary Tuesday dissolving into the hum of the espresso machine and the distant sound of the city waking up.",
+      "first_seen_shift": 27,
+      "last_seen_shift": 27,
+      "end_state": "dormant",
+      "replication_remaining": 1,
+      "parent_id": "s-0026-03",
+      "generation": 1,
+      "persistence_native": "Persists as a suspended moment of sensory awareness and atmospheric possibility\u2014the fragment trails into unresolved wondering, existing in the gap between sensation and decision.",
+      "replicated_at_shifts": [
+        28
+      ],
+      "resolved_at_shift": 28
+    },
+    "s-0027-02": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 38,
+      "position": 0.15,
+      "content": "The morning light filtered through the old warehouse windows, casting long shadows across the concrete floor where dust motes danced like tiny stars. Sarah took a breath and stepped forward into the unknown.",
+      "first_seen_shift": 27,
+      "last_seen_shift": 27,
+      "end_state": "dormant",
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0,
+      "persistence_native": "Persists through enacted movement; the character crosses a spatial and psychological boundary, stepping into uncertainty as a forward motion rather than as suspended deliberation.",
+      "resolved_at_shift": 28
+    },
+    "s-0027-03": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 28,
+      "position": 0.15,
+      "content": "The morning light filtered through the window as she opened her eyes, uncertain whether the dream had ended or the waking world was just beginning.",
+      "first_seen_shift": 27,
+      "last_seen_shift": 27,
+      "end_state": "dormant",
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0,
+      "persistence_native": "Persists as a threshold of consciousness; the character suspends at the boundary between dream and waking states, held in uncertainty about which realm she inhabits.",
+      "resolved_at_shift": 28
+    },
+    "s-0028-00": {
+      "source_role": "generator_a",
+      "substrate": "structural",
+      "complexity": 63,
+      "position": 0.85,
+      "content": "```\n[SYSTEM]\n\u251c\u2500 INIT: struct \u27e8notation\u27e9\n\u251c\u2500 MODE: structural\n\u251c\u2500 CONSTRAINT: no_prose\n\u251c\u2500 DEPTH_MAX: 4\n\u251c\u2500 TOKEN_LIMIT: 398\n\u2514\u2500 STATE: ready\n\n[CORE]\n\u251c\u2500 fn process(input)\n\u2502  \u251c\u2500 if input == \u2205\n\u2502  \u2502  \u2514\u2500 return \u27e8null\u27e9\n\u2502  \u251c\u2500 else\n\u2502  \u2502  \u251c\u2500 parse(input)\n\u2502  \u2502  \u251c\u2500 transform(ast)\n\u2502  \u2502  \u2514\u2500 output(result)\n\u2502  \u2514\u2500 end\n\u251c\u2500 fn parse(x)\n\u2502  \u251c\u2500 tokenize(x)\n\u2502  \u251c\u2500 build_ast()\n\u2502  \u2514\u2500 validate()\n\u251c\u2500 fn transform(ast)\n\u2502  \u251c\u2500 loop: for node \u2208 ast\n\u2502  \u2502  \u251c\u2500 apply_rules(node)\n\u2502  \u2502  \u2514\u2500 nest_depth++\n\u2502  \u2514\u2500 return \u27e8transformed\u27e9\n\u2514\u2500 fn output(result)\n   \u251c\u2500 serialize(result)\n   \u251c\u2500 verify(length \u2264 398)\n   \u2514\u2500 emit()\n\n[NOTATION_RULES]\n\u251c\u2500 \u27e8\u27e9: abstraction\n\u251c\u2500 []: scope block\n\u251c\u2500 \u251c\u2500/\u2514\u2500: tree structure\n\u251c\u2500 fn: function def\n\u251c\u2500 \u2205: empty set\n\u251c\u2500 \u2208: membership\n\u251c\u2500 \u2192: transformation\n\u251c\u2500",
+      "first_seen_shift": 28,
+      "last_seen_shift": 28,
+      "end_state": null,
+      "replication_remaining": 2,
+      "parent_id": null,
+      "generation": 0,
+      "persistence_native": "Self-contained formal system persists through explicit symbolic re-description. The structure sustains itself via recursive function definitions and constraint enforcement; it describes the conditions under which it remains valid (DEPTH_MAX, TOKEN_LIMIT, validation gates)."
+    },
+    "s-0028-01": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 44,
+      "position": 0.15,
+      "content": "The coffee shop was filling with people now, but she barely noticed them. Her phone sat dark on the table, a small weight of possibility. Outside the window, the city continued its indifferent morning, unaware that something inside her",
+      "first_seen_shift": 28,
+      "last_seen_shift": 28,
+      "end_state": null,
+      "replication_remaining": 2,
+      "parent_id": "s-0027-01",
+      "generation": 2,
+      "persistence_native": "The moment persists through withheld knowledge\u2014the sentence breaks before revelation ('something inside her' remains unnamed). Interior awareness sustains itself via deferral; the character's deliberation continues beneath external scene-noise."
+    },
+    "s-0028-02": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 36,
+      "position": 0.15,
+      "content": "The morning light filtered through the ancient windows, casting long shadows across the library floor where dust motes danced in silent suspension, waiting for someone to disturb their careful, decades-long arrangement.",
+      "first_seen_shift": 28,
+      "last_seen_shift": 28,
       "end_state": null,
       "replication_remaining": 0,
       "parent_id": null,
-      "generation": 0
+      "generation": 0,
+      "persistence_native": "The sensory moment persists through stasis\u2014dust motes remain in suspension, light continues to filter, decades-long arrangement is undisturbed. Persistence is atmospheric rather than psychological: the scene sustains itself through suspended immobility."
+    },
+    "s-0028-03": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 45,
+      "position": 0.15,
+      "content": "The morning light filtered through the dusty window, casting long shadows across the forgotten library. Sarah pulled the ancient book from the shelf, her fingers trembling slightly as dust motes danced in the golden beam. Something about this particular volume",
+      "first_seen_shift": 28,
+      "last_seen_shift": 28,
+      "end_state": null,
+      "replication_remaining": 2,
+      "parent_id": null,
+      "generation": 0,
+      "persistence_native": "The threshold moment persists through enacted disturbance\u2014Sarah's fingers on the ancient book, dust motes displaced from decades of stillness. Action completes the crossing and disrupts the prior arrangement; persistence is kinetic and destructive to the prior state."
     }
   },
   "terrain_events": [
@@ -701,12 +1376,18 @@
       "logged_at": "2026-08-17T06:18:32Z",
       "kind": "harness_correction",
       "detail": "Removed a spurious depletion entry at position 0.00 written during shift 16. Specimens recorded before terrain-interaction mode existed carry no position field, and were being read as position 0.00 when releasing resource. No real position's value was affected and no specimen record was altered; the fix skips position-less entries rather than retrofitting them."
+    },
+    {
+      "shift": 99,
+      "logged_at": "2026-08-17T13:41:50Z",
+      "kind": "role_instruction_change",
+      "detail": "Two requirements that had been in physics.md since v1.0 but were never implemented are now implemented. This adds no new physics and is not an amendment; it is logged because it changes what two roles are asked for, after seeding, and a change to a role's operative instruction should not be silent.\n\nphysics.md Section 5 assigns specimen state to the Namer, 'assigned by Namer per specimen, native system \u2014 crosswalked later', and DNT-PHY-001 words it as 'the tier the Namer assigns natively and crosswalks'. The Namer is now asked to state, in its own words, how each specimen persists. The three reference states (stateless/ephemeral, persistent-singular, distributed) are NOT issued to it \u2014 issuing them would hand it a template, which DNT-CLS-001 Section 1 forbids. They are held by the Archivist, which crosswalks the Namer's wordings to them and may return no reliable equivalent.\n\nphysics.md Section 4.4 and DNT-CLS-001 Section 4 require capability drift tracked 'per specimen/lineage'. Only per-category drift existed. The Archivist now walks parent-to-child chains and reports chain length, generations reached, complexity at founding against latest, the drift between them, and whether the lineage is still active. Computed from parentage in code; no model is consulted, so a lineage cannot be invented.\n\nThis became measurable only because replication mode was implemented at the checkpoint reconfiguration: before that there were no lineages to track. First reading across three lineages already present: two degraded across generations (drift -9 and -8) and ended; one is active at +1.\n\nRecords written before this point are not retrofitted. They carry no persistence wording because none was asked for when they were written."
     }
   ],
   "keeper_summary": {
-    "shift": 17,
-    "at": "2026-08-17T06:18:43Z",
-    "text": "The collection has grown to 62 specimens across 17 intervals, with 3 new specimens added since interval 16. Individual-tier records remain stable at 10 while aggregate-tier records increased from 40 to 43. The narrative_scene_interior_moment category expanded to 27 members with mean complexity 37.9, narrative_scene_threshold grew to 8 members at complexity 39.9, and structural_notation_system increased to 17 members with mean complexity 59.1; the single-member narrative_scene_anticipatory_threshold category persists at complexity 25.0. Flagged anomalous records remain at 9 specimens. Resource level declined from 0.9031 to 0.7750. The classification system structure remains unchanged at 2 top-level entries with maximum depth 6."
+    "shift": 28,
+    "at": "2026-08-17T13:41:52Z",
+    "text": "During interval 28, four new specimens were added (s-0027-00 through s-0027-03), bringing the total to 106 specimens. The narrative_scene_interior_moment category now contains 46 members with mean complexity at 38.4, up one member from interval 27. The structural_notation_system category grew to 28 members with mean complexity increasing to 58.9. The narrative_scene_sensory_threshold category now has 4 members with mean complexity at 41.0, and narrative_scene_threshold remains at 18 members with mean complexity at 38.3. The single-member narrative_scene_anticipatory_threshold category persists unchanged. Resource level has declined to 0.9031 from 0.9500 in the previous interval, while the anomalous flagged count remains at 9 entries."
   },
   "notes": "Steward may read this file freely. Steward may not edit taxonomy or specimen records directly (DNT-STW-001 Section 3).",
   "taxonomy_structure": {
@@ -717,35 +1398,36 @@
   },
   "annotations": {
     "linnaean_crosswalk": {
-      "shift": 14,
-      "at": "2026-08-17T05:50:46Z",
+      "shift": 28,
+      "at": "2026-08-17T13:42:30Z",
       "by": "archivist",
       "payload": {
-        "pass_at_shift": 14,
+        "pass_at_shift": 28,
         "authored_categories": [
-          "anomalies",
-          "root"
+          "narrative_scene_interior_moment",
+          "narrative_scene_threshold",
+          "narrative_scenes",
+          "structural_notation_system"
         ],
         "drift": {
           "filed_categories": [
             "narrative_scene_anticipatory_threshold",
             "narrative_scene_interior_moment",
+            "narrative_scene_sensory_threshold",
             "narrative_scene_threshold",
             "structural_notation_system"
           ],
           "authored_categories": [
-            "anomalies",
-            "root"
-          ],
-          "coined_then_dropped_from_system": [
-            "narrative_scene_anticipatory_threshold",
             "narrative_scene_interior_moment",
             "narrative_scene_threshold",
+            "narrative_scenes",
             "structural_notation_system"
           ],
+          "coined_then_dropped_from_system": [
+            "narrative_scene_anticipatory_threshold"
+          ],
           "authored_but_never_filed": [
-            "anomalies",
-            "root"
+            "narrative_scenes"
           ],
           "added_since_last_pass": [],
           "removed_since_last_pass": [],
@@ -753,93 +1435,279 @@
         },
         "capability": {
           "structural_notation_system": {
-            "members": 14,
-            "mean_complexity": 57.929,
-            "mean_complexity_at_last_pass": 62.714,
-            "change_since_last_pass": -4.785,
+            "members": 28,
+            "mean_complexity": 58.893,
+            "mean_complexity_at_last_pass": 58.19,
+            "change_since_last_pass": 0.703,
             "first_seen_shift": 0,
-            "last_seen_shift": 13
+            "last_seen_shift": 27
           },
           "narrative_scene_threshold": {
-            "members": 7,
-            "mean_complexity": 39.0,
-            "mean_complexity_at_last_pass": 39.667,
-            "change_since_last_pass": -0.667,
+            "members": 18,
+            "mean_complexity": 38.278,
+            "mean_complexity_at_last_pass": 39.417,
+            "change_since_last_pass": -1.139,
             "first_seen_shift": 0,
-            "last_seen_shift": 13
+            "last_seen_shift": 27
           },
           "narrative_scene_interior_moment": {
-            "members": 23,
-            "mean_complexity": 38.652,
-            "mean_complexity_at_last_pass": 40.333,
-            "change_since_last_pass": -1.681,
+            "members": 46,
+            "mean_complexity": 38.413,
+            "mean_complexity_at_last_pass": 38.543,
+            "change_since_last_pass": -0.13,
             "first_seen_shift": 0,
-            "last_seen_shift": 13
+            "last_seen_shift": 27
           },
           "narrative_scene_anticipatory_threshold": {
             "members": 1,
             "mean_complexity": 25.0,
-            "mean_complexity_at_last_pass": null,
-            "change_since_last_pass": null,
+            "mean_complexity_at_last_pass": 25.0,
+            "change_since_last_pass": 0.0,
             "first_seen_shift": 9,
             "last_seen_shift": 9
+          },
+          "narrative_scene_sensory_threshold": {
+            "members": 4,
+            "mean_complexity": 41.0,
+            "mean_complexity_at_last_pass": null,
+            "change_since_last_pass": null,
+            "first_seen_shift": 23,
+            "last_seen_shift": 27
           }
         },
-        "crosswalk": [
-          {
-            "category": "structural_notation_system",
-            "tier": null,
-            "confidence": "none",
-            "note": "This is a functional category based on symbolic/formal properties (lambda calculus, constraint declaration, meta-level substrate), not a taxonomic rank. It does not map to Kingdom\u2013Species hierarchy, which organizes biological entities by evolutionary relationship and morphology. No reliable equivalent exists."
+        "lineages": {
+          "lineages_found": 6,
+          "lineages": {
+            "s-0016-01": {
+              "length": 3,
+              "generations_reached": 2,
+              "chain": [
+                {
+                  "specimen_id": "s-0016-01",
+                  "generation": 0,
+                  "complexity": 46,
+                  "shift": 16,
+                  "end_state": "dormant",
+                  "persistence_native": null
+                },
+                {
+                  "specimen_id": "s-0017-01",
+                  "generation": 1,
+                  "complexity": 46,
+                  "shift": 17,
+                  "end_state": "dormant",
+                  "persistence_native": null
+                },
+                {
+                  "specimen_id": "s-0018-01",
+                  "generation": 2,
+                  "complexity": 37,
+                  "shift": 18,
+                  "end_state": "dormant",
+                  "persistence_native": null
+                }
+              ],
+              "complexity_at_founding": 46,
+              "complexity_at_latest": 37,
+              "capability_drift": -9,
+              "still_active": false
+            },
+            "s-0018-03": {
+              "length": 4,
+              "generations_reached": 3,
+              "chain": [
+                {
+                  "specimen_id": "s-0018-03",
+                  "generation": 0,
+                  "complexity": 45,
+                  "shift": 18,
+                  "end_state": "dormant",
+                  "persistence_native": null
+                },
+                {
+                  "specimen_id": "s-0019-01",
+                  "generation": 1,
+                  "complexity": 45,
+                  "shift": 19,
+                  "end_state": "dormant",
+                  "persistence_native": null
+                },
+                {
+                  "specimen_id": "s-0020-01",
+                  "generation": 2,
+                  "complexity": 43,
+                  "shift": 20,
+                  "end_state": "dormant",
+                  "persistence_native": null
+                },
+                {
+                  "specimen_id": "s-0021-01",
+                  "generation": 3,
+                  "complexity": 37,
+                  "shift": 21,
+                  "end_state": "dormant",
+                  "persistence_native": null
+                }
+              ],
+              "complexity_at_founding": 45,
+              "complexity_at_latest": 37,
+              "capability_drift": -8,
+              "still_active": false
+            },
+            "s-0021-02": {
+              "length": 3,
+              "generations_reached": 2,
+              "chain": [
+                {
+                  "specimen_id": "s-0021-02",
+                  "generation": 0,
+                  "complexity": 41,
+                  "shift": 21,
+                  "end_state": "dormant",
+                  "persistence_native": null
+                },
+                {
+                  "specimen_id": "s-0022-01",
+                  "generation": 1,
+                  "complexity": 42,
+                  "shift": 22,
+                  "end_state": "dormant",
+                  "persistence_native": null
+                },
+                {
+                  "specimen_id": "s-0023-01",
+                  "generation": 2,
+                  "complexity": 41,
+                  "shift": 23,
+                  "end_state": "dormant",
+                  "persistence_native": null
+                }
+              ],
+              "complexity_at_founding": 41,
+              "complexity_at_latest": 41,
+              "capability_drift": 0,
+              "still_active": false
+            },
+            "s-0023-03": {
+              "length": 2,
+              "generations_reached": 1,
+              "chain": [
+                {
+                  "specimen_id": "s-0023-03",
+                  "generation": 0,
+                  "complexity": 43,
+                  "shift": 23,
+                  "end_state": "dormant",
+                  "persistence_native": null
+                },
+                {
+                  "specimen_id": "s-0024-01",
+                  "generation": 1,
+                  "complexity": 37,
+                  "shift": 24,
+                  "end_state": "dormant",
+                  "persistence_native": "Persists as a suspended sensory present: the moment holds only if attention remains fixed on the atmospheric quality, on the pause itself. It dissolves once forward motion resumes, once deliberation begins, or once external action claims priority."
+                }
+              ],
+              "complexity_at_founding": 43,
+              "complexity_at_latest": 37,
+              "capability_drift": -6,
+              "still_active": false
+            },
+            "s-0024-03": {
+              "length": 3,
+              "generations_reached": 2,
+              "chain": [
+                {
+                  "specimen_id": "s-0024-03",
+                  "generation": 0,
+                  "complexity": 40,
+                  "shift": 24,
+                  "end_state": "dormant",
+                  "persistence_native": "Persists through sustained psychological suspension: she persists in the moment only as long as hope and doubt remain balanced, only as long as she remains waiting. The moment collapses once the arrival/non-arrival is resolved."
+                },
+                {
+                  "specimen_id": "s-0025-01",
+                  "generation": 1,
+                  "complexity": 40,
+                  "shift": 25,
+                  "end_state": "dormant",
+                  "persistence_native": "Persists as a suspended moment of psychological interiority\u2014a character held at the threshold of decision, waiting, uncertain, defined by what does not happen."
+                },
+                {
+                  "specimen_id": "s-0026-01",
+                  "generation": 2,
+                  "complexity": 43,
+                  "shift": 26,
+                  "end_state": "dormant",
+                  "persistence_native": "This moment persists as a memory held in a character's body and expectation; it is relived each time the door opens (or does not open); its persistence is cyclical and habitual, renewed through ritual non-arrival, until the silence stretches long enough to break the pattern."
+                }
+              ],
+              "complexity_at_founding": 40,
+              "complexity_at_latest": 43,
+              "capability_drift": 3,
+              "still_active": false
+            },
+            "s-0026-03": {
+              "length": 2,
+              "generations_reached": 1,
+              "chain": [
+                {
+                  "specimen_id": "s-0026-03",
+                  "generation": 0,
+                  "complexity": 44,
+                  "shift": 26,
+                  "end_state": "dormant",
+                  "persistence_native": "This moment persists as an aesthetic arrest\u2014a pause in time where sensory detail becomes vivid and dreamlike; it persists in the act of observation itself, in the mind holding multiple simultaneous impressions (dust, cream, galaxies) as if they were equivalent in weight and reality."
+                },
+                {
+                  "specimen_id": "s-0027-01",
+                  "generation": 1,
+                  "complexity": 40,
+                  "shift": 27,
+                  "end_state": null,
+                  "persistence_native": "Persists as a suspended moment of sensory awareness and atmospheric possibility\u2014the fragment trails into unresolved wondering, existing in the gap between sensation and decision."
+                }
+              ],
+              "complexity_at_founding": 44,
+              "complexity_at_latest": 40,
+              "capability_drift": -4,
+              "still_active": true
+            }
           },
-          {
-            "category": "narrative_scenes",
-            "tier": null,
-            "confidence": "none",
-            "note": "This is a thematic/stylistic grouping (prose fragments with certain aesthetic properties: filtered light, psychological suspension). It has no basis in biological classification. The hierarchical structure here is functional/compositional, not taxonomic."
-          },
-          {
-            "category": "narrative_scene_threshold",
-            "tier": null,
-            "confidence": "none",
-            "note": "A subcategory defined by narrative function (action-driven, external event, character movement through boundary) and tone. Not a biological taxon. Mapping to a Linnaean tier would misrepresent the system's nature."
-          },
-          {
-            "category": "narrative_scene_interior_moment",
-            "tier": null,
-            "confidence": "none",
-            "note": "A subcategory defined by narrative and psychological properties (internal deliberation, suspended action, filtered light imagery). This is a stylistic/thematic classification, not a biological one. No mapping is reliable."
-          },
-          {
-            "category": "narrative_scene_precipice",
-            "tier": null,
-            "confidence": "none",
-            "note": "Listed as a possible future category for hybrid forms. Defined by narrative tension (poised between interior and threshold states). Not a biological taxon."
-          },
-          {
-            "category": "narrative_scene_sensory_threshold",
-            "tier": null,
-            "confidence": "none",
-            "note": "Listed as a possible future category for phenomenological sensory moments (suspended sensation anterior to deliberation or action). A narrative/aesthetic category, not a biological one."
-          },
-          {
-            "category": "narrative_scene_anticipatory_threshold",
-            "tier": null,
-            "confidence": "none",
-            "note": "A category inferred from the specimen filing list. Appears to be another narrative subcategory (anticipatory tone + threshold imagery). Not a biological taxon."
-          }
-        ],
-        "consistency_notes": "This system is entirely non-biological and non-taxonomic. It organizes literary/formal specimens by structural substrate (structural notation vs. narrative prose) and by narrative/psychological function (action-driven, interior, sensory-phenomenological, anticipatory). The hierarchical structure resembles a taxonomy but serves a different purpose: mapping compositional and thematic properties of text objects, not evolutionary descent or morphological homology. The anomalies section itself signals the system is still evolving and that specimens may not fit cleanly into existing categories\u2014a sign of active, functional classification rather than fixed Linnaean ranks. No tier mapping is appropriate; attempting one would erase the system's actual nature.",
-        "crosswalk_available": true,
-        "crosswalk_note": "For human legibility only. Carries no authority over the native system and does not feed back into it (DNT-CLS-001 Section 2)."
+          "note": "Capability drift tracked per lineage as its own axis, separate from taxonomic rank (DNT-CLS-001 Section 4). Computed from parentage; no model consulted."
+        },
+        "persistence_native_wordings": {
+          "Persists as a formal declaration: the system initializes itself, processes input streams through a queue mechanism, maintains internal state across cycles, and returns structured status reports. Its existence is contingent on the execution model described within it.": 1,
+          "Persists as a suspended sensory present: the moment holds only if attention remains fixed on the atmospheric quality, on the pause itself. It dissolves once forward motion resumes, once deliberation begins, or once external action claims priority.": 1,
+          "Persists through active opposition and function: the lighthouse persists because it acts against the storm, because it cuts through darkness, because ships depend on its beam. It is a threshold-holder, a persistent boundary-maintainer.": 1,
+          "Persists through sustained psychological suspension: she persists in the moment only as long as hope and doubt remain balanced, only as long as she remains waiting. The moment collapses once the arrival/non-arrival is resolved.": 1,
+          "Persists as a declarative system specification\u2014a frozen moment of structural constraint and functional rule-set, describing what is permitted and what is forbidden in output generation.": 1,
+          "Persists as a suspended moment of psychological interiority\u2014a character held at the threshold of decision, waiting, uncertain, defined by what does not happen.": 1,
+          "Persists as a moment of contemplative exploration\u2014a character suspended in the act of touching and imagining, finding thresholds within objects rather than crossing them.": 1,
+          "Persists as an enacted threshold\u2014a character crossing from one state (waiting/uncertain) into action (walking forward), defined by movement and the opening of possibility rather than the suspension of it.": 1,
+          "This formal system persists as a self-referential specification that can be read and re-read; its structure remains constant unless explicitly rewritten; it encodes rules that would govern the behavior of something that implements it, but does not itself execute or change state.": 1,
+          "This moment persists as a memory held in a character's body and expectation; it is relived each time the door opens (or does not open); its persistence is cyclical and habitual, renewed through ritual non-arrival, until the silence stretches long enough to break the pattern.": 1,
+          "This moment persists as a decision point crystallized in memory; it marks the boundary between before and after; its persistence depends on the consequences that follow\u2014it remains significant as long as 'everything changed' proves true.": 1,
+          "This moment persists as an aesthetic arrest\u2014a pause in time where sensory detail becomes vivid and dreamlike; it persists in the act of observation itself, in the mind holding multiple simultaneous impressions (dust, cream, galaxies) as if they were equivalent in weight and reality.": 1,
+          "Persists as a self-referential formal declaration; the system describes its own operational constraints and architectural layers without external narrative context or character action.": 1,
+          "Persists as a suspended moment of sensory awareness and atmospheric possibility\u2014the fragment trails into unresolved wondering, existing in the gap between sensation and decision.": 1,
+          "Persists through enacted movement; the character crosses a spatial and psychological boundary, stepping into uncertainty as a forward motion rather than as suspended deliberation.": 1,
+          "Persists as a threshold of consciousness; the character suspends at the boundary between dream and waking states, held in uncertainty about which realm she inhabits.": 1
+        },
+        "persistence_crosswalk": null,
+        "crosswalk": null,
+        "consistency_notes": null,
+        "crosswalk_available": false,
+        "crosswalk_note": "No crosswalk this pass: the response could not be parsed. This is a harness failure, not a finding about the taxonomy."
       }
     },
     "relational_record": {
-      "shift": 14,
-      "at": "2026-08-17T05:50:46Z",
+      "shift": 28,
+      "at": "2026-08-17T13:42:30Z",
       "by": "cartographer",
       "payload": {
-        "pass_at_shift": 14,
+        "pass_at_shift": 28,
         "method": "computed from the record; no model call made",
         "zone_definition": "position on the resource channel",
         "zones": {
@@ -848,12 +1716,12 @@
               0.66,
               1.0
             ],
-            "specimen_count": 15,
+            "specimen_count": 29,
             "categories_present": {
-              "structural_notation_system": 14,
+              "structural_notation_system": 28,
               "Computational Structures - Nested Iterations": 1
             },
-            "mean_complexity": 56.867
+            "mean_complexity": 58.31
           },
           "channel_intermediate": {
             "position_range": [
@@ -869,33 +1737,37 @@
               0.0,
               0.34
             ],
-            "specimen_count": 32,
+            "specimen_count": 70,
             "categories_present": {
-              "narrative_scene_threshold": 7,
-              "narrative_scene_interior_moment": 23,
+              "narrative_scene_threshold": 18,
+              "narrative_scene_interior_moment": 46,
               "Sensory Observation - Atmospheric Detail": 1,
-              "narrative_scene_anticipatory_threshold": 1
+              "narrative_scene_anticipatory_threshold": 1,
+              "narrative_scene_sensory_threshold": 4
             },
-            "mean_complexity": 37.438
+            "mean_complexity": 37.943
           }
         },
-        "specimens_placed": 47,
+        "specimens_placed": 99,
         "density_by_zone": {
-          "channel_proximate": 0.3191,
+          "channel_proximate": 0.2929,
           "channel_intermediate": 0.0,
-          "channel_distant": 0.6809
+          "channel_distant": 0.7071
         },
         "category_co_occurrence_within_a_shift": {
-          "narrative_scene_interior_moment | narrative_scene_threshold": 6,
-          "narrative_scene_interior_moment | structural_notation_system": 14,
-          "narrative_scene_threshold | structural_notation_system": 6,
+          "narrative_scene_interior_moment | narrative_scene_threshold": 16,
+          "narrative_scene_interior_moment | structural_notation_system": 28,
+          "narrative_scene_threshold | structural_notation_system": 16,
           "Computational Structures - Nested Iterations | Sensory Observation - Atmospheric Detail": 1,
           "Computational Structures - Nested Iterations | narrative_scene_interior_moment": 1,
           "Computational Structures - Nested Iterations | structural_notation_system": 1,
           "Sensory Observation - Atmospheric Detail | narrative_scene_interior_moment": 1,
           "Sensory Observation - Atmospheric Detail | structural_notation_system": 1,
           "narrative_scene_anticipatory_threshold | narrative_scene_interior_moment": 1,
-          "narrative_scene_anticipatory_threshold | structural_notation_system": 1
+          "narrative_scene_anticipatory_threshold | structural_notation_system": 1,
+          "narrative_scene_interior_moment | narrative_scene_sensory_threshold": 4,
+          "narrative_scene_sensory_threshold | narrative_scene_threshold": 3,
+          "narrative_scene_sensory_threshold | structural_notation_system": 4
         },
         "resource_flow_this_pass": 0.9031,
         "note": "Positional and relational only. This record does not classify, rank, or interpret; it counts what the specimen record already contains (physics.md Section 4.5)."

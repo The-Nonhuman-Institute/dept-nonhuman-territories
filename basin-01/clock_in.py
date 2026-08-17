@@ -503,6 +503,13 @@ def run_shift(dry_run: bool = False) -> int:
     memory["taxonomy_structure"] = outcome.get("taxonomy_structure")
 
     index = memory.setdefault("specimen_index", {})
+    # The Namer's own persistence wording per specimen, keyed by id, so the
+    # index carries what it actually wrote (physics.md Section 5).
+    persistence_by_id = {
+        record.get("specimen_id"): (record.get("classification") or {}).get(
+            "persistence_native", "")
+        for record in outcome.get("records", []) or []
+    }
     for position, emission in enumerate(emissions):
         specimen_id = namer._specimen_id(shift_number, position)
         complexity = int(emission.get("complexity") or 0)
@@ -523,6 +530,7 @@ def run_shift(dry_run: bool = False) -> int:
             ),
             "parent_id": emission.get("parent_id"),
             "generation": int(emission.get("generation", 0)),
+            "persistence_native": persistence_by_id.get(specimen_id, ""),
         }
 
     # Positions releasing resource as their specimens resolve (physics.md
