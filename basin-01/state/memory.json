@@ -1,0 +1,25 @@
+{
+  "terrain_id": "DNT-T01",
+  "terrain_name": "BASIN-01",
+  "physics_document": "DNT-PHY-001",
+  "seeded_at": "2026-08-17T02:36:20Z",
+  "last_committed_shift": -1,
+  "shifts_completed": 0,
+  "cumulative_cost_usd": 0.0,
+  "resource": {
+    "flow": 0.6,
+    "generator_a_position": 0.85,
+    "generator_b_position": 0.15
+  },
+  "specimen_counts": {
+    "total": 0,
+    "individual_records": 0,
+    "aggregate_members": 0,
+    "anomalous": 0
+  },
+  "category_stats": {},
+  "specimen_index": {},
+  "terrain_events": [],
+  "keeper_summary": null,
+  "notes": "Steward may read this file freely. Steward may not edit taxonomy or specimen records directly (DNT-STW-001 Section 3)."
+}

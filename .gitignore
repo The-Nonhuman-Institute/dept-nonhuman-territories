@@ -1,0 +1,20 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Staged temp files from an interrupted terrain commit.
+# These are never part of the record — terrain_io.verify_integrity() reports
+# them so the steward can see an interrupted commit rather than have it
+# silently cleaned up.
+basin-01/state/.stage-*.tmp
+basin-01/shifts/.stage-*.tmp
+
+# Credentials — never committed. Phase 2 reads ANTHROPIC_API_KEY from the
+# environment or an `ant auth login` profile, never from a file in the repo.
+.env
+*.key
