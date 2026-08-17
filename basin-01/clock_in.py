@@ -322,14 +322,33 @@ def run_shift(dry_run: bool = False) -> int:
             module = _load_optional_role(role_name)
             if module is None:
                 continue
-            module.run(
-                shift_number=shift_number,
-                writer=terrain_io.writer_for_role(transaction, role_name),
-                ledger=ledger,
-                taxonomy_native=transaction.taxonomy.get("native", {}),
-                memory=transaction.memory,
-            )
-            print("%-13s: pass complete" % role_name)
+            kwargs = {
+                "shift_number": shift_number,
+                "writer": terrain_io.writer_for_role(transaction, role_name),
+                "ledger": ledger,
+                "taxonomy_native": transaction.taxonomy.get("native", {}),
+                "memory": transaction.memory,
+            }
+            if role_name == "cartographer":
+                # Positional tracking needs the full placed record, which is a
+                # free read — this role makes no model call.
+                kwargs["specimen_records"] = terrain_io.read_log(config.SPECIMEN_LOG)
+
+            role_outcome = module.run(**kwargs)
+            if role_outcome.get("halt_reason"):
+                halts.append("%s %s" % (role_name, role_outcome["halt_reason"]))
+
+            if role_name == "archivist":
+                drift = role_outcome.get("drift") or {}
+                print("archivist    : crosswalk %s; drift %s"
+                      % ("produced" if role_outcome.get("crosswalk") else "not available",
+                         "DETECTED" if drift.get("drift_detected") else "none"))
+                for label in drift.get("coined_then_dropped_from_system", []):
+                    print("               dropped from its own system: %s" % label)
+            else:
+                print("cartographer : %d specimen(s) placed across %d zone(s), no model call"
+                      % (role_outcome.get("specimens_placed", 0),
+                         role_outcome.get("zones", 0)))
 
     except config.ModelUnavailable as exc:
         return _abort(transaction, shift_number, start_timestamp, ledger,
