@@ -590,6 +590,13 @@ def run(
                 "complexity": record.get("complexity"),
                 "resource_available": record.get("resource_available"),
                 "scarcity": record.get("scarcity"),
+                # Lineage, carried through from the emission. physics.md
+                # Section 4.4 tracks capability drift "per specimen/lineage",
+                # which needs the parentage to be in the record itself and not
+                # only in derived state.
+                "replicated": bool(record.get("replicated")),
+                "parent_id": record.get("parent_id"),
+                "generation": int(record.get("generation", 0) or 0),
                 "content": record.get("content"),
                 "classification": classification,
                 "generation": {

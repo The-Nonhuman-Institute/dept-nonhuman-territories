@@ -36,7 +36,7 @@ from __future__ import annotations
 
 import os
 import sys
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -105,6 +105,13 @@ def _system_prompt(allowance_tokens: int) -> str:
 
 _INITIATION = "Initiate."
 
+# Replication mode (physics.md Section 3). See generator_a.py — the same
+# mechanism, and the same restriction: the instruction names prior material and
+# adds no target, no theme and no direction.
+_REPLICATION_INITIATION = (
+    "Initiate from this prior material:\n\n%s\n\nReturn the fragment and nothing else."
+)
+
 
 # ---------------------------------------------------------------------------
 # Mechanical measurement
@@ -149,6 +156,7 @@ def run(
     resource_flow: float,
     ledger: config.ShiftLedger,
     position: float = config.GENERATOR_B_POSITION,
+    source_material: Optional[Sequence[Dict[str, Any]]] = None,
 ) -> Tuple[List[Dict[str, Any]], Optional[str]]:
     """Self-initiate for this shift.
 
@@ -163,10 +171,16 @@ def run(
     emissions: List[Dict[str, Any]] = []
     halt_reason: Optional[str] = None
 
+    material = list(source_material or [])
+
     for index in range(count):
+        parent = material[index] if index < len(material) else None
+        prompt = (
+            _REPLICATION_INITIATION % parent["content"] if parent else _INITIATION
+        )
         try:
             result = config.generate(
-                prompt=_INITIATION,
+                prompt=prompt,
                 role=ROLE,
                 system=_system_prompt(allowance),
                 ledger=ledger,
@@ -197,6 +211,9 @@ def run(
                 "complexity": measure_complexity(text),
                 "empty": not bool(text),
                 "constraint_violation_notation": contains_structural_notation(text),
+                "replicated": bool(parent),
+                "parent_id": (parent or {}).get("specimen_id"),
+                "generation": int((parent or {}).get("generation", 0)) + 1 if parent else 0,
                 "truncated": result.truncated,
                 "model": result.model,
                 "input_tokens": result.input_tokens,

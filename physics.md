@@ -1,8 +1,8 @@
 # physics.md — Terrain Founding Document
 ## Department of Nonhuman Territories
 ### Terrain ID: BASIN-01 (working name — provisional per Terrain Registry)
-### Status: PRE-SEED / DRAFT
-### Version: 1.1 (see Amendment Log, end of document)
+### Status: ACTIVE (seeded 2026-08-17; frozen except as logged terrain events)
+### Version: 1.2 (see Amendment Log, end of document)
 
 This is the working, plain-text copy of DNT-PHY-001. It is the literal spec file the
 build should reference. The formal .docx version in /docs is the canonical governance
@@ -253,6 +253,58 @@ Changes to this document after shift 0 are prohibited except as a logged
 terrain event or a genuine containment concern (Section 10, and DNT-STW-001
 Section 3). Everything below was ratified while the terrain was still
 PRE-SEED, before any canonical shift.
+
+### v1.2 — 2026-08-17 — post-checkpoint reconfiguration (LOGGED TERRAIN EVENT)
+
+Made after canonical shift 0, and therefore permitted only as a documented,
+logged terrain event (DNT-STW-001 Section 3) and under the reconfiguration
+Section 11 sanctions at the falsification checkpoint. 16 canonical shifts had
+run; the checkpoint returned "not a null result". The corresponding terrain
+event is recorded in memory.json.
+
+**This amendment adds no new physics.** It records the implementation of two
+mechanisms Section 3 has required since v1.0 and which the seed build never
+implemented.
+
+Section 3 defines a Generator by six mechanisms: substrate, constraint,
+resource logic, initiation mode, **replication mode**, and **terrain-interaction
+mode**. README.md Section 4's constraint specs defined only the first four, and
+the build followed those specs. The consequence was a terrain in which no
+specimen could act on any other: Section 6's functional roles (producer,
+consumer, decomposer, connector, parasite, symbiont, engineer, scavenger) were
+unreachable, and Section 7's "dissolution — consumed by decomposer or
+scavenger" could never occur, because nothing could consume anything.
+
+**Terrain-interaction mode.** A recorded specimen holds resource out of its own
+position while it persists. Local depletion recovers each shift, and a specimen
+resolving to dormancy releases its held resource back — Section 6's decomposer
+function, expressed quantitatively. A Generator now receives the flow available
+at its own position rather than the terrain-wide figure. Occupancy changes the
+SIZE of an allowance and never what may be produced with it, so the operative
+instruction still carries substrate and constraint alone, and no Generator is
+ever shown another specimen's content. Section 3 is unaffected.
+
+**Replication mode.** A specimen whose own measured complexity meets a fixed
+threshold may claim an initiation slot in a later shift and produce a descendant
+from its own prior material, for a fixed number of shifts. Eligibility is
+checked in code against a constant and is never a Namer decision, so
+classification cannot drive replication. Replication may never claim every slot
+of a role. The material a descendant works from is the terrain's own prior
+output; nothing authored by the steward enters it. Whether lineages converge,
+diverge or die out is an observed outcome and is not steered.
+
+This also makes two existing provisions reachable for the first time: Section 5's
+specimen state (a specimen can now persist and update rather than being inert on
+arrival) and Section 4.4's capability drift "per specimen/lineage", which had no
+lineages to track.
+
+Thresholds, as required by the Section 8.1 precedent that a rule without a
+number cannot be enforced in code:
+
+- Depletion per specimen 0.055; recovery per shift 0.040; release on dormancy
+  0.030; depletion capped at 0.85 so no position is ever permanently dead.
+- Replication eligibility at measured complexity >= 40; persistence 2 shifts;
+  replication may claim at most 0.5 of a role's slots.
 
 ### v1.1 — 2026-08-17 — pre-shift-0 ratification
 

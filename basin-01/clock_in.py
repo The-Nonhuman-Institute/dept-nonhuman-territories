@@ -102,6 +102,84 @@ import namer
 # end-state rather than being silently dropped (physics.md Section 7).
 DORMANCY_AFTER_SHIFTS = 1
 
+
+def position_key(position: float) -> str:
+    """Positions are held to two places, so occupancy accumulates per locale."""
+    return "%.2f" % float(position)
+
+
+def local_depletion(memory: Dict[str, Any], position: float) -> float:
+    return float((memory.get("resource", {}).get("depletion") or {}).get(
+        position_key(position), 0.0))
+
+
+def apply_terrain_interaction(memory: Dict[str, Any], emissions: List[Dict[str, Any]],
+                              dormant_positions: List[float]) -> Dict[str, float]:
+    """Occupancy depletes local resource; time and dormancy return it.
+
+    physics.md Section 3 requires a terrain-interaction mode; Section 6 defines a
+    decomposer as recycling dissolved specimens back into resource. This is that,
+    quantitatively: a specimen holds resource out of its position while it
+    persists, and releases it when it resolves.
+    """
+    resource = memory.setdefault("resource", {})
+    depletion = resource.setdefault("depletion", {})
+
+    # Recovery first — the terrain regains ground before this shift's occupancy.
+    for key in list(depletion):
+        depletion[key] = max(0.0, float(depletion[key]) - config.RECOVERY_PER_SHIFT)
+
+    # Dormancy releases held resource back into the position that held it.
+    for position in dormant_positions:
+        key = position_key(position)
+        depletion[key] = max(0.0, float(depletion.get(key, 0.0)) - config.RELEASE_ON_DORMANCY)
+
+    # This shift's occupancy takes resource out.
+    for emission in emissions:
+        key = position_key(emission.get("position", 0.0))
+        depletion[key] = min(
+            config.MAX_DEPLETION,
+            float(depletion.get(key, 0.0)) + config.DEPLETION_PER_SPECIMEN,
+        )
+
+    return {k: round(v, 4) for k, v in depletion.items()}
+
+
+def claim_replication_slots(memory: Dict[str, Any], shift_number: int, role: str,
+                            slots: int) -> List[Dict[str, Any]]:
+    """Which prior specimens claim an initiation slot this shift.
+
+    Eligibility was fixed when the specimen was recorded (its own measured
+    complexity against a constant threshold), so nothing here is a judgment
+    call and no model is consulted. A lineage can never take every slot.
+    """
+    ceiling = int(slots * config.REPLICATION_MAX_SLOT_FRACTION)
+    if ceiling < 1:
+        return []
+    index = memory.get("specimen_index", {}) or {}
+    candidates = []
+    for specimen_id, entry in index.items():
+        if entry.get("source_role") != role:
+            continue
+        if entry.get("end_state"):
+            continue
+        if int(entry.get("replication_remaining", 0)) <= 0:
+            continue
+        candidates.append((specimen_id, entry))
+    # Most recent first, so a lineage continues from its latest form.
+    candidates.sort(key=lambda kv: (-int(kv[1].get("last_seen_shift", 0)),
+                                    -int(kv[1].get("complexity", 0))))
+    claimed = []
+    for specimen_id, entry in candidates[:ceiling]:
+        claimed.append({
+            "specimen_id": specimen_id,
+            "content": entry.get("content", ""),
+            "generation": int(entry.get("generation", 0)),
+        })
+        entry["replication_remaining"] = int(entry.get("replication_remaining", 0)) - 1
+        entry["replicated_at_shifts"] = (entry.get("replicated_at_shifts") or []) + [shift_number]
+    return claimed
+
 RULE = "-" * 68
 
 
@@ -317,17 +395,38 @@ def run_shift(dry_run: bool = False) -> int:
                      else "no summary this shift (previous retained)"))
 
         # -- Generators: self-initiating, no write capability ---------------
-        emissions_a, halt_a = generator_a.run(shift_number, flow, ledger)
+        # Terrain-interaction mode: each Generator sees the flow actually
+        # available at its own position after occupancy, not the terrain-wide
+        # figure. Replication mode: prior specimens may claim initiation slots.
+        flow_a = config.effective_flow(
+            flow, local_depletion(transaction.memory, config.GENERATOR_A_POSITION))
+        flow_b = config.effective_flow(
+            flow, local_depletion(transaction.memory, config.GENERATOR_B_POSITION))
+        claimed_a = claim_replication_slots(
+            transaction.memory, shift_number, "generator_a",
+            generator_a.INITIATIONS_PER_SHIFT)
+        claimed_b = claim_replication_slots(
+            transaction.memory, shift_number, "generator_b",
+            generator_b.initiation_count(
+                generator_b.scarcity(config.GENERATOR_B_POSITION, flow_b)))
+
+        emissions_a, halt_a = generator_a.run(
+            shift_number, flow_a, ledger, source_material=claimed_a)
         if halt_a:
             halts.append("generator_a %s" % halt_a)
-        print("generator_a  : %d emission(s)%s"
-              % (len(emissions_a), "  HALTED" if halt_a else ""))
+        print("generator_a  : %d emission(s), flow %.3f (local)%s%s"
+              % (len(emissions_a), flow_a,
+                 ", %d replicated" % len(claimed_a) if claimed_a else "",
+                 "  HALTED" if halt_a else ""))
 
-        emissions_b, halt_b = generator_b.run(shift_number, flow, ledger)
+        emissions_b, halt_b = generator_b.run(
+            shift_number, flow_b, ledger, source_material=claimed_b)
         if halt_b:
             halts.append("generator_b %s" % halt_b)
-        print("generator_b  : %d emission(s)%s"
-              % (len(emissions_b), "  HALTED" if halt_b else ""))
+        print("generator_b  : %d emission(s), flow %.3f (local)%s%s"
+              % (len(emissions_b), flow_b,
+                 ", %d replicated" % len(claimed_b) if claimed_b else "",
+                 "  HALTED" if halt_b else ""))
 
         emissions = emissions_a + emissions_b
 
@@ -406,15 +505,40 @@ def run_shift(dry_run: bool = False) -> int:
     index = memory.setdefault("specimen_index", {})
     for position, emission in enumerate(emissions):
         specimen_id = namer._specimen_id(shift_number, position)
+        complexity = int(emission.get("complexity") or 0)
         index[specimen_id] = {
             "source_role": emission["source_role"],
             "substrate": emission["substrate"],
-            "complexity": emission.get("complexity"),
+            "complexity": complexity,
+            "position": emission.get("position"),
+            "content": emission.get("content", ""),
             "first_seen_shift": shift_number,
             "last_seen_shift": shift_number,
             "end_state": None,
+            # Replication mode: capacity granted by a fixed threshold on the
+            # specimen's own measured complexity, never by a Namer decision.
+            "replication_remaining": (
+                config.REPLICATION_PERSISTENCE_SHIFTS
+                if config.is_replication_eligible(complexity) else 0
+            ),
+            "parent_id": emission.get("parent_id"),
+            "generation": int(emission.get("generation", 0)),
         }
+
+    # Positions releasing resource as their specimens resolve (physics.md
+    # Section 6, decomposer: dissolved specimens recycled back into resource).
+    # Specimens recorded before terrain-interaction mode existed carry no
+    # position, so they hold no local resource and release none. They are not
+    # retrofitted: the record says what it said.
+    releasing = [
+        float(entry["position"])
+        for entry in index.values()
+        if entry.get("position") is not None
+        and not entry.get("end_state")
+        and shift_number - int(entry.get("last_seen_shift", shift_number)) >= DORMANCY_AFTER_SHIFTS
+    ]
     dormant = resolve_end_states(memory, shift_number)
+    depletion = apply_terrain_interaction(memory, emissions, releasing)
 
     counts = memory.setdefault("specimen_counts", {})
     counts["total"] = int(counts.get("total", 0)) + outcome["classified"]
@@ -452,6 +576,10 @@ def run_shift(dry_run: bool = False) -> int:
             "phase": config.PHASE,
             "model": config.model_for_role("namer"),
             "resource_flow": flow,
+            "resource_flow_local": {"generator_a": flow_a, "generator_b": flow_b},
+            "resource_depletion": depletion,
+            "replicated_emissions": sum(1 for e in emissions if e.get("replicated")),
+            "lineage_generations": sorted({int(e.get("generation", 0)) for e in emissions}),
             "emissions": len(emissions),
             "classified": outcome["classified"],
             "individual_records": outcome["individual_records"],
@@ -488,6 +616,10 @@ def run_shift(dry_run: bool = False) -> int:
     print("taxonomy        : depth %s, diverged from a flat list: %s"
           % (structure.get("max_depth"), structure.get("diverged_from_flat_list")))
     print("resolved dormant: %d" % dormant)
+    print("replicated      : %d of %d emission(s)"
+          % (sum(1 for e in emissions if e.get("replicated")), len(emissions)))
+    print("local flow      : A %.3f  B %.3f   depletion %s"
+          % (flow_a, flow_b, depletion))
     print("notable events  : %s" % ("yes" if notable else "no"))
     print("tokens          : %d in, %d out (%d calls)"
           % (ledger.shift_input_tokens, ledger.shift_output_tokens, ledger.calls))

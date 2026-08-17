@@ -28,7 +28,7 @@ from __future__ import annotations
 
 import os
 import sys
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -102,6 +102,15 @@ def _system_prompt(allowance_tokens: int, depth_limit: int) -> str:
 
 _INITIATION = "Initiate."
 
+# Replication mode (physics.md Section 3). A specimen that met the fixed
+# eligibility threshold claims an initiation slot and works from its own prior
+# material. The instruction adds no target and no direction — it names the
+# material and nothing else. The material is the terrain's own prior output;
+# nothing authored by the steward ever enters here.
+_REPLICATION_INITIATION = (
+    "Initiate from this prior material:\n\n%s\n\nReturn the notation and nothing else."
+)
+
 
 # ---------------------------------------------------------------------------
 # Mechanical measurement
@@ -148,6 +157,7 @@ def run(
     resource_flow: float,
     ledger: config.ShiftLedger,
     position: float = config.GENERATOR_A_POSITION,
+    source_material: Optional[Sequence[Dict[str, Any]]] = None,
 ) -> Tuple[List[Dict[str, Any]], Optional[str]]:
     """Self-initiate for this shift.
 
@@ -162,10 +172,16 @@ def run(
     emissions: List[Dict[str, Any]] = []
     halt_reason: Optional[str] = None
 
+    material = list(source_material or [])
+
     for index in range(INITIATIONS_PER_SHIFT):
+        parent = material[index] if index < len(material) else None
+        prompt = (
+            _REPLICATION_INITIATION % parent["content"] if parent else _INITIATION
+        )
         try:
             result = config.generate(
-                prompt=_INITIATION,
+                prompt=prompt,
                 role=ROLE,
                 system=_system_prompt(allowance, depth_limit),
                 ledger=ledger,
@@ -191,6 +207,9 @@ def run(
                 "complexity": measure_complexity(text),
                 "measured_depth": measure_depth(text),
                 "empty": not bool(text),
+                "replicated": bool(parent),
+                "parent_id": (parent or {}).get("specimen_id"),
+                "generation": int((parent or {}).get("generation", 0)) + 1 if parent else 0,
                 "truncated": result.truncated,
                 "model": result.model,
                 "input_tokens": result.input_tokens,

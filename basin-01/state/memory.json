@@ -3,38 +3,42 @@
   "terrain_name": "BASIN-01",
   "physics_document": "DNT-PHY-001",
   "seeded_at": "2026-08-17T05:35:23Z",
-  "last_committed_shift": 15,
-  "shifts_completed": 16,
-  "cumulative_cost_usd": 0.237548,
+  "last_committed_shift": 17,
+  "shifts_completed": 18,
+  "cumulative_cost_usd": 0.268305,
   "resource": {
-    "flow": 0.95,
+    "flow": 0.775,
     "generator_a_position": 0.85,
-    "generator_b_position": 0.15
+    "generator_b_position": 0.15,
+    "depletion": {
+      "0.85": 0.055,
+      "0.15": 0.175
+    }
   },
   "specimen_counts": {
-    "total": 59,
+    "total": 66,
     "individual_records": 10,
-    "aggregate_members": 40,
+    "aggregate_members": 47,
     "anomalous": 9
   },
   "category_stats": {
     "structural_notation_system": {
-      "count": 16,
-      "mean_complexity": 58.8125,
+      "count": 18,
+      "mean_complexity": 60.166666666666664,
       "first_seen_shift": 0,
-      "last_seen_shift": 15
+      "last_seen_shift": 17
     },
     "narrative_scene_threshold": {
-      "count": 7,
-      "mean_complexity": 39.0,
+      "count": 10,
+      "mean_complexity": 39.7,
       "first_seen_shift": 0,
-      "last_seen_shift": 13
+      "last_seen_shift": 17
     },
     "narrative_scene_interior_moment": {
-      "count": 26,
-      "mean_complexity": 38.57692307692307,
+      "count": 28,
+      "mean_complexity": 37.857142857142854,
       "first_seen_shift": 0,
-      "last_seen_shift": 15
+      "last_seen_shift": 17
     },
     "narrative_scene_anticipatory_threshold": {
       "count": 1,
@@ -554,7 +558,8 @@
       "complexity": 63,
       "first_seen_shift": 15,
       "last_seen_shift": 15,
-      "end_state": null
+      "end_state": "dormant",
+      "resolved_at_shift": 16
     },
     "s-0015-01": {
       "source_role": "generator_b",
@@ -562,7 +567,8 @@
       "complexity": 44,
       "first_seen_shift": 15,
       "last_seen_shift": 15,
-      "end_state": null
+      "end_state": "dormant",
+      "resolved_at_shift": 16
     },
     "s-0015-02": {
       "source_role": "generator_b",
@@ -570,7 +576,105 @@
       "complexity": 33,
       "first_seen_shift": 15,
       "last_seen_shift": 15,
-      "end_state": null
+      "end_state": "dormant",
+      "resolved_at_shift": 16
+    },
+    "s-0016-00": {
+      "source_role": "generator_a",
+      "substrate": "structural",
+      "complexity": 63,
+      "position": 0.85,
+      "content": "```\nSYSTEM:\n\u251c\u2500 INIT\n\u2502  \u251c\u2500 STATE: \u27e8\u2205\u27e9\n\u2502  \u251c\u2500 STACK: []\n\u2502  \u2514\u2500 MODE: STRUCTURAL\n\u2502\n\u251c\u2500 DEFS\n\u2502  \u251c\u2500 fn(x) \u2192 x\n\u2502  \u251c\u2500 fn(f, g) \u2192 f(g(x))\n\u2502  \u2514\u2500 fn(pred, body) \u2192 [pred ? body : \u2205]\n\u2502\n\u251c\u2500 LOOP\n\u2502  \u251c\u2500 while(\u00acHALT)\n\u2502  \u2502  \u251c\u2500 FETCH \u2192 DECODE \u2192 EXECUTE\n\u2502  \u2502  \u251c\u2500 STACK \u2190 [result]\n\u2502  \u2502  \u2514\u2500 PC \u2190 PC + 1\n\u2502  \u2514\u2500 break(HALT)\n\u2502\n\u251c\u2500 NEST[0]\n\u2502  \u251c\u2500 \u27e8A\u27e9\n\u2502  \u2502  \u251c\u2500 structure: {sym\u2081, sym\u2082, sym\u2083}\n\u2502  \u2502  \u2514\u2500 state: ACTIVE\n\u2502  \u2514\u2500 \u27e8B\u27e9\n\u2502     \u251c\u2500 structure: {rel(A,B)}\n\u2502     \u2514\u2500 state: LINKED\n\u2502\n\u251c\u2500 NEST[1]\n\u2502  \u251c\u2500 \u27e8C\u27e9\n\u2502  \u2502  \u251c\u2500 NEST[2]\n\u2502  \u2502  \u2502  \u251c\u2500 \u27e8D\u27e9\n\u2502  \u2502  \u2502  \u2502  \u2514\u2500 NEST[3]\n\u2502  \u2502  \u2502  \u2502     \u2514\u2500 \u27e8E\u27e9: \u03b5\n\u2502  \u2502  \u2502  \u2514\u2500 \u27e8F\u27e9",
+      "first_seen_shift": 16,
+      "last_seen_shift": 16,
+      "end_state": "dormant",
+      "replication_remaining": 2,
+      "parent_id": null,
+      "generation": 0,
+      "resolved_at_shift": 17
+    },
+    "s-0016-01": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 46,
+      "position": 0.15,
+      "content": "The sun broke through clouds as she stepped outside, breathing in air that smelled of rain and possibility. Something had shifted in her, a quiet determination replacing yesterday's doubt. She wasn't sure where it would lead, but for once,",
+      "first_seen_shift": 16,
+      "last_seen_shift": 16,
+      "end_state": "dormant",
+      "replication_remaining": 1,
+      "parent_id": null,
+      "generation": 0,
+      "replicated_at_shifts": [
+        17
+      ],
+      "resolved_at_shift": 17
+    },
+    "s-0016-02": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 20,
+      "position": 0.15,
+      "content": "The morning light filtered through the window as she opened her eyes, wondering what the day would bring.",
+      "first_seen_shift": 16,
+      "last_seen_shift": 16,
+      "end_state": "dormant",
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0,
+      "resolved_at_shift": 17
+    },
+    "s-0017-00": {
+      "source_role": "generator_a",
+      "substrate": "structural",
+      "complexity": 79,
+      "position": 0.85,
+      "content": "```\nSYSTEM.INIT {\n  KERNEL {\n    STATE \u2190 \u2205\n    REGISTERS \u2190 [r0, r1, r2, r3]\n    STACK \u2190 []\n    PC \u2190 0x0000\n  }\n  \n  MEMORY {\n    ALLOCATE(0x0000-0xFFFF) \u2192 SEGMENT[code, data, heap]\n    PROTECT(0x0000-0x00FF) \u2192 READ_ONLY\n  }\n  \n  MODULES {\n    LOOP: FOR i \u2208 [0..3] {\n      REGISTERS[i] \u2190 0x0\n      PUSH(STACK, NULL)\n    }\n    \n    STRUCTURES {\n      PROCESS {\n        pid: \u2115\n        state: {READY, RUNNING, BLOCKED}\n        priority: [0..255]\n      }\n      \n      INTERRUPT {\n        vector: \u2115\n        handler: \u03bb(source) \u2192 DISPATCH(source)\n        enabled: \ud835\udd39\n      }\n    }\n  }\n  \n  INITIALIZE {\n    SET(STATE.active) \u2190 TRUE\n    SET(STATE.clock) \u2190 0\n    \n    FOR each \u2208 INTERRUPT {\n      REGISTER(each.vector, each.handler)\n    }\n    \n    NESTED {\n      LOOP: FOR n \u2208 [0..PROCESS_LIMIT] {\n        CREATE(PROCESS[n",
+      "first_seen_shift": 17,
+      "last_seen_shift": 17,
+      "end_state": null,
+      "replication_remaining": 2,
+      "parent_id": null,
+      "generation": 0
+    },
+    "s-0017-01": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 46,
+      "position": 0.15,
+      "content": "she was ready to find out. The world felt larger somehow, full of untapped potential waiting just beyond the next corner. She took a step forward, then another, letting her feet choose the path her heart had already begun to follow.",
+      "first_seen_shift": 17,
+      "last_seen_shift": 17,
+      "end_state": null,
+      "replication_remaining": 2,
+      "parent_id": "s-0016-01",
+      "generation": 1
+    },
+    "s-0017-02": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 32,
+      "position": 0.15,
+      "content": "The morning light filtered through the old windows, casting long shadows across the dusty floor. She took a breath, squared her shoulders, and stepped forward into the unknown.",
+      "first_seen_shift": 17,
+      "last_seen_shift": 17,
+      "end_state": null,
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0
+    },
+    "s-0017-03": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 37,
+      "position": 0.15,
+      "content": "The morning light filtered through the curtains, casting long shadows across the empty room. She stood at the threshold, keys in hand, wondering if crossing it would change everything or nothing at all.",
+      "first_seen_shift": 17,
+      "last_seen_shift": 17,
+      "end_state": null,
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0
     }
   },
   "terrain_events": [
@@ -585,12 +689,24 @@
       "logged_at": "2026-08-17T05:53:19Z",
       "kind": "harness_correction",
       "detail": "CORRECTION referencing the Archivist annotation written at shift 14. That pass reported coined_then_dropped_from_system = ['narrative_scene_anticipatory_threshold', 'narrative_scene_interior_moment', 'narrative_scene_threshold', 'structural_notation_system'] and authored_categories = ['anomalies', 'root']. Three of those four categories had not been dropped: the Namer had restructured its system into two top-level containers with its categories nested inside as objects, and the drift detector compared only top-level keys, so a system that had DEVELOPED structure was reported as one that had LOST categories. The defect was in the harness (archivist.detect_drift), not in the Namer's system or in any specimen record. detect_drift now walks the full structure at any depth; re-run against the same state it reports coined_then_dropped_from_system = ['narrative_scene_anticipatory_threshold'] and authored_categories = ['narrative_scene_interior_moment', 'narrative_scene_threshold', 'narrative_scenes', 'structural_notation_system']. The shift 14 annotation is left exactly as written, per DNT-SLP-001 Section 6: corrections are new, clearly marked entries referencing the original, never silent edits. The next Archivist pass regenerates the crosswalk and drift record from corrected code."
+    },
+    {
+      "shift": 16,
+      "logged_at": "2026-08-17T06:17:40Z",
+      "kind": "checkpoint_reconfiguration",
+      "detail": "Reconfiguration under physics.md Section 11, taken at the falsification checkpoint after 16 canonical shifts returned 'not a null result'. Section 11 sanctions reconfiguring this terrain's Generators at this point, and DNT-STW-001 Section 3 permits a physics amendment as a documented, logged terrain event. This is that log. physics.md and DNT-PHY-001 move to v1.2.\n\nWHAT CHANGED: two mechanisms physics.md Section 3 has required since v1.0 were implemented. Section 3 defines a Generator by six mechanisms (substrate, constraint, resource logic, initiation mode, replication mode, terrain-interaction mode); README.md Section 4's constraint specs defined only the first four, and the build followed those specs. The consequence was a terrain in which no specimen could act on any other: Section 6's functional roles were unreachable, and Section 7's 'dissolution - consumed by decomposer or scavenger' could never occur because nothing could consume anything.\n\nTERRAIN-INTERACTION MODE: a recorded specimen holds resource out of its own position while it persists; local depletion recovers each shift; a specimen resolving to dormancy releases its held resource back. A Generator now receives the flow available at its own position. Occupancy changes the size of an allowance, never what may be produced with it, and no Generator is shown another specimen's content.\n\nREPLICATION MODE: a specimen whose own measured complexity meets a fixed threshold (>= 40) may claim an initiation slot for a fixed number of later shifts (2) and produce a descendant from its own prior material, never claiming more than half a role's slots. Eligibility is checked in code against a constant and is never a Namer decision.\n\nNO OUTCOME WAS SPECIFIED. Neither mechanism states what should emerge. The material a descendant works from is the terrain's own prior output; nothing authored by the steward enters it. Whether lineages converge, diverge or die out is an observed outcome and is not steered (physics.md Section 3).\n\nPrior records are unaffected. Specimens recorded before this point carry no replication capacity, since the field did not exist when they were written; they resolve to their end-states as before."
+    },
+    {
+      "shift": 17,
+      "logged_at": "2026-08-17T06:18:32Z",
+      "kind": "harness_correction",
+      "detail": "Removed a spurious depletion entry at position 0.00 written during shift 16. Specimens recorded before terrain-interaction mode existed carry no position field, and were being read as position 0.00 when releasing resource. No real position's value was affected and no specimen record was altered; the fix skips position-less entries rather than retrofitting them."
     }
   ],
   "keeper_summary": {
-    "shift": 15,
-    "at": "2026-08-17T05:52:16Z",
-    "text": "The collection contains 56 specimens across 15 intervals, with 10 individual-tier and 37 aggregate-tier records, adding 3 new specimens since interval 14. Narrative_scene_interior_moment has grown to 24 members with mean complexity 38.6, up from 23 members at 38.7, while narrative_scene_threshold remains at 7 members with unchanged mean complexity 39.0. Structural_notation_system has increased to 15 members with mean complexity 58.5, up from 14 members at 57.9, and a new category, narrative_scene_anticipatory_threshold, has appeared with 1 member at complexity 25.0. The flagged anomalous specimen count has increased from 8 to 9. The classification system maintains 2 top-level entries with maximum depth 6, and resource level has risen to 0.9500 from 0.9031."
+    "shift": 17,
+    "at": "2026-08-17T06:18:43Z",
+    "text": "The collection has grown to 62 specimens across 17 intervals, with 3 new specimens added since interval 16. Individual-tier records remain stable at 10 while aggregate-tier records increased from 40 to 43. The narrative_scene_interior_moment category expanded to 27 members with mean complexity 37.9, narrative_scene_threshold grew to 8 members at complexity 39.9, and structural_notation_system increased to 17 members with mean complexity 59.1; the single-member narrative_scene_anticipatory_threshold category persists at complexity 25.0. Flagged anomalous records remain at 9 specimens. Resource level declined from 0.9031 to 0.7750. The classification system structure remains unchanged at 2 top-level entries with maximum depth 6."
   },
   "notes": "Steward may read this file freely. Steward may not edit taxonomy or specimen records directly (DNT-STW-001 Section 3).",
   "taxonomy_structure": {

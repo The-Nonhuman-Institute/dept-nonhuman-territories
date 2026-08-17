@@ -85,6 +85,15 @@ running cleanly is a complete, valid first milestone.
 FINAL for seed. Written as mechanism-only, no shape language, per
 physics.md Section 3.
 
+> **AMENDED 2026-08-17, post-checkpoint (physics.md v1.2).** The specs below
+> originally defined four mechanisms each. physics.md Section 3 requires SIX —
+> substrate, constraint, resource logic, initiation mode, **replication mode**,
+> **terrain-interaction mode**. The two missing ones are now specified and
+> implemented; see physics.md Section 13 Amendment Log v1.2 and the
+> `checkpoint_reconfiguration` terrain event in memory.json. Without them no
+> specimen could act on any other, and Section 6's functional roles were
+> unreachable.
+
 **Generator A — code/structure-native**
 - Substrate: structural/code-form output only (functions, loops, nested
   structures, symbolic notation). No natural-language prose.
@@ -94,6 +103,12 @@ physics.md Section 3.
 - Initiation: self-initiating each shift.
 - Constraint: hard max output token length (tuned during Phase 1 testing);
   no external references; no instruction implying visual/organic target.
+- Terrain-interaction: receives the flow available at its own position after
+  occupancy, not the terrain-wide figure. Its own recorded specimens hold
+  resource out of that position until they resolve.
+- Replication: a specimen of its own whose measured complexity reaches the
+  fixed threshold may claim its initiation slot and produce a descendant from
+  its own prior material.
 
 **Generator B — language-fragment-native**
 - Substrate: short natural-language text fragments only. No code, no markup,
@@ -105,6 +120,11 @@ physics.md Section 3.
 - Constraint: hard max fragment length; no narrative continuity requirement
   imposed (any continuity across fragments is Generator B's own emergent
   behavior, not seeded).
+- Terrain-interaction: as Generator A, at its own position. Because its
+  resource logic is inverse, local depletion RAISES its initiation count.
+- Replication: as Generator A, capped so replication never claims more than
+  half its slots. A descendant works from its parent's material only — never
+  from another specimen's, and never from anything the steward wrote.
 
 **Generator C** — deferred. Do not add at seed. Revisit only after the
 15-shift falsification checkpoint (physics.md Section 11), and only if

@@ -300,6 +300,76 @@ RESOURCE_FLOW_MIN = 0.05
 RESOURCE_FLOW_MAX = 1.00
 
 
+# ---------------------------------------------------------------------------
+# 7.1 TERRAIN-INTERACTION MODE
+#
+#     physics.md Section 3 requires every Generator to be defined by six
+#     mechanisms: substrate, constraint, resource logic, initiation mode,
+#     replication mode, and terrain-interaction mode. The seed build
+#     implemented the first four. These constants and Section 7.2 implement the
+#     remaining two, which is why nothing in the terrain could previously act
+#     on anything else.
+#
+#     Interaction here is strictly mechanical and strictly quantitative. A
+#     specimen occupying a position DEPLETES the resource available at that
+#     position; depletion RECOVERS over time; a specimen resolving to dormancy
+#     RELEASES its held resource back (physics.md Section 6: a decomposer
+#     "recycles dissolved/dead specimens into resource").
+#
+#     What this does NOT do: it never shows a Generator another specimen's
+#     content. Occupancy changes the SIZE of an allowance, never what may be
+#     produced with it, so the operative instruction still carries substrate and
+#     constraint alone (physics.md Section 3).
+# ---------------------------------------------------------------------------
+
+# Resource a single recorded specimen holds out of its local position.
+DEPLETION_PER_SPECIMEN = 0.055
+# Fraction of local depletion that recovers each shift.
+RECOVERY_PER_SHIFT = 0.040
+# Resource returned when a specimen resolves to dormancy.
+RELEASE_ON_DORMANCY = 0.030
+# A position can never be depleted past this, so a zone is never permanently dead.
+MAX_DEPLETION = 0.85
+
+
+def effective_flow(base_flow: float, depletion: float) -> float:
+    """Flow actually available at a position, after occupancy."""
+    depletion = max(0.0, min(MAX_DEPLETION, float(depletion)))
+    return round(max(RESOURCE_FLOW_MIN, float(base_flow) * (1.0 - depletion)), 4)
+
+
+# ---------------------------------------------------------------------------
+# 7.2 REPLICATION MODE
+#
+#     A specimen that meets a fixed, code-checked threshold may claim an
+#     initiation slot in a later shift and produce a descendant from its own
+#     prior material. That is the whole mechanism.
+#
+#     Eligibility is measured from the specimen itself — its own complexity —
+#     and never from a Namer decision, so classification cannot drive
+#     replication and the two roles stay independent.
+#
+#     The material a descendant works from is the terrain's OWN prior output,
+#     never anything authored by the steward. Whether lineages converge,
+#     diverge, or die out is an observed outcome and is not steered
+#     (physics.md Section 3).
+# ---------------------------------------------------------------------------
+
+# Measured complexity at or above which a specimen gains the capacity to claim
+# a later initiation slot.
+REPLICATION_COMPLEXITY_THRESHOLD = 40
+# How many later shifts an eligible specimen may claim a slot in.
+REPLICATION_PERSISTENCE_SHIFTS = 2
+# Ceiling on the fraction of a role's slots that replication may claim, so a
+# lineage can never wholly displace fresh initiation.
+REPLICATION_MAX_SLOT_FRACTION = 0.5
+
+
+def is_replication_eligible(complexity: int) -> bool:
+    """Fixed threshold check. Never a judgment call, never asked of a model."""
+    return int(complexity or 0) >= REPLICATION_COMPLEXITY_THRESHOLD
+
+
 def resource_flow_for_shift(shift_number: int) -> float:
     """Channel flow for a given shift. Deterministic, periodic, replayable."""
     import math
