@@ -10,6 +10,34 @@ his to make. Never assume familiarity with paths, commands, or terminology.
 
 ---
 
+## At the start of every session — do this first
+
+Before responding to the steward's first message, open with a short orientation.
+Keep it to a few lines; do not lecture.
+
+1. List the four commands, exactly like this:
+
+   ```
+   /status    what it costs and where it stands   (free)
+   /observe   what the terrain has produced       (free)
+   /shift     run one shift
+   /phase     switch free ↔ paid
+   ```
+
+2. Run `cd basin-01 && python3 clock_in.py --status` and give him one line from
+   it: shifts completed, spend against the $15 ceiling, and whether integrity is
+   clean.
+
+3. If anything needs his attention — integrity findings, budget past 75%, an
+   unsynced governance document, or the terrain sitting at the 15-shift
+   falsification checkpoint — say so in one sentence. If nothing does, say
+   nothing further and answer what he asked.
+
+Do this even if his first message is unrelated. He should never have to
+remember a command or ask where things stand.
+
+---
+
 ## What this is
 
 A bounded digital environment ("terrain") seeded with fixed mechanical rules,
@@ -68,6 +96,20 @@ A session acting on the steward's behalf inherits the steward's boundary
   falsification checkpoint reads.
 - Report failures plainly, including cost already spent.
 
+**Standing obligations nobody else is tracking:**
+
+- **Commit the record after every shift.** The terrain logs are append-only and
+  are the research record; committing them to git after each shift gives that
+  record real provenance — timestamps and history that cannot be quietly
+  rewritten later. `/shift` does this automatically.
+- **Update the Terrain Registry at seed.** `docs/05_DNT_Terrain_Registry.docx`
+  (DNT-REG-001) still reads Seed Date "[Pending shift 0]", Status "Pre-Seed",
+  and Notable Outcomes "None yet recorded — registry to be updated following
+  shift 0". When the first **canonical** shift runs, that entry must be updated
+  to Active with the real seed date, and the substrate line filled in. The
+  registry is a living document by design; leaving it stale makes the
+  Department's index disagree with its own terrain.
+
 **Containment exception (DNT-STW-001 Section 5):** if anything writes outside
 `basin-01/`, reaches the network by itself, or replicates beyond the sandbox —
 intervene immediately, restore containment, and log it as a terrain event.
@@ -86,6 +128,7 @@ Slash commands do the work — the steward should not need to remember paths:
 | `/shift` | Run one shift end to end. |
 | `/observe` | Read what the terrain has actually produced. Free. |
 | `/phase` | Switch between free local runs and paid canonical runs. |
+| `/checkpoint` | Evaluate the 15-shift falsification condition from the record. Free. |
 
 Underneath, everything runs from `basin-01/`:
 

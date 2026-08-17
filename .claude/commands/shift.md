@@ -33,5 +33,19 @@ If the shift aborts, that is a designed outcome, not a crash: nothing was
 committed, the shift number stays unused, and the failure is on the record.
 Say what happened and offer to run it again.
 
+After a successful shift, commit the record to git so it gains real provenance:
+
+```bash
+git add basin-01/state basin-01/shifts && git commit -m "Shift N: <one-line summary>" && git push
+```
+
+The terrain logs are append-only and are the research data. Committing each
+shift gives that record a history that cannot be quietly rewritten afterwards.
+Do not commit a shift that aborted — nothing was written.
+
 Never edit state files to make a shift look better, and never re-run a shift to
 get a nicer result — the first result is the record.
+
+If this was the **first canonical shift**, remind the steward that
+`docs/05_DNT_Terrain_Registry.docx` still lists this terrain as Pre-Seed with
+seed date pending, and offer to update it.
