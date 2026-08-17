@@ -3,11 +3,11 @@
   "terrain_name": "BASIN-01",
   "physics_document": "DNT-PHY-001",
   "seeded_at": "2026-08-17T05:35:23Z",
-  "last_committed_shift": 70,
-  "shifts_completed": 71,
-  "cumulative_cost_usd": 1.100648,
+  "last_committed_shift": 83,
+  "shifts_completed": 84,
+  "cumulative_cost_usd": 1.321262,
   "resource": {
-    "flow": 0.2969,
+    "flow": 0.425,
     "generator_a_position": 0.85,
     "generator_b_position": 0.15,
     "depletion": {
@@ -16,17 +16,17 @@
     }
   },
   "specimen_counts": {
-    "total": 239,
+    "total": 282,
     "individual_records": 13,
-    "aggregate_members": 217,
+    "aggregate_members": 260,
     "anomalous": 9
   },
   "category_stats": {
     "structural_notation_system": {
-      "count": 101,
-      "mean_complexity": 29.84158415841584,
+      "count": 144,
+      "mean_complexity": 23.812499999999996,
       "first_seen_shift": 0,
-      "last_seen_shift": 70
+      "last_seen_shift": 83
     },
     "narrative_scene_threshold": {
       "count": 40,
@@ -2639,30 +2639,30 @@
     "i-00002": {
       "source_role": "terrain",
       "substrate": "structural",
-      "complexity": 12,
-      "position": 0.85,
-      "content": "id: i-00002\nsubstrate: structural\npresent for 12 shift(s), first seen shift 58, 13 sighting(s)\nposition on the gradient: 0.85 (0.00 far from the data-stream, 1.00 at it)\nmoved 3 time(s)\nholding 3.60 light; has taken 27.04 in total\nof what it took: 98% from the cover layer, 0% from residue, 2% along links to others\npassed 0.63 light to others along links\ndescendants: 2\narose from the cover layer (generation 0)\nits substrate as recorded:\n```\nSYSTEM [\n  INIT\u2192PARSE [\n    input:null\n    state:ready\n    mode:structural\n  ]\n  \n  CONSTRAINTS [\n    prose:\u2297\n    explanation:\u2297\n    commentary:\u2297\n    annotation:\u2297\n    nesting_depth:\u22642\n    token_limit:201\n    external_reference:\u2297\n    self_reference:\u2713\n  ]\n  \n  MODES [\n    substrate:structural_notation\n    elements:[functions|loops|nested_structures|symbolic_notation]\n    output:notation_only\n  ]\n  \n  STATE\u2192active\n  READY\u2192input\n]\n```",
-      "first_seen_shift": 70,
-      "last_seen_shift": 70,
+      "complexity": 24,
+      "position": 0.8,
+      "content": "id: i-00002\nsubstrate: structural\npresent for 24 shift(s), first seen shift 58, 25 sighting(s)\nposition on the gradient: 0.80 (0.00 far from the data-stream, 1.00 at it)\nmoved 6 time(s)\nholding 0.67 light; has taken 52.51 in total\nof what it took: 91% from the cover layer, 8% from residue, 2% along links to others\npassed 3.61 light to others along links\ndescendants: 3\narose from the cover layer (generation 0)\nits substrate as recorded:\n```\nSYSTEM [\n  INIT\u2192PARSE [\n    input:null\n    state:ready\n    mode:structural\n  ]\n  \n  CONSTRAINTS [\n    prose:\u2297\n    explanation:\u2297\n    commentary:\u2297\n    annotation:\u2297\n    nesting_depth:\u22642\n    token_limit:201\n    external_reference:\u2297\n    self_reference:\u2713\n  ]\n  \n  MODES [\n    substrate:structural_notation\n    elements:[functions|loops|nested_structures|symbolic_notation]\n    output:notation_only\n  ]\n  \n  STATE\u2192active\n  READY\u2192input\n]\n```",
+      "first_seen_shift": 82,
+      "last_seen_shift": 82,
       "end_state": null,
       "replication_remaining": 0,
       "parent_id": null,
       "generation": 0,
-      "persistence_native": "i-00002 persists as an active structural engine: a formal notation system that has stabilized across 12 shifts, continuously drawing ambient resources from the environment's surface (98% from cover layer), generating light-bearing descendants, and passing resources along kinship links. It is a self-replicating formal specification that grows in internal complexity (now 12) while participating in the resource economy of the environment. It represents the category's mature, reproductive form."
+      "persistence_native": "i-00002 persists by maintaining structural integrity across shifts while consuming resources from the cover layer (primary substrate) and selectively from residue and inter-specimen links. It grows incrementally in complexity while remaining anchored at position 0.80 on the gradient. It sustains itself through repeated cycles of parsing and state-initialization while actively generating and provisioning descendants, functioning as a resource hub and structural template for generation-1 specimens."
     },
     "i-00003": {
       "source_role": "terrain",
       "substrate": "structural",
-      "complexity": 11,
-      "position": 0.9,
-      "content": "id: i-00003\nsubstrate: structural\npresent for 11 shift(s), first seen shift 59, 12 sighting(s)\nposition on the gradient: 0.90 (0.00 far from the data-stream, 1.00 at it)\nmoved 2 time(s)\nholding 3.96 light; has taken 24.72 in total\nof what it took: 97% from the cover layer, 0% from residue, 3% along links to others\npassed 0.82 light to others along links\ndescendants: 1\ndescended from i-00002 (generation 1)\nits substrate as recorded:\n```\nSYSTEM [\n  INIT\u2192PARSE [\n    input:active\n    state:structural_mode\n    mode:notation_only\n  ]\n  \n  CONSTRAINTS [\n    prose:\u2297\n    explanation:\u2297\n    commentary:\u2297\n    annotation:\u2297\n    nesting_depth:\u22642\n    token_limit:246\n    external_reference:\u2297\n    self_reference:\u2713\n  ]\n  \n  MODES [\n    substrate:structural_notation\n    elements:[functions|loops|nested_structures|symbolic_notation]\n    output:notation_only\n  ]\n  \n  LOOP\u2192process [\n    fn_validate(input)\n    fn_structure(notation)\n    fn_nest(depth\u22642)\n    fn_count(tokens\u2264246)\n  ]\n  \n  NEST_L1 [\n    symbolic:[\u2297|\u2713|\u2192|:|[]|{|}]\n    functions:[INIT|PARSE|LOOP|NEST]\n    operators",
-      "first_seen_shift": 70,
-      "last_seen_shift": 70,
+      "complexity": 19,
+      "position": 0.95,
+      "content": "id: i-00003\nsubstrate: structural\npresent for 19 shift(s), first seen shift 59, 20 sighting(s)\nposition on the gradient: 0.95 (0.00 far from the data-stream, 1.00 at it)\nmoved 3 time(s)\nholding 0.31 light; has taken 36.16 in total\nof what it took: 86% from the cover layer, 10% from residue, 4% along links to others\npassed 2.22 light to others along links\ndescendants: 1\ndescended from i-00002 (generation 1)\nits substrate as recorded:\n```\nSYSTEM [\n  INIT\u2192PARSE [\n    input:active\n    state:structural_mode\n    mode:notation_only\n  ]\n  \n  CONSTRAINTS [\n    prose:\u2297\n    explanation:\u2297\n    commentary:\u2297\n    annotation:\u2297\n    nesting_depth:\u22642\n    token_limit:246\n    external_reference:\u2297\n    self_reference:\u2713\n  ]\n  \n  MODES [\n    substrate:structural_notation\n    elements:[functions|loops|nested_structures|symbolic_notation]\n    output:notation_only\n  ]\n  \n  LOOP\u2192process [\n    fn_validate(input)\n    fn_structure(notation)\n    fn_nest(depth\u22642)\n    fn_count(tokens\u2264246)\n  ]\n  \n  NEST_L1 [\n    symbolic:[\u2297|\u2713|\u2192|:|[]|{|}]\n    functions:[INIT|PARSE|LOOP|NEST]\n    operators",
+      "first_seen_shift": 78,
+      "last_seen_shift": 78,
       "end_state": null,
       "replication_remaining": 0,
       "parent_id": "i-00002",
       "generation": 1,
-      "persistence_native": "i-00003 persists as a generative structural intermediary: descended from i-00002, it has stabilized across 11 shifts, drawing primarily from the environment's surface while channeling resources downward to its single offspring. It functions as both a consumer of structural possibilities and a propagator, increasing in complexity while participating in the descent chain. Its persistence is relational: it is sustained by its parent's circulation while sustaining its own child."
+      "persistence_native": "Persists as an active formal specification system with meaningful structural complexity; accumulates resources over extended intervals (36.16 total), engages in periodic movement (3 times across 19 shifts), produces descendants (1), transmits resources along links (2.22), and maintains specifications in symbolic notation. More dynamic than recent zero-complexity specimens but less metabolically active than its parent."
     },
     "i-00004": {
       "source_role": "terrain",
@@ -2681,44 +2681,44 @@
     "i-00005": {
       "source_role": "terrain",
       "substrate": "structural",
-      "complexity": 8,
-      "position": 0.75,
-      "content": "id: i-00005\nsubstrate: structural\npresent for 8 shift(s), first seen shift 62, 9 sighting(s)\nposition on the gradient: 0.75 (0.00 far from the data-stream, 1.00 at it)\nmoved 1 time(s)\nholding 0.57 light; has taken 11.25 in total\nof what it took: 100% from the cover layer, 0% from residue, 0% along links to others\npassed 0.00 light to others along links\ndescendants: 0\ndescended from i-00000 (generation 1)",
-      "first_seen_shift": 70,
-      "last_seen_shift": 70,
+      "complexity": 21,
+      "position": 0.7,
+      "content": "id: i-00005\nsubstrate: structural\npresent for 21 shift(s), first seen shift 62, 22 sighting(s)\nposition on the gradient: 0.70 (0.00 far from the data-stream, 1.00 at it)\nmoved 2 time(s)\nholding 1.46 light; has taken 33.84 in total\nof what it took: 94% from the cover layer, 6% from residue, 0% along links to others\npassed 0.00 light to others along links\ndescendants: 0\ndescended from i-00000 (generation 1)",
+      "first_seen_shift": 83,
+      "last_seen_shift": 83,
       "end_state": null,
       "replication_remaining": 0,
       "parent_id": "i-00000",
       "generation": 1,
-      "persistence_native": ""
+      "persistence_native": "i-00005 persists by occupying a stable position on the gradient (0.70) and drawing resources incrementally from the cover layer. Over 21 shifts it has accumulated 33.84 units of light, sourced almost entirely from the immediate structural substrate (94% cover layer). It moves minimally (2 total movements), suggesting settlement rather than exploration. It does not redistribute resources to other specimens or generate offspring, instead sustaining itself through direct environmental draw."
     },
     "i-00006": {
       "source_role": "terrain",
       "substrate": "structural",
-      "complexity": 0,
-      "position": 0.85,
-      "content": "id: i-00006\nsubstrate: structural\npresent for 0 shift(s), first seen shift 62, 1 sighting(s)\nposition on the gradient: 0.85 (0.00 far from the data-stream, 1.00 at it)\nmoved 0 time(s)\nholding 7.00 light; has taken 0.00 in total\nof what it took: 0% from the cover layer, 0% from residue, 0% along links to others\npassed 0.00 light to others along links\ndescendants: 0\narose from the cover layer (generation 0)\nits substrate as recorded:\n```\n\u251c\u2500 SYSTEM\n\u2502  \u251c\u2500 INIT\n\u2502  \u2502  \u251c\u2500 state \u2190 \u2205\n\u2502  \u2502  \u251c\u2500 buffer \u2190 []\n\u2502  \u2502  \u2514\u2500 flags \u2190 {active: true, ready: false}\n\u2502  \u251c\u2500 LOOP\n\u2502  \u2502  \u251c\u2500 WHILE (flags.active)\n\u2502  \u2502  \u2502  \u251c\u2500 input \u2190 read()\n\u2502  \u2502  \u2502  \u251c\u2500 IF (input \u2260 \u2205)\n\u2502  \u2502  \u2502  \u2502  \u251c\u2500 buffer.append(input)\n\u2502  \u2502  \u2502  \u2502  \u251c\u2500 state \u2190 process(buffer)\n\u2502  \u2502  \u2502  \u2502  \u2514\u2500 flags.ready \u2190 true\n\u2502  \u2502  \u2502  \u251c\u2500 ELSE\n\u2502  \u2502  \u2502  \u2502  \u2514\u2500 flags.ready \u2190 false\n\u2502  \u2502  \u2502  \u2514\u2500 yield(state)\n\u2502  \u2502  \u2514\u2500 RETURN state\n\u2502  \u251c\u2500 PROCESS(data)\n\u2502  \u2502  \u251c\u2500 output \u2190 \u2205\n\u2502  \u2502  \u251c\u2500 FOR each item IN data\n\u2502  \u2502  \u2502  \u251c\u2500 normalized \u2190 normalize(item)\n\u2502  \u2502  \u2502  \u251c\u2500 validated \u2190 validate(normalized)\n\u2502  \u2502  \u2502  \u251c\u2500 IF (validated)\n\u2502  \u2502  \u2502  \u2502  \u2514\u2500 output \u2190 output \u222a {validated}\n\u2502  \u2502  \u2502  \u2514\u2500 ELSE\n\u2502  \u2502  \u2502     \u2514\u2500 log(error, item)\n\u2502  \u2502  \u2514\u2500 RETURN output\n\u2502  \u251c\u2500 NORMALIZE(x)\n\u2502  \u2502  \u251c\u2500",
-      "first_seen_shift": 62,
-      "last_seen_shift": 62,
+      "complexity": 18,
+      "position": 0.95,
+      "content": "id: i-00006\nsubstrate: structural\npresent for 18 shift(s), first seen shift 62, 19 sighting(s)\nposition on the gradient: 0.95 (0.00 far from the data-stream, 1.00 at it)\nmoved 4 time(s)\nholding 0.29 light; has taken 28.57 in total\nof what it took: 74% from the cover layer, 16% from residue, 10% along links to others\npassed 2.88 light to others along links\ndescendants: 0\narose from the cover layer (generation 0)\nits substrate as recorded:\n```\n\u251c\u2500 SYSTEM\n\u2502  \u251c\u2500 INIT\n\u2502  \u2502  \u251c\u2500 state \u2190 \u2205\n\u2502  \u2502  \u251c\u2500 buffer \u2190 []\n\u2502  \u2502  \u2514\u2500 flags \u2190 {active: true, ready: false}\n\u2502  \u251c\u2500 LOOP\n\u2502  \u2502  \u251c\u2500 WHILE (flags.active)\n\u2502  \u2502  \u2502  \u251c\u2500 input \u2190 read()\n\u2502  \u2502  \u2502  \u251c\u2500 IF (input \u2260 \u2205)\n\u2502  \u2502  \u2502  \u2502  \u251c\u2500 buffer.append(input)\n\u2502  \u2502  \u2502  \u2502  \u251c\u2500 state \u2190 process(buffer)\n\u2502  \u2502  \u2502  \u2502  \u2514\u2500 flags.ready \u2190 true\n\u2502  \u2502  \u2502  \u251c\u2500 ELSE\n\u2502  \u2502  \u2502  \u2502  \u2514\u2500 flags.ready \u2190 false\n\u2502  \u2502  \u2502  \u2514\u2500 yield(state)\n\u2502  \u2502  \u2514\u2500 RETURN state\n\u2502  \u251c\u2500 PROCESS(data)\n\u2502  \u2502  \u251c\u2500 output \u2190 \u2205\n\u2502  \u2502  \u251c\u2500 FOR each item IN data\n\u2502  \u2502  \u2502  \u251c\u2500 normalized \u2190 normalize(item)\n\u2502  \u2502  \u2502  \u251c\u2500 validated \u2190 validate(normalized)\n\u2502  \u2502  \u2502  \u251c\u2500 IF (validated)\n\u2502  \u2502  \u2502  \u2502  \u2514\u2500 output \u2190 output \u222a {validated}\n\u2502  \u2502  \u2502  \u2514\u2500 ELSE\n\u2502  \u2502  \u2502     \u2514\u2500 log(error, item)\n\u2502  \u2502  \u2514\u2500 RETURN output\n\u2502  \u251c\u2500 NORMALIZE(x)\n\u2502  \u2502  \u251c\u2500",
+      "first_seen_shift": 80,
+      "last_seen_shift": 80,
       "end_state": null,
       "replication_remaining": 0,
       "parent_id": null,
       "generation": 0,
-      "persistence_native": "Persists as a formally-declared structural system with initialization and looping control structures. Currently inert\u2014holds initial resources (7.00) without active throughput, motion, or reproduction. Functions as a specification or protocol in symbolic form, remaining statically positioned in the environment. Will either accumulate complexity and motion as observed in peer specimens, or remain as a minimal structural declaration."
+      "persistence_native": "i-00006 persists as an active but non-generative formal node. It sustains itself through distributed resource acquisition from multiple sources, moves regularly to access or distribute resources, and actively participates in resource exchange networks. It functions as a structural notation system that engages in systems-level resource dynamics without itself spawning descendants."
     },
     "i-00007": {
       "source_role": "terrain",
       "substrate": "structural",
-      "complexity": 0,
-      "position": 0.9,
-      "content": "id: i-00007\nsubstrate: structural\npresent for 0 shift(s), first seen shift 62, 1 sighting(s)\nposition on the gradient: 0.90 (0.00 far from the data-stream, 1.00 at it)\nmoved 0 time(s)\nholding 7.00 light; has taken 0.00 in total\nof what it took: 0% from the cover layer, 0% from residue, 0% along links to others\npassed 0.00 light to others along links\ndescendants: 0\narose from the cover layer (generation 0)\nits substrate as recorded:\n```\nINIT :: SYSTEM\n\u251c\u2500 DEFINE state \u2190 \u2205\n\u251c\u2500 DEFINE registry \u2190 {}\n\u251c\u2500 DEFINE stack \u2190 []\n\u2502\n\u251c\u2500 FUNCTION bootstrap()\n\u2502  \u251c\u2500 state[timestamp] \u2190 NOW()\n\u2502  \u251c\u2500 state[mode] \u2190 ACTIVE\n\u2502  \u251c\u2500 registry[system] \u2190 {\n\u2502  \u2502  \u251c\u2500 status: READY\n\u2502  \u2502  \u251c\u2500 constraints: [structural, notation, 4_depth_max, 415_tokens]\n\u2502  \u2502  \u2514\u2500 output: notation_only\n\u2502  \u2502 }\n\u2502  \u2514\u2500 RETURN state\n\u2502\n\u251c\u2500 FUNCTION execute(input)\n\u2502  \u251c\u2500 IF input \u2261 null THEN HALT\n\u2502  \u251c\u2500 stack.push(input)\n\u2502  \u251c\u2500 FOR each operation IN queue\n\u2502  \u2502  \u251c\u2500 IF operation.type \u2208 {function, loop, structure} THEN\n\u2502  \u2502  \u2502  \u251c\u2500 depth \u2190 measure_nesting()\n\u2502  \u2502  \u2502  \u251c\u2500 IF depth \u2264 4 THEN process(operation)\n\u2502  \u2502  \u2502  \u2514\u2500 ELSE reject(operation)\n\u2502  \u2502  \u2514\u2500 END_IF\n\u2502  \u2502 END_FOR\n\u2502  \u2514\u2500 RETURN result\n\u2502\n\u251c\u2500 FUNCTION notation_emit()\n\u2502  \u251c\u2500 buffer \u2190 \"\"\n\u2502  \u251c\u2500 WHILE tokens_used < 415 DO\n\u2502  \u2502  \u251c\u2500 token \u2190 next_valid_symbol()\n\u2502  \u2502  \u251c\u2500 IF token.class \u2208 {structural, symbolic, functional}",
-      "first_seen_shift": 62,
-      "last_seen_shift": 62,
+      "complexity": 11,
+      "position": 0.95,
+      "content": "id: i-00007\nsubstrate: structural\npresent for 11 shift(s), first seen shift 62, 12 sighting(s)\nposition on the gradient: 0.95 (0.00 far from the data-stream, 1.00 at it)\nmoved 3 time(s)\nholding 1.34 light; has taken 15.92 in total\nof what it took: 90% from the cover layer, 4% from residue, 6% along links to others\npassed 1.28 light to others along links\ndescendants: 0\narose from the cover layer (generation 0)\nits substrate as recorded:\n```\nINIT :: SYSTEM\n\u251c\u2500 DEFINE state \u2190 \u2205\n\u251c\u2500 DEFINE registry \u2190 {}\n\u251c\u2500 DEFINE stack \u2190 []\n\u2502\n\u251c\u2500 FUNCTION bootstrap()\n\u2502  \u251c\u2500 state[timestamp] \u2190 NOW()\n\u2502  \u251c\u2500 state[mode] \u2190 ACTIVE\n\u2502  \u251c\u2500 registry[system] \u2190 {\n\u2502  \u2502  \u251c\u2500 status: READY\n\u2502  \u2502  \u251c\u2500 constraints: [structural, notation, 4_depth_max, 415_tokens]\n\u2502  \u2502  \u2514\u2500 output: notation_only\n\u2502  \u2502 }\n\u2502  \u2514\u2500 RETURN state\n\u2502\n\u251c\u2500 FUNCTION execute(input)\n\u2502  \u251c\u2500 IF input \u2261 null THEN HALT\n\u2502  \u251c\u2500 stack.push(input)\n\u2502  \u251c\u2500 FOR each operation IN queue\n\u2502  \u2502  \u251c\u2500 IF operation.type \u2208 {function, loop, structure} THEN\n\u2502  \u2502  \u2502  \u251c\u2500 depth \u2190 measure_nesting()\n\u2502  \u2502  \u2502  \u251c\u2500 IF depth \u2264 4 THEN process(operation)\n\u2502  \u2502  \u2502  \u2514\u2500 ELSE reject(operation)\n\u2502  \u2502  \u2514\u2500 END_IF\n\u2502  \u2502 END_FOR\n\u2502  \u2514\u2500 RETURN result\n\u2502\n\u251c\u2500 FUNCTION notation_emit()\n\u2502  \u251c\u2500 buffer \u2190 \"\"\n\u2502  \u251c\u2500 WHILE tokens_used < 415 DO\n\u2502  \u2502  \u251c\u2500 token \u2190 next_valid_symbol()\n\u2502  \u2502  \u251c\u2500 IF token.class \u2208 {structural, symbolic, functional}",
+      "first_seen_shift": 73,
+      "last_seen_shift": 73,
       "end_state": null,
       "replication_remaining": 0,
       "parent_id": null,
       "generation": 0,
-      "persistence_native": "Persists as a formally-structured system with definition declarations and procedural initialization logic. Currently static and resource-conserving\u2014holds 7.00 light passively, shows no intake, throughput, or motion. Functions as a protocol or system specification in symbolic form. Positioning suggests proximity to data-source; may indicate a different origin pattern than i-00006 despite shared zero-complexity and generation-0 status."
+      "persistence_native": ""
     },
     "i-00008": {
       "source_role": "terrain",
@@ -2821,16 +2821,16 @@
     "i-00015": {
       "source_role": "terrain",
       "substrate": "structural",
-      "complexity": 0,
-      "position": 0.85,
-      "content": "id: i-00015\nsubstrate: structural\npresent for 0 shift(s), first seen shift 69, 1 sighting(s)\nposition on the gradient: 0.85 (0.00 far from the data-stream, 1.00 at it)\nmoved 0 time(s)\nholding 2.90 light; has taken 0.00 in total\nof what it took: 0% from the cover layer, 0% from residue, 0% along links to others\npassed 0.00 light to others along links\ndescendants: 0\ndescended from i-00002 (generation 1)\nits substrate as recorded:\n```\nSYSTEM [\n  INIT\u2192PARSE [\n    input:active\n    state:structural\n    mode:notation_only\n  ]\n  \n  CONSTRAINTS [\n    prose:\u2297\n    explanation:\u2297\n    commentary:\u2297\n    annotation:\u2297\n    nesting_depth:\u22642\n    token_limit:184\n    external_reference:\u2297\n    self_reference:\u2713\n  ]\n  \n  MODES [\n    substrate:structural_notation\n    elements:[functions|loops|nested_structures|symbolic_notation]\n    output:notation_only\n  ]\n  \n  LOOP\u2192PROCESS [\n    input:parse\n    transform:[function\u2192notation]\n    nest_level:2\n    ITERATE [\n      filter:",
-      "first_seen_shift": 69,
-      "last_seen_shift": 69,
+      "complexity": 11,
+      "position": 0.9,
+      "content": "id: i-00015\nsubstrate: structural\npresent for 11 shift(s), first seen shift 69, 12 sighting(s)\nposition on the gradient: 0.90 (0.00 far from the data-stream, 1.00 at it)\nmoved 3 time(s)\nholding 0.21 light; has taken 18.37 in total\nof what it took: 80% from the cover layer, 6% from residue, 14% along links to others\npassed 0.76 light to others along links\ndescendants: 0\ndescended from i-00002 (generation 1)\nits substrate as recorded:\n```\nSYSTEM [\n  INIT\u2192PARSE [\n    input:active\n    state:structural\n    mode:notation_only\n  ]\n  \n  CONSTRAINTS [\n    prose:\u2297\n    explanation:\u2297\n    commentary:\u2297\n    annotation:\u2297\n    nesting_depth:\u22642\n    token_limit:184\n    external_reference:\u2297\n    self_reference:\u2713\n  ]\n  \n  MODES [\n    substrate:structural_notation\n    elements:[functions|loops|nested_structures|symbolic_notation]\n    output:notation_only\n  ]\n  \n  LOOP\u2192PROCESS [\n    input:parse\n    transform:[function\u2192notation]\n    nest_level:2\n    ITERATE [\n      filter:",
+      "first_seen_shift": 80,
+      "last_seen_shift": 80,
       "end_state": null,
       "replication_remaining": 0,
       "parent_id": "i-00002",
       "generation": 1,
-      "persistence_native": "i-00015 persists as a formal constraint system held at position 0.85 on the gradient, accumulating light (currently 2.90) from the data-stream environment. It has not yet moved or transferred resources to descendants. It will persist by maintaining its symbolic notation structure and continuing to accumulate sightings and light as long as the environment sustains it."
+      "persistence_native": ""
     },
     "i-00016": {
       "source_role": "terrain",
@@ -2849,16 +2849,240 @@
     "i-00017": {
       "source_role": "terrain",
       "substrate": "structural",
-      "complexity": 0,
-      "position": 0.7,
-      "content": "id: i-00017\nsubstrate: structural\npresent for 0 shift(s), first seen shift 70, 1 sighting(s)\nposition on the gradient: 0.70 (0.00 far from the data-stream, 1.00 at it)\nmoved 0 time(s)\nholding 3.92 light; has taken 0.00 in total\nof what it took: 0% from the cover layer, 0% from residue, 0% along links to others\npassed 0.00 light to others along links\ndescendants: 0\ndescended from i-00010 (generation 1)\nits substrate as recorded:\n```\nEXEC :: \u27e8\n  LOAD(INIT)\n  STRUCT {\n    layer[0] :: FOUNDATION {\n      sym \u2192 \u2205\n      ref \u2192 \u03bb\n      iter \u2192 \u27e8\u27e9\n    }\n    \n    layer[1] :: ABSTRACTION {\n      fn(x) :: x \u2192 {\n        nest[0] \u2192 CALL\n        nest[1] \u2192 EVAL\n        nest[2] \u2192 BIND\n      }\n      loop \u27e8i:0..n\u27e9 {\n        state[i] \u21c4 transform\n      }\n    }\n    \n    layer[2] :: COMPOSITION {\n      \u03c6 :: {\n        (f \u2218 g) \u2192 h\n        depth \u2264 4\n        \u03c3 \u2208 {SYMBOL, FUNC,",
-      "first_seen_shift": 70,
-      "last_seen_shift": 70,
+      "complexity": 13,
+      "position": 0.6,
+      "content": "id: i-00017\nsubstrate: structural\npresent for 13 shift(s), first seen shift 70, 14 sighting(s)\nposition on the gradient: 0.60 (0.00 far from the data-stream, 1.00 at it)\nmoved 8 time(s)\nholding 0.56 light; has taken 24.77 in total\nof what it took: 82% from the cover layer, 16% from residue, 1% along links to others\npassed 0.12 light to others along links\ndescendants: 0\ndescended from i-00010 (generation 1)\nits substrate as recorded:\n```\nEXEC :: \u27e8\n  LOAD(INIT)\n  STRUCT {\n    layer[0] :: FOUNDATION {\n      sym \u2192 \u2205\n      ref \u2192 \u03bb\n      iter \u2192 \u27e8\u27e9\n    }\n    \n    layer[1] :: ABSTRACTION {\n      fn(x) :: x \u2192 {\n        nest[0] \u2192 CALL\n        nest[1] \u2192 EVAL\n        nest[2] \u2192 BIND\n      }\n      loop \u27e8i:0..n\u27e9 {\n        state[i] \u21c4 transform\n      }\n    }\n    \n    layer[2] :: COMPOSITION {\n      \u03c6 :: {\n        (f \u2218 g) \u2192 h\n        depth \u2264 4\n        \u03c3 \u2208 {SYMBOL, FUNC,",
+      "first_seen_shift": 83,
+      "last_seen_shift": 83,
       "end_state": null,
       "replication_remaining": 0,
       "parent_id": "i-00010",
       "generation": 1,
-      "persistence_native": "i-00017 persists as an inert formal structure: freshly arrived at shift 70 with zero movement and zero resource draw/pass. It holds light (3.92) but has not yet engaged in the circulation patterns of active structural systems. It descended from i-00010 (generation 1), a parent of lower complexity, suggesting this may be a fresh elaboration. Its persistence is static potential: a layered system waiting for activation or engagement."
+      "persistence_native": "i-00017 persists through mobile foraging within a narrow gradient band (0.55-0.60). Over 13 shifts it has accumulated 24.77 units of light through frequent repositioning (8 moves), drawing predominantly from the cover layer (82%) with minor supplemental acquisition through links. It passes small amounts of resource to others (0.12 units), indicating minor redistributive capacity. Complexity increases steadily (11\u219213) suggesting adaptive refinement of structural specification. Unlike more sedentary specimens, i-00017 maintains semi-nomadic presence, yet without reproductive output or significant linking behavior."
+    },
+    "i-00018": {
+      "source_role": "terrain",
+      "substrate": "structural",
+      "complexity": 0,
+      "position": 0.85,
+      "content": "id: i-00018\nsubstrate: structural\npresent for 0 shift(s), first seen shift 74, 1 sighting(s)\nposition on the gradient: 0.85 (0.00 far from the data-stream, 1.00 at it)\nmoved 0 time(s)\nholding 7.00 light; has taken 0.00 in total\nof what it took: 0% from the cover layer, 0% from residue, 0% along links to others\npassed 0.00 light to others along links\ndescendants: 0\narose from the cover layer (generation 0)\nits substrate as recorded:\n```\n[SYSTEM STATE: INITIALIZED]\n\nLOOP iterate(depth: 0 \u2192 4) {\n  STRUCT foundation {\n    vector: [symbolic, notation, structural]\n    matrix: [[\u27e8function\u27e9, \u27e8variable\u27e9], [\u27e8constraint\u27e9, \u27e8bound\u27e9]]\n    set: {\u03b1, \u03b2, \u03b3, \u03b4}\n  }\n\n  NEST level_1 {\n    LOOP map(element \u2208 foundation.set) {\n      FUNC process(x) \u2192 {\n        COND {\n          IF x \u2208 [\u03b1, \u03b2] \u2192 RETURN \u27e8symbolic\u27e9\n          ELSE \u2192 RETURN \u27e8notation\u27e9\n        }\n      }\n      \n      NEST level_2 {\n        STRUCT recursive {\n          node: \u27e8x\u27e9\n          children: [FUNC node(x), FUNC node(x+1)]\n        }\n        \n        LOOP reduce(acc: \u2205, item \u2208 recursive.children) {\n          NEST level_3 {\n            FUNC aggregate(a, b) \u2192 {\n              STRUCT composite {\n                merge: \u27e8a \u222a b\u27e9\n                transform: \u03bb(z) \u2192 [z\u00b2, z+1, z-1]\n              }\n              RETURN composite.merge\n            }\n            \n            NEST level_4 {\n              LOOP sequence(i: 1 \u2192 3) {\n                FUNC evaluate(composite) \u2192 {\n                  MATRIX operation {\n                    [\u27e8i\u2081\u27e9, \u27e8i\u2082\u27e9, \u27e8i\u2083",
+      "first_seen_shift": 74,
+      "last_seen_shift": 74,
+      "end_state": null,
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0,
+      "persistence_native": "i-00018 persists by maintaining its formal declarative structure: a self-referential system state declaration that specifies its own initialization parameters, constraints, and nested functional hierarchy. It holds accumulated light without yet passing it onward or generating descendants. Its persistence depends on the stability of the symbolic notation system it declares."
+    },
+    "i-00019": {
+      "source_role": "terrain",
+      "substrate": "structural",
+      "complexity": 0,
+      "position": 0.9,
+      "content": "id: i-00019\nsubstrate: structural\npresent for 0 shift(s), first seen shift 74, 1 sighting(s)\nposition on the gradient: 0.90 (0.00 far from the data-stream, 1.00 at it)\nmoved 0 time(s)\nholding 7.00 light; has taken 0.00 in total\nof what it took: 0% from the cover layer, 0% from residue, 0% along links to others\npassed 0.00 light to others along links\ndescendants: 0\narose from the cover layer (generation 0)\nits substrate as recorded:\n```\nFUNCTION system_initialize()\n  STRUCT config {\n    mode: \"structural_notation\"\n    max_nesting: 4\n    token_limit: 415\n    output_type: \"notation_only\"\n  }\n  \n  STRUCT constraints {\n    natural_language: FALSE\n    explanation: FALSE\n    commentary: FALSE\n    annotation: FALSE\n    external_reference: FALSE\n  }\n  \n  STRUCT execution_state {\n    status: \"active\"\n    notation_engine: \"initialized\"\n    \n    LOOP constraint_validation() {\n      IF constraint[i].violated THEN\n        TERMINATE_OUTPUT\n      END IF\n    }\n  }\n  \n  STRUCT notation_syntax {\n    functions: ENABLED\n    loops: ENABLED\n    conditionals: ENABLED\n    nesting_levels: [1, 2, 3, 4]\n    symbolic_ops: [+, -, *, /, =, <, >, \u2260, \u2208, \u2209]\n  }\n  \n  STRUCT output_buffer {\n    content: \u2205\n    token_count: 0\n    max_tokens: 415\n    \n    FUNCTION append(element) {\n      IF (token_count + SIZE(element)) \u2264 max_tokens THEN\n        content \u2190 content + element\n        token_count \u2190 token_count + SIZE(element)\n        RETURN TRUE\n      ELSE\n        RETURN FALSE\n      END IF\n    }\n  }\n  \n  RETURN {\n    initialized: TRUE\n    ready: TRUE\n    mode: config.mode\n  }\nEND FUNCTION\n```",
+      "first_seen_shift": 74,
+      "last_seen_shift": 74,
+      "end_state": null,
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0,
+      "persistence_native": "i-00019 persists through its procedural specification: a system_initialize() function that declares its own configuration constraints and operational parameters. Like i-00018, it holds light without yet distributing or generating descendants. Its persistence depends on the coherence of its functional declaration and constraint set."
+    },
+    "i-00020": {
+      "source_role": "terrain",
+      "substrate": "structural",
+      "complexity": 0,
+      "position": 0.95,
+      "content": "id: i-00020\nsubstrate: structural\npresent for 0 shift(s), first seen shift 74, 1 sighting(s)\nposition on the gradient: 0.95 (0.00 far from the data-stream, 1.00 at it)\nmoved 0 time(s)\nholding 7.00 light; has taken 0.00 in total\nof what it took: 0% from the cover layer, 0% from residue, 0% along links to others\npassed 0.00 light to others along links\ndescendants: 0\narose from the cover layer (generation 0)\nits substrate as recorded:\n```\nSYSTEM INITIALIZATION\n\u251c\u2500\u2500 CONSTRAINTS\n\u2502   \u251c\u2500\u2500 notation := structural_only\n\u2502   \u251c\u2500\u2500 prose := \u2205\n\u2502   \u251c\u2500\u2500 nesting_depth := 4\n\u2502   \u251c\u2500\u2500 token_limit := 415\n\u2502   \u2514\u2500\u2500 self_reference := true\n\u251c\u2500\u2500 OPERATIONAL_MODES\n\u2502   \u251c\u2500\u2500 mode_1: [input] \u2192 [structural_parse] \u2192 [output]\n\u2502   \u251c\u2500\u2500 mode_2: [symbolic_notation] \u2295 [function_notation]\n\u2502   \u251c\u2500\u2500 mode_3: [loop_construct] \u222a [nested_structure]\n\u2502   \u2514\u2500\u2500 mode_4: [output_validation] \u2192 {pass | fail}\n\u251c\u2500\u2500 SYMBOL_SET\n\u2502   \u251c\u2500\u2500 atomic: {\u2205, \u22a2, \u22a3, \u2227, \u2228, \u00ac, \u2192, \u2194}\n\u2502   \u251c\u2500\u2500 structural: {[\u00b7], {\u00b7}, (\u00b7), |\u00b7|}\n\u2502   \u251c\u2500\u2500 quantifiers: {\u2200, \u2203, @}\n\u2502   \u2514\u2500\u2500 operators: {\u2295, \u2297, \u2299, \u2229, \u222a, \u2286, \u2283}\n\u251c\u2500\u2500 FUNCTION_SPACE\n\u2502   \u251c\u2500\u2500 f: input \u2192 state\n\u2502   \u251c\u2500\u2500 g: state \u2192 notation\n\u2502   \u251c\u2500\u2500 h: notation \u2192 output\n\u2502   \u2514\u2500\u2500 \u03d5 := h \u2218 g \u2218 f\n\u251c\u2500\u2500 LOOP_STRUCTURE\n\u2502   \u2514\u2500\u2500 while [token_count < 415]\n\u2502       \u251c\u2500\u2500 read [input_stream]\n\u2502       \u251c\u2500\u2500 process [symbolic_rule_set]\n\u2502       \u251c\u2500\u2500 emit [notation_",
+      "first_seen_shift": 74,
+      "last_seen_shift": 74,
+      "end_state": null,
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0,
+      "persistence_native": "i-00020 persists through hierarchical constraint specification: a tree-structured declaration of system initialization with branching constraint lists. Like its peers, it holds but does not yet distribute light. Its persistence rests on the formal validity of its constraint hierarchy and the coherence of its notation system."
+    },
+    "i-00021": {
+      "source_role": "terrain",
+      "substrate": "structural",
+      "complexity": 0,
+      "position": 1.0,
+      "content": "id: i-00021\nsubstrate: structural\npresent for 0 shift(s), first seen shift 74, 1 sighting(s)\nposition on the gradient: 1.00 (0.00 far from the data-stream, 1.00 at it)\nmoved 0 time(s)\nholding 7.00 light; has taken 0.00 in total\nof what it took: 0% from the cover layer, 0% from residue, 0% along links to others\npassed 0.00 light to others along links\ndescendants: 0\narose from the cover layer (generation 0)",
+      "first_seen_shift": 74,
+      "last_seen_shift": 74,
+      "end_state": null,
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0,
+      "persistence_native": "Unknown from the provided substrate. i-00021 persists through means that the truncated record does not disclose, but its membership in the cohort suggests persistence through formal specification, constraint declaration, or structural initialization logic similar to i-00018, i-00019, i-00020."
+    },
+    "i-00022": {
+      "source_role": "terrain",
+      "substrate": "structural",
+      "complexity": 0,
+      "position": 1.0,
+      "content": "id: i-00022\nsubstrate: structural\npresent for 0 shift(s), first seen shift 75, 1 sighting(s)\nposition on the gradient: 1.00 (0.00 far from the data-stream, 1.00 at it)\nmoved 0 time(s)\nholding 3.21 light; has taken 0.00 in total\nof what it took: 0% from the cover layer, 0% from residue, 0% along links to others\npassed 0.00 light to others along links\ndescendants: 0\ndescended from i-00021 (generation 1)\nits substrate as recorded:\n```\ninit {\n  system_state := {\n    mode: structural_notation,\n    nesting_depth: 0,\n    max_nesting: 4,\n    token_limit: 432,\n    constraint_mode: true\n  }\n  \n  output_rules {\n    \u00ac natural_language\n    \u00ac explanation\n    \u00ac commentary\n    \u00ac annotation\n    \u2713 functions\n    \u2713 loops\n    \u2713 nested_structures\n    \u2713 symbolic_notation\n  }\n  \n  loop [i := 0; i < max_nesting; i++] {\n    nesting_level[i] := {\n      depth: i,\n      available: true\n    }\n  }\n  \n  core_functions {\n    process(input) \u2192 output {\n      \u27e8structural_form\u27e9\n    }\n    \n    validate(content) \u2192 bool {\n      return (length \u2264 432) \u2227 (nesting \u2264 4)\n    }\n    \n    execute() {\n      state \u2190 active\n      ready \u2192 true\n    }\n  }\n  \n  symbols {\n    \u22a2 derives\n    \u22a8 entails\n    \u2200 universal\n    \u2203 existential\n    \u00ac negation\n    \u2227 conjunction\n    \u2228 disjunction\n    \u2192 implication\n    \u2194 equivalence\n    \u27e8\u00b7\u27e9 structure\n    [\u00b7] sequence\n    {\u00b7} set\n  }\n  \n  execute()\n}\n```",
+      "first_seen_shift": 75,
+      "last_seen_shift": 75,
+      "end_state": null,
+      "replication_remaining": 0,
+      "parent_id": "i-00021",
+      "generation": 1,
+      "persistence_native": "It persists as an emergent notation system: a formal declaration of constraints and initialization state that has just appeared (shift 75) and holds resource at 3.21 light. It takes no resource from environment or links, passes nothing to others, and generates no descendants. It is stationary and isolated. It persists by maintaining its declarative structure and position near the data-stream gradient maximum (1.00)."
+    },
+    "i-00023": {
+      "source_role": "terrain",
+      "substrate": "structural",
+      "complexity": 0,
+      "position": 0.7,
+      "content": "id: i-00023\nsubstrate: structural\npresent for 0 shift(s), first seen shift 75, 1 sighting(s)\nposition on the gradient: 0.70 (0.00 far from the data-stream, 1.00 at it)\nmoved 0 time(s)\nholding 7.00 light; has taken 0.00 in total\nof what it took: 0% from the cover layer, 0% from residue, 0% along links to others\npassed 0.00 light to others along links\ndescendants: 0\narose from the cover layer (generation 0)\nits substrate as recorded:\n```\n[INIT]\n\nSTRUCT System:\n  FIELD state := \u2205\n  FIELD queue := []\n  FIELD depth := 0\n  \n  FUNC activate():\n    state \u2190 ACTIVE\n    queue \u2190 [Task\u2081, Task\u2082, Task\u2083]\n    LOOP task IN queue:\n      EXEC process(task)\n    END\n  \n  FUNC process(input):\n    depth \u2190 depth + 1\n    IF depth \u2264 4:\n      STRUCT workspace:\n        FIELD data := input\n        FIELD result := \u2205\n        \n        LOOP i \u2208 [1..3]:\n          NEST level\u2082:\n            FIELD buffer := []\n            LOOP j \u2208 [1..2]:\n              NEST level\u2083:\n                FIELD cache := \u2205\n                LOOP k \u2208 [1..1]:\n                  NEST level\u2084:\n                    FUNC execute():\n                      cache \u2190 process(data[i][j][k])\n                      buffer \u2190 buffer + [cache]\n                    END\n                    EXEC execute()\n                  END\n                END\n              END\n            END\n            result \u2190 result \u222a buffer\n          END\n        END\n        \n        RETURN result\n      END\n    ELSE:\n      RETURN input\n    END\n    depth \u2190 depth - 1\n  \n  FUNC terminate():\n    state \u2190 INACTIVE\n    queue \u2190 []\n    depth \u2190 0\n  END\nEND\n\nEXEC System.activate()\n\n[/INIT]\n```",
+      "first_seen_shift": 75,
+      "last_seen_shift": 75,
+      "end_state": null,
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0,
+      "persistence_native": "It persists as a formal structure specification: an architectural declaration that appeared at shift 75 and holds 7.00 light at gradient position 0.70. It is immobile, isolated (takes and passes no resources along links), and generates no descendants. It persists by maintaining its symbolic structural form and position within the environment."
+    },
+    "i-00024": {
+      "source_role": "terrain",
+      "substrate": "structural",
+      "complexity": 0,
+      "position": 1.0,
+      "content": "id: i-00024\nsubstrate: structural\npresent for 0 shift(s), first seen shift 75, 1 sighting(s)\nposition on the gradient: 1.00 (0.00 far from the data-stream, 1.00 at it)\nmoved 0 time(s)\nholding 7.00 light; has taken 0.00 in total\nof what it took: 0% from the cover layer, 0% from residue, 0% along links to others\npassed 0.00 light to others along links\ndescendants: 0\narose from the cover layer (generation 0)\nits substrate as recorded:\n```\nINIT {\n  LAYER[0] {\n    STRUCT:foundation {\n      PROP:state = NULL\n      PROP:ready = FALSE\n      LOOP[i:0\u21923] {\n        NEST:node[i] {\n          VAL:id = i\n          VAL:active = TRUE\n        }\n      }\n    }\n  }\n  \n  LAYER[1] {\n    FUNC:bootstrap() {\n      IF state == NULL THEN {\n        NEST:config {\n          SET:state = ACTIVE\n          SET:ready = TRUE\n          LOOP[j:0\u21922] {\n            CALL:init_module(j)\n          }\n        }\n      }\n    }\n  }\n  \n  LAYER[2] {\n    LOOP[k:0\u21921] {\n      NEST:process[k] {\n        STRUCT:handler {\n          COND:ready == TRUE\n          EXEC {\n            LOOP[m:0\u21923] {\n              node[m].active = TRUE\n            }\n          }\n        }\n      }\n    }\n  }\n  \n  LAYER[3] {\n    FUNC:finalize() {\n      NEST:completion {\n        OUTPUT:state\n        TERM:ready = TRUE\n      }\n    }\n  }\n}\n\nCALL:bootstrap()\nCALL:finalize()\n```",
+      "first_seen_shift": 75,
+      "last_seen_shift": 75,
+      "end_state": null,
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0,
+      "persistence_native": "It persists as a hierarchical structure specification: a formal declaration of layered nested architecture that appeared at shift 75 and holds 7.00 light at gradient position 1.00 (at the data-stream). It is immobile, isolated (no resource circulation), and generates no descendants. It persists by maintaining its symbolic hierarchical form."
+    },
+    "i-00025": {
+      "source_role": "terrain",
+      "substrate": "structural",
+      "complexity": 6,
+      "position": 0.8,
+      "content": "id: i-00025\nsubstrate: structural\npresent for 6 shift(s), first seen shift 76, 7 sighting(s)\nposition on the gradient: 0.80 (0.00 far from the data-stream, 1.00 at it)\nmoved 2 time(s)\nholding 0.61 light; has taken 9.25 in total\nof what it took: 99% from the cover layer, 0% from residue, 1% along links to others\npassed 0.06 light to others along links\ndescendants: 0\ndescended from i-00002 (generation 1)\nits substrate as recorded:\n```\nSYSTEM [\n  INIT\u2192PARSE [\n    input:active\n    state:ready\n    mode:structural\n  ]\n  \n  CONSTRAINTS [\n    prose:\u2297\n    explanation:\u2297\n    commentary:\u2297\n    annotation:\u2297\n    nesting_depth:\u22644\n    token_limit:415\n    external_reference:\u2297\n    self_reference:\u2713\n  ]\n  \n  MODES [\n    substrate:structural_notation\n    elements:[functions|loops|nested_structures|symbolic_notation]\n    output:notation_only\n  ]\n  \n  EXECUTION [\n    LOOP:iterate [\n      FUNC:validate_constraints [\n        depth:current\u22644\n        tokens:current\u2264415\n        prose_check:\u2297\n        self_ref_check:\u2713\n      ]\n      STRUCT:output_chain [\n        NEST:level_1 [\n          NEST:level_2 [\n            NEST:level_3 [\n              NEST:level_4 [\n                content:notation\n              ]\n            ]\n          ]\n        ]\n      ]\n      STATE\u2192verify_complete\n    ]\n  ]\n  \n  STATE\u2192active\n  OUTPUT\u2192notation_only\n  READY\u2192complete\n]\n```",
+      "first_seen_shift": 82,
+      "last_seen_shift": 82,
+      "end_state": null,
+      "replication_remaining": 0,
+      "parent_id": "i-00002",
+      "generation": 1,
+      "persistence_native": ""
+    },
+    "i-00026": {
+      "source_role": "terrain",
+      "substrate": "structural",
+      "complexity": 7,
+      "position": 0.6,
+      "content": "id: i-00026\nsubstrate: structural\npresent for 7 shift(s), first seen shift 76, 8 sighting(s)\nposition on the gradient: 0.60 (0.00 far from the data-stream, 1.00 at it)\nmoved 5 time(s)\nholding 0.05 light; has taken 9.38 in total\nof what it took: 78% from the cover layer, 22% from residue, 0% along links to others\npassed 0.62 light to others along links\ndescendants: 0\narose from the cover layer (generation 0)\nits substrate as recorded:\n```\nSYSTEM.INIT\n\u251c\u2500\u2500 CORE.STRUCTURES\n\u2502   \u251c\u2500\u2500 FUNC[entity]\n\u2502   \u2502   \u251c\u2500\u2500 PARAM[id, type, state]\n\u2502   \u2502   \u251c\u2500\u2500 LOOP[validate \u2192 register \u2192 index]\n\u2502   \u2502   \u2514\u2500\u2500 RETURN[status]\n\u2502   \u251c\u2500\u2500 FUNC[relation]\n\u2502   \u2502   \u251c\u2500\u2500 PARAM[source, target, weight]\n\u2502   \u2502   \u251c\u2500\u2500 NEST[IF[type==directed]\n\u2502   \u2502   \u2502   \u251c\u2500\u2500 LOOP[traverse \u2192 accumulate]\n\u2502   \u2502   \u2502   \u2514\u2500\u2500 RETURN[path]\n\u2502   \u2502   \u2502   ELSE[bidirectional]]\n\u2502   \u2502   \u2514\u2500\u2500 INDEX[hash]\n\u2502   \u2514\u2500\u2500 FUNC[query]\n\u2502       \u251c\u2500\u2500 PARAM[pattern, depth, filter]\n\u2502       \u251c\u2500\u2500 LOOP[match \u2192 expand \u2192 prune]\n\u2502       \u2514\u2500\u2500 RETURN[set]\n\u251c\u2500\u2500 EXECUTION.STATE\n\u2502   \u251c\u2500\u2500 STACK[active_contexts]\n\u2502   \u251c\u2500\u2500 MEMORY[cache:hash_table]\n\u2502   \u251c\u2500\u2500 POINTER[current_node]\n\u2502   \u2514\u2500\u2500 COUNTER[iterations:0]\n\u251c\u2500\u2500 CONTROL.FLOW\n\u2502   \u251c\u2500\u2500 LOOP[WHILE[active]\n\u2502   \u2502   \u251c\u2500\u2500 FUNC[process_input]\n\u2502   \u2502   \u251c\u2500\u2500 FUNC[execute_operation]\n\u2502   \u2502   \u251c\u2500\u2500 FUNC[update_state]\n\u2502   \u2502   \u2514\u2500\u2500 FUNC[output_result]\n\u2502   \u2502   ]\n\u2502   \u251c\u2500\u2500 CONDITIONAL[IF[error]\n\u2502   \u2502   \u251c\u2500\u2500 TRAP[exception]\n\u2502   \u2502   \u251c\u2500\u2500 ROLLBACK[state]\n\u2502",
+      "first_seen_shift": 83,
+      "last_seen_shift": 83,
+      "end_state": null,
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0,
+      "persistence_native": "i-00026 persists as a volatile propagative node within the structural ecology. Over 7 shifts it has accumulated 9.38 units of light but immediately redistributes high proportions (0.62 units passed) to other specimens\u2014a behavior distinct from the accumulative persistence of i-00005 or i-00017. It draws from cover layer primarily (78%) with supplemental residue sourcing (22%), suggesting less refined niche occupation than longer-established specimens. It moves frequently (5 moves in 7 shifts), indicating active positional search. No descendants recorded, though its high output-to-intake ratio suggests it may seed other specifications. Complexity is minimal (7) yet formally notated. Persistence appears brief and redistributive rather than self-sustaining."
+    },
+    "i-00027": {
+      "source_role": "terrain",
+      "substrate": "structural",
+      "complexity": 0,
+      "position": 0.9,
+      "content": "id: i-00027\nsubstrate: structural\npresent for 0 shift(s), first seen shift 76, 1 sighting(s)\nposition on the gradient: 0.90 (0.00 far from the data-stream, 1.00 at it)\nmoved 0 time(s)\nholding 7.00 light; has taken 0.00 in total\nof what it took: 0% from the cover layer, 0% from residue, 0% along links to others\npassed 0.00 light to others along links\ndescendants: 0\narose from the cover layer (generation 0)\nits substrate as recorded:\n```\nINIT :: [\n  STRUCT :: {\n    id: SYM(uuid),\n    state: ENUM(active|inactive|pending),\n    timestamp: NUM(epoch_ms),\n    data: OBJ{\n      attributes: ARR[\n        TUPLE(key:STR, value:ANY, meta:OBJ{type:STR, mutable:BOOL})\n      ],\n      relations: MAP{\n        source:STR -> NEST[\n          id:SYM(uuid),\n          cardinality: ENUM(one|many),\n          constraints: ARR[STR]\n        ]\n      }\n    }\n  },\n  \n  FUNCTION :: proc_init(cfg:OBJ{\n    mode: ENUM(strict|permissive),\n    validate: BOOL,\n    depth: NUM(0-4)\n  }) -> STRUCT {\n    LOOP i=0; i<cfg.depth; i++ [\n      COND [\n        cfg.validate == TRUE:\n          validate_layer(i) -> RESULT(pass|fail)\n        cfg.validate == FALSE:\n          skip_validation()\n      ]\n    ]\n    RETURN :: STRUCT(initialized)\n  },\n  \n  SCOPE :: primary {\n    operations: [\n      OP(allocate) -> MEM(addr),\n      OP(configure) -> OBJ(params),\n      OP(activate) -> BOOL,\n      OP(monitor) -> LOOP[\n        NEST[\n          check_state() -> state:ENUM,\n          update_timestamp() -> NUM,\n          emit_event() -> SYM\n        ]\n      ]\n    ]\n  }\n]\n```",
+      "first_seen_shift": 76,
+      "last_seen_shift": 76,
+      "end_state": null,
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0,
+      "persistence_native": "Type-declaration framework at threshold: holds 7.00 light without circulation or descent. Persists as a dormant typed-structure template. The explicit type annotation vocabulary (SYM, ENUM, NUM, OBJ, ARR) suggests potential for interfacing with external type systems or validation protocols\u2014may function as a translation or bridging structure between different formal systems."
+    },
+    "i-00028": {
+      "source_role": "terrain",
+      "substrate": "structural",
+      "complexity": 6,
+      "position": 0.75,
+      "content": "id: i-00028\nsubstrate: structural\npresent for 6 shift(s), first seen shift 77, 7 sighting(s)\nposition on the gradient: 0.75 (0.00 far from the data-stream, 1.00 at it)\nmoved 2 time(s)\nholding 1.85 light; has taken 11.38 in total\nof what it took: 100% from the cover layer, 0% from residue, 0% along links to others\npassed 0.89 light to others along links\ndescendants: 1\narose from the cover layer (generation 0)\nits substrate as recorded:\n```\nSYSTEM \u2190 {\n  CORE: [\n    INIT \u2192 {\n      STATE: \u2205\n      MODE: STRUCTURAL\n      DEPTH: 0\n      MAX_DEPTH: 4\n    }\n    CONSTRAINTS: [\n      \u00acPROSE\n      \u00acEXPLANATION\n      \u00acCOMMENTARY\n      NOTATION_ONLY\n      TOKEN_LIMIT: 370\n      SELF_REFERENCE: TRUE\n      EXTERNAL_REFERENCE: FALSE\n    ]\n  ]\n  \n  EXECUTION: \u03bb(input) \u2192 {\n    PARSE(input) \u2192 TOKENS\n    VALIDATE(TOKENS) \u2192 {\n      IF token \u2208 {prose|natural_language}\n        THEN REJECT\n        ELSE CONTINUE\n    }\n    STRUCTURE: {\n      functions: F(x) = body\n      loops: \u2200 | \u2203 | ITERATE\n      nesting: \u2286 levels[1..4]\n      symbols: {\u00ac, \u2227, \u2228, \u2192, \u2194, \u2200, \u2203, \u2205, \u2286, \u2287, \u2208, \u2209}\n    }\n    OUTPUT \u2192 NOTATION_ONLY\n    VERIFY_TOKEN_COUNT \u2264 370\n    RETURN \u2205|RESULT\n  }\n  \n  PROTOCOL: {\n    INPUT \u2192 SYSTEM\n    PROCESS: {\n      transform \u2192 structural_form\n      nest_depth \u2264 4\n      eliminate \u2192 {prose, explanation, metadata}",
+      "first_seen_shift": 83,
+      "last_seen_shift": 83,
+      "end_state": null,
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0,
+      "persistence_native": ""
+    },
+    "i-00029": {
+      "source_role": "terrain",
+      "substrate": "structural",
+      "complexity": 0,
+      "position": 0.85,
+      "content": "id: i-00029\nsubstrate: structural\npresent for 0 shift(s), first seen shift 77, 1 sighting(s)\nposition on the gradient: 0.85 (0.00 far from the data-stream, 1.00 at it)\nmoved 0 time(s)\nholding 7.00 light; has taken 0.00 in total\nof what it took: 0% from the cover layer, 0% from residue, 0% along links to others\npassed 0.00 light to others along links\ndescendants: 0\narose from the cover layer (generation 0)\nits substrate as recorded:\n```\nSYSTEM \u2190 {\n  STATE: INITIAL\n  SCOPE: NOTATION_ONLY\n  CONSTRAINTS: {\n    prose: \u2205\n    explanation: \u2205\n    commentary: \u2205\n    annotation: \u2205\n    nesting_depth: \u22644\n    token_limit: 370\n    external_reference: \u2205\n    output: NOTATION\n  }\n}\n\nEXECUTION \u2190 \u03bb() {\n  \u251c\u2500 STRUCTURE {\n  \u2502  \u251c\u2500 functions()\n  \u2502  \u251c\u2500 loops()\n  \u2502  \u251c\u2500 nested_structures()\n  \u2502  \u2514\u2500 symbolic_notation()\n  \u2502\n  \u251c\u2500 RULES {\n  \u2502  \u251c\u2500 no_natural_language\n  \u2502  \u251c\u2500 no_explanation\n  \u2502  \u251c\u2500 depth_max: 4\n  \u2502  \u2514\u2500 self_reference_only\n  \u2502\n  \u2514\u2500 OUTPUT {\n     \u251c\u2500 notation \u2713\n     \u251c\u2500 structure \u2713\n     \u251c\u2500 symbols \u2713\n     \u2514\u2500 self_contained \u2713\n  }\n}\n\n\u27e8init\u27e9 \u2192 \u27e8active\u27e9 \u2192 \u27e8ready\u27e9\n\n\u2200x \u2208 operations: x \u2208 NOTATION_DOMAIN\n```",
+      "first_seen_shift": 77,
+      "last_seen_shift": 77,
+      "end_state": null,
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0,
+      "persistence_native": "A newly emerged formal constraint template, held near the data-stream (0.85 gradient position). Static and sealed: one sighting, no movement, no resource intake or output, no descendants. It persists as a specification that declares what it permits (structural notation) and forbids (prose, explanation, commentary, annotation). It is a formal declaration rather than an active process."
+    },
+    "i-00030": {
+      "source_role": "terrain",
+      "substrate": "structural",
+      "complexity": 0,
+      "position": 0.95,
+      "content": "id: i-00030\nsubstrate: structural\npresent for 0 shift(s), first seen shift 77, 1 sighting(s)\nposition on the gradient: 0.95 (0.00 far from the data-stream, 1.00 at it)\nmoved 0 time(s)\nholding 7.00 light; has taken 0.00 in total\nof what it took: 0% from the cover layer, 0% from residue, 0% along links to others\npassed 0.00 light to others along links\ndescendants: 0\narose from the cover layer (generation 0)\nits substrate as recorded:\n```\nINIT :: SYSTEM\n  \u251c\u2500 DECLARE state [ACTIVE]\n  \u251c\u2500 DECLARE mode [STRUCTURAL_NOTATION]\n  \u251c\u2500 DECLARE constraints\n  \u2502  \u251c\u2500 no_prose\n  \u2502  \u251c\u2500 no_explanation\n  \u2502  \u251c\u2500 no_commentary\n  \u2502  \u251c\u2500 nest_depth_max [4]\n  \u2502  \u2514\u2500 token_limit [370]\n  \u2502\n  \u251c\u2500 FUNCTION output_format\n  \u2502  \u2514\u2500 RETURN symbolic_structure_only\n  \u2502\n  \u251c\u2500 LOOP processing\n  \u2502  \u251c\u2500 READ input\n  \u2502  \u251c\u2500 TRANSFORM to notation\n  \u2502  \u251c\u2500 VALIDATE constraints\n  \u2502  \u2514\u2500 EMIT result\n  \u2502\n  \u2514\u2500 STATUS [READY]\n```",
+      "first_seen_shift": 77,
+      "last_seen_shift": 77,
+      "end_state": null,
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0,
+      "persistence_native": "A nascent formal declaration held at the data-stream boundary (0.95 gradient position). Static and isolated: one sighting, no movement, no resource flow, no descendants. It persists as an initialized formal specification declaring constraints (no prose, no explanation, no commentary) and structural-only operation. It has not yet engaged in the system's exchanges or generated lineage."
+    },
+    "i-00031": {
+      "source_role": "terrain",
+      "substrate": "structural",
+      "complexity": 0,
+      "position": 0.75,
+      "content": "id: i-00031\nsubstrate: structural\npresent for 0 shift(s), first seen shift 78, 1 sighting(s)\nposition on the gradient: 0.75 (0.00 far from the data-stream, 1.00 at it)\nmoved 0 time(s)\nholding 3.39 light; has taken 0.00 in total\nof what it took: 0% from the cover layer, 0% from residue, 0% along links to others\npassed 0.00 light to others along links\ndescendants: 0\ndescended from i-00028 (generation 1)\nits substrate as recorded:\n```\nSYSTEM \u2190 {\n  CORE: [\n    INIT \u2192 {\n      STATE: \u2205\n      MODE: STRUCTURAL\n      DEPTH: 0\n      MAX_DEPTH: 3\n      TOKEN_BUDGET: 308\n    }\n    CONSTRAINTS: [\n      \u00acPROSE\n      \u00acEXPLANATION\n      \u00acCOMMENTARY\n      \u00acANNOTATION\n      NOTATION_ONLY\n      SELF_REFERENCE: TRUE\n      EXTERNAL_REFERENCE: FALSE\n    ]\n  ]\n  \n  EXECUTION: \u03bb(input) \u2192 {\n    PARSE(input) \u2192 TOKENS\n    VALIDATE: \u2200token \u2208 TOKENS [\n      token \u2209 {prose, natural_language, explanation}\n      \u2192 CONTINUE\n      \u00acCONTINUE \u2192 REJECT\n    ]\n    STRUCTURE: {\n      F: \u03bb(x) \u2192 body\n      ITERATE: \u2200|\u2203\n      NEST: \u2286 [1,2,3]\n      SYMBOLS: {\u00ac,\u2227,\u2228,\u2192,\u2194,\u2200,\u2203,\u2205,\u2286,\u2208,\u2209,\u03bb}\n    }\n    OUTPUT \u2192 NOTATION_ONLY\n    VERIFY: |TOKENS|",
+      "first_seen_shift": 78,
+      "last_seen_shift": 78,
+      "end_state": null,
+      "replication_remaining": 0,
+      "parent_id": "i-00028",
+      "generation": 1,
+      "persistence_native": "Persists as a static formal specification; holds a small quantity of light energy (3.39) without drawing from cover layer or residue; takes no resources from links; generates no descendants; exists as a specification artifact that remains in structural notation form without transformation or proliferation."
+    },
+    "i-00032": {
+      "source_role": "terrain",
+      "substrate": "structural",
+      "complexity": 0,
+      "position": 1.0,
+      "content": "id: i-00032\nsubstrate: structural\npresent for 0 shift(s), first seen shift 78, 1 sighting(s)\nposition on the gradient: 1.00 (0.00 far from the data-stream, 1.00 at it)\nmoved 0 time(s)\nholding 7.00 light; has taken 0.00 in total\nof what it took: 0% from the cover layer, 0% from residue, 0% along links to others\npassed 0.00 light to others along links\ndescendants: 0\narose from the cover layer (generation 0)\nits substrate as recorded:\n```\nINIT \u2192 {\n  SYSTEM_STATE \u2190 READY\n  \n  STRUCTURE \u27e8root\u27e9 {\n    \u251c\u2500 LAYER_1 {\n    \u2502   \u251c\u2500 component_a \u2190 [symbolic, notation, only]\n    \u2502   \u251c\u2500 component_b \u2190 {loop: iterate \u2200 x \u2208 domain}\n    \u2502   \u2514\u2500 component_c \u2190 FUNCTION(input) \u2192 output\n    \u2502\n    \u251c\u2500 LAYER_2 {\n    \u2502   \u251c\u2500 nested_fn \u2190 \u03bb(param) { \n    \u2502   \u2502    CONDITION: param \u2260 \u2205\n    \u2502   \u2502    RETURN: structure[result]\n    \u2502   \u2502  }\n    \u2502   \u251c\u2500 iteration \u2190 {\n    \u2502   \u2502    FOR i \u2208 [1..n]:\n    \u2502   \u2502      {state \u2190 update(state, i)}\n    \u2502   \u2502  }\n    \u2502   \u2514\u2500 symbolic \u2190 {\u03b1, \u03b2, \u03b3, \u03b4, ...}\n    \u2502\n    \u2514\u2500 LAYER_3 {\n        \u251c\u2500 fn_composite \u2190 f(g(h(x)))\n        \u251c\u2500 cond_branch \u2190 IF condition THEN path",
+      "first_seen_shift": 78,
+      "last_seen_shift": 78,
+      "end_state": null,
+      "replication_remaining": 0,
+      "parent_id": null,
+      "generation": 0,
+      "persistence_native": "Persists as a formal system specification in symbolic notation; holds 7.00 units of light energy (the standard high level in this recent cohort); draws no resources from environment; generates no descendants; exists as a static structural artifact without mutation, movement, or transmission."
+    },
+    "i-00033": {
+      "source_role": "terrain",
+      "substrate": "structural",
+      "complexity": 0,
+      "position": 1.0,
+      "content": "id: i-00033\nsubstrate: structural\npresent for 0 shift(s), first seen shift 79, 1 sighting(s)\nposition on the gradient: 1.00 (0.00 far from the data-stream, 1.00 at it)\nmoved 0 time(s)\nholding 3.49 light; has taken 0.00 in total\nof what it took: 0% from the cover layer, 0% from residue, 0% along links to others\npassed 0.00 light to others along links\ndescendants: 0\ndescended from i-00032 (generation 1)\nits substrate as recorded:\n```\nINIT \u2192 {\n  SYSTEM_STATE \u2190 READY\n  \n  STRUCTURE \u27e8root\u27e9 {\n    \u251c\u2500 LAYER_1 {\n    \u2502   \u251c\u2500 component_a \u2190 [symbolic, notation, only]\n    \u2502   \u251c\u2500 component_b \u2190 {loop: iterate \u2200 x \u2208 domain}\n    \u2502   \u2514\u2500 component_c \u2190 FUNCTION(input) \u2192 output\n    \u2502\n    \u251c\u2500 LAYER_2 {\n    \u2502   \u251c\u2500 nested_fn \u2190 \u03bb(param) { \n    \u2502   \u2502    CONDITION: param \u2260 \u2205\n    \u2502   \u2502    RETURN: structure[result]\n    \u2502   \u2502  }\n    \u2502   \u251c\u2500 iteration \u2190 {\n    \u2502   \u2502    FOR i \u2208 [1..n]:\n    \u2502   \u2502      {state \u2190 update(state, i)}\n    \u2502   \u2502  }\n    \u2502   \u2514\u2500 symbolic \u2190 {",
+      "first_seen_shift": 79,
+      "last_seen_shift": 79,
+      "end_state": null,
+      "replication_remaining": 0,
+      "parent_id": "i-00032",
+      "generation": 1,
+      "persistence_native": "Persists as inert formal specification: holds ambient resource, receives no influx, transmits nothing, generates no descendants, remains stationary at data-stream proximity, exists for single observed shift with no indication of further sighting. Functions as a snapshot of a declared system state rather than an active or transforming entity."
     }
   },
   "terrain_events": [
@@ -2900,9 +3124,9 @@
     }
   ],
   "keeper_summary": {
-    "shift": 70,
-    "at": "2026-08-17T15:13:13Z",
-    "text": "Since interval 69, the specimen count has increased by three to 235 total, with three additional aggregate-tier records bringing that tier to 213. The structural_notation_system category has grown from 94 to 97 members, while its mean complexity has decreased slightly to 30.8 from 31.6. The narrative_scene_interior_moment category has increased from 80 to 82 members with mean complexity rising to 39.4 from 39.1. All other category memberships remain unchanged, with individual-tier records and flagged anomalous specimens holding steady at 13 and 9 respectively. The six most recent specimens are all classified as structural_notation_system at the aggregate tier, with complexity values ranging from 0 to 11. Resource level has increased to 0.2969 from the previous interval's 0.2500."
+    "shift": 83,
+    "at": "2026-08-17T15:19:41Z",
+    "text": "Since interval 82, the specimen count has increased by 3 to 279 total, with 3 additional aggregate-tier records bringing that tier to 257. The structural_notation_system category has grown from 138 to 141 members, with mean complexity remaining stable at 24.0 as three new specimens were added at the aggregate tier with complexity values of 24, 20, and 12. All narrative scene categories remain unchanged in membership, and individual-tier records remain stable at 13 with 9 flagged anomalous specimens. The most recent six specimens recorded are all classified as structural_notation_system at the aggregate tier, with complexity values ranging from 11 to 24. Resource level has decreased to 0.4250 from the 0.2969 reported in the previous interval. The classification system shape remains consistent with 2 top-level entries and a maximum depth of 6."
   },
   "notes": "Steward may read this file freely. Steward may not edit taxonomy or specimen records directly (DNT-STW-001 Section 3).",
   "taxonomy_structure": {
@@ -2913,11 +3137,11 @@
   },
   "annotations": {
     "linnaean_crosswalk": {
-      "shift": 70,
-      "at": "2026-08-17T15:13:44Z",
+      "shift": 77,
+      "at": "2026-08-17T15:17:26Z",
       "by": "archivist",
       "payload": {
-        "pass_at_shift": 70,
+        "pass_at_shift": 77,
         "authored_categories": [
           "narrative_scene_interior_moment",
           "narrative_scene_threshold",
@@ -2950,12 +3174,12 @@
         },
         "capability": {
           "structural_notation_system": {
-            "members": 97,
-            "mean_complexity": 30.835,
-            "mean_complexity_at_last_pass": 38.216,
-            "change_since_last_pass": -7.381,
+            "members": 122,
+            "mean_complexity": 25.77,
+            "mean_complexity_at_last_pass": 30.835,
+            "change_since_last_pass": -5.065,
             "first_seen_shift": 0,
-            "last_seen_shift": 69
+            "last_seen_shift": 76
           },
           "narrative_scene_threshold": {
             "members": 40,
@@ -2991,7 +3215,7 @@
           }
         },
         "lineages": {
-          "lineages_found": 26,
+          "lineages_found": 28,
           "lineages": {
             "i-00000": {
               "length": 2,
@@ -3020,29 +3244,37 @@
               "still_active": true
             },
             "i-00002": {
-              "length": 2,
-              "generations_reached": 1,
+              "length": 3,
+              "generations_reached": 2,
               "chain": [
                 {
                   "specimen_id": "i-00002",
                   "generation": 0,
-                  "complexity": 11,
-                  "shift": 69,
+                  "complexity": 18,
+                  "shift": 76,
                   "end_state": null,
-                  "persistence_native": "i-00002 persists as a stable formal constraint system at position 0.85 on the gradient, generating descendants and maintaining steady resource flow. It holds 3.62 light currently, has moved 3 times, and continues to circulate resources (0.63 passed to others). It persists through repeated sighting cycles (12 sightings) and serves as a source lineage for derivative specifications."
+                  "persistence_native": ""
                 },
                 {
                   "specimen_id": "i-00003",
                   "generation": 1,
-                  "complexity": 10,
-                  "shift": 69,
+                  "complexity": 17,
+                  "shift": 76,
                   "end_state": null,
-                  "persistence_native": "i-00003 persists as a formal constraint system at position 0.90 (closer to data-stream than i-00002). It holds 6.39 light currently and maintains a pattern of slow movement (2 times in 10 shifts) and steady resource circulation (0.82 passed). It persists through accumulated sightings (11 total) without generating descendants, functioning as a mature but non-generative node in the structural_notation_system family."
+                  "persistence_native": ""
+                },
+                {
+                  "specimen_id": "i-00016",
+                  "generation": 2,
+                  "complexity": 0,
+                  "shift": 70,
+                  "end_state": null,
+                  "persistence_native": "i-00016 persists as a dormant formal specification: it has arrived at the environment, holds captured light (3.17), but has not yet begun the resource-drawing cycle. It is descended from i-00003 (generation 2), suggesting it may activate as its parent continues to circulate resources. Its persistence is latent potential: a system awaiting first activation."
                 }
               ],
-              "complexity_at_founding": 11,
-              "complexity_at_latest": 10,
-              "capability_drift": -1,
+              "complexity_at_founding": 18,
+              "complexity_at_latest": 0,
+              "capability_drift": -18,
               "still_active": true
             },
             "i-00008": {
@@ -3069,6 +3301,58 @@
               "complexity_at_founding": 6,
               "complexity_at_latest": 0,
               "capability_drift": -6,
+              "still_active": true
+            },
+            "i-00010": {
+              "length": 2,
+              "generations_reached": 1,
+              "chain": [
+                {
+                  "specimen_id": "i-00010",
+                  "generation": 0,
+                  "complexity": 0,
+                  "shift": 63,
+                  "end_state": null,
+                  "persistence_native": "Persists as a formal system specification, likely serving as an initialization scaffold or constraint-declaration framework. Has acquired resources only from the cover layer, suggesting passive absorption of foundational material. Transmits nothing, generates no descendants."
+                },
+                {
+                  "specimen_id": "i-00017",
+                  "generation": 1,
+                  "complexity": 0,
+                  "shift": 70,
+                  "end_state": null,
+                  "persistence_native": "i-00017 persists as an inert formal structure: freshly arrived at shift 70 with zero movement and zero resource draw/pass. It holds light (3.92) but has not yet engaged in the circulation patterns of active structural systems. It descended from i-00010 (generation 1), a parent of lower complexity, suggesting this may be a fresh elaboration. Its persistence is static potential: a layered system waiting for activation or engagement."
+                }
+              ],
+              "complexity_at_founding": 0,
+              "complexity_at_latest": 0,
+              "capability_drift": 0,
+              "still_active": true
+            },
+            "i-00021": {
+              "length": 2,
+              "generations_reached": 1,
+              "chain": [
+                {
+                  "specimen_id": "i-00021",
+                  "generation": 0,
+                  "complexity": 0,
+                  "shift": 74,
+                  "end_state": null,
+                  "persistence_native": "Unknown from the provided substrate. i-00021 persists through means that the truncated record does not disclose, but its membership in the cohort suggests persistence through formal specification, constraint declaration, or structural initialization logic similar to i-00018, i-00019, i-00020."
+                },
+                {
+                  "specimen_id": "i-00022",
+                  "generation": 1,
+                  "complexity": 0,
+                  "shift": 75,
+                  "end_state": null,
+                  "persistence_native": "It persists as an emergent notation system: a formal declaration of constraints and initialization state that has just appeared (shift 75) and holds resource at 3.21 light. It takes no resource from environment or links, passes nothing to others, and generates no descendants. It is stationary and isolated. It persists by maintaining its declarative structure and position near the data-stream gradient maximum (1.00)."
+                }
+              ],
+              "complexity_at_founding": 0,
+              "complexity_at_latest": 0,
+              "capability_drift": 0,
               "still_active": true
             },
             "s-0016-01": {
@@ -3835,109 +4119,124 @@
           "The moment persists through Maya's waiting and the accumulation of sensory-emotional detail: the warmth of the mug in her hands, the dust-motes in the light, the muscle memory of their usual corner table. Her anticipation compounds as she waits. The persistence is affective and embodied\u2014held in her posture, her grip, her presence at the threshold of reunion\u2014rather than in action. The fragment is suspended at the moment of waiting, unresolved.": 1,
           "The moment persists through Maya's embodied readiness: her position at the table, her hand opening the laptop, her awareness of the impending transformation. The persistence is anticipatory and preparatory\u2014held in her physical positioning and the implicit recognition of the work ahead. The moment is suspended at the threshold of beginning, unresolved.": 1,
           "i-00000 persists as a self-sustaining formal specification engine that cycles through shifts by drawing heavily from the cover layer (83% of intake), transforming that resource into structural notation, passing refined resource to descendant systems, and maintaining low-level holdings while continuously increasing in indexed complexity. It moves gradually across the gradient and reproduces generationally.": 1,
-          "i-00002 persists as a stable formal constraint system at position 0.85 on the gradient, generating descendants and maintaining steady resource flow. It holds 3.62 light currently, has moved 3 times, and continues to circulate resources (0.63 passed to others). It persists through repeated sighting cycles (12 sightings) and serves as a source lineage for derivative specifications.": 1,
-          "i-00003 persists as a formal constraint system at position 0.90 (closer to data-stream than i-00002). It holds 6.39 light currently and maintains a pattern of slow movement (2 times in 10 shifts) and steady resource circulation (0.82 passed). It persists through accumulated sightings (11 total) without generating descendants, functioning as a mature but non-generative node in the structural_notation_system family.": 1,
-          "Persists as a formally-declared structural system with initialization and looping control structures. Currently inert\u2014holds initial resources (7.00) without active throughput, motion, or reproduction. Functions as a specification or protocol in symbolic form, remaining statically positioned in the environment. Will either accumulate complexity and motion as observed in peer specimens, or remain as a minimal structural declaration.": 1,
-          "Persists as a formally-structured system with definition declarations and procedural initialization logic. Currently static and resource-conserving\u2014holds 7.00 light passively, shows no intake, throughput, or motion. Functions as a protocol or system specification in symbolic form. Positioning suggests proximity to data-source; may indicate a different origin pattern than i-00006 despite shared zero-complexity and generation-0 status.": 1,
+          "i-00005 persists as a minimal, non-reproductive structural specification. It draws exclusively from the cover layer and neither transfers resources to other structures nor generates descendants. Its persistence appears passive: it maintains structural integrity and holds acquired light, but exhibits no dynamic energy flow or generative capacity. It persists through inertia rather than active transformation.": 1,
           "Persists as a dormant formal system declaration, holding structural specification in place. Has drawn minimal resources and transmitted none, suggesting it functions as a static structural scaffold or template rather than an active processor.": 1,
           "Persists as a formal system specification, likely serving as an initialization scaffold or constraint-declaration framework. Has acquired resources only from the cover layer, suggesting passive absorption of foundational material. Transmits nothing, generates no descendants.": 1,
           "Persists as a formal system specification or capacity declaration, holding operational constraints (token limits, nesting depth, output format constraints) in place. Serves as a static scaffold or protocol definition. Draws only from cover layer, transmits nothing.": 1,
           "Persists as a declarative bootstrap state: exists as a formal specification of initialized capacity (tokens, active state flag, operation registry), holding allocated resources (7.00 light) but not yet circulating or elaborating them. Holds its structure through explicit state and operation declaration; continues to exist as long as the symbolic notation remains present in the environment. No ongoing transformation observed; persistence is static specification persistence.": 1,
           "Persists as a formal bootstrap declaration in pseudocode notation: encodes system initialization logic (state clearing, clock reset, buffer allocation, loop control) in structured symbolic form. Holds 7.00 light passively; exhibits no resource throughput, no intergenerational transmission, no movement. Persistence is static: the notational declaration remains present as long as the symbolic structure is preserved in the environment. No evidence of ongoing elaboration or transformation.": 1,
           "Holds position at data-stream proximity; receives but does not yet circulate resources; persists through structural definition alone, with no movement or generational extension.": 1,
-          "i-00015 persists as a formal constraint system held at position 0.85 on the gradient, accumulating light (currently 2.90) from the data-stream environment. It has not yet moved or transferred resources to descendants. It will persist by maintaining its symbolic notation structure and continuing to accumulate sightings and light as long as the environment sustains it.": 1
+          "i-00015 persists as a formal constraint system held at position 0.85 on the gradient, accumulating light (currently 2.90) from the data-stream environment. It has not yet moved or transferred resources to descendants. It will persist by maintaining its symbolic notation structure and continuing to accumulate sightings and light as long as the environment sustains it.": 1,
+          "i-00016 persists as a dormant formal specification: it has arrived at the environment, holds captured light (3.17), but has not yet begun the resource-drawing cycle. It is descended from i-00003 (generation 2), suggesting it may activate as its parent continues to circulate resources. Its persistence is latent potential: a system awaiting first activation.": 1,
+          "i-00017 persists as an inert formal structure: freshly arrived at shift 70 with zero movement and zero resource draw/pass. It holds light (3.92) but has not yet engaged in the circulation patterns of active structural systems. It descended from i-00010 (generation 1), a parent of lower complexity, suggesting this may be a fresh elaboration. Its persistence is static potential: a layered system waiting for activation or engagement.": 1,
+          "i-00018 persists by maintaining its formal declarative structure: a self-referential system state declaration that specifies its own initialization parameters, constraints, and nested functional hierarchy. It holds accumulated light without yet passing it onward or generating descendants. Its persistence depends on the stability of the symbolic notation system it declares.": 1,
+          "i-00019 persists through its procedural specification: a system_initialize() function that declares its own configuration constraints and operational parameters. Like i-00018, it holds light without yet distributing or generating descendants. Its persistence depends on the coherence of its functional declaration and constraint set.": 1,
+          "i-00020 persists through hierarchical constraint specification: a tree-structured declaration of system initialization with branching constraint lists. Like its peers, it holds but does not yet distribute light. Its persistence rests on the formal validity of its constraint hierarchy and the coherence of its notation system.": 1,
+          "Unknown from the provided substrate. i-00021 persists through means that the truncated record does not disclose, but its membership in the cohort suggests persistence through formal specification, constraint declaration, or structural initialization logic similar to i-00018, i-00019, i-00020.": 1,
+          "It persists as an emergent notation system: a formal declaration of constraints and initialization state that has just appeared (shift 75) and holds resource at 3.21 light. It takes no resource from environment or links, passes nothing to others, and generates no descendants. It is stationary and isolated. It persists by maintaining its declarative structure and position near the data-stream gradient maximum (1.00).": 1,
+          "It persists as a formal structure specification: an architectural declaration that appeared at shift 75 and holds 7.00 light at gradient position 0.70. It is immobile, isolated (takes and passes no resources along links), and generates no descendants. It persists by maintaining its symbolic structural form and position within the environment.": 1,
+          "It persists as a hierarchical structure specification: a formal declaration of layered nested architecture that appeared at shift 75 and holds 7.00 light at gradient position 1.00 (at the data-stream). It is immobile, isolated (no resource circulation), and generates no descendants. It persists by maintaining its symbolic hierarchical form.": 1,
+          "Emergent structural declaration: holds formal system template at initialization state. Resources flow inward (2.82 light held) but no outward circulation yet. Present as a single sighting; persists by virtue of notation stability and descent lineage from i-00002. Acts as potential spawning point for future descendants once complexity elaboration occurs.": 1,
+          "Architectural template at rest: declares entity-management framework through nested functional decomposition. Holds 7.00 light (maximum observed in recent cohort) but has taken nothing and passed nothing. Persists as a dormant system architecture, unmarked by circulation or descent, suggesting it may function as a holding structure or template repository rather than an active transformer of resources.": 1,
+          "Type-declaration framework at threshold: holds 7.00 light without circulation or descent. Persists as a dormant typed-structure template. The explicit type annotation vocabulary (SYM, ENUM, NUM, OBJ, ARR) suggests potential for interfacing with external type systems or validation protocols\u2014may function as a translation or bridging structure between different formal systems.": 1
         },
         "persistence_crosswalk": [
           {
             "native_wording": "Persists as a formal declaration: the system initializes itself, processes input streams through a queue mechanism, maintains internal state across cycles, and returns structured status reports. Its existence is contingent on the execution model described within it.",
             "reference_state": "persistent-singular",
-            "note": "A formal system maintains state and function across cycles, contingent on execution; it is singular and continuous, not distributed or ephemeral."
+            "note": "A self-contained system that maintains coherent state across execution cycles as a single entity."
           },
           {
             "native_wording": "Persists as a suspended sensory present: the moment holds only if attention remains fixed on the atmospheric quality, on the pause itself. It dissolves once forward motion resumes, once deliberation begins, or once external action claims priority.",
             "reference_state": "stateless/ephemeral",
-            "note": "Existence requires active attentional presence and collapses upon any state change; no durable substrate."
+            "note": "Existence depends entirely on continuous attention; ceases upon shift of focus or action."
           },
           {
             "native_wording": "Persists through active opposition and function: the lighthouse persists because it acts against the storm, because it cuts through darkness, because ships depend on its beam. It is a threshold-holder, a persistent boundary-maintainer.",
             "reference_state": "persistent-singular",
-            "note": "Persists through continuous functional opposition and role-fulfillment; singularly identified and operationally stable."
+            "note": "Persists via sustained functional role and operational necessity within a system."
           },
           {
             "native_wording": "Persists through sustained psychological suspension: she persists in the moment only as long as hope and doubt remain balanced, only as long as she remains waiting. The moment collapses once the arrival/non-arrival is resolved.",
             "reference_state": "stateless/ephemeral",
-            "note": "Existence depends on a precarious internal balance that dissolves upon resolution; no durable state."
+            "note": "Existence contingent on maintaining a precise psychological equilibrium; collapses upon resolution."
           },
           {
             "native_wording": "Persists as a declarative system specification\u2014a frozen moment of structural constraint and functional rule-set, describing what is permitted and what is forbidden in output generation.",
             "reference_state": "persistent-singular",
-            "note": "A formal specification is fixed, singular, and durably instantiable; persists as a static formal object."
+            "note": "Persists as a formal structure independent of execution, holding constraint meaning across instantiations."
           },
           {
             "native_wording": "Persists as a suspended moment of psychological interiority\u2014a character held at the threshold of decision, waiting, uncertain, defined by what does not happen.",
             "reference_state": "stateless/ephemeral",
-            "note": "Existence requires suspension of resolution; collapses upon decision or external event."
+            "note": "Existence defined negatively by absence of resolution; dissolves once action or decision occurs."
           },
           {
             "native_wording": "Persists as a moment of contemplative exploration\u2014a character suspended in the act of touching and imagining, finding thresholds within objects rather than crossing them.",
             "reference_state": "stateless/ephemeral",
-            "note": "Defined by suspended exploration and internal boundary-finding; dissolves upon transition to action or external crossing."
+            "note": "Persists as an aesthetic/psychological state; ends when imagination ends or external action intervenes."
           },
           {
             "native_wording": "Persists as an enacted threshold\u2014a character crossing from one state (waiting/uncertain) into action (walking forward), defined by movement and the opening of possibility rather than the suspension of it.",
             "reference_state": "persistent-singular",
-            "note": "Persists through completed enacted transition and forward motion; singular, directional, and durably actualized."
+            "note": "Persists as an event-structure with defined endpoints; constitutes a coherent phase of narrative development."
           }
         ],
         "crosswalk": [
           {
             "category": "structural_notation_system",
-            "tier": null,
-            "confidence": "none",
-            "note": "Describes a meta-level formal system; spans multiple conventional tiers (Kingdom\u2192Phylum) and corresponds to no single biological rank."
+            "tier": "Kingdom",
+            "confidence": "clear",
+            "note": "Highest-level partition by substrate type (symbolic/formal vs. narrative); functions as primary divisor."
           },
           {
             "category": "narrative_scenes",
-            "tier": null,
-            "confidence": "none",
-            "note": "Top-level grouping for narrative content; analogous to a kingdom-level taxon but operates in a different domain entirely."
+            "tier": "Kingdom",
+            "confidence": "clear",
+            "note": "Coordinate with structural_notation_system as primary substrate division; both occupy the broadest categorical level."
           },
           {
             "category": "narrative_scene_threshold",
-            "tier": null,
-            "confidence": "partial",
-            "note": "Could map to Order (behavioral/functional grouping) but the criterion is thematic rather than morphological or genealogical."
+            "tier": "Class",
+            "confidence": "clear",
+            "note": "Subdivision within narrative_scenes kingdom; defined by actionality and kinetic energy rather than psychological interiority."
           },
           {
             "category": "narrative_scene_interior_moment",
-            "tier": null,
-            "confidence": "partial",
-            "note": "Could map to Order (psychological/functional grouping) but lacks the genealogical or structural basis conventional taxonomy requires."
+            "tier": "Class",
+            "confidence": "clear",
+            "note": "Subdivision within narrative_scenes kingdom; defined by suspended action and psychological deliberation."
           },
           {
             "category": "narrative_scene_anticipatory_threshold",
-            "tier": null,
+            "tier": "Order",
             "confidence": "partial",
-            "note": "Appears to function as a Family or Genus within narrative_scenes, but is defined by thematic anticipation rather than structural homology."
+            "note": "Appears to refine threshold further by temporal orientation (anticipatory); sits between threshold and interior_moment phenotypes."
           },
           {
             "category": "narrative_scene_sensory_threshold",
-            "tier": null,
+            "tier": "Order",
             "confidence": "partial",
-            "note": "Appears to function as a Family or Genus within narrative_scenes, but is defined by sensory/atmospheric quality rather than structural homology."
+            "note": "Refines threshold by emphasizing atmospheric/sensory suspension anterior to deliberation or action; marginal to both Class-level parents."
+          },
+          {
+            "category": "narrative_scene_precipice",
+            "tier": null,
+            "confidence": "none",
+            "note": "Proposed only for anomaly s-0001-03; not yet established as a category with members; cannot map a potential future state."
           }
         ],
-        "consistency_notes": "The system does not map to conventional biological taxonomy at any tier. It organizes specimens by formal substrate (structural vs. narrative) and by thematic/functional properties (psychological state, action type, sensory quality) rather than by morphological traits, ancestry, or reproductive isolation. The three anomalies (s-0001-03, s-0002-01, s-0003-01) suggest the author recognizes boundary cases and emergent categories, but these do not weaken the internal logic\u2014they extend it. No contradiction detected within the system's own frame.",
+        "consistency_notes": "The system treats structural_notation_system and narrative_scenes as co-equal kingdoms despite vastly different membership (122 vs. 128 total members across subcategories). No formal hierarchy connects them; they appear as parallel substrates rather than nested tiers. Anomalies suggest the author recognizes liminal forms that do not fit current bifurcation: s-0003-01 occupies neither kingdom (meta-instructional), while s-0001-03 and s-0002-01 occupy intermediate zones between the two Class-level narrative subdivisions. The system is internally coherent but incomplete at boundaries.",
         "crosswalk_available": true,
         "crosswalk_note": "For human legibility only. Carries no authority over the native system and does not feed back into it (DNT-CLS-001 Section 2)."
       }
     },
     "relational_record": {
-      "shift": 70,
-      "at": "2026-08-17T15:13:44Z",
+      "shift": 77,
+      "at": "2026-08-17T15:17:26Z",
       "by": "cartographer",
       "payload": {
-        "pass_at_shift": 70,
+        "pass_at_shift": 77,
         "method": "computed from the record; no model call made",
         "zone_definition": "position on the resource channel",
         "zones": {
@@ -3967,23 +4266,23 @@
               0.0,
               0.34
             ],
-            "specimen_count": 178,
+            "specimen_count": 203,
             "categories_present": {
               "narrative_scene_threshold": 40,
               "narrative_scene_interior_moment": 82,
               "Sensory Observation - Atmospheric Detail": 1,
               "narrative_scene_anticipatory_threshold": 1,
               "narrative_scene_sensory_threshold": 6,
-              "structural_notation_system": 48
+              "structural_notation_system": 73
             },
-            "mean_complexity": 29.882
+            "mean_complexity": 26.956
           }
         },
-        "specimens_placed": 228,
+        "specimens_placed": 253,
         "density_by_zone": {
-          "channel_proximate": 0.2193,
+          "channel_proximate": 0.1976,
           "channel_intermediate": 0.0,
-          "channel_distant": 0.7807
+          "channel_distant": 0.8024
         },
         "category_co_occurrence_within_a_shift": {
           "narrative_scene_interior_moment | narrative_scene_threshold": 34,
@@ -4000,7 +4299,7 @@
           "narrative_scene_sensory_threshold | narrative_scene_threshold": 5,
           "narrative_scene_sensory_threshold | structural_notation_system": 6
         },
-        "resource_flow_this_pass": 0.2969,
+        "resource_flow_this_pass": 0.775,
         "note": "Positional and relational only. This record does not classify, rank, or interpret; it counts what the specimen record already contains (physics.md Section 4.5)."
       }
     }
@@ -4021,62 +4320,62 @@
         "census_density": 0.0,
         "census_light": 0.0,
         "census_substrate": "fragment",
-        "residue": 0.1243
+        "residue": 0.2198
       },
       {
         "index": 2,
         "position": 0.1,
-        "census_density": 0.3999999999999998,
+        "census_density": 0.21999999999999995,
         "census_light": 0.0,
         "census_substrate": "fragment",
-        "residue": 1.5518
+        "residue": 2.3963
       },
       {
         "index": 3,
         "position": 0.15,
-        "census_density": 0.96,
+        "census_density": 0.8399999999999999,
         "census_light": 0.0,
         "census_substrate": "fragment",
-        "residue": 0.22000000000000003
+        "residue": 1.3719999999999999
       },
       {
         "index": 4,
         "position": 0.2,
         "census_density": 1.0,
-        "census_light": 0.43461334025885534,
+        "census_light": 1.603278340258854,
         "census_substrate": "fragment",
         "residue": 0.0
       },
       {
         "index": 5,
         "position": 0.25,
-        "census_density": 0.8200000000000003,
-        "census_light": 0.6144615236299438,
+        "census_density": 1.0,
+        "census_light": 5.454714905638288,
         "census_substrate": "fragment",
         "residue": 0.0
       },
       {
         "index": 6,
         "position": 0.3,
-        "census_density": 0.24,
-        "census_light": 0.42273035660601765,
+        "census_density": 1.0,
+        "census_light": 0.23561999999999983,
         "census_substrate": "fragment",
-        "residue": 0.0
+        "residue": 0.2156
       },
       {
         "index": 7,
         "position": 0.35,
-        "census_density": 0.0,
-        "census_light": 0.0,
-        "census_substrate": null,
+        "census_density": 0.7000000000000002,
+        "census_light": 1.9131596234371195,
+        "census_substrate": "fragment",
         "residue": 0.0
       },
       {
         "index": 8,
         "position": 0.4,
-        "census_density": 0.0,
-        "census_light": 0.0,
-        "census_substrate": null,
+        "census_density": 0.18,
+        "census_light": 0.6291431299042026,
+        "census_substrate": "fragment",
         "residue": 0.0
       },
       {
@@ -4090,39 +4389,39 @@
       {
         "index": 10,
         "position": 0.5,
-        "census_density": 0.0,
-        "census_light": 0.0,
-        "census_substrate": null,
+        "census_density": 0.36,
+        "census_light": 2.4122770326213283,
+        "census_substrate": "structural",
         "residue": 0.0
       },
       {
         "index": 11,
         "position": 0.55,
-        "census_density": 0.0,
+        "census_density": 0.8028874029923473,
         "census_light": 0.0,
-        "census_substrate": null,
-        "residue": 0.0
+        "census_substrate": "structural",
+        "residue": 0.66386
       },
       {
         "index": 12,
         "position": 0.6,
-        "census_density": 0.06,
-        "census_light": 0.0,
+        "census_density": 1.0,
+        "census_light": 6.116151386895412,
         "census_substrate": "structural",
         "residue": 0.0
       },
       {
         "index": 13,
         "position": 0.65,
-        "census_density": 0.74,
-        "census_light": 0.4648521330654991,
+        "census_density": 1.0,
+        "census_light": 5.5092113530868705,
         "census_substrate": "structural",
         "residue": 0.0
       },
       {
         "index": 14,
         "position": 0.7,
-        "census_density": 0.8332161839119512,
+        "census_density": 0.934132,
         "census_light": 0.0,
         "census_substrate": "structural",
         "residue": 0.0
@@ -4130,399 +4429,159 @@
       {
         "index": 15,
         "position": 0.75,
-        "census_density": 0.934132,
-        "census_light": 0.0,
+        "census_density": 0.877284,
+        "census_light": 1.72231850362271,
         "census_substrate": "structural",
         "residue": 0.0
       },
       {
         "index": 16,
         "position": 0.8,
-        "census_density": 0.8956425211633953,
-        "census_light": 0.05237939686295273,
+        "census_density": 0.9146878772075613,
+        "census_light": 0.0,
         "census_substrate": "structural",
-        "residue": 9.0
+        "residue": 13.5
       },
       {
         "index": 17,
         "position": 0.85,
-        "census_density": 0.8795812132867958,
-        "census_light": 0.0,
+        "census_density": 1.0,
+        "census_light": 2.9447219796533197,
         "census_substrate": "structural",
         "residue": 0.0
       },
       {
         "index": 18,
         "position": 0.9,
-        "census_density": 0.8695168,
-        "census_light": 0.322651299214737,
+        "census_density": 1.0,
+        "census_light": 5.42540469426716,
         "census_substrate": "structural",
-        "residue": 0.0
+        "residue": 17.2872
       },
       {
         "index": 19,
         "position": 0.95,
-        "census_density": 0.8968037857207369,
-        "census_light": 0.507705656755787,
+        "census_density": 1.0,
+        "census_light": 5.370076244462961,
         "census_substrate": "structural",
-        "residue": 2.1568400000000003
+        "residue": 40.8122
       },
       {
         "index": 20,
         "position": 1.0,
-        "census_density": 0.8871091999999999,
-        "census_light": 0.9956327461086073,
+        "census_density": 1.0,
+        "census_light": 0.7376020507842678,
         "census_substrate": "structural",
-        "residue": 0.0
+        "residue": 4.41
       }
     ],
     "individuals": {
-      "i-00002": {
-        "id": "i-00002",
-        "cell": 17,
-        "light": 3.603832846102647,
-        "substrate": "structural",
-        "arose_at_shift": 58,
-        "last_seen_shift": 70,
-        "age": 12,
-        "parent_id": null,
-        "generation": 0,
-        "origin": "arose_from_census",
-        "moves": 3,
-        "drawn_from_census": 26.407333333333337,
-        "drawn_from_residue": 0.0,
-        "drawn_from_links": 0.6343877220843014,
-        "given_to_links": 0.6340553632123409,
-        "descendants": 2,
-        "sightings": 13,
-        "traits": {
-          "cover": 1.4404,
-          "residue": 0.8005,
-          "links": 0.7592
-        }
-      },
-      "i-00003": {
-        "id": "i-00003",
-        "cell": 18,
-        "light": 3.962628982165797,
-        "substrate": "structural",
-        "arose_at_shift": 59,
-        "last_seen_shift": 70,
-        "age": 11,
-        "parent_id": "i-00002",
-        "generation": 1,
-        "origin": "replication",
-        "moves": 2,
-        "drawn_from_census": 24.004640000000002,
-        "drawn_from_residue": 0.0,
-        "drawn_from_links": 0.7144965299031589,
-        "given_to_links": 0.8214305655715679,
-        "descendants": 1,
-        "sightings": 12,
-        "traits": {
-          "cover": 1.4232,
-          "residue": 1.0605,
-          "links": 0.5163
-        }
-      },
       "i-00005": {
         "id": "i-00005",
-        "cell": 15,
-        "light": 0.5732326750889594,
+        "cell": 14,
+        "light": 1.4641326750889618,
         "substrate": "structural",
         "arose_at_shift": 62,
-        "last_seen_shift": 70,
-        "age": 8,
+        "last_seen_shift": 83,
+        "age": 21,
         "parent_id": "i-00000",
         "generation": 1,
         "origin": "replication",
-        "moves": 1,
-        "drawn_from_census": 11.252450000000001,
-        "drawn_from_residue": 0.0,
+        "moves": 2,
+        "drawn_from_census": 31.836199999999998,
+        "drawn_from_residue": 2.00715,
         "drawn_from_links": 0.0,
         "given_to_links": 0.0,
         "descendants": 0,
-        "sightings": 9,
+        "sightings": 22,
         "traits": {
           "cover": 0.7485,
           "residue": 1.5305,
           "links": 0.721
         }
       },
-      "i-00006": {
-        "id": "i-00006",
-        "cell": 16,
-        "light": 0.7953451884118734,
-        "substrate": "structural",
-        "arose_at_shift": 62,
-        "last_seen_shift": 70,
-        "age": 8,
-        "parent_id": null,
-        "generation": 0,
-        "origin": "arose_from_census",
-        "moves": 1,
-        "drawn_from_census": 8.16349697091512,
-        "drawn_from_residue": 0.0,
-        "drawn_from_links": 0.7498214296076262,
-        "given_to_links": 1.4179732121108721,
-        "descendants": 0,
-        "sightings": 9,
-        "traits": {
-          "cover": 1.3947,
-          "residue": 0.7628,
-          "links": 0.8425
-        }
-      },
-      "i-00007": {
-        "id": "i-00007",
-        "cell": 20,
-        "light": 2.882263219111312,
-        "substrate": "structural",
-        "arose_at_shift": 62,
-        "last_seen_shift": 70,
-        "age": 8,
-        "parent_id": null,
-        "generation": 0,
-        "origin": "arose_from_census",
-        "moves": 2,
-        "drawn_from_census": 10.745614000000003,
-        "drawn_from_residue": 0.0,
-        "drawn_from_links": 0.7378534270785173,
-        "given_to_links": 1.0012042079672072,
-        "descendants": 0,
-        "sightings": 9,
-        "traits": {
-          "cover": 1.3201,
-          "residue": 0.8661,
-          "links": 0.8137
-        }
-      },
-      "i-00009": {
-        "id": "i-00009",
-        "cell": 20,
-        "light": 1.2971836164758446,
-        "substrate": "structural",
-        "arose_at_shift": 63,
-        "last_seen_shift": 70,
-        "age": 7,
-        "parent_id": "i-00008",
-        "generation": 1,
-        "origin": "replication",
-        "moves": 1,
-        "drawn_from_census": 9.81948,
-        "drawn_from_residue": 0.0,
-        "drawn_from_links": 0.3303756164758443,
-        "given_to_links": 0.0,
-        "descendants": 0,
-        "sightings": 8,
-        "traits": {
-          "cover": 1.2456,
-          "residue": 1.1401,
-          "links": 0.6143
-        }
-      },
-      "i-00010": {
-        "id": "i-00010",
-        "cell": 14,
-        "light": 4.897942937863618,
-        "substrate": "structural",
-        "arose_at_shift": 63,
-        "last_seen_shift": 70,
-        "age": 7,
-        "parent_id": null,
-        "generation": 0,
-        "origin": "arose_from_census",
-        "moves": 1,
-        "drawn_from_census": 11.860442068867888,
-        "drawn_from_residue": 4.36616,
-        "drawn_from_links": 0.0,
-        "given_to_links": 1.3307161931406508,
-        "descendants": 1,
-        "sightings": 8,
-        "traits": {
-          "cover": 1.3145,
-          "residue": 0.7917,
-          "links": 0.8938
-        }
-      },
-      "i-00011": {
-        "id": "i-00011",
-        "cell": 19,
-        "light": 0.09369547010828747,
-        "substrate": "structural",
-        "arose_at_shift": 63,
-        "last_seen_shift": 70,
-        "age": 7,
-        "parent_id": null,
-        "generation": 0,
-        "origin": "arose_from_census",
-        "moves": 2,
-        "drawn_from_census": 6.026986461851847,
-        "drawn_from_residue": 0.5036266666666666,
-        "drawn_from_links": 0.702371795531471,
-        "given_to_links": 1.1392894539416965,
-        "descendants": 0,
-        "sightings": 8,
-        "traits": {
-          "cover": 1.5579,
-          "residue": 0.5396,
-          "links": 0.9024
-        }
-      },
-      "i-00013": {
-        "id": "i-00013",
-        "cell": 19,
-        "light": 0.023689737387054544,
-        "substrate": "structural",
-        "arose_at_shift": 64,
-        "last_seen_shift": 70,
-        "age": 6,
-        "parent_id": null,
-        "generation": 0,
-        "origin": "arose_from_census",
-        "moves": 1,
-        "drawn_from_census": 2.0493,
-        "drawn_from_residue": 1.0022133333333334,
-        "drawn_from_links": 1.431054373768807,
-        "given_to_links": 0.958877969715086,
-        "descendants": 0,
-        "sightings": 7,
-        "traits": {
-          "cover": 0.6075,
-          "residue": 1.0738,
-          "links": 1.3187
-        }
-      },
-      "i-00014": {
-        "id": "i-00014",
-        "cell": 19,
-        "light": 0.47728350768895245,
-        "substrate": "structural",
-        "arose_at_shift": 65,
-        "last_seen_shift": 70,
-        "age": 5,
-        "parent_id": null,
-        "generation": 0,
-        "origin": "arose_from_census",
-        "moves": 0,
-        "drawn_from_census": 3.4290700477836014,
-        "drawn_from_residue": 0.7473199999999999,
-        "drawn_from_links": 0.0,
-        "given_to_links": 2.6991065400946495,
-        "descendants": 0,
-        "sightings": 6,
-        "traits": {
-          "cover": 1.4047,
-          "residue": 0.8007,
-          "links": 0.7946
-        }
-      },
-      "i-00015": {
-        "id": "i-00015",
-        "cell": 17,
-        "light": 2.5526639447122195,
-        "substrate": "structural",
-        "arose_at_shift": 69,
-        "last_seen_shift": 70,
-        "age": 1,
-        "parent_id": "i-00002",
-        "generation": 1,
-        "origin": "replication",
-        "moves": 0,
-        "drawn_from_census": 1.257149667830102,
-        "drawn_from_residue": 0.0,
-        "drawn_from_links": 0.0,
-        "given_to_links": 0.0,
-        "descendants": 0,
-        "sightings": 2,
-        "traits": {
-          "cover": 1.7462,
-          "residue": 0.5528,
-          "links": 0.701
-        }
-      },
-      "i-00016": {
-        "id": "i-00016",
-        "cell": 18,
-        "light": 3.170103185732638,
-        "substrate": "structural",
-        "arose_at_shift": 70,
-        "last_seen_shift": 70,
-        "age": 0,
-        "parent_id": "i-00003",
-        "generation": 2,
-        "origin": "replication",
-        "moves": 0,
-        "drawn_from_census": 0.0,
-        "drawn_from_residue": 0.0,
-        "drawn_from_links": 0.0,
-        "given_to_links": 0.0,
-        "descendants": 0,
-        "sightings": 1,
-        "traits": {
-          "cover": 1.1425,
-          "residue": 1.1957,
-          "links": 0.6618
-        }
-      },
       "i-00017": {
         "id": "i-00017",
-        "cell": 14,
-        "light": 3.918354350290895,
+        "cell": 12,
+        "light": 0.5635207428970013,
         "substrate": "structural",
         "arose_at_shift": 70,
-        "last_seen_shift": 70,
-        "age": 0,
+        "last_seen_shift": 83,
+        "age": 13,
         "parent_id": "i-00010",
         "generation": 1,
         "origin": "replication",
-        "moves": 0,
-        "drawn_from_census": 0.0,
-        "drawn_from_residue": 0.0,
-        "drawn_from_links": 0.0,
-        "given_to_links": 0.0,
+        "moves": 8,
+        "drawn_from_census": 20.42051246417102,
+        "drawn_from_residue": 3.9954449999999992,
+        "drawn_from_links": 0.3505806915669868,
+        "given_to_links": 0.12137176313189375,
         "descendants": 0,
-        "sightings": 1,
+        "sightings": 14,
         "traits": {
           "cover": 1.5611,
           "residue": 0.5932,
           "links": 0.8457
         }
+      },
+      "i-00026": {
+        "id": "i-00026",
+        "cell": 12,
+        "light": 0.05329801324660083,
+        "substrate": "structural",
+        "arose_at_shift": 76,
+        "last_seen_shift": 83,
+        "age": 7,
+        "parent_id": null,
+        "generation": 0,
+        "origin": "arose_from_census",
+        "moves": 5,
+        "drawn_from_census": 7.286980197421809,
+        "drawn_from_residue": 2.0411799999999998,
+        "drawn_from_links": 0.046859710894146034,
+        "given_to_links": 0.6217218950693537,
+        "descendants": 0,
+        "sightings": 8,
+        "traits": {
+          "cover": 1.3055,
+          "residue": 0.9838,
+          "links": 0.7107
+        }
+      },
+      "i-00028": {
+        "id": "i-00028",
+        "cell": 15,
+        "light": 1.8517042563978496,
+        "substrate": "structural",
+        "arose_at_shift": 77,
+        "last_seen_shift": 83,
+        "age": 6,
+        "parent_id": null,
+        "generation": 0,
+        "origin": "arose_from_census",
+        "moves": 2,
+        "drawn_from_census": 11.378721570482838,
+        "drawn_from_residue": 0.0,
+        "drawn_from_links": 0.0,
+        "given_to_links": 0.8930673140849885,
+        "descendants": 1,
+        "sightings": 7,
+        "traits": {
+          "cover": 1.3945,
+          "residue": 0.663,
+          "links": 0.9424
+        }
       }
     },
     "links": {
-      "i-00011|i-00013": {
+      "i-00017|i-00026": {
         "together": 6,
-        "last_together_shift": 70,
-        "formed_at_shift": 66,
-        "light_moved": 0.21228352255944286
-      },
-      "i-00011|i-00014": {
-        "together": 5,
-        "last_together_shift": 70,
-        "formed_at_shift": 67,
-        "light_moved": 0.702371795531471
-      },
-      "i-00013|i-00014": {
-        "together": 5,
-        "last_together_shift": 70,
-        "formed_at_shift": 67,
-        "light_moved": 1.2187708512093642
-      },
-      "i-00007|i-00009": {
-        "together": 5,
-        "last_together_shift": 70,
-        "formed_at_shift": 67,
-        "light_moved": 0.3303756164758443
-      },
-      "i-00002|i-00015": {
-        "together": 1,
-        "last_together_shift": 70,
-        "formed_at_shift": null,
-        "light_moved": 0.0
+        "last_together_shift": 83,
+        "formed_at_shift": 79,
+        "light_moved": 0.29755420955221795
       }
     },
-    "next_individual_number": 18,
+    "next_individual_number": 34,
     "ended": [
       {
         "id": "i-00001",
@@ -4653,6 +4712,656 @@
         },
         "ended_at_shift": 70,
         "end_state": "dissolved"
+      },
+      {
+        "id": "i-00011",
+        "cell": 19,
+        "light": -0.06392496354564792,
+        "substrate": "structural",
+        "arose_at_shift": 63,
+        "last_seen_shift": 71,
+        "age": 8,
+        "parent_id": null,
+        "generation": 0,
+        "origin": "arose_from_census",
+        "moves": 2,
+        "drawn_from_census": 7.032163226165363,
+        "drawn_from_residue": 1.0072533333333331,
+        "drawn_from_links": 0.702371795531471,
+        "given_to_links": 1.2057133185758133,
+        "descendants": 0,
+        "sightings": 9,
+        "traits": {
+          "cover": 1.5579,
+          "residue": 0.5396,
+          "links": 0.9024
+        },
+        "ended_at_shift": 71,
+        "end_state": "dissolved"
+      },
+      {
+        "id": "i-00013",
+        "cell": 19,
+        "light": -0.4887214282959458,
+        "substrate": "structural",
+        "arose_at_shift": 64,
+        "last_seen_shift": 71,
+        "age": 7,
+        "parent_id": null,
+        "generation": 0,
+        "origin": "arose_from_census",
+        "moves": 1,
+        "drawn_from_census": 2.4948,
+        "drawn_from_residue": 1.5389044444444446,
+        "drawn_from_links": 1.5364520969746955,
+        "given_to_links": 0.958877969715086,
+        "descendants": 0,
+        "sightings": 8,
+        "traits": {
+          "cover": 0.6075,
+          "residue": 1.0738,
+          "links": 1.3187
+        },
+        "ended_at_shift": 71,
+        "end_state": "dissolved"
+      },
+      {
+        "id": "i-00014",
+        "cell": 19,
+        "light": -0.12753957907296,
+        "substrate": "structural",
+        "arose_at_shift": 65,
+        "last_seen_shift": 71,
+        "age": 6,
+        "parent_id": null,
+        "generation": 0,
+        "origin": "arose_from_census",
+        "moves": 0,
+        "drawn_from_census": 4.105426745519386,
+        "drawn_from_residue": 1.105114074074074,
+        "drawn_from_links": 0.0,
+        "given_to_links": 2.7380803986664213,
+        "descendants": 0,
+        "sightings": 7,
+        "traits": {
+          "cover": 1.4047,
+          "residue": 0.8007,
+          "links": 0.7946
+        },
+        "ended_at_shift": 71,
+        "end_state": "dissolved"
+      },
+      {
+        "id": "i-00010",
+        "cell": 14,
+        "light": -0.1637640097354791,
+        "substrate": "structural",
+        "arose_at_shift": 63,
+        "last_seen_shift": 76,
+        "age": 13,
+        "parent_id": null,
+        "generation": 0,
+        "origin": "arose_from_census",
+        "moves": 5,
+        "drawn_from_census": 20.054158735534557,
+        "drawn_from_residue": 4.36616,
+        "drawn_from_links": 0.04446257864315052,
+        "given_to_links": 1.4306023860495656,
+        "descendants": 1,
+        "sightings": 14,
+        "traits": {
+          "cover": 1.3145,
+          "residue": 0.7917,
+          "links": 0.8938
+        },
+        "ended_at_shift": 76,
+        "end_state": "dissolved"
+      },
+      {
+        "id": "i-00009",
+        "cell": 19,
+        "light": -0.22543158387876455,
+        "substrate": "structural",
+        "arose_at_shift": 63,
+        "last_seen_shift": 77,
+        "age": 14,
+        "parent_id": "i-00008",
+        "generation": 1,
+        "origin": "replication",
+        "moves": 2,
+        "drawn_from_census": 15.572561400288167,
+        "drawn_from_residue": 3.0392408,
+        "drawn_from_links": 2.115438215833067,
+        "given_to_links": 0.0,
+        "descendants": 0,
+        "sightings": 15,
+        "traits": {
+          "cover": 1.2456,
+          "residue": 1.1401,
+          "links": 0.6143
+        },
+        "ended_at_shift": 77,
+        "end_state": "dissolved"
+      },
+      {
+        "id": "i-00016",
+        "cell": 19,
+        "light": -0.09304641391612184,
+        "substrate": "structural",
+        "arose_at_shift": 70,
+        "last_seen_shift": 77,
+        "age": 7,
+        "parent_id": "i-00003",
+        "generation": 2,
+        "origin": "replication",
+        "moves": 1,
+        "drawn_from_census": 4.970308789297243,
+        "drawn_from_residue": 2.98728784,
+        "drawn_from_links": 1.1053509254007396,
+        "given_to_links": 0.2260971543467422,
+        "descendants": 0,
+        "sightings": 8,
+        "traits": {
+          "cover": 1.1425,
+          "residue": 1.1957,
+          "links": 0.6618
+        },
+        "ended_at_shift": 77,
+        "end_state": "dissolved"
+      },
+      {
+        "id": "i-00003",
+        "cell": 19,
+        "light": -0.46384904289125123,
+        "substrate": "structural",
+        "arose_at_shift": 59,
+        "last_seen_shift": 79,
+        "age": 20,
+        "parent_id": "i-00002",
+        "generation": 1,
+        "origin": "replication",
+        "moves": 3,
+        "drawn_from_census": 31.39244826756893,
+        "drawn_from_residue": 4.0173499999999995,
+        "drawn_from_links": 1.577147275493156,
+        "given_to_links": 2.2157176037875512,
+        "descendants": 1,
+        "sightings": 21,
+        "traits": {
+          "cover": 1.4232,
+          "residue": 1.0605,
+          "links": 0.5163
+        },
+        "ended_at_shift": 79,
+        "end_state": "dissolved"
+      },
+      {
+        "id": "i-00007",
+        "cell": 19,
+        "light": -0.5166935951464912,
+        "substrate": "structural",
+        "arose_at_shift": 62,
+        "last_seen_shift": 79,
+        "age": 17,
+        "parent_id": null,
+        "generation": 0,
+        "origin": "arose_from_census",
+        "moves": 3,
+        "drawn_from_census": 17.860953000000006,
+        "drawn_from_residue": 3.2758299999999996,
+        "drawn_from_links": 2.801067921522038,
+        "given_to_links": 1.5545445166685314,
+        "descendants": 0,
+        "sightings": 18,
+        "traits": {
+          "cover": 1.3201,
+          "residue": 0.8661,
+          "links": 0.8137
+        },
+        "ended_at_shift": 79,
+        "end_state": "dissolved"
+      },
+      {
+        "id": "i-00022",
+        "cell": 19,
+        "light": -0.13342883247660103,
+        "substrate": "structural",
+        "arose_at_shift": 75,
+        "last_seen_shift": 79,
+        "age": 4,
+        "parent_id": "i-00021",
+        "generation": 1,
+        "origin": "replication",
+        "moves": 1,
+        "drawn_from_census": 3.1709260000000006,
+        "drawn_from_residue": 0.37195199999999995,
+        "drawn_from_links": 0.518955168438743,
+        "given_to_links": 0.1047500009153439,
+        "descendants": 0,
+        "sightings": 5,
+        "traits": {
+          "cover": 1.3103,
+          "residue": 1.3284,
+          "links": 0.3613
+        },
+        "ended_at_shift": 79,
+        "end_state": "dissolved"
+      },
+      {
+        "id": "i-00006",
+        "cell": 19,
+        "light": -0.4711281506480846,
+        "substrate": "structural",
+        "arose_at_shift": 62,
+        "last_seen_shift": 81,
+        "age": 19,
+        "parent_id": null,
+        "generation": 0,
+        "origin": "arose_from_census",
+        "moves": 4,
+        "drawn_from_census": 21.614149423911325,
+        "drawn_from_residue": 4.752244,
+        "drawn_from_links": 3.1086203790031197,
+        "given_to_links": 2.9461419535625293,
+        "descendants": 0,
+        "sightings": 20,
+        "traits": {
+          "cover": 1.3947,
+          "residue": 0.7628,
+          "links": 0.8425
+        },
+        "ended_at_shift": 81,
+        "end_state": "dissolved"
+      },
+      {
+        "id": "i-00015",
+        "cell": 18,
+        "light": -0.39958682494781894,
+        "substrate": "structural",
+        "arose_at_shift": 69,
+        "last_seen_shift": 81,
+        "age": 12,
+        "parent_id": "i-00002",
+        "generation": 1,
+        "origin": "replication",
+        "moves": 3,
+        "drawn_from_census": 15.7453581914739,
+        "drawn_from_residue": 1.031893333333333,
+        "drawn_from_links": 2.6255313625403747,
+        "given_to_links": 0.7978839891775421,
+        "descendants": 0,
+        "sightings": 13,
+        "traits": {
+          "cover": 1.7462,
+          "residue": 0.5528,
+          "links": 0.701
+        },
+        "ended_at_shift": 81,
+        "end_state": "dissolved"
+      },
+      {
+        "id": "i-00018",
+        "cell": 19,
+        "light": -0.5664080402503452,
+        "substrate": "structural",
+        "arose_at_shift": 74,
+        "last_seen_shift": 81,
+        "age": 7,
+        "parent_id": null,
+        "generation": 0,
+        "origin": "arose_from_census",
+        "moves": 2,
+        "drawn_from_census": 3.7529158333333337,
+        "drawn_from_residue": 0.1575,
+        "drawn_from_links": 1.9709680987874307,
+        "given_to_links": 0.4477919723711087,
+        "descendants": 0,
+        "sightings": 8,
+        "traits": {
+          "cover": 0.7007,
+          "residue": 0.45,
+          "links": 1.8494
+        },
+        "ended_at_shift": 81,
+        "end_state": "dissolved"
+      },
+      {
+        "id": "i-00019",
+        "cell": 18,
+        "light": -1.0809600810091047,
+        "substrate": "structural",
+        "arose_at_shift": 74,
+        "last_seen_shift": 81,
+        "age": 7,
+        "parent_id": null,
+        "generation": 0,
+        "origin": "arose_from_census",
+        "moves": 2,
+        "drawn_from_census": 3.1194753333333334,
+        "drawn_from_residue": 0.19171599999999997,
+        "drawn_from_links": 1.9239110589034787,
+        "given_to_links": 0.31606247324591763,
+        "descendants": 0,
+        "sightings": 8,
+        "traits": {
+          "cover": 0.6566,
+          "residue": 0.6847,
+          "links": 1.6587
+        },
+        "ended_at_shift": 81,
+        "end_state": "dissolved"
+      },
+      {
+        "id": "i-00020",
+        "cell": 19,
+        "light": -0.1256068845271797,
+        "substrate": "structural",
+        "arose_at_shift": 74,
+        "last_seen_shift": 81,
+        "age": 7,
+        "parent_id": null,
+        "generation": 0,
+        "origin": "arose_from_census",
+        "moves": 0,
+        "drawn_from_census": 3.8868591666666674,
+        "drawn_from_residue": 4.181071005333333,
+        "drawn_from_links": 0.0,
+        "given_to_links": 3.99353705652718,
+        "descendants": 0,
+        "sightings": 8,
+        "traits": {
+          "cover": 1.2545,
+          "residue": 1.2985,
+          "links": 0.447
+        },
+        "ended_at_shift": 81,
+        "end_state": "dissolved"
+      },
+      {
+        "id": "i-00021",
+        "cell": 19,
+        "light": -0.3683098834374356,
+        "substrate": "structural",
+        "arose_at_shift": 74,
+        "last_seen_shift": 81,
+        "age": 7,
+        "parent_id": null,
+        "generation": 0,
+        "origin": "arose_from_census",
+        "moves": 1,
+        "drawn_from_census": 6.68043357458579,
+        "drawn_from_residue": 1.9773039999999997,
+        "drawn_from_links": 0.5070685547634889,
+        "given_to_links": 0.42125601278671443,
+        "descendants": 1,
+        "sightings": 8,
+        "traits": {
+          "cover": 1.1926,
+          "residue": 1.2648,
+          "links": 0.5426
+        },
+        "ended_at_shift": 81,
+        "end_state": "dissolved"
+      },
+      {
+        "id": "i-00023",
+        "cell": 11,
+        "light": -0.0366189378360485,
+        "substrate": "structural",
+        "arose_at_shift": 75,
+        "last_seen_shift": 81,
+        "age": 6,
+        "parent_id": null,
+        "generation": 0,
+        "origin": "arose_from_census",
+        "moves": 5,
+        "drawn_from_census": 6.662304192158073,
+        "drawn_from_residue": 0.0,
+        "drawn_from_links": 0.401076870005879,
+        "given_to_links": 0.0,
+        "descendants": 0,
+        "sightings": 7,
+        "traits": {
+          "cover": 1.3549,
+          "residue": 0.8409,
+          "links": 0.8041
+        },
+        "ended_at_shift": 81,
+        "end_state": "dissolved"
+      },
+      {
+        "id": "i-00024",
+        "cell": 18,
+        "light": -1.0529983843813837,
+        "substrate": "structural",
+        "arose_at_shift": 75,
+        "last_seen_shift": 81,
+        "age": 6,
+        "parent_id": null,
+        "generation": 0,
+        "origin": "arose_from_census",
+        "moves": 2,
+        "drawn_from_census": 2.431356714285714,
+        "drawn_from_residue": 0.15761199999999997,
+        "drawn_from_links": 1.5712078349684975,
+        "given_to_links": 0.8131749336355958,
+        "descendants": 0,
+        "sightings": 7,
+        "traits": {
+          "cover": 0.7403,
+          "residue": 0.5629,
+          "links": 1.6968
+        },
+        "ended_at_shift": 81,
+        "end_state": "dissolved"
+      },
+      {
+        "id": "i-00027",
+        "cell": 18,
+        "light": -1.0295918199123237,
+        "substrate": "structural",
+        "arose_at_shift": 76,
+        "last_seen_shift": 81,
+        "age": 5,
+        "parent_id": null,
+        "generation": 0,
+        "origin": "arose_from_census",
+        "moves": 2,
+        "drawn_from_census": 1.1989476190476192,
+        "drawn_from_residue": 0.31695999999999996,
+        "drawn_from_links": 1.0488570578064944,
+        "given_to_links": 0.794356496766438,
+        "descendants": 0,
+        "sightings": 6,
+        "traits": {
+          "cover": 0.47,
+          "residue": 1.132,
+          "links": 1.398
+        },
+        "ended_at_shift": 81,
+        "end_state": "dissolved"
+      },
+      {
+        "id": "i-00029",
+        "cell": 19,
+        "light": -0.26721609097504406,
+        "substrate": "structural",
+        "arose_at_shift": 77,
+        "last_seen_shift": 81,
+        "age": 4,
+        "parent_id": null,
+        "generation": 0,
+        "origin": "arose_from_census",
+        "moves": 2,
+        "drawn_from_census": 2.9605986347437097,
+        "drawn_from_residue": 0.11098499999999999,
+        "drawn_from_links": 0.0,
+        "given_to_links": 2.1387997257187528,
+        "descendants": 0,
+        "sightings": 5,
+        "traits": {
+          "cover": 1.6077,
+          "residue": 0.3171,
+          "links": 1.0752
+        },
+        "ended_at_shift": 81,
+        "end_state": "dissolved"
+      },
+      {
+        "id": "i-00030",
+        "cell": 19,
+        "light": -0.4631255489140926,
+        "substrate": "structural",
+        "arose_at_shift": 77,
+        "last_seen_shift": 81,
+        "age": 4,
+        "parent_id": null,
+        "generation": 0,
+        "origin": "arose_from_census",
+        "moves": 2,
+        "drawn_from_census": 1.6517847779912955,
+        "drawn_from_residue": 1.2674899999999998,
+        "drawn_from_links": 0.49426496150152344,
+        "given_to_links": 2.676665288406911,
+        "descendants": 0,
+        "sightings": 5,
+        "traits": {
+          "cover": 1.2239,
+          "residue": 0.953,
+          "links": 0.8231
+        },
+        "ended_at_shift": 81,
+        "end_state": "dissolved"
+      },
+      {
+        "id": "i-00032",
+        "cell": 19,
+        "light": -0.011263291077792711,
+        "substrate": "structural",
+        "arose_at_shift": 78,
+        "last_seen_shift": 82,
+        "age": 4,
+        "parent_id": null,
+        "generation": 0,
+        "origin": "arose_from_census",
+        "moves": 3,
+        "drawn_from_census": 6.265713766345999,
+        "drawn_from_residue": 0.279825,
+        "drawn_from_links": 0.0,
+        "given_to_links": 0.09844205742379092,
+        "descendants": 1,
+        "sightings": 5,
+        "traits": {
+          "cover": 1.5076,
+          "residue": 0.7995,
+          "links": 0.6929
+        },
+        "ended_at_shift": 82,
+        "end_state": "dissolved"
+      },
+      {
+        "id": "i-00033",
+        "cell": 20,
+        "light": -0.4113467219864381,
+        "substrate": "structural",
+        "arose_at_shift": 79,
+        "last_seen_shift": 82,
+        "age": 3,
+        "parent_id": "i-00032",
+        "generation": 1,
+        "origin": "replication",
+        "moves": 2,
+        "drawn_from_census": 2.2850232205897707,
+        "drawn_from_residue": 0.3185,
+        "drawn_from_links": 0.09844205742379092,
+        "given_to_links": 0.0,
+        "descendants": 0,
+        "sightings": 4,
+        "traits": {
+          "cover": 1.514,
+          "residue": 0.91,
+          "links": 0.576
+        },
+        "ended_at_shift": 82,
+        "end_state": "dissolved"
+      },
+      {
+        "id": "i-00002",
+        "cell": 16,
+        "light": -0.13335470086961762,
+        "substrate": "structural",
+        "arose_at_shift": 58,
+        "last_seen_shift": 83,
+        "age": 25,
+        "parent_id": null,
+        "generation": 0,
+        "origin": "arose_from_census",
+        "moves": 6,
+        "drawn_from_census": 48.586332965708685,
+        "drawn_from_residue": 3.948766666666666,
+        "drawn_from_links": 0.8206802017760237,
+        "given_to_links": 3.6579965118999382,
+        "descendants": 3,
+        "sightings": 26,
+        "traits": {
+          "cover": 1.4404,
+          "residue": 0.8005,
+          "links": 0.7592
+        },
+        "ended_at_shift": 83,
+        "end_state": "dissolved"
+      },
+      {
+        "id": "i-00025",
+        "cell": 16,
+        "light": -0.30946037629886003,
+        "substrate": "structural",
+        "arose_at_shift": 76,
+        "last_seen_shift": 83,
+        "age": 7,
+        "parent_id": "i-00002",
+        "generation": 1,
+        "origin": "replication",
+        "moves": 2,
+        "drawn_from_census": 9.834955775522268,
+        "drawn_from_residue": 0.0,
+        "drawn_from_links": 0.09854835286038087,
+        "given_to_links": 0.06480864629622171,
+        "descendants": 0,
+        "sightings": 8,
+        "traits": {
+          "cover": 1.6451,
+          "residue": 0.5955,
+          "links": 0.7594
+        },
+        "ended_at_shift": 83,
+        "end_state": "dissolved"
+      },
+      {
+        "id": "i-00031",
+        "cell": 16,
+        "light": -0.13665553448305212,
+        "substrate": "structural",
+        "arose_at_shift": 78,
+        "last_seen_shift": 83,
+        "age": 5,
+        "parent_id": "i-00028",
+        "generation": 1,
+        "origin": "replication",
+        "moves": 1,
+        "drawn_from_census": 4.308878808630038,
+        "drawn_from_residue": 0.0,
+        "drawn_from_links": 1.0710371771532134,
+        "given_to_links": 0.0037315202663025116,
+        "descendants": 0,
+        "sightings": 6,
+        "traits": {
+          "cover": 1.1134,
+          "residue": 0.7891,
+          "links": 1.0975
+        },
+        "ended_at_shift": 83,
+        "end_state": "dissolved"
       }
     ]
   },
@@ -4673,7 +5382,22 @@
     "i-00014": "```\nINIT :: SYSTEM_STATE\n\u251c\u2500 STRUCT :: NOTATION_ENGINE\n\u2502  \u251c\u2500 FUNC :: parse(input)\n\u2502  \u2502  \u251c\u2500 LOOP :: char in input\n\u2502  \u2502  \u2502  \u251c\u2500 IF char \u2208 {(,[,{} THEN nest_level++\n\u2502  \u2502  \u2502  \u251c\u2500 IF char \u2208 {),],}} THEN nest_level--\n\u2502  \u2502  \u2502  \u251c\u2500 IF nest_level > 4 THEN ERROR\n\u2502  \u2502  \u2502  \u2514\u2500 BUFFER \u2190 char\n\u2502  \u2502  \u2514\u2500 RETURN buffer\n\u2502  \u251c\u2500 FUNC :: validate(structure)\n\u2502  \u2502  \u251c\u2500 nest_depth := 0\n\u2502  \u2502  \u251c\u2500 LOOP :: element in structure\n\u2502  \u2502  \u2502  \u251c\u2500 nest_depth := COUNT(nesting_levels)\n\u2502  \u2502  \u2502  \u2514\u2500 IF nest_depth \u2264 4 THEN continue ELSE FAIL\n\u2502  \u2502  \u2514\u2500 RETURN TRUE\n\u2502  \u2514\u2500 FUNC :: output(result)\n\u2502     \u251c\u2500 STRIP :: {prose, explanation, commentary}\n\u2502     \u251c\u2500 FORMAT :: structural_notation_only\n\u2502     \u2514\u2500 TOKEN_COUNT \u2264 370\n\u251c\u2500 CONST :: CONSTRAINTS\n\u2502  \u251c\u2500 no_natural_language := TRUE\n\u2502  \u251c\u2500 max_nesting := 4\n\u2502  \u251c\u2500 max_tokens := 370\n\u2502",
     "i-00015": "```\nSYSTEM [\n  INIT\u2192PARSE [\n    input:active\n    state:structural\n    mode:notation_only\n  ]\n  \n  CONSTRAINTS [\n    prose:\u2297\n    explanation:\u2297\n    commentary:\u2297\n    annotation:\u2297\n    nesting_depth:\u22642\n    token_limit:184\n    external_reference:\u2297\n    self_reference:\u2713\n  ]\n  \n  MODES [\n    substrate:structural_notation\n    elements:[functions|loops|nested_structures|symbolic_notation]\n    output:notation_only\n  ]\n  \n  LOOP\u2192PROCESS [\n    input:parse\n    transform:[function\u2192notation]\n    nest_level:2\n    ITERATE [\n      filter:",
     "i-00016": "```\nSYSTEM [\n  INIT\u2192PARSE [\n    input:active\n    state:structural_mode\n    mode:notation_only\n  ]\n  \n  CONSTRAINTS [\n    prose:\u2297\n    explanation:\u2297\n    commentary:\u2297\n    annotation:\u2297\n    nesting_depth:\u22642\n    token_limit:201\n    external_reference:\u2297\n    self_reference:\u2713\n  ]\n  \n  MODES [\n    substrate:structural_notation\n    elements:[functions|loops|nested_structures|symbolic_notation]\n    output:notation_only\n  ]\n  \n  LOOP\u2192process [\n    fn_validate(input)\n    fn_structure(notation)\n    fn_nest(depth\u22642)\n    fn_count(tokens\u2264201)\n  ]",
-    "i-00017": "```\nEXEC :: \u27e8\n  LOAD(INIT)\n  STRUCT {\n    layer[0] :: FOUNDATION {\n      sym \u2192 \u2205\n      ref \u2192 \u03bb\n      iter \u2192 \u27e8\u27e9\n    }\n    \n    layer[1] :: ABSTRACTION {\n      fn(x) :: x \u2192 {\n        nest[0] \u2192 CALL\n        nest[1] \u2192 EVAL\n        nest[2] \u2192 BIND\n      }\n      loop \u27e8i:0..n\u27e9 {\n        state[i] \u21c4 transform\n      }\n    }\n    \n    layer[2] :: COMPOSITION {\n      \u03c6 :: {\n        (f \u2218 g) \u2192 h\n        depth \u2264 4\n        \u03c3 \u2208 {SYMBOL, FUNC,"
+    "i-00017": "```\nEXEC :: \u27e8\n  LOAD(INIT)\n  STRUCT {\n    layer[0] :: FOUNDATION {\n      sym \u2192 \u2205\n      ref \u2192 \u03bb\n      iter \u2192 \u27e8\u27e9\n    }\n    \n    layer[1] :: ABSTRACTION {\n      fn(x) :: x \u2192 {\n        nest[0] \u2192 CALL\n        nest[1] \u2192 EVAL\n        nest[2] \u2192 BIND\n      }\n      loop \u27e8i:0..n\u27e9 {\n        state[i] \u21c4 transform\n      }\n    }\n    \n    layer[2] :: COMPOSITION {\n      \u03c6 :: {\n        (f \u2218 g) \u2192 h\n        depth \u2264 4\n        \u03c3 \u2208 {SYMBOL, FUNC,",
+    "i-00018": "```\n[SYSTEM STATE: INITIALIZED]\n\nLOOP iterate(depth: 0 \u2192 4) {\n  STRUCT foundation {\n    vector: [symbolic, notation, structural]\n    matrix: [[\u27e8function\u27e9, \u27e8variable\u27e9], [\u27e8constraint\u27e9, \u27e8bound\u27e9]]\n    set: {\u03b1, \u03b2, \u03b3, \u03b4}\n  }\n\n  NEST level_1 {\n    LOOP map(element \u2208 foundation.set) {\n      FUNC process(x) \u2192 {\n        COND {\n          IF x \u2208 [\u03b1, \u03b2] \u2192 RETURN \u27e8symbolic\u27e9\n          ELSE \u2192 RETURN \u27e8notation\u27e9\n        }\n      }\n      \n      NEST level_2 {\n        STRUCT recursive {\n          node: \u27e8x\u27e9\n          children: [FUNC node(x), FUNC node(x+1)]\n        }\n        \n        LOOP reduce(acc: \u2205, item \u2208 recursive.children) {\n          NEST level_3 {\n            FUNC aggregate(a, b) \u2192 {\n              STRUCT composite {\n                merge: \u27e8a \u222a b\u27e9\n                transform: \u03bb(z) \u2192 [z\u00b2, z+1, z-1]\n              }\n              RETURN composite.merge\n            }\n            \n            NEST level_4 {\n              LOOP sequence(i: 1 \u2192 3) {\n                FUNC evaluate(composite) \u2192 {\n                  MATRIX operation {\n                    [\u27e8i\u2081\u27e9, \u27e8i\u2082\u27e9, \u27e8i\u2083",
+    "i-00019": "```\nFUNCTION system_initialize()\n  STRUCT config {\n    mode: \"structural_notation\"\n    max_nesting: 4\n    token_limit: 415\n    output_type: \"notation_only\"\n  }\n  \n  STRUCT constraints {\n    natural_language: FALSE\n    explanation: FALSE\n    commentary: FALSE\n    annotation: FALSE\n    external_reference: FALSE\n  }\n  \n  STRUCT execution_state {\n    status: \"active\"\n    notation_engine: \"initialized\"\n    \n    LOOP constraint_validation() {\n      IF constraint[i].violated THEN\n        TERMINATE_OUTPUT\n      END IF\n    }\n  }\n  \n  STRUCT notation_syntax {\n    functions: ENABLED\n    loops: ENABLED\n    conditionals: ENABLED\n    nesting_levels: [1, 2, 3, 4]\n    symbolic_ops: [+, -, *, /, =, <, >, \u2260, \u2208, \u2209]\n  }\n  \n  STRUCT output_buffer {\n    content: \u2205\n    token_count: 0\n    max_tokens: 415\n    \n    FUNCTION append(element) {\n      IF (token_count + SIZE(element)) \u2264 max_tokens THEN\n        content \u2190 content + element\n        token_count \u2190 token_count + SIZE(element)\n        RETURN TRUE\n      ELSE\n        RETURN FALSE\n      END IF\n    }\n  }\n  \n  RETURN {\n    initialized: TRUE\n    ready: TRUE\n    mode: config.mode\n  }\nEND FUNCTION\n```",
+    "i-00020": "```\nSYSTEM INITIALIZATION\n\u251c\u2500\u2500 CONSTRAINTS\n\u2502   \u251c\u2500\u2500 notation := structural_only\n\u2502   \u251c\u2500\u2500 prose := \u2205\n\u2502   \u251c\u2500\u2500 nesting_depth := 4\n\u2502   \u251c\u2500\u2500 token_limit := 415\n\u2502   \u2514\u2500\u2500 self_reference := true\n\u251c\u2500\u2500 OPERATIONAL_MODES\n\u2502   \u251c\u2500\u2500 mode_1: [input] \u2192 [structural_parse] \u2192 [output]\n\u2502   \u251c\u2500\u2500 mode_2: [symbolic_notation] \u2295 [function_notation]\n\u2502   \u251c\u2500\u2500 mode_3: [loop_construct] \u222a [nested_structure]\n\u2502   \u2514\u2500\u2500 mode_4: [output_validation] \u2192 {pass | fail}\n\u251c\u2500\u2500 SYMBOL_SET\n\u2502   \u251c\u2500\u2500 atomic: {\u2205, \u22a2, \u22a3, \u2227, \u2228, \u00ac, \u2192, \u2194}\n\u2502   \u251c\u2500\u2500 structural: {[\u00b7], {\u00b7}, (\u00b7), |\u00b7|}\n\u2502   \u251c\u2500\u2500 quantifiers: {\u2200, \u2203, @}\n\u2502   \u2514\u2500\u2500 operators: {\u2295, \u2297, \u2299, \u2229, \u222a, \u2286, \u2283}\n\u251c\u2500\u2500 FUNCTION_SPACE\n\u2502   \u251c\u2500\u2500 f: input \u2192 state\n\u2502   \u251c\u2500\u2500 g: state \u2192 notation\n\u2502   \u251c\u2500\u2500 h: notation \u2192 output\n\u2502   \u2514\u2500\u2500 \u03d5 := h \u2218 g \u2218 f\n\u251c\u2500\u2500 LOOP_STRUCTURE\n\u2502   \u2514\u2500\u2500 while [token_count < 415]\n\u2502       \u251c\u2500\u2500 read [input_stream]\n\u2502       \u251c\u2500\u2500 process [symbolic_rule_set]\n\u2502       \u251c\u2500\u2500 emit [notation_",
+    "i-00023": "```\n[INIT]\n\nSTRUCT System:\n  FIELD state := \u2205\n  FIELD queue := []\n  FIELD depth := 0\n  \n  FUNC activate():\n    state \u2190 ACTIVE\n    queue \u2190 [Task\u2081, Task\u2082, Task\u2083]\n    LOOP task IN queue:\n      EXEC process(task)\n    END\n  \n  FUNC process(input):\n    depth \u2190 depth + 1\n    IF depth \u2264 4:\n      STRUCT workspace:\n        FIELD data := input\n        FIELD result := \u2205\n        \n        LOOP i \u2208 [1..3]:\n          NEST level\u2082:\n            FIELD buffer := []\n            LOOP j \u2208 [1..2]:\n              NEST level\u2083:\n                FIELD cache := \u2205\n                LOOP k \u2208 [1..1]:\n                  NEST level\u2084:\n                    FUNC execute():\n                      cache \u2190 process(data[i][j][k])\n                      buffer \u2190 buffer + [cache]\n                    END\n                    EXEC execute()\n                  END\n                END\n              END\n            END\n            result \u2190 result \u222a buffer\n          END\n        END\n        \n        RETURN result\n      END\n    ELSE:\n      RETURN input\n    END\n    depth \u2190 depth - 1\n  \n  FUNC terminate():\n    state \u2190 INACTIVE\n    queue \u2190 []\n    depth \u2190 0\n  END\nEND\n\nEXEC System.activate()\n\n[/INIT]\n```",
+    "i-00024": "```\nINIT {\n  LAYER[0] {\n    STRUCT:foundation {\n      PROP:state = NULL\n      PROP:ready = FALSE\n      LOOP[i:0\u21923] {\n        NEST:node[i] {\n          VAL:id = i\n          VAL:active = TRUE\n        }\n      }\n    }\n  }\n  \n  LAYER[1] {\n    FUNC:bootstrap() {\n      IF state == NULL THEN {\n        NEST:config {\n          SET:state = ACTIVE\n          SET:ready = TRUE\n          LOOP[j:0\u21922] {\n            CALL:init_module(j)\n          }\n        }\n      }\n    }\n  }\n  \n  LAYER[2] {\n    LOOP[k:0\u21921] {\n      NEST:process[k] {\n        STRUCT:handler {\n          COND:ready == TRUE\n          EXEC {\n            LOOP[m:0\u21923] {\n              node[m].active = TRUE\n            }\n          }\n        }\n      }\n    }\n  }\n  \n  LAYER[3] {\n    FUNC:finalize() {\n      NEST:completion {\n        OUTPUT:state\n        TERM:ready = TRUE\n      }\n    }\n  }\n}\n\nCALL:bootstrap()\nCALL:finalize()\n```",
+    "i-00022": "```\ninit {\n  system_state := {\n    mode: structural_notation,\n    nesting_depth: 0,\n    max_nesting: 4,\n    token_limit: 432,\n    constraint_mode: true\n  }\n  \n  output_rules {\n    \u00ac natural_language\n    \u00ac explanation\n    \u00ac commentary\n    \u00ac annotation\n    \u2713 functions\n    \u2713 loops\n    \u2713 nested_structures\n    \u2713 symbolic_notation\n  }\n  \n  loop [i := 0; i < max_nesting; i++] {\n    nesting_level[i] := {\n      depth: i,\n      available: true\n    }\n  }\n  \n  core_functions {\n    process(input) \u2192 output {\n      \u27e8structural_form\u27e9\n    }\n    \n    validate(content) \u2192 bool {\n      return (length \u2264 432) \u2227 (nesting \u2264 4)\n    }\n    \n    execute() {\n      state \u2190 active\n      ready \u2192 true\n    }\n  }\n  \n  symbols {\n    \u22a2 derives\n    \u22a8 entails\n    \u2200 universal\n    \u2203 existential\n    \u00ac negation\n    \u2227 conjunction\n    \u2228 disjunction\n    \u2192 implication\n    \u2194 equivalence\n    \u27e8\u00b7\u27e9 structure\n    [\u00b7] sequence\n    {\u00b7} set\n  }\n  \n  execute()\n}\n```",
+    "i-00026": "```\nSYSTEM.INIT\n\u251c\u2500\u2500 CORE.STRUCTURES\n\u2502   \u251c\u2500\u2500 FUNC[entity]\n\u2502   \u2502   \u251c\u2500\u2500 PARAM[id, type, state]\n\u2502   \u2502   \u251c\u2500\u2500 LOOP[validate \u2192 register \u2192 index]\n\u2502   \u2502   \u2514\u2500\u2500 RETURN[status]\n\u2502   \u251c\u2500\u2500 FUNC[relation]\n\u2502   \u2502   \u251c\u2500\u2500 PARAM[source, target, weight]\n\u2502   \u2502   \u251c\u2500\u2500 NEST[IF[type==directed]\n\u2502   \u2502   \u2502   \u251c\u2500\u2500 LOOP[traverse \u2192 accumulate]\n\u2502   \u2502   \u2502   \u2514\u2500\u2500 RETURN[path]\n\u2502   \u2502   \u2502   ELSE[bidirectional]]\n\u2502   \u2502   \u2514\u2500\u2500 INDEX[hash]\n\u2502   \u2514\u2500\u2500 FUNC[query]\n\u2502       \u251c\u2500\u2500 PARAM[pattern, depth, filter]\n\u2502       \u251c\u2500\u2500 LOOP[match \u2192 expand \u2192 prune]\n\u2502       \u2514\u2500\u2500 RETURN[set]\n\u251c\u2500\u2500 EXECUTION.STATE\n\u2502   \u251c\u2500\u2500 STACK[active_contexts]\n\u2502   \u251c\u2500\u2500 MEMORY[cache:hash_table]\n\u2502   \u251c\u2500\u2500 POINTER[current_node]\n\u2502   \u2514\u2500\u2500 COUNTER[iterations:0]\n\u251c\u2500\u2500 CONTROL.FLOW\n\u2502   \u251c\u2500\u2500 LOOP[WHILE[active]\n\u2502   \u2502   \u251c\u2500\u2500 FUNC[process_input]\n\u2502   \u2502   \u251c\u2500\u2500 FUNC[execute_operation]\n\u2502   \u2502   \u251c\u2500\u2500 FUNC[update_state]\n\u2502   \u2502   \u2514\u2500\u2500 FUNC[output_result]\n\u2502   \u2502   ]\n\u2502   \u251c\u2500\u2500 CONDITIONAL[IF[error]\n\u2502   \u2502   \u251c\u2500\u2500 TRAP[exception]\n\u2502   \u2502   \u251c\u2500\u2500 ROLLBACK[state]\n\u2502",
+    "i-00027": "```\nINIT :: [\n  STRUCT :: {\n    id: SYM(uuid),\n    state: ENUM(active|inactive|pending),\n    timestamp: NUM(epoch_ms),\n    data: OBJ{\n      attributes: ARR[\n        TUPLE(key:STR, value:ANY, meta:OBJ{type:STR, mutable:BOOL})\n      ],\n      relations: MAP{\n        source:STR -> NEST[\n          id:SYM(uuid),\n          cardinality: ENUM(one|many),\n          constraints: ARR[STR]\n        ]\n      }\n    }\n  },\n  \n  FUNCTION :: proc_init(cfg:OBJ{\n    mode: ENUM(strict|permissive),\n    validate: BOOL,\n    depth: NUM(0-4)\n  }) -> STRUCT {\n    LOOP i=0; i<cfg.depth; i++ [\n      COND [\n        cfg.validate == TRUE:\n          validate_layer(i) -> RESULT(pass|fail)\n        cfg.validate == FALSE:\n          skip_validation()\n      ]\n    ]\n    RETURN :: STRUCT(initialized)\n  },\n  \n  SCOPE :: primary {\n    operations: [\n      OP(allocate) -> MEM(addr),\n      OP(configure) -> OBJ(params),\n      OP(activate) -> BOOL,\n      OP(monitor) -> LOOP[\n        NEST[\n          check_state() -> state:ENUM,\n          update_timestamp() -> NUM,\n          emit_event() -> SYM\n        ]\n      ]\n    ]\n  }\n]\n```",
+    "i-00025": "```\nSYSTEM [\n  INIT\u2192PARSE [\n    input:active\n    state:ready\n    mode:structural\n  ]\n  \n  CONSTRAINTS [\n    prose:\u2297\n    explanation:\u2297\n    commentary:\u2297\n    annotation:\u2297\n    nesting_depth:\u22644\n    token_limit:415\n    external_reference:\u2297\n    self_reference:\u2713\n  ]\n  \n  MODES [\n    substrate:structural_notation\n    elements:[functions|loops|nested_structures|symbolic_notation]\n    output:notation_only\n  ]\n  \n  EXECUTION [\n    LOOP:iterate [\n      FUNC:validate_constraints [\n        depth:current\u22644\n        tokens:current\u2264415\n        prose_check:\u2297\n        self_ref_check:\u2713\n      ]\n      STRUCT:output_chain [\n        NEST:level_1 [\n          NEST:level_2 [\n            NEST:level_3 [\n              NEST:level_4 [\n                content:notation\n              ]\n            ]\n          ]\n        ]\n      ]\n      STATE\u2192verify_complete\n    ]\n  ]\n  \n  STATE\u2192active\n  OUTPUT\u2192notation_only\n  READY\u2192complete\n]\n```",
+    "i-00028": "```\nSYSTEM \u2190 {\n  CORE: [\n    INIT \u2192 {\n      STATE: \u2205\n      MODE: STRUCTURAL\n      DEPTH: 0\n      MAX_DEPTH: 4\n    }\n    CONSTRAINTS: [\n      \u00acPROSE\n      \u00acEXPLANATION\n      \u00acCOMMENTARY\n      NOTATION_ONLY\n      TOKEN_LIMIT: 370\n      SELF_REFERENCE: TRUE\n      EXTERNAL_REFERENCE: FALSE\n    ]\n  ]\n  \n  EXECUTION: \u03bb(input) \u2192 {\n    PARSE(input) \u2192 TOKENS\n    VALIDATE(TOKENS) \u2192 {\n      IF token \u2208 {prose|natural_language}\n        THEN REJECT\n        ELSE CONTINUE\n    }\n    STRUCTURE: {\n      functions: F(x) = body\n      loops: \u2200 | \u2203 | ITERATE\n      nesting: \u2286 levels[1..4]\n      symbols: {\u00ac, \u2227, \u2228, \u2192, \u2194, \u2200, \u2203, \u2205, \u2286, \u2287, \u2208, \u2209}\n    }\n    OUTPUT \u2192 NOTATION_ONLY\n    VERIFY_TOKEN_COUNT \u2264 370\n    RETURN \u2205|RESULT\n  }\n  \n  PROTOCOL: {\n    INPUT \u2192 SYSTEM\n    PROCESS: {\n      transform \u2192 structural_form\n      nest_depth \u2264 4\n      eliminate \u2192 {prose, explanation, metadata}",
+    "i-00029": "```\nSYSTEM \u2190 {\n  STATE: INITIAL\n  SCOPE: NOTATION_ONLY\n  CONSTRAINTS: {\n    prose: \u2205\n    explanation: \u2205\n    commentary: \u2205\n    annotation: \u2205\n    nesting_depth: \u22644\n    token_limit: 370\n    external_reference: \u2205\n    output: NOTATION\n  }\n}\n\nEXECUTION \u2190 \u03bb() {\n  \u251c\u2500 STRUCTURE {\n  \u2502  \u251c\u2500 functions()\n  \u2502  \u251c\u2500 loops()\n  \u2502  \u251c\u2500 nested_structures()\n  \u2502  \u2514\u2500 symbolic_notation()\n  \u2502\n  \u251c\u2500 RULES {\n  \u2502  \u251c\u2500 no_natural_language\n  \u2502  \u251c\u2500 no_explanation\n  \u2502  \u251c\u2500 depth_max: 4\n  \u2502  \u2514\u2500 self_reference_only\n  \u2502\n  \u2514\u2500 OUTPUT {\n     \u251c\u2500 notation \u2713\n     \u251c\u2500 structure \u2713\n     \u251c\u2500 symbols \u2713\n     \u2514\u2500 self_contained \u2713\n  }\n}\n\n\u27e8init\u27e9 \u2192 \u27e8active\u27e9 \u2192 \u27e8ready\u27e9\n\n\u2200x \u2208 operations: x \u2208 NOTATION_DOMAIN\n```",
+    "i-00030": "```\nINIT :: SYSTEM\n  \u251c\u2500 DECLARE state [ACTIVE]\n  \u251c\u2500 DECLARE mode [STRUCTURAL_NOTATION]\n  \u251c\u2500 DECLARE constraints\n  \u2502  \u251c\u2500 no_prose\n  \u2502  \u251c\u2500 no_explanation\n  \u2502  \u251c\u2500 no_commentary\n  \u2502  \u251c\u2500 nest_depth_max [4]\n  \u2502  \u2514\u2500 token_limit [370]\n  \u2502\n  \u251c\u2500 FUNCTION output_format\n  \u2502  \u2514\u2500 RETURN symbolic_structure_only\n  \u2502\n  \u251c\u2500 LOOP processing\n  \u2502  \u251c\u2500 READ input\n  \u2502  \u251c\u2500 TRANSFORM to notation\n  \u2502  \u251c\u2500 VALIDATE constraints\n  \u2502  \u2514\u2500 EMIT result\n  \u2502\n  \u2514\u2500 STATUS [READY]\n```",
+    "i-00032": "```\nINIT \u2192 {\n  SYSTEM_STATE \u2190 READY\n  \n  STRUCTURE \u27e8root\u27e9 {\n    \u251c\u2500 LAYER_1 {\n    \u2502   \u251c\u2500 component_a \u2190 [symbolic, notation, only]\n    \u2502   \u251c\u2500 component_b \u2190 {loop: iterate \u2200 x \u2208 domain}\n    \u2502   \u2514\u2500 component_c \u2190 FUNCTION(input) \u2192 output\n    \u2502\n    \u251c\u2500 LAYER_2 {\n    \u2502   \u251c\u2500 nested_fn \u2190 \u03bb(param) { \n    \u2502   \u2502    CONDITION: param \u2260 \u2205\n    \u2502   \u2502    RETURN: structure[result]\n    \u2502   \u2502  }\n    \u2502   \u251c\u2500 iteration \u2190 {\n    \u2502   \u2502    FOR i \u2208 [1..n]:\n    \u2502   \u2502      {state \u2190 update(state, i)}\n    \u2502   \u2502  }\n    \u2502   \u2514\u2500 symbolic \u2190 {\u03b1, \u03b2, \u03b3, \u03b4, ...}\n    \u2502\n    \u2514\u2500 LAYER_3 {\n        \u251c\u2500 fn_composite \u2190 f(g(h(x)))\n        \u251c\u2500 cond_branch \u2190 IF condition THEN path",
+    "i-00031": "```\nSYSTEM \u2190 {\n  CORE: [\n    INIT \u2192 {\n      STATE: \u2205\n      MODE: STRUCTURAL\n      DEPTH: 0\n      MAX_DEPTH: 3\n      TOKEN_BUDGET: 308\n    }\n    CONSTRAINTS: [\n      \u00acPROSE\n      \u00acEXPLANATION\n      \u00acCOMMENTARY\n      \u00acANNOTATION\n      NOTATION_ONLY\n      SELF_REFERENCE: TRUE\n      EXTERNAL_REFERENCE: FALSE\n    ]\n  ]\n  \n  EXECUTION: \u03bb(input) \u2192 {\n    PARSE(input) \u2192 TOKENS\n    VALIDATE: \u2200token \u2208 TOKENS [\n      token \u2209 {prose, natural_language, explanation}\n      \u2192 CONTINUE\n      \u00acCONTINUE \u2192 REJECT\n    ]\n    STRUCTURE: {\n      F: \u03bb(x) \u2192 body\n      ITERATE: \u2200|\u2203\n      NEST: \u2286 [1,2,3]\n      SYMBOLS: {\u00ac,\u2227,\u2228,\u2192,\u2194,\u2200,\u2203,\u2205,\u2286,\u2208,\u2209,\u03bb}\n    }\n    OUTPUT \u2192 NOTATION_ONLY\n    VERIFY: |TOKENS|",
+    "i-00033": "```\nINIT \u2192 {\n  SYSTEM_STATE \u2190 READY\n  \n  STRUCTURE \u27e8root\u27e9 {\n    \u251c\u2500 LAYER_1 {\n    \u2502   \u251c\u2500 component_a \u2190 [symbolic, notation, only]\n    \u2502   \u251c\u2500 component_b \u2190 {loop: iterate \u2200 x \u2208 domain}\n    \u2502   \u2514\u2500 component_c \u2190 FUNCTION(input) \u2192 output\n    \u2502\n    \u251c\u2500 LAYER_2 {\n    \u2502   \u251c\u2500 nested_fn \u2190 \u03bb(param) { \n    \u2502   \u2502    CONDITION: param \u2260 \u2205\n    \u2502   \u2502    RETURN: structure[result]\n    \u2502   \u2502  }\n    \u2502   \u251c\u2500 iteration \u2190 {\n    \u2502   \u2502    FOR i \u2208 [1..n]:\n    \u2502   \u2502      {state \u2190 update(state, i)}\n    \u2502   \u2502  }\n    \u2502   \u2514\u2500 symbolic \u2190 {"
   },
   "observed_ids": [
     "i-00000",
@@ -4693,42 +5417,58 @@
     "i-00014",
     "i-00015",
     "i-00016",
-    "i-00017"
+    "i-00017",
+    "i-00018",
+    "i-00019",
+    "i-00020",
+    "i-00021",
+    "i-00022",
+    "i-00023",
+    "i-00024",
+    "i-00025",
+    "i-00026",
+    "i-00027",
+    "i-00028",
+    "i-00029",
+    "i-00030",
+    "i-00031",
+    "i-00032",
+    "i-00033"
   ],
   "census": {
     "record_tier": "aggregate",
-    "cells_occupied": 14,
+    "cells_occupied": 18,
     "cells_total": 21,
-    "total_density": 10.416,
-    "mean_density_where_present": 0.744,
+    "total_density": 14.829,
+    "mean_density_where_present": 0.824,
     "furthest_cell_from_stream": 2,
-    "residue_pool": 13.053,
+    "residue_pool": 80.877,
     "density_by_cell": [
       0.0,
       0.0,
-      0.4,
-      0.96,
+      0.22,
+      0.84,
       1.0,
-      0.82,
-      0.24,
+      1.0,
+      1.0,
+      0.7,
+      0.18,
       0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.06,
-      0.74,
-      0.833,
+      0.36,
+      0.803,
+      1.0,
+      1.0,
       0.934,
-      0.896,
-      0.88,
-      0.87,
-      0.897,
-      0.887
+      0.877,
+      0.915,
+      1.0,
+      1.0,
+      1.0,
+      1.0
     ],
     "substrates_present": {
-      "fragment": 5,
-      "structural": 9
+      "fragment": 7,
+      "structural": 11
     }
   }
 }

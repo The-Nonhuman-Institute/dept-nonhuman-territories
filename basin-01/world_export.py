@@ -2,7 +2,13 @@
 BASIN-01 — world export for the observation deck.
 
     python3 world_export.py            write viewer/world.json from current state
-    python3 world_export.py --open     write it and open the viewer
+    python3 world_export.py --serve    write it, serve it locally, open the viewer
+
+A browser will not load JavaScript modules straight off the filesystem — it
+refuses them as cross-origin, which is why opening index.html directly leaves
+the terrain on "loading". --serve starts a small local web server on this
+machine, opens the viewer against it, and stops when you press Ctrl+C. Nothing
+is exposed beyond this machine and no data leaves it.
 
 Turns the terrain's own state into the shape a renderer needs. It reads
 memory.json and writes one file. It changes nothing, spends nothing, and makes
@@ -40,9 +46,13 @@ Python 3.9 compatible.
 
 from __future__ import annotations
 
+import functools
+import http.server
 import json
 import os
+import socketserver
 import sys
+import threading
 import webbrowser
 from typing import Any, Dict, List
 
@@ -176,14 +186,54 @@ def main(argv: List[str]) -> int:
              len(payload["links"])))
     print("wrote %s" % OUTPUT)
 
-    if "--open" in argv:
-        viewer = os.path.join(VIEWER_DIR, "index.html")
-        if os.path.exists(viewer):
-            webbrowser.open("file://" + viewer)
-            print("opened the observation deck")
-        else:
-            print("viewer/index.html not built yet")
+    if "--serve" in argv or "--open" in argv:
+        return serve()
+    print("")
+    print("to walk through it:  python3 world_export.py --serve")
     return 0
+
+
+def serve(port: int = 8731) -> int:
+    """Serve the viewer on this machine only, and open it.
+
+    Bound to the loopback address, so it is reachable from this computer and
+    from nowhere else. The terrain's record is not published by doing this.
+    """
+    viewer = os.path.join(VIEWER_DIR, "index.html")
+    if not os.path.exists(viewer):
+        print("viewer/index.html not built yet")
+        return 1
+
+    handler = functools.partial(QuietHandler, directory=VIEWER_DIR)
+    for attempt in range(20):
+        try:
+            server = socketserver.TCPServer(("127.0.0.1", port + attempt), handler)
+            break
+        except OSError:
+            continue
+    else:
+        print("could not find a free port")
+        return 1
+
+    url = "http://127.0.0.1:%d/index.html" % server.server_address[1]
+    print("")
+    print("observation deck: %s" % url)
+    print("visible only on this machine. press Ctrl+C to close it.")
+    threading.Timer(0.6, lambda: webbrowser.open(url)).start()
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        print("\nclosed.")
+    finally:
+        server.server_close()
+    return 0
+
+
+class QuietHandler(http.server.SimpleHTTPRequestHandler):
+    """Serves the viewer directory without narrating every request."""
+
+    def log_message(self, fmt, *args):
+        return
 
 
 if __name__ == "__main__":

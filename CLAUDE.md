@@ -21,6 +21,7 @@ Keep it to a few lines; do not lecture.
    /status     what it costs and where it stands   (free)
    /observe    what the terrain has produced       (free)
    /dashboard  open the visual dashboard           (free)
+   /viewer     walk through the terrain in 3D      (free)
    /shift      run one shift
    /phase      switch free ↔ paid
    ```
@@ -131,6 +132,7 @@ Slash commands do the work — the steward should not need to remember paths:
 | `/phase` | Switch between free local runs and paid canonical runs. |
 | `/checkpoint` | Evaluate the 15-shift falsification condition from the record. Free. |
 | `/dashboard` | Rebuild and open the visual dashboard. Free. |
+| `/viewer` | Walk through the terrain in 3D. Free. |
 
 Underneath, everything runs from `basin-01/`:
 
