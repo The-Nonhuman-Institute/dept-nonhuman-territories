@@ -419,8 +419,14 @@ class Transaction(object):
         self._anomaly_records = []
         self._shift_records = []
 
-    def commit(self) -> Dict[str, int]:
+    def commit(self, mark_shift: bool = True) -> Dict[str, int]:
         """Write the shift's changes. The only moment this terrain touches disk.
+
+        mark_shift=False records state without advancing the shift counter. It
+        exists for one case: a shift that failed before it could close still
+        needs its failure on the record (the Charter forbids omitting an
+        outcome because it is inconvenient), but it did not produce a shift of
+        terrain history and must not claim a shift number.
 
         Order matters. The append-only logs are written first, then taxonomy,
         then memory.json last. memory.json carries `last_committed_shift`, so it
@@ -444,10 +450,11 @@ class Transaction(object):
 
         _write_json_atomic(config.TAXONOMY_FILE, self.taxonomy)
 
-        self.memory["last_committed_shift"] = self.shift_number
-        self.memory["shifts_completed"] = int(
-            self.memory.get("shifts_completed", 0)
-        ) + 1
+        if mark_shift:
+            self.memory["last_committed_shift"] = self.shift_number
+            self.memory["shifts_completed"] = int(
+                self.memory.get("shifts_completed", 0)
+            ) + 1
         _write_json_atomic(config.MEMORY_FILE, self.memory)
 
         self._committed = True

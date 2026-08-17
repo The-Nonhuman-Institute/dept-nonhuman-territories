@@ -326,6 +326,74 @@ def extract_json(text: str) -> Optional[Dict[str, Any]]:
     return None
 
 
+def salvage_classifications(text: str) -> List[Dict[str, Any]]:
+    """Recover the classification objects that completed before a cut-off.
+
+    A response truncated by the output ceiling is valid JSON up to the point it
+    stops. Discarding the whole reply would throw away real classification
+    decisions — including their reasoning, which is the primary research data —
+    over an unterminated bracket at the end.
+
+    Every object recovered here is marked salvaged in the record it produces,
+    so the log never presents a partially-read response as a clean one.
+    """
+    recovered: List[Dict[str, Any]] = []
+    seen_ids = set()
+    cursor = 0
+
+    while True:
+        start = text.find("{", cursor)
+        if start == -1:
+            break
+
+        depth = 0
+        end = -1
+        in_string = False
+        escaped = False
+        for position in range(start, len(text)):
+            character = text[position]
+            if in_string:
+                if escaped:
+                    escaped = False
+                elif character == "\\":
+                    escaped = True
+                elif character == '"':
+                    in_string = False
+                continue
+            if character == '"':
+                in_string = True
+            elif character == "{":
+                depth += 1
+            elif character == "}":
+                depth -= 1
+                if depth == 0:
+                    end = position
+                    break
+
+        if end == -1:
+            # Unterminated: this object was cut off. Step inside it and look
+            # for smaller objects that did complete.
+            cursor = start + 1
+            continue
+
+        chunk = text[start : end + 1]
+        if '"specimen_id"' in chunk:
+            try:
+                parsed = json.loads(chunk)
+            except json.JSONDecodeError:
+                parsed = None
+            if isinstance(parsed, dict) and parsed.get("specimen_id"):
+                identifier = str(parsed["specimen_id"]).strip()
+                if identifier not in seen_ids:
+                    seen_ids.add(identifier)
+                    recovered.append(parsed)
+                cursor = end + 1
+                continue
+        cursor = start + 1
+
+    return recovered
+
+
 _DECISION_MAP = {
     "file": "filed",
     "filed": "filed",
@@ -402,18 +470,29 @@ def run(
             outcome["unresolved"] += 1
         return outcome
 
+    outcome["response_truncated"] = result.truncated
     parsed = extract_json(result.text)
+    salvaged = False
+
     if parsed is None:
-        outcome["parse_failed"] = True
-        for record in batch:
-            _record_unresolved(
-                writer,
-                record,
-                "classification response could not be parsed as JSON",
-                raw_response=result.text,
-            )
-            outcome["unresolved"] += 1
-        return outcome
+        # Recover whatever completed before the cut-off rather than discarding
+        # real decisions over a missing bracket.
+        recovered = salvage_classifications(result.text)
+        if recovered:
+            parsed = {"classifications": recovered, "taxonomy": None}
+            salvaged = True
+            outcome["salvaged_from_truncated_response"] = True
+        else:
+            outcome["parse_failed"] = True
+            for record in batch:
+                _record_unresolved(
+                    writer,
+                    record,
+                    "classification response could not be parsed as JSON",
+                    raw_response=result.text,
+                )
+                outcome["unresolved"] += 1
+            return outcome
 
     by_id = {}
     for entry in parsed.get("classifications", []) or []:
@@ -460,6 +539,9 @@ def run(
             # research data (README.md Section 5).
             "reasoning": entry.get("reasoning", ""),
             "comparison": entry.get("comparison", ""),
+            # A record recovered from a truncated response says so, so the log
+            # never presents a partially-read reply as a clean one.
+            "salvaged_from_truncated_response": salvaged,
         }
 
         if decision == "anomalous":

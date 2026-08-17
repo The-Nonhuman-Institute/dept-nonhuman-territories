@@ -2,9 +2,9 @@
   "terrain_id": "DNT-T01",
   "terrain_name": "BASIN-01",
   "physics_document": "DNT-PHY-001",
-  "seeded_at": "2026-08-17T02:36:20Z",
-  "last_committed_shift": -1,
-  "shifts_completed": 0,
+  "seeded_at": "2026-08-17T04:07:55Z",
+  "last_committed_shift": 0,
+  "shifts_completed": 1,
   "cumulative_cost_usd": 0.0,
   "resource": {
     "flow": 0.6,
@@ -12,14 +12,66 @@
     "generator_b_position": 0.15
   },
   "specimen_counts": {
-    "total": 0,
-    "individual_records": 0,
+    "total": 4,
+    "individual_records": 2,
     "aggregate_members": 0,
-    "anomalous": 0
+    "anomalous": 2
   },
-  "category_stats": {},
-  "specimen_index": {},
+  "category_stats": {
+    "Algorithmic Core": {
+      "count": 1,
+      "mean_complexity": 26.0,
+      "first_seen_shift": 0,
+      "last_seen_shift": 0
+    },
+    "Sensory Observation": {
+      "count": 1,
+      "mean_complexity": 10.0,
+      "first_seen_shift": 0,
+      "last_seen_shift": 0
+    }
+  },
+  "specimen_index": {
+    "s-0000-00": {
+      "source_role": "generator_a",
+      "substrate": "structural",
+      "complexity": 26,
+      "first_seen_shift": 0,
+      "last_seen_shift": 0,
+      "end_state": null
+    },
+    "s-0000-01": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 10,
+      "first_seen_shift": 0,
+      "last_seen_shift": 0,
+      "end_state": null
+    },
+    "s-0000-02": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 10,
+      "first_seen_shift": 0,
+      "last_seen_shift": 0,
+      "end_state": null
+    },
+    "s-0000-03": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 9,
+      "first_seen_shift": 0,
+      "last_seen_shift": 0,
+      "end_state": null
+    }
+  },
   "terrain_events": [],
   "keeper_summary": null,
-  "notes": "Steward may read this file freely. Steward may not edit taxonomy or specimen records directly (DNT-STW-001 Section 3)."
+  "notes": "Steward may read this file freely. Steward may not edit taxonomy or specimen records directly (DNT-STW-001 Section 3).",
+  "taxonomy_structure": {
+    "top_level_entries": 2,
+    "max_depth": 2,
+    "total_nodes": 7,
+    "diverged_from_flat_list": true
+  }
 }

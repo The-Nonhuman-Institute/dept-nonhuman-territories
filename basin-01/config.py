@@ -121,7 +121,12 @@ PRICING: Dict[str, Tuple[float, float]] = {
 MAX_OUTPUT_TOKENS_BY_ROLE: Dict[str, int] = {
     "generator_a": 512,       # structural substrate, resource-scaled below cap
     "generator_b": 160,       # fragment substrate, short by constraint
-    "namer": 900,             # reasoning is logged in full, so it needs room
+    # README.md Section 5 requires the Namer's reasoning to be logged in
+    # full, not summarised. Phase 1 showed 900 truncating mid-response on a
+    # four-specimen batch, which would have silently clipped the primary
+    # research data. Raised so the requirement is affordable rather than
+    # nominal; at Haiku rates the extra headroom costs ~$0.0025 per shift.
+    "namer": 1600,
     "keeper": 400,
     "archivist": 1200,
     "cartographer": 600,
@@ -243,6 +248,31 @@ NAMER_RECENT_SPECIMEN_WINDOW = 12
 GENERATOR_A_POSITION = 0.85      # channel-proximate
 GENERATOR_B_POSITION = 0.15      # channel-distant
 RESOURCE_FLOW_BASELINE = 0.60    # memory.json carries the live value
+
+# Flow varies across shifts on a fixed cycle. physics.md Section 5 describes
+# this terrain as "closer to a tidal/seasonal system than continuous flow", so
+# the variation is periodic rather than random, and derived from the shift
+# number alone. That makes every shift's resource conditions reproducible from
+# the record — a random walk would leave the steward unable to distinguish a
+# terrain effect from a sampling artifact when reading the log months later.
+#
+# STEWARD NOTE: physics.md names the data-stream channel as the resource
+# variable but does not specify how it varies over time. The cycle below is an
+# engineering choice, not a governance decision. It belongs in physics.md
+# Section 5 alongside the promotion thresholds, ratified before shift 0.
+RESOURCE_FLOW_AMPLITUDE = 0.35
+RESOURCE_FLOW_PERIOD_SHIFTS = 12
+RESOURCE_FLOW_MIN = 0.05
+RESOURCE_FLOW_MAX = 1.00
+
+
+def resource_flow_for_shift(shift_number: int) -> float:
+    """Channel flow for a given shift. Deterministic, periodic, replayable."""
+    import math
+
+    phase = (2.0 * math.pi * float(shift_number)) / float(RESOURCE_FLOW_PERIOD_SHIFTS)
+    value = RESOURCE_FLOW_BASELINE + (RESOURCE_FLOW_AMPLITUDE * math.sin(phase))
+    return round(max(RESOURCE_FLOW_MIN, min(RESOURCE_FLOW_MAX, value)), 4)
 
 
 # ---------------------------------------------------------------------------
