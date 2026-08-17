@@ -3,38 +3,44 @@
   "terrain_name": "BASIN-01",
   "physics_document": "DNT-PHY-001",
   "seeded_at": "2026-08-17T05:35:23Z",
-  "last_committed_shift": 5,
-  "shifts_completed": 6,
-  "cumulative_cost_usd": 0.081259,
+  "last_committed_shift": 15,
+  "shifts_completed": 16,
+  "cumulative_cost_usd": 0.237548,
   "resource": {
-    "flow": 0.775,
+    "flow": 0.95,
     "generator_a_position": 0.85,
     "generator_b_position": 0.15
   },
   "specimen_counts": {
-    "total": 21,
-    "individual_records": 9,
-    "aggregate_members": 7,
-    "anomalous": 5
+    "total": 59,
+    "individual_records": 10,
+    "aggregate_members": 40,
+    "anomalous": 9
   },
   "category_stats": {
     "structural_notation_system": {
-      "count": 6,
-      "mean_complexity": 63.5,
+      "count": 16,
+      "mean_complexity": 58.8125,
       "first_seen_shift": 0,
-      "last_seen_shift": 5
+      "last_seen_shift": 15
     },
     "narrative_scene_threshold": {
-      "count": 3,
-      "mean_complexity": 39.666666666666664,
+      "count": 7,
+      "mean_complexity": 39.0,
       "first_seen_shift": 0,
-      "last_seen_shift": 5
+      "last_seen_shift": 13
     },
     "narrative_scene_interior_moment": {
-      "count": 7,
-      "mean_complexity": 39.57142857142857,
+      "count": 26,
+      "mean_complexity": 38.57692307692307,
       "first_seen_shift": 0,
-      "last_seen_shift": 5
+      "last_seen_shift": 15
+    },
+    "narrative_scene_anticipatory_threshold": {
+      "count": 1,
+      "mean_complexity": 25.0,
+      "first_seen_shift": 9,
+      "last_seen_shift": 9
     }
   },
   "specimen_index": {
@@ -197,7 +203,8 @@
       "complexity": 79,
       "first_seen_shift": 5,
       "last_seen_shift": 5,
-      "end_state": null
+      "end_state": "dormant",
+      "resolved_at_shift": 6
     },
     "s-0005-01": {
       "source_role": "generator_b",
@@ -205,7 +212,8 @@
       "complexity": 40,
       "first_seen_shift": 5,
       "last_seen_shift": 5,
-      "end_state": null
+      "end_state": "dormant",
+      "resolved_at_shift": 6
     },
     "s-0005-02": {
       "source_role": "generator_b",
@@ -213,7 +221,8 @@
       "complexity": 28,
       "first_seen_shift": 5,
       "last_seen_shift": 5,
-      "end_state": null
+      "end_state": "dormant",
+      "resolved_at_shift": 6
     },
     "s-0005-03": {
       "source_role": "generator_b",
@@ -221,6 +230,346 @@
       "complexity": 38,
       "first_seen_shift": 5,
       "last_seen_shift": 5,
+      "end_state": "dormant",
+      "resolved_at_shift": 6
+    },
+    "s-0006-00": {
+      "source_role": "generator_a",
+      "substrate": "structural",
+      "complexity": 58,
+      "first_seen_shift": 6,
+      "last_seen_shift": 6,
+      "end_state": "dormant",
+      "resolved_at_shift": 7
+    },
+    "s-0006-01": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 39,
+      "first_seen_shift": 6,
+      "last_seen_shift": 6,
+      "end_state": "dormant",
+      "resolved_at_shift": 7
+    },
+    "s-0006-02": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 38,
+      "first_seen_shift": 6,
+      "last_seen_shift": 6,
+      "end_state": "dormant",
+      "resolved_at_shift": 7
+    },
+    "s-0006-03": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 47,
+      "first_seen_shift": 6,
+      "last_seen_shift": 6,
+      "end_state": "dormant",
+      "resolved_at_shift": 7
+    },
+    "s-0007-00": {
+      "source_role": "generator_a",
+      "substrate": "structural",
+      "complexity": 48,
+      "first_seen_shift": 7,
+      "last_seen_shift": 7,
+      "end_state": "dormant",
+      "resolved_at_shift": 8
+    },
+    "s-0007-01": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 37,
+      "first_seen_shift": 7,
+      "last_seen_shift": 7,
+      "end_state": "dormant",
+      "resolved_at_shift": 8
+    },
+    "s-0007-02": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 47,
+      "first_seen_shift": 7,
+      "last_seen_shift": 7,
+      "end_state": "dormant",
+      "resolved_at_shift": 8
+    },
+    "s-0007-03": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 39,
+      "first_seen_shift": 7,
+      "last_seen_shift": 7,
+      "end_state": "dormant",
+      "resolved_at_shift": 8
+    },
+    "s-0008-00": {
+      "source_role": "generator_a",
+      "substrate": "structural",
+      "complexity": 61,
+      "first_seen_shift": 8,
+      "last_seen_shift": 8,
+      "end_state": "dormant",
+      "resolved_at_shift": 9
+    },
+    "s-0008-01": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 45,
+      "first_seen_shift": 8,
+      "last_seen_shift": 8,
+      "end_state": "dormant",
+      "resolved_at_shift": 9
+    },
+    "s-0008-02": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 37,
+      "first_seen_shift": 8,
+      "last_seen_shift": 8,
+      "end_state": "dormant",
+      "resolved_at_shift": 9
+    },
+    "s-0008-03": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 41,
+      "first_seen_shift": 8,
+      "last_seen_shift": 8,
+      "end_state": "dormant",
+      "resolved_at_shift": 9
+    },
+    "s-0009-00": {
+      "source_role": "generator_a",
+      "substrate": "structural",
+      "complexity": 42,
+      "first_seen_shift": 9,
+      "last_seen_shift": 9,
+      "end_state": "dormant",
+      "resolved_at_shift": 10
+    },
+    "s-0009-01": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 37,
+      "first_seen_shift": 9,
+      "last_seen_shift": 9,
+      "end_state": "dormant",
+      "resolved_at_shift": 10
+    },
+    "s-0009-02": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 43,
+      "first_seen_shift": 9,
+      "last_seen_shift": 9,
+      "end_state": "dormant",
+      "resolved_at_shift": 10
+    },
+    "s-0009-03": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 25,
+      "first_seen_shift": 9,
+      "last_seen_shift": 9,
+      "end_state": "dormant",
+      "resolved_at_shift": 10
+    },
+    "s-0010-00": {
+      "source_role": "generator_a",
+      "substrate": "structural",
+      "complexity": 62,
+      "first_seen_shift": 10,
+      "last_seen_shift": 10,
+      "end_state": "dormant",
+      "resolved_at_shift": 11
+    },
+    "s-0010-01": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 40,
+      "first_seen_shift": 10,
+      "last_seen_shift": 10,
+      "end_state": "dormant",
+      "resolved_at_shift": 11
+    },
+    "s-0010-02": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 42,
+      "first_seen_shift": 10,
+      "last_seen_shift": 10,
+      "end_state": "dormant",
+      "resolved_at_shift": 11
+    },
+    "s-0010-03": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 42,
+      "first_seen_shift": 10,
+      "last_seen_shift": 10,
+      "end_state": "dormant",
+      "resolved_at_shift": 11
+    },
+    "s-0011-00": {
+      "source_role": "generator_a",
+      "substrate": "structural",
+      "complexity": 39,
+      "first_seen_shift": 11,
+      "last_seen_shift": 11,
+      "end_state": "dormant",
+      "resolved_at_shift": 12
+    },
+    "s-0011-01": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 42,
+      "first_seen_shift": 11,
+      "last_seen_shift": 11,
+      "end_state": "dormant",
+      "resolved_at_shift": 12
+    },
+    "s-0011-02": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 31,
+      "first_seen_shift": 11,
+      "last_seen_shift": 11,
+      "end_state": "dormant",
+      "resolved_at_shift": 12
+    },
+    "s-0011-03": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 38,
+      "first_seen_shift": 11,
+      "last_seen_shift": 11,
+      "end_state": "dormant",
+      "resolved_at_shift": 12
+    },
+    "s-0012-00": {
+      "source_role": "generator_a",
+      "substrate": "structural",
+      "complexity": 49,
+      "first_seen_shift": 12,
+      "last_seen_shift": 12,
+      "end_state": "dormant",
+      "resolved_at_shift": 13
+    },
+    "s-0012-01": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 30,
+      "first_seen_shift": 12,
+      "last_seen_shift": 12,
+      "end_state": "dormant",
+      "resolved_at_shift": 13
+    },
+    "s-0012-02": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 27,
+      "first_seen_shift": 12,
+      "last_seen_shift": 12,
+      "end_state": "dormant",
+      "resolved_at_shift": 13
+    },
+    "s-0012-03": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 39,
+      "first_seen_shift": 12,
+      "last_seen_shift": 12,
+      "end_state": "dormant",
+      "resolved_at_shift": 13
+    },
+    "s-0013-00": {
+      "source_role": "generator_a",
+      "substrate": "structural",
+      "complexity": 71,
+      "first_seen_shift": 13,
+      "last_seen_shift": 13,
+      "end_state": "dormant",
+      "resolved_at_shift": 14
+    },
+    "s-0013-01": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 35,
+      "first_seen_shift": 13,
+      "last_seen_shift": 13,
+      "end_state": "dormant",
+      "resolved_at_shift": 14
+    },
+    "s-0013-02": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 30,
+      "first_seen_shift": 13,
+      "last_seen_shift": 13,
+      "end_state": "dormant",
+      "resolved_at_shift": 14
+    },
+    "s-0013-03": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 37,
+      "first_seen_shift": 13,
+      "last_seen_shift": 13,
+      "end_state": "dormant",
+      "resolved_at_shift": 14
+    },
+    "s-0014-00": {
+      "source_role": "generator_a",
+      "substrate": "structural",
+      "complexity": 67,
+      "first_seen_shift": 14,
+      "last_seen_shift": 14,
+      "end_state": "dormant",
+      "resolved_at_shift": 15
+    },
+    "s-0014-01": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 37,
+      "first_seen_shift": 14,
+      "last_seen_shift": 14,
+      "end_state": "dormant",
+      "resolved_at_shift": 15
+    },
+    "s-0014-02": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 22,
+      "first_seen_shift": 14,
+      "last_seen_shift": 14,
+      "end_state": "dormant",
+      "resolved_at_shift": 15
+    },
+    "s-0015-00": {
+      "source_role": "generator_a",
+      "substrate": "structural",
+      "complexity": 63,
+      "first_seen_shift": 15,
+      "last_seen_shift": 15,
+      "end_state": null
+    },
+    "s-0015-01": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 44,
+      "first_seen_shift": 15,
+      "last_seen_shift": 15,
+      "end_state": null
+    },
+    "s-0015-02": {
+      "source_role": "generator_b",
+      "substrate": "fragment",
+      "complexity": 33,
+      "first_seen_shift": 15,
+      "last_seen_shift": 15,
       "end_state": null
     }
   },
@@ -230,12 +579,18 @@
       "logged_at": "2026-08-17T05:36:30Z",
       "kind": "shift_aborted",
       "detail": "Shift 0 began at 2026-08-17T05:36:30Z and failed before clock-out: model backend unavailable: the `anthropic` package is not installed. Phase 2 needs it: python3 -m venv .venv && .venv/bin/pip install anthropic. No specimen or classification records were written. 0 model call(s) had been made, $0.000000 spent."
+    },
+    {
+      "shift": 15,
+      "logged_at": "2026-08-17T05:53:19Z",
+      "kind": "harness_correction",
+      "detail": "CORRECTION referencing the Archivist annotation written at shift 14. That pass reported coined_then_dropped_from_system = ['narrative_scene_anticipatory_threshold', 'narrative_scene_interior_moment', 'narrative_scene_threshold', 'structural_notation_system'] and authored_categories = ['anomalies', 'root']. Three of those four categories had not been dropped: the Namer had restructured its system into two top-level containers with its categories nested inside as objects, and the drift detector compared only top-level keys, so a system that had DEVELOPED structure was reported as one that had LOST categories. The defect was in the harness (archivist.detect_drift), not in the Namer's system or in any specimen record. detect_drift now walks the full structure at any depth; re-run against the same state it reports coined_then_dropped_from_system = ['narrative_scene_anticipatory_threshold'] and authored_categories = ['narrative_scene_interior_moment', 'narrative_scene_threshold', 'narrative_scenes', 'structural_notation_system']. The shift 14 annotation is left exactly as written, per DNT-SLP-001 Section 6: corrections are new, clearly marked entries referencing the original, never silent edits. The next Archivist pass regenerates the crosswalk and drift record from corrected code."
     }
   ],
   "keeper_summary": {
-    "shift": 5,
-    "at": "2026-08-17T05:44:41Z",
-    "text": "After five completed intervals, 17 specimens are recorded across three categories: narrative_scene_interior_moment now holds 6 members with mean complexity 39.5, narrative_scene_threshold remains at 2 members with mean complexity 40.5, and structural_notation_system has grown to 5 members with mean complexity 60.4. The record composition has shifted to 8 individual-tier and 5 aggregate-tier entries, representing an increase in aggregate documentation since the previous interval. Four specimens have been flagged as anomalous across all five intervals. The classification system structure maintains 2 top-level entries with maximum depth of 6, unchanged from interval 4. Resource availability has declined to 0.7750 from 0.9031 at the end of interval 4."
+    "shift": 15,
+    "at": "2026-08-17T05:52:16Z",
+    "text": "The collection contains 56 specimens across 15 intervals, with 10 individual-tier and 37 aggregate-tier records, adding 3 new specimens since interval 14. Narrative_scene_interior_moment has grown to 24 members with mean complexity 38.6, up from 23 members at 38.7, while narrative_scene_threshold remains at 7 members with unchanged mean complexity 39.0. Structural_notation_system has increased to 15 members with mean complexity 58.5, up from 14 members at 57.9, and a new category, narrative_scene_anticipatory_threshold, has appeared with 1 member at complexity 25.0. The flagged anomalous specimen count has increased from 8 to 9. The classification system maintains 2 top-level entries with maximum depth 6, and resource level has risen to 0.9500 from 0.9031."
   },
   "notes": "Steward may read this file freely. Steward may not edit taxonomy or specimen records directly (DNT-STW-001 Section 3).",
   "taxonomy_structure": {
@@ -243,5 +598,192 @@
     "max_depth": 6,
     "total_nodes": 54,
     "diverged_from_flat_list": true
+  },
+  "annotations": {
+    "linnaean_crosswalk": {
+      "shift": 14,
+      "at": "2026-08-17T05:50:46Z",
+      "by": "archivist",
+      "payload": {
+        "pass_at_shift": 14,
+        "authored_categories": [
+          "anomalies",
+          "root"
+        ],
+        "drift": {
+          "filed_categories": [
+            "narrative_scene_anticipatory_threshold",
+            "narrative_scene_interior_moment",
+            "narrative_scene_threshold",
+            "structural_notation_system"
+          ],
+          "authored_categories": [
+            "anomalies",
+            "root"
+          ],
+          "coined_then_dropped_from_system": [
+            "narrative_scene_anticipatory_threshold",
+            "narrative_scene_interior_moment",
+            "narrative_scene_threshold",
+            "structural_notation_system"
+          ],
+          "authored_but_never_filed": [
+            "anomalies",
+            "root"
+          ],
+          "added_since_last_pass": [],
+          "removed_since_last_pass": [],
+          "drift_detected": true
+        },
+        "capability": {
+          "structural_notation_system": {
+            "members": 14,
+            "mean_complexity": 57.929,
+            "mean_complexity_at_last_pass": 62.714,
+            "change_since_last_pass": -4.785,
+            "first_seen_shift": 0,
+            "last_seen_shift": 13
+          },
+          "narrative_scene_threshold": {
+            "members": 7,
+            "mean_complexity": 39.0,
+            "mean_complexity_at_last_pass": 39.667,
+            "change_since_last_pass": -0.667,
+            "first_seen_shift": 0,
+            "last_seen_shift": 13
+          },
+          "narrative_scene_interior_moment": {
+            "members": 23,
+            "mean_complexity": 38.652,
+            "mean_complexity_at_last_pass": 40.333,
+            "change_since_last_pass": -1.681,
+            "first_seen_shift": 0,
+            "last_seen_shift": 13
+          },
+          "narrative_scene_anticipatory_threshold": {
+            "members": 1,
+            "mean_complexity": 25.0,
+            "mean_complexity_at_last_pass": null,
+            "change_since_last_pass": null,
+            "first_seen_shift": 9,
+            "last_seen_shift": 9
+          }
+        },
+        "crosswalk": [
+          {
+            "category": "structural_notation_system",
+            "tier": null,
+            "confidence": "none",
+            "note": "This is a functional category based on symbolic/formal properties (lambda calculus, constraint declaration, meta-level substrate), not a taxonomic rank. It does not map to Kingdom\u2013Species hierarchy, which organizes biological entities by evolutionary relationship and morphology. No reliable equivalent exists."
+          },
+          {
+            "category": "narrative_scenes",
+            "tier": null,
+            "confidence": "none",
+            "note": "This is a thematic/stylistic grouping (prose fragments with certain aesthetic properties: filtered light, psychological suspension). It has no basis in biological classification. The hierarchical structure here is functional/compositional, not taxonomic."
+          },
+          {
+            "category": "narrative_scene_threshold",
+            "tier": null,
+            "confidence": "none",
+            "note": "A subcategory defined by narrative function (action-driven, external event, character movement through boundary) and tone. Not a biological taxon. Mapping to a Linnaean tier would misrepresent the system's nature."
+          },
+          {
+            "category": "narrative_scene_interior_moment",
+            "tier": null,
+            "confidence": "none",
+            "note": "A subcategory defined by narrative and psychological properties (internal deliberation, suspended action, filtered light imagery). This is a stylistic/thematic classification, not a biological one. No mapping is reliable."
+          },
+          {
+            "category": "narrative_scene_precipice",
+            "tier": null,
+            "confidence": "none",
+            "note": "Listed as a possible future category for hybrid forms. Defined by narrative tension (poised between interior and threshold states). Not a biological taxon."
+          },
+          {
+            "category": "narrative_scene_sensory_threshold",
+            "tier": null,
+            "confidence": "none",
+            "note": "Listed as a possible future category for phenomenological sensory moments (suspended sensation anterior to deliberation or action). A narrative/aesthetic category, not a biological one."
+          },
+          {
+            "category": "narrative_scene_anticipatory_threshold",
+            "tier": null,
+            "confidence": "none",
+            "note": "A category inferred from the specimen filing list. Appears to be another narrative subcategory (anticipatory tone + threshold imagery). Not a biological taxon."
+          }
+        ],
+        "consistency_notes": "This system is entirely non-biological and non-taxonomic. It organizes literary/formal specimens by structural substrate (structural notation vs. narrative prose) and by narrative/psychological function (action-driven, interior, sensory-phenomenological, anticipatory). The hierarchical structure resembles a taxonomy but serves a different purpose: mapping compositional and thematic properties of text objects, not evolutionary descent or morphological homology. The anomalies section itself signals the system is still evolving and that specimens may not fit cleanly into existing categories\u2014a sign of active, functional classification rather than fixed Linnaean ranks. No tier mapping is appropriate; attempting one would erase the system's actual nature.",
+        "crosswalk_available": true,
+        "crosswalk_note": "For human legibility only. Carries no authority over the native system and does not feed back into it (DNT-CLS-001 Section 2)."
+      }
+    },
+    "relational_record": {
+      "shift": 14,
+      "at": "2026-08-17T05:50:46Z",
+      "by": "cartographer",
+      "payload": {
+        "pass_at_shift": 14,
+        "method": "computed from the record; no model call made",
+        "zone_definition": "position on the resource channel",
+        "zones": {
+          "channel_proximate": {
+            "position_range": [
+              0.66,
+              1.0
+            ],
+            "specimen_count": 15,
+            "categories_present": {
+              "structural_notation_system": 14,
+              "Computational Structures - Nested Iterations": 1
+            },
+            "mean_complexity": 56.867
+          },
+          "channel_intermediate": {
+            "position_range": [
+              0.34,
+              0.66
+            ],
+            "specimen_count": 0,
+            "categories_present": {},
+            "mean_complexity": null
+          },
+          "channel_distant": {
+            "position_range": [
+              0.0,
+              0.34
+            ],
+            "specimen_count": 32,
+            "categories_present": {
+              "narrative_scene_threshold": 7,
+              "narrative_scene_interior_moment": 23,
+              "Sensory Observation - Atmospheric Detail": 1,
+              "narrative_scene_anticipatory_threshold": 1
+            },
+            "mean_complexity": 37.438
+          }
+        },
+        "specimens_placed": 47,
+        "density_by_zone": {
+          "channel_proximate": 0.3191,
+          "channel_intermediate": 0.0,
+          "channel_distant": 0.6809
+        },
+        "category_co_occurrence_within_a_shift": {
+          "narrative_scene_interior_moment | narrative_scene_threshold": 6,
+          "narrative_scene_interior_moment | structural_notation_system": 14,
+          "narrative_scene_threshold | structural_notation_system": 6,
+          "Computational Structures - Nested Iterations | Sensory Observation - Atmospheric Detail": 1,
+          "Computational Structures - Nested Iterations | narrative_scene_interior_moment": 1,
+          "Computational Structures - Nested Iterations | structural_notation_system": 1,
+          "Sensory Observation - Atmospheric Detail | narrative_scene_interior_moment": 1,
+          "Sensory Observation - Atmospheric Detail | structural_notation_system": 1,
+          "narrative_scene_anticipatory_threshold | narrative_scene_interior_moment": 1,
+          "narrative_scene_anticipatory_threshold | structural_notation_system": 1
+        },
+        "resource_flow_this_pass": 0.9031,
+        "note": "Positional and relational only. This record does not classify, rank, or interpret; it counts what the specimen record already contains (physics.md Section 4.5)."
+      }
+    }
   }
 }

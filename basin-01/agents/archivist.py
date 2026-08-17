@@ -48,7 +48,7 @@ from __future__ import annotations
 import json
 import os
 import sys
-from typing import Any, Dict, List, Optional, Sequence
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -83,6 +83,60 @@ LINNAEAN_TIERS = (
 # ---------------------------------------------------------------------------
 
 
+# Keys a classification system might use to name one of its own categories.
+# Checked in addition to a plain walk of the whole structure, never instead of
+# it — the Namer owns the shape and may use none of these.
+_LABEL_KEYS = ("category", "subcategory", "label", "name", "id", "key")
+
+
+def collect_labels(node: Any) -> Tuple[set, set]:
+    """Walk the authored system and return (all_strings, label_like_strings).
+
+    The Namer's system has no fixed shape by design (DNT-CLS-001 Section 1), so
+    this cannot assume categories live at the top level, or in dict keys, or
+    under any particular field. It walks the whole structure.
+
+    That assumption is exactly what broke the first version of this function.
+    The Namer restructured into two top-level containers with its categories
+    nested inside them as objects — a genuine hierarchy. Comparing only
+    top-level keys then reported every live category as "coined then dropped",
+    which is the opposite of what had happened: they had moved deeper, not
+    disappeared. A detector that mistakes a system developing structure for a
+    system losing categories would feed exactly the wrong signal into the
+    Section 11 checkpoint.
+    """
+    all_strings = set()
+    explicit_labels = set()      # named under a label-like key
+    top_level_keys = set()       # dict keys at depth 0
+
+    def walk(node: Any, parent_key: Optional[str] = None, depth: int = 0) -> None:
+        if isinstance(node, dict):
+            for key, value in node.items():
+                if isinstance(key, str):
+                    all_strings.add(key)
+                    if depth == 0:
+                        top_level_keys.add(key)
+                walk(value, key if isinstance(key, str) else None, depth + 1)
+        elif isinstance(node, list):
+            for item in node:
+                walk(item, parent_key, depth)
+        elif isinstance(node, str):
+            all_strings.add(node)
+            if parent_key and parent_key.lower() in _LABEL_KEYS:
+                explicit_labels.add(node)
+
+    walk(node)
+
+    # If the system names its categories explicitly, those names are the
+    # categories and the surrounding dict keys are its field names — `members`,
+    # `complexity_range`, `subcategories` are structure, not categories, and
+    # reporting them as "authored but never filed" would be noise dressed up as
+    # a finding. Only when nothing is named explicitly do dict keys serve as the
+    # labels, which is the flat shape a simpler system would produce.
+    labels = explicit_labels if explicit_labels else top_level_keys
+    return all_strings, labels
+
+
 def detect_drift(
     native: Any,
     category_stats: Dict[str, Any],
@@ -92,13 +146,16 @@ def detect_drift(
 
     Returns findings only. Nothing here corrects anything.
     """
-    authored = set(native.keys()) if isinstance(native, dict) else set()
+    present_anywhere, authored = collect_labels(native)
     filed = set(category_stats.keys())
+    # A label is only "dropped" if it appears nowhere in the authored system at
+    # any depth — not merely absent from the top level.
+    still_present = {label for label in filed if label in present_anywhere}
 
     # Coined and used to file real specimens, but absent from the system the
-    # Namer most recently wrote. The specimen records still carry the label, so
-    # the record and the current system disagree.
-    dropped = sorted(filed - authored)
+    # Namer most recently wrote, at any depth. The specimen records still carry
+    # the label, so the record and the current system disagree.
+    dropped = sorted(filed - still_present)
 
     # Present in the authored system but never used to file anything.
     unused = sorted(authored - filed)
