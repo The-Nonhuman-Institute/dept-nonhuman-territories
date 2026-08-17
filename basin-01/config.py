@@ -269,6 +269,15 @@ OLLAMA_NAMER_RECENT_SPECIMEN_WINDOW = 4
 # the output cap only delays that; bounding the input fixes it.
 ARCHIVIST_PERSISTENCE_WINDOW = 8
 
+# The terrain's physics runs free — life.py makes no model call. Cost enters
+# only where the terrain has to be turned into words: a trace drawn for
+# something newly arisen, and the Namer's observation pass. Both are bounded,
+# which is the same problem physics.md Section 8's two tiers describe: the
+# cover layer is counted, individuals are looked at, and not everything can be
+# looked at every interval.
+MAX_TRACES_PER_SHIFT = 3        # newly arisen things given a substrate trace
+MAX_OBSERVATIONS_PER_SHIFT = 5  # individuals the Namer looks at per shift
+
 
 def namer_window() -> int:
     """How many recent specimen records the Namer is shown, per phase."""

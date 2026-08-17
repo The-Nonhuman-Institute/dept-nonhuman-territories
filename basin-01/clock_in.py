@@ -96,6 +96,8 @@ import terrain_io
 import generator_a
 import generator_b
 import namer
+import observer
+import life
 
 
 # A specimen not seen again after this many shifts resolves to a defined
@@ -243,6 +245,7 @@ def resolve_end_states(memory: Dict[str, Any], shift_number: int) -> int:
     seen again settles into dormancy: an inert feature of the terrain rather
     than an active specimen.
     """
+    world = memory.get("world", {})
     index = memory.setdefault("specimen_index", {})
     resolved = 0
     for specimen_id, entry in index.items():
@@ -394,46 +397,70 @@ def run_shift(dry_run: bool = False) -> int:
                   % ("summary written" if keeper_outcome.get("written")
                      else "no summary this shift (previous retained)"))
 
-        # -- Generators: self-initiating, no write capability ---------------
-        # Terrain-interaction mode: each Generator sees the flow actually
-        # available at its own position after occupancy, not the terrain-wide
-        # figure. Replication mode: prior specimens may claim initiation slots.
-        flow_a = config.effective_flow(
-            flow, local_depletion(transaction.memory, config.GENERATOR_A_POSITION))
-        flow_b = config.effective_flow(
-            flow, local_depletion(transaction.memory, config.GENERATOR_B_POSITION))
-        claimed_a = claim_replication_slots(
-            transaction.memory, shift_number, "generator_a",
-            generator_a.INITIATIONS_PER_SHIFT)
-        claimed_b = claim_replication_slots(
-            transaction.memory, shift_number, "generator_b",
-            generator_b.initiation_count(
-                generator_b.scarcity(config.GENERATOR_B_POSITION, flow_b)))
+        # -- The terrain lives ----------------------------------------------
+        # This is free: life.py makes no model call. Everything that follows is
+        # the terrain being turned into a record, which is the part that costs.
+        world = transaction.memory.setdefault("world", life.seed_state())
+        if not any(c["census_density"] > 0 for c in world["cells"]):
+            # First light. Two arrivals seed the ground, one at each Generator's
+            # position; everything after this the terrain does itself.
+            life.seed_census(world, int(config.GENERATOR_A_POSITION * (life.CELL_COUNT - 1)),
+                             generator_a.SUBSTRATE)
+            life.seed_census(world, int(config.GENERATOR_B_POSITION * (life.CELL_COUNT - 1)),
+                             generator_b.SUBSTRATE)
 
-        emissions_a, halt_a = generator_a.run(
-            shift_number, flow_a, ledger, source_material=claimed_a)
-        if halt_a:
-            halts.append("generator_a %s" % halt_a)
-        print("generator_a  : %d emission(s), flow %.3f (local)%s%s"
-              % (len(emissions_a), flow_a,
-                 ", %d replicated" % len(claimed_a) if claimed_a else "",
-                 "  HALTED" if halt_a else ""))
+        living = life.step(world, shift_number, flow)
+        print("terrain      : %d living, %d arose, %d ended, %d links, cover in %d cell(s)"
+              % (len(world["individuals"]), len(living["arose_from_census"]),
+                 len(living["ended"]), len(living["links_formed"]),
+                 life.census_summary(world)["cells_with_cover"]))
 
-        emissions_b, halt_b = generator_b.run(
-            shift_number, flow_b, ledger, source_material=claimed_b)
-        if halt_b:
-            halts.append("generator_b %s" % halt_b)
-        print("generator_b  : %d emission(s), flow %.3f (local)%s%s"
-              % (len(emissions_b), flow_b,
-                 ", %d replicated" % len(claimed_b) if claimed_b else "",
-                 "  HALTED" if halt_b else ""))
+        # -- Generators: a substrate trace for what newly arrived -------------
+        # Generators no longer produce the terrain's activity. They are how
+        # something newly arisen acquires the material it is made of.
+        traces: Dict[str, str] = transaction.memory.setdefault("traces", {})
+        newly = living["arose_from_census"] + [c for _, c in living["replicated"]]
+        for identifier in newly[: config.MAX_TRACES_PER_SHIFT]:
+            being = world["individuals"].get(identifier)
+            if not being or identifier in traces:
+                continue
+            module = generator_a if being["substrate"] == generator_a.SUBSTRATE else generator_b
+            parent_trace = traces.get(being.get("parent_id") or "", None)
+            material = ([{"content": parent_trace, "specimen_id": being["parent_id"]}]
+                        if parent_trace else None)
+            emissions, halt = module.run(
+                shift_number, flow, ledger,
+                source_material=material)
+            if halt:
+                halts.append("%s %s" % (module.ROLE, halt))
+                break
+            if emissions:
+                traces[identifier] = emissions[0]["content"]
 
-        emissions = emissions_a + emissions_b
+        # -- Namer: observes what is living ----------------------------------
+        observed_before = transaction.memory.setdefault("observed_ids", [])
+        chosen = observer.select_for_observation(
+            world, shift_number, observed_before, config.MAX_OBSERVATIONS_PER_SHIFT)
 
-        # -- Namer: classification and the code-enforced logging tier -------
+        observations = []
+        for being in chosen:
+            record = observer.describe_individual(
+                being, shift_number, traces.get(being["id"]))
+            observations.append({
+                "specimen_id": record["specimen_id"],
+                "source_role": "terrain",
+                "substrate": record["substrate"],
+                "complexity": record["shifts_present"],
+                "content": observer.observation_text(record),
+                "measurements": record,
+            })
+        for being in chosen:
+            if being["id"] not in observed_before:
+                observed_before.append(being["id"])
+
         outcome = namer.run(
             shift_number=shift_number,
-            emissions=emissions,
+            emissions=observations,
             writer=terrain_io.writer_for_role(transaction, "namer"),
             ledger=ledger,
             native=transaction.taxonomy.get("native", {}),
@@ -443,14 +470,29 @@ def run_shift(dry_run: bool = False) -> int:
         )
         if outcome.get("halt_reason"):
             halts.append("namer %s" % outcome["halt_reason"])
-        print("namer        : %d classified (%d individual, %d aggregate, "
+        print("namer        : %d observed (%d individual, %d aggregate, "
               "%d anomalous, %d unresolved)"
               % (outcome["classified"], outcome["individual_records"],
                  outcome["aggregate_records"], outcome["anomalous"],
                  outcome["unresolved"]))
-        if outcome.get("parse_failed"):
-            print("               response unparseable — logged as unresolved, "
-                  "not as anomalies")
+
+        # The cover layer, recorded as a census rather than per instance.
+        census = observer.census_observation(world)
+        transaction.memory["census"] = census
+
+        # Everything that ended, with its end-state. Nothing dropped.
+        for gone in observer.ended_since(world, shift_number):
+            terrain_io.writer_for_role(transaction, "namer").append_anomaly({
+                "specimen_id": gone["id"],
+                "record_tier": "ended",
+                "resolution": gone.get("end_state", "dissolved"),
+                "is_classification_outcome": False,
+                "shifts_present": gone.get("age"),
+                "position_cell": gone.get("cell"),
+                "descendants": gone.get("descendants"),
+                "note": "Ran out of light and ended; what it held stayed where it fell.",
+            })
+        emissions = observations
 
         # -- Low-frequency roles, behind their cadence gates ----------------
         for role_name in ("archivist", "cartographer"):
@@ -502,6 +544,7 @@ def run_shift(dry_run: bool = False) -> int:
     memory["cumulative_cost_usd"] = round(ledger.cumulative_total, 6)
     memory["taxonomy_structure"] = outcome.get("taxonomy_structure")
 
+    world = memory.get("world", {})
     index = memory.setdefault("specimen_index", {})
     # The Namer's own persistence wording per specimen, keyed by id, so the
     # index carries what it actually wrote (physics.md Section 5).
@@ -510,14 +553,15 @@ def run_shift(dry_run: bool = False) -> int:
             "persistence_native", "")
         for record in outcome.get("records", []) or []
     }
-    for position, emission in enumerate(emissions):
-        specimen_id = namer._specimen_id(shift_number, position)
+    for emission in emissions:
+        specimen_id = emission["specimen_id"]
+        measurements = emission.get("measurements", {})
         complexity = int(emission.get("complexity") or 0)
         index[specimen_id] = {
             "source_role": emission["source_role"],
             "substrate": emission["substrate"],
             "complexity": complexity,
-            "position": emission.get("position"),
+            "position": measurements.get("position_on_gradient"),
             "content": emission.get("content", ""),
             "first_seen_shift": shift_number,
             "last_seen_shift": shift_number,
@@ -528,8 +572,8 @@ def run_shift(dry_run: bool = False) -> int:
                 config.REPLICATION_PERSISTENCE_SHIFTS
                 if config.is_replication_eligible(complexity) else 0
             ),
-            "parent_id": emission.get("parent_id"),
-            "generation": int(emission.get("generation", 0)),
+            "parent_id": measurements.get("parent_id"),
+            "generation": int(measurements.get("generation", 0) or 0),
             "persistence_native": persistence_by_id.get(specimen_id, ""),
         }
 
@@ -538,15 +582,8 @@ def run_shift(dry_run: bool = False) -> int:
     # Specimens recorded before terrain-interaction mode existed carry no
     # position, so they hold no local resource and release none. They are not
     # retrofitted: the record says what it said.
-    releasing = [
-        float(entry["position"])
-        for entry in index.values()
-        if entry.get("position") is not None
-        and not entry.get("end_state")
-        and shift_number - int(entry.get("last_seen_shift", shift_number)) >= DORMANCY_AFTER_SHIFTS
-    ]
-    dormant = resolve_end_states(memory, shift_number)
-    depletion = apply_terrain_interaction(memory, emissions, releasing)
+
+    dormant = len(living.get("ended", []))
 
     counts = memory.setdefault("specimen_counts", {})
     counts["total"] = int(counts.get("total", 0)) + outcome["classified"]
@@ -584,10 +621,13 @@ def run_shift(dry_run: bool = False) -> int:
             "phase": config.PHASE,
             "model": config.model_for_role("namer"),
             "resource_flow": flow,
-            "resource_flow_local": {"generator_a": flow_a, "generator_b": flow_b},
-            "resource_depletion": depletion,
-            "replicated_emissions": sum(1 for e in emissions if e.get("replicated")),
-            "lineage_generations": sorted({int(e.get("generation", 0)) for e in emissions}),
+            "living": len(world.get("individuals", {})),
+            "arose_this_shift": len(living.get("arose_from_census", [])),
+            "ended_this_shift": len(living.get("ended", [])),
+            "replicated_this_shift": len(living.get("replicated", [])),
+            "links_formed": len(living.get("links_formed", [])),
+            "light_along_links": living.get("light_along_links", 0.0),
+            "census": census,
             "emissions": len(emissions),
             "classified": outcome["classified"],
             "individual_records": outcome["individual_records"],
@@ -624,10 +664,12 @@ def run_shift(dry_run: bool = False) -> int:
     print("taxonomy        : depth %s, diverged from a flat list: %s"
           % (structure.get("max_depth"), structure.get("diverged_from_flat_list")))
     print("resolved dormant: %d" % dormant)
-    print("replicated      : %d of %d emission(s)"
-          % (sum(1 for e in emissions if e.get("replicated")), len(emissions)))
-    print("local flow      : A %.3f  B %.3f   depletion %s"
-          % (flow_a, flow_b, depletion))
+    print("arose / ended   : %d / %d   links formed %d"
+          % (len(living.get("arose_from_census", [])), len(living.get("ended", [])),
+             len(living.get("links_formed", []))))
+    print("terrain         : %d living, cover in %d of %d cells, residue %.1f"
+          % (len(world.get("individuals", {})), census["cells_occupied"],
+             census["cells_total"], census["residue_pool"]))
     print("notable events  : %s" % ("yes" if notable else "no"))
     print("tokens          : %d in, %d out (%d calls)"
           % (ledger.shift_input_tokens, ledger.shift_output_tokens, ledger.calls))

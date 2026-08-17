@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BASIN-01 — Observation Deck</title>
+<style>
+  :root {
+    --terrain-black:#0A0A0A; --territorial-green:#3B4A2F; --warm-paper:#E9E3D6;
+    --structural-grey:#7A8086; --field-white:#F6F6F4;
+  }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:var(--terrain-black); overflow:hidden;
+    color:var(--warm-paper);
+    font:13px/1.5 ui-monospace,"Courier New",Courier,monospace; }
+  canvas { display:block; }
+  .panel { position:fixed; background:rgba(10,10,10,.82); border:1px solid #2a2f26;
+    padding:12px 14px; backdrop-filter:blur(3px); }
+  #hud { top:14px; left:14px; max-width:290px; }
+  #hud h1 { font:600 15px/1.2 Georgia,'Times New Roman',serif; margin:0 0 2px;
+    letter-spacing:.04em; color:var(--field-white); }
+  #hud .sub { color:var(--structural-grey); font-size:11px; margin-bottom:10px; }
+  #hud dl { display:grid; grid-template-columns:auto 1fr; gap:2px 10px; margin:0; }
+  #hud dt { color:var(--structural-grey); }
+  #hud dd { margin:0; color:var(--field-white); }
+  #help { bottom:14px; left:14px; color:var(--structural-grey); font-size:11px; }
+  #help b { color:var(--warm-paper); font-weight:400; }
+  #record { top:14px; right:14px; width:330px; max-height:calc(100vh - 28px);
+    overflow:auto; display:none; }
+  #record h2 { font:600 13px/1.3 Georgia,serif; margin:0 0 2px; color:var(--field-white);
+    letter-spacing:.05em; }
+  #record .id { color:var(--structural-grey); font-size:11px; margin-bottom:10px; }
+  #record dl { display:grid; grid-template-columns:auto 1fr; gap:2px 10px; margin:0 0 10px; }
+  #record dt { color:var(--structural-grey); }
+  #record dd { margin:0; }
+  #record pre { white-space:pre-wrap; word-break:break-word; font-size:10.5px;
+    background:#121310; border:1px solid #23261f; padding:8px; margin:0;
+    color:#b9b4a6; max-height:190px; overflow:auto; }
+  .bar { height:4px; background:#23261f; margin:2px 0 6px; }
+  .bar span { display:block; height:4px; background:var(--territorial-green); }
+  .close { float:right; cursor:pointer; color:var(--structural-grey); }
+  #loading { position:fixed; inset:0; display:grid; place-items:center;
+    background:var(--terrain-black); z-index:10; }
+</style>
+</head>
+<body>
+<div id="loading">loading terrain…</div>
+
+<div class="panel" id="hud">
+  <h1>BASIN-01</h1>
+  <div class="sub">Department of Nonhuman Territories · observation deck</div>
+  <dl>
+    <dt>shift</dt><dd id="h-shift">—</dd>
+    <dt>living</dt><dd id="h-living">—</dd>
+    <dt>cover</dt><dd id="h-cover">—</dd>
+    <dt>links</dt><dd id="h-links">—</dd>
+    <dt>flow</dt><dd id="h-flow">—</dd>
+    <dt>ended</dt><dd id="h-ended">—</dd>
+  </dl>
+</div>
+
+<div class="panel" id="record">
+  <span class="close" onclick="closeRecord()">close ✕</span>
+  <h2 id="r-title">—</h2>
+  <div class="id" id="r-id">—</div>
+  <dl id="r-fields"></dl>
+  <div id="r-trace"></div>
+</div>
+
+<div class="panel" id="help">
+  <b>W A S D</b> move &nbsp; <b>mouse</b> look &nbsp; <b>shift</b> faster
+  &nbsp; <b>space/C</b> up·down &nbsp; <b>click</b> a form to read its record
+  &nbsp; <b>Esc</b> release cursor
+</div>
+
+<script type="module">
+import * as THREE from './three.module.js';
+
+const VALLEY_WIDTH = 26;      // display width across the gradient
+const CELL_SPACING = 3.2;     // spacing between gradient bands
+
+let scene, camera, renderer, raycaster;
+let beingMeshes = [];
+let world = null;
+
+const keys = {};
+const velocity = new THREE.Vector3();
+let yaw = 0, pitch = 0, pointerLocked = false;
+
+init();
+
+async function init() {
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x07080a);
+  scene.fog = new THREE.FogExp2(0x07080a, 0.011);
+
+  camera = new THREE.PerspectiveCamera(62, innerWidth/innerHeight, 0.1, 500);
+  camera.position.set(0, 6, CELL_SPACING * 6);
+
+  renderer = new THREE.WebGLRenderer({ antialias:true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(innerWidth, innerHeight);
+  document.body.appendChild(renderer.domElement);
+  raycaster = new THREE.Raycaster();
+
+  scene.add(new THREE.AmbientLight(0x2a3348, 0.7));
+  const key = new THREE.DirectionalLight(0x9fb4d8, 0.35);
+  key.position.set(-20, 30, 10); scene.add(key);
+
+  try {
+    world = await (await fetch('./world.json?t=' + Date.now())).json();
+  } catch (e) {
+    document.getElementById('loading').textContent =
+      'could not load world.json — run:  python3 world_export.py';
+    return;
+  }
+  build(world);
+  document.getElementById('loading').style.display = 'none';
+  bindControls();
+  animate();
+}
+
+function cellZ(index, count) {
+  // The data-stream sits at the far end; the margin is behind the camera start.
+  return (count - 1 - index) * CELL_SPACING - (count - 1) * CELL_SPACING / 2;
+}
+
+function build(w) {
+  const n = w.cell_count;
+
+  // --- the ground: one band per cell, darker where nothing grows -----------
+  for (const cell of w.cells) {
+    const z = cellZ(cell.index, n);
+    const shade = 0.04 + cell.influx * 0.012;
+    const ground = new THREE.Mesh(
+      new THREE.PlaneGeometry(VALLEY_WIDTH, CELL_SPACING),
+      new THREE.MeshStandardMaterial({
+        color: new THREE.Color(shade * 0.7, shade * 0.78, shade),
+        roughness: 1, metalness: 0,
+      }));
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.set(0, 0, z);
+    scene.add(ground);
+
+    // --- cover: density drawn as how much stands there, not as a shape ----
+    if (cell.cover > 0.001) {
+      const blades = Math.max(1, Math.round(cell.cover * 90));
+      const geo = new THREE.BufferGeometry();
+      const pts = new Float32Array(blades * 6);
+      for (let i = 0; i < blades; i++) {
+        const x = (hash(cell.index * 977 + i) * 2 - 1) * (VALLEY_WIDTH / 2 - 0.5);
+        const zz = z + (hash(cell.index * 31 + i * 7) - 0.5) * CELL_SPACING * 0.9;
+        const h = 0.25 + cell.cover * 1.15 * (0.55 + hash(i * 13) * 0.9);
+        pts.set([x, 0, zz, x, h, zz], i * 6);
+      }
+      geo.setAttribute('position', new THREE.BufferAttribute(pts, 3));
+      const isStructural = cell.substrate === 'structural';
+      scene.add(new THREE.LineSegments(geo, new THREE.LineBasicMaterial({
+        color: isStructural ? 0x5f8f7a : 0x6f7f4f,
+        transparent: true, opacity: 0.30 + cell.cover * 0.45,
+      })));
+    }
+
+    // --- residue: light that fell and has not been taken up yet -----------
+    if (cell.residue > 0.05) {
+      const glow = new THREE.Mesh(
+        new THREE.PlaneGeometry(VALLEY_WIDTH * 0.7, CELL_SPACING * 0.8),
+        new THREE.MeshBasicMaterial({
+          color: 0x6a5a3a, transparent: true,
+          opacity: Math.min(0.30, cell.residue * 0.035),
+        }));
+      glow.rotation.x = -Math.PI / 2;
+      glow.position.set(0, 0.02, z);
+      scene.add(glow);
+    }
+  }
+
+  // --- the data-stream: where light enters the terrain --------------------
+  const streamZ = cellZ(n - 1, n) + CELL_SPACING * 0.6;
+  const stream = new THREE.Mesh(
+    new THREE.PlaneGeometry(VALLEY_WIDTH * 1.25, CELL_SPACING * 1.5),
+    new THREE.MeshBasicMaterial({ color: 0x6fa8dc, transparent: true, opacity: 0.55 }));
+  stream.rotation.x = -Math.PI / 2;
+  stream.position.set(0, 0.03, streamZ);
+  scene.add(stream);
+  const streamLight = new THREE.PointLight(0x86b9ff, 2.4, 90, 1.6);
+  streamLight.position.set(0, 3, streamZ);
+  scene.add(streamLight);
+
+  // --- the living: brightness is light held, size is how long it has been here
+  const byId = {};
+  for (const b of w.beings) {
+    const z = cellZ(b.cell, n);
+    const x = b.lateral * (VALLEY_WIDTH / 2 - 1.6);
+    const size = 0.34 + Math.min(1.5, b.age * 0.035);
+    const held = Math.max(0, Math.min(1, b.light / 9));
+
+    // Hue carries where its light comes from. It is a measurement, not a
+    // kind — nothing here decides what anything is.
+    const colour = new THREE.Color().setRGB(
+      0.28 + b.from_links * 0.62,
+      0.55 + b.from_cover * 0.35,
+      0.42 + b.from_residue * 0.45);
+
+    const mesh = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(size, 1),
+      new THREE.MeshStandardMaterial({
+        color: colour, emissive: colour,
+        emissiveIntensity: 0.25 + held * 1.5,
+        roughness: 0.45, metalness: 0.1,
+        transparent: true, opacity: 0.55 + held * 0.4,
+      }));
+    mesh.position.set(x, 0.7 + size, z);
+    mesh.userData = b;
+    scene.add(mesh);
+    beingMeshes.push(mesh);
+    byId[b.id] = mesh;
+
+    const halo = new THREE.PointLight(colour, 0.4 + held * 1.5, 9, 2);
+    halo.position.copy(mesh.position);
+    scene.add(halo);
+  }
+
+  // --- links: light moving between things ---------------------------------
+  for (const link of w.links) {
+    const a = byId[link.a], b = byId[link.b];
+    if (!a || !b) continue;
+    const geo = new THREE.BufferGeometry().setFromPoints([a.position, b.position]);
+    scene.add(new THREE.Line(geo, new THREE.LineBasicMaterial({
+      color: 0xc9a227, transparent: true,
+      opacity: Math.min(0.85, 0.25 + link.light_moved * 0.5),
+    })));
+  }
+
+  document.getElementById('h-shift').textContent = w.shift;
+  document.getElementById('h-living').textContent = w.totals.living;
+  document.getElementById('h-cover').textContent =
+    w.totals.cover_cells + ' of ' + w.cell_count + ' cells';
+  document.getElementById('h-links').textContent = w.links.length;
+  document.getElementById('h-flow').textContent = w.flow;
+  document.getElementById('h-ended').textContent = w.totals.ever_ended + ' ever';
+}
+
+function hash(n) {
+  const x = Math.sin(n * 12.9898) * 43758.5453;
+  return x - Math.floor(x);
+}
+
+// --- the field record -----------------------------------------------------
+function showRecord(b) {
+  document.getElementById('r-title').textContent = 'SPECIMEN FIELD RECORD';
+  document.getElementById('r-id').textContent = b.id + ' · ' + (b.substrate || '—');
+  const rows = [
+    ['present for', b.age + ' shift(s)'],
+    ['sightings', b.sightings],
+    ['position', b.position.toFixed(2) + ' on the gradient'],
+    ['holding', b.light.toFixed(2) + ' light'],
+    ['moved', b.moves + ' time(s)'],
+    ['arrived by', (b.origin || '').replace(/_/g, ' ')],
+    ['generation', b.generation],
+    ['descendants', b.descendants],
+  ];
+  if (b.parent_id) rows.push(['descended from', b.parent_id]);
+  let html = rows.map(r => '<dt>' + r[0] + '</dt><dd>' + r[1] + '</dd>').join('');
+  html += '<dt>from cover</dt><dd>' + pct(b.from_cover) + bar(b.from_cover) + '</dd>';
+  html += '<dt>from residue</dt><dd>' + pct(b.from_residue) + bar(b.from_residue) + '</dd>';
+  html += '<dt>along links</dt><dd>' + pct(b.from_links) + bar(b.from_links) + '</dd>';
+  const a = b.affinities || {};
+  html += '<dt>affinities</dt><dd>cover ' + fx(a.cover) + ' · residue ' + fx(a.residue)
+        + ' · links ' + fx(a.links) + '</dd>';
+  document.getElementById('r-fields').innerHTML = html;
+  document.getElementById('r-trace').innerHTML =
+    b.trace ? '<div style="color:var(--structural-grey);margin-bottom:4px">substrate as recorded</div><pre>'
+      + escapeHtml(b.trace) + '</pre>' : '';
+  document.getElementById('record').style.display = 'block';
+}
+const pct = v => Math.round(v * 100) + '%';
+const fx = v => (v === undefined ? '—' : Number(v).toFixed(2));
+const bar = v => '<div class="bar"><span style="width:' + (v * 100) + '%"></span></div>';
+const escapeHtml = s => s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+window.closeRecord = () => document.getElementById('record').style.display = 'none';
+
+// --- moving through it ----------------------------------------------------
+function bindControls() {
+  addEventListener('keydown', e => keys[e.code] = true);
+  addEventListener('keyup', e => keys[e.code] = false);
+  renderer.domElement.addEventListener('click', ev => {
+    if (!pointerLocked) { renderer.domElement.requestPointerLock(); return; }
+    raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
+    const hit = raycaster.intersectObjects(beingMeshes)[0];
+    if (hit) showRecord(hit.object.userData);
+  });
+  document.addEventListener('pointerlockchange', () => {
+    pointerLocked = document.pointerLockElement === renderer.domElement;
+  });
+  addEventListener('mousemove', e => {
+    if (!pointerLocked) return;
+    yaw -= e.movementX * 0.0022;
+    pitch = Math.max(-1.4, Math.min(1.4, pitch - e.movementY * 0.0022));
+  });
+  addEventListener('resize', () => {
+    camera.aspect = innerWidth / innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth, innerHeight);
+  });
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+  const speed = (keys['ShiftLeft'] || keys['ShiftRight']) ? 0.62 : 0.24;
+  camera.rotation.set(pitch, yaw, 0, 'YXZ');
+  velocity.set(0, 0, 0);
+  if (keys['KeyW']) velocity.z -= 1;
+  if (keys['KeyS']) velocity.z += 1;
+  if (keys['KeyA']) velocity.x -= 1;
+  if (keys['KeyD']) velocity.x += 1;
+  velocity.normalize().applyEuler(camera.rotation).multiplyScalar(speed);
+  if (keys['Space']) velocity.y += speed;
+  if (keys['KeyC']) velocity.y -= speed;
+  camera.position.add(velocity);
+  camera.position.y = Math.max(1.0, camera.position.y);
+  renderer.render(scene, camera);
+}
+</script>
+</body>
+</html>

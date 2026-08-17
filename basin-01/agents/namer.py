@@ -198,8 +198,14 @@ def measure_taxonomy_structure(native: Any) -> Dict[str, Any]:
 
 def _system_prompt() -> str:
     return (
-        "You classify specimens recorded in a bounded environment, using a "
+        "You classify specimens observed in a bounded environment, using a "
         "system of your own design.\n"
+        "\n"
+        "Each specimen is something that has been present in the environment "
+        "over one or more intervals. You are given what was measured about it: "
+        "how long it has been present, where it sits on the environment's "
+        "gradient, what it has drawn on, what it has passed to others, whether "
+        "it moved, and whether anything has descended from it.\n"
         "\n"
         "You are not issued a classification structure to fill in. The shape "
         "of your system is yours: it may be hierarchical, relational, "
@@ -221,6 +227,10 @@ def _system_prompt() -> str:
         "For each specimen also state how it persists, in your own words. You "
         "are not given a set of persistence states to choose from; describe "
         "what you observe.\n"
+        "\n"
+        "Classify by what a specimen does, not by what its substrate looks "
+        "like. Two specimens made of the same material may live entirely "
+        "differently; two made of different material may live the same way.\n"
         "\n"
         "Reply with JSON only, in this form:\n"
         "{\n"
@@ -465,7 +475,12 @@ def run(
 
     batch = [dict(e) for e in emissions]
     for index, record in enumerate(batch):
-        record["specimen_id"] = _specimen_id(shift_number, index)
+        # A specimen that already carries an identity keeps it. Something
+        # observed across many shifts has to stay the same specimen in the
+        # record, or its history is a series of strangers and no continuity of
+        # observation is possible at all.
+        if not record.get("specimen_id"):
+            record["specimen_id"] = _specimen_id(shift_number, index)
 
     if not batch:
         return outcome

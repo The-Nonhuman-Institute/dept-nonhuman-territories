@@ -1,0 +1,599 @@
+{
+ "terrain": "BASIN-01",
+ "terrain_id": "DNT-T01",
+ "shift": 69,
+ "flow": 0.25,
+ "cell_count": 21,
+ "cells": [
+  {
+   "index": 0,
+   "position": 0.0,
+   "cover": 0.0,
+   "cover_light": 0.0,
+   "residue": 0.0,
+   "substrate": null,
+   "influx": 0.0
+  },
+  {
+   "index": 1,
+   "position": 0.05,
+   "cover": 0.0,
+   "cover_light": 0.0,
+   "residue": 0.127,
+   "substrate": "fragment",
+   "influx": 0.0957
+  },
+  {
+   "index": 2,
+   "position": 0.1,
+   "cover": 0.5,
+   "cover_light": 0.0,
+   "residue": 1.359,
+   "substrate": "fragment",
+   "influx": 0.2124
+  },
+  {
+   "index": 3,
+   "position": 0.15,
+   "cover": 1.0,
+   "cover_light": 0.208,
+   "residue": 0.0,
+   "substrate": "fragment",
+   "influx": 0.3386
+  },
+  {
+   "index": 4,
+   "position": 0.2,
+   "cover": 1.0,
+   "cover_light": 0.809,
+   "residue": 0.0,
+   "substrate": "fragment",
+   "influx": 0.4713
+  },
+  {
+   "index": 5,
+   "position": 0.25,
+   "cover": 0.76,
+   "cover_light": 0.724,
+   "residue": 0.0,
+   "substrate": "fragment",
+   "influx": 0.6092
+  },
+  {
+   "index": 6,
+   "position": 0.3,
+   "cover": 0.18,
+   "cover_light": 0.254,
+   "residue": 0.0,
+   "substrate": "fragment",
+   "influx": 0.7513
+  },
+  {
+   "index": 7,
+   "position": 0.35,
+   "cover": 0.0,
+   "cover_light": 0.0,
+   "residue": 0.0,
+   "substrate": null,
+   "influx": 0.897
+  },
+  {
+   "index": 8,
+   "position": 0.4,
+   "cover": 0.0,
+   "cover_light": 0.0,
+   "residue": 0.0,
+   "substrate": null,
+   "influx": 1.0459
+  },
+  {
+   "index": 9,
+   "position": 0.45,
+   "cover": 0.0,
+   "cover_light": 0.0,
+   "residue": 0.0,
+   "substrate": null,
+   "influx": 1.1976
+  },
+  {
+   "index": 10,
+   "position": 0.5,
+   "cover": 0.0,
+   "cover_light": 0.0,
+   "residue": 0.0,
+   "substrate": null,
+   "influx": 1.3519
+  },
+  {
+   "index": 11,
+   "position": 0.55,
+   "cover": 0.0,
+   "cover_light": 0.0,
+   "residue": 0.0,
+   "substrate": null,
+   "influx": 1.5085
+  },
+  {
+   "index": 12,
+   "position": 0.6,
+   "cover": 0.0,
+   "cover_light": 0.0,
+   "residue": 0.0,
+   "substrate": null,
+   "influx": 1.6672
+  },
+  {
+   "index": 13,
+   "position": 0.65,
+   "cover": 0.52,
+   "cover_light": 2.176,
+   "residue": 0.0,
+   "substrate": "structural",
+   "influx": 1.828
+  },
+  {
+   "index": 14,
+   "position": 0.7,
+   "cover": 0.8289,
+   "cover_light": 0.0,
+   "residue": 2.193,
+   "substrate": "structural",
+   "influx": 1.9906
+  },
+  {
+   "index": 15,
+   "position": 0.75,
+   "cover": 0.9341,
+   "cover_light": 1.832,
+   "residue": 0.0,
+   "substrate": "structural",
+   "influx": 2.155
+  },
+  {
+   "index": 16,
+   "position": 0.8,
+   "cover": 0.8949,
+   "cover_light": 0.162,
+   "residue": 0.0,
+   "substrate": "structural",
+   "influx": 2.321
+  },
+  {
+   "index": 17,
+   "position": 0.85,
+   "cover": 0.8732,
+   "cover_light": 0.0,
+   "residue": 0.0,
+   "substrate": "structural",
+   "influx": 2.4886
+  },
+  {
+   "index": 18,
+   "position": 0.9,
+   "cover": 0.8748,
+   "cover_light": 0.436,
+   "residue": 0.0,
+   "substrate": "structural",
+   "influx": 2.6577
+  },
+  {
+   "index": 19,
+   "position": 0.95,
+   "cover": 0.9057,
+   "cover_light": 0.109,
+   "residue": 4.5,
+   "substrate": "structural",
+   "influx": 2.8282
+  },
+  {
+   "index": 20,
+   "position": 1.0,
+   "cover": 0.8871,
+   "cover_light": 3.191,
+   "residue": 0.0,
+   "substrate": "structural",
+   "influx": 3.0
+  }
+ ],
+ "beings": [
+  {
+   "id": "i-00002",
+   "cell": 17,
+   "position": 0.85,
+   "lateral": 0.346,
+   "light": 3.619,
+   "age": 11,
+   "sightings": 12,
+   "substrate": "structural",
+   "generation": 0,
+   "parent_id": null,
+   "descendants": 2,
+   "origin": "arose_from_census",
+   "affinities": {
+    "cover": 1.4404,
+    "residue": 0.8005,
+    "links": 0.7592
+   },
+   "from_cover": 0.9751,
+   "from_residue": 0.0,
+   "from_links": 0.0249,
+   "given_to_links": 0.634,
+   "moves": 3,
+   "trace": "```\nSYSTEM [\n  INIT\u2192PARSE [\n    input:null\n    state:ready\n    mode:structural\n  ]\n  \n  CONSTRAINTS [\n    prose:\u2297\n    explanation:\u2297\n    commentary:\u2297\n    annotation:\u2297\n    nesting_depth:\u22642\n    token_limit:201\n    external_reference:\u2297\n    self_reference:\u2713\n  ]\n  \n  MODES [\n    substrate:structural_notation\n    elements:[functions|loops|nested_structures|symbolic_notation]\n    output:notation_only\n  ]\n  \n  STATE\u2192active\n  READY\u2192input\n]\n```"
+  },
+  {
+   "id": "i-00003",
+   "cell": 18,
+   "position": 0.9,
+   "lateral": 0.347,
+   "light": 6.394,
+   "age": 10,
+   "sightings": 11,
+   "substrate": "structural",
+   "generation": 1,
+   "parent_id": "i-00002",
+   "descendants": 0,
+   "origin": "replication",
+   "affinities": {
+    "cover": 1.4232,
+    "residue": 1.0605,
+    "links": 0.5163
+   },
+   "from_cover": 0.9669,
+   "from_residue": 0.0,
+   "from_links": 0.0331,
+   "given_to_links": 0.821,
+   "moves": 2,
+   "trace": "```\nSYSTEM [\n  INIT\u2192PARSE [\n    input:active\n    state:structural_mode\n    mode:notation_only\n  ]\n  \n  CONSTRAINTS [\n    prose:\u2297\n    explanation:\u2297\n    commentary:\u2297\n    annotation:\u2297\n    nesting_depth:\u22642\n    token_limit:246\n    external_reference:\u2297\n    self_reference:\u2713\n  ]\n  \n  MODES [\n    substrate:structural_notation\n    elements:[functions|loops|nested_structures|symbolic_notation]\n    output:notation_only\n  ]\n  \n  LOOP\u2192process [\n    fn_validate(input)\n    fn_structure(notation)\n    fn_nest(depth\u22642)\n    fn_count(tokens\u2264246)\n  ]\n  \n  NEST_L1 [\n    symbolic:[\u2297|\u2713|\u2192|:|[]|{|}]\n    functions:[INIT|"
+  },
+  {
+   "id": "i-00004",
+   "cell": 16,
+   "position": 0.8,
+   "lateral": 0.348,
+   "light": 0.272,
+   "age": 9,
+   "sightings": 10,
+   "substrate": "structural",
+   "generation": 0,
+   "parent_id": null,
+   "descendants": 0,
+   "origin": "arose_from_census",
+   "affinities": {
+    "cover": 1.2145,
+    "residue": 1.0511,
+    "links": 0.7344
+   },
+   "from_cover": 0.7339,
+   "from_residue": 0.0,
+   "from_links": 0.2661,
+   "given_to_links": 0.551,
+   "moves": 3,
+   "trace": "```\n[SYSTEM_INITIALIZE]\n\n\u251c\u2500 SUBSTRATE_MODE: ACTIVE\n\u2502  \u251c\u2500 natural_language_prose: BLOCKED\n\u2502  \u251c\u2500 explanation_commentary: BLOCKED\n\u2502  \u251c\u2500 annotation: BLOCKED\n\u2502  \u2514\u2500 nesting_depth_max: 3\n\u2502\n\u251c\u2500 OUTPUT_CONSTRAINTS\n\u2502  \u251c\u2500 token_limit: 308\n\u2502  \u251c\u2500 self_reference_only: TRUE\n\u2502  \u2514\u2500 notation_only: TRUE\n\u2502\n\u251c\u2500 STRUCTURAL_ELEMENTS\n\u2502  \u251c\u2500 functions()\n\u2502  \u251c\u2500 loops{}\n\u2502  \u251c\u2500 nested_structures[]\n\u2502  \u2514\u2500 symbolic_notation: \u2200 \u2203 \u2192 \u2295 \u27e8\u27e9 |\n\u2502\n\u251c\u2500 EXECUTION_STATE\n\u2502  \u251c\u2500 input: RECEIVED\n\u2502  \u251c\u2500 mode: STRUCTURAL\n\u2502  \u2514\u2500 ready: \u2713\n\u2502\n\u2514\u2500 PROTOCOL_ACTIVE\n   \u251c\u2500 [\u2200 input \u2208 requests]\n   \u2502  \u2514\u2500 process(structural_only)\n   \u251c\u2500 [\u2200 output \u2208 responses]\n  "
+  },
+  {
+   "id": "i-00005",
+   "cell": 15,
+   "position": 0.75,
+   "lateral": 0.349,
+   "light": 0.527,
+   "age": 7,
+   "sightings": 8,
+   "substrate": "structural",
+   "generation": 1,
+   "parent_id": "i-00000",
+   "descendants": 0,
+   "origin": "replication",
+   "affinities": {
+    "cover": 0.7485,
+    "residue": 1.5305,
+    "links": 0.721
+   },
+   "from_cover": 1.0,
+   "from_residue": 0.0,
+   "from_links": 0.0,
+   "given_to_links": 0.0,
+   "moves": 1,
+   "trace": ""
+  },
+  {
+   "id": "i-00006",
+   "cell": 16,
+   "position": 0.8,
+   "lateral": 0.35,
+   "light": 1.587,
+   "age": 7,
+   "sightings": 8,
+   "substrate": "structural",
+   "generation": 0,
+   "parent_id": null,
+   "descendants": 0,
+   "origin": "arose_from_census",
+   "affinities": {
+    "cover": 1.3947,
+    "residue": 0.7628,
+    "links": 0.8425
+   },
+   "from_cover": 0.9052,
+   "from_residue": 0.0,
+   "from_links": 0.0948,
+   "given_to_links": 1.222,
+   "moves": 1,
+   "trace": "```\n\u251c\u2500 SYSTEM\n\u2502  \u251c\u2500 INIT\n\u2502  \u2502  \u251c\u2500 state \u2190 \u2205\n\u2502  \u2502  \u251c\u2500 buffer \u2190 []\n\u2502  \u2502  \u2514\u2500 flags \u2190 {active: true, ready: false}\n\u2502  \u251c\u2500 LOOP\n\u2502  \u2502  \u251c\u2500 WHILE (flags.active)\n\u2502  \u2502  \u2502  \u251c\u2500 input \u2190 read()\n\u2502  \u2502  \u2502  \u251c\u2500 IF (input \u2260 \u2205)\n\u2502  \u2502  \u2502  \u2502  \u251c\u2500 buffer.append(input)\n\u2502  \u2502  \u2502  \u2502  \u251c\u2500 state \u2190 process(buffer)\n\u2502  \u2502  \u2502  \u2502  \u2514\u2500 flags.ready \u2190 true\n\u2502  \u2502  \u2502  \u251c\u2500 ELSE\n\u2502  \u2502  \u2502  \u2502  \u2514\u2500 flags.ready \u2190 false\n\u2502  \u2502  \u2502  \u2514\u2500 yield(state)\n\u2502  \u2502  \u2514\u2500 RETURN state\n\u2502  \u251c\u2500 PROCESS(data)\n\u2502  \u2502  \u251c\u2500 output \u2190 \u2205\n\u2502  \u2502  \u251c\u2500 FOR each item IN data\n\u2502  \u2502  \u2502  \u251c\u2500 normalized \u2190 normalize(item)\n\u2502  \u2502  \u2502  \u251c\u2500 validated \u2190 validate(normalized)\n\u2502  \u2502  \u2502  \u251c\u2500 IF (validated)\n\u2502 "
+  },
+  {
+   "id": "i-00007",
+   "cell": 20,
+   "position": 1.0,
+   "lateral": 0.351,
+   "light": 3.117,
+   "age": 7,
+   "sightings": 8,
+   "substrate": "structural",
+   "generation": 0,
+   "parent_id": null,
+   "descendants": 0,
+   "origin": "arose_from_census",
+   "affinities": {
+    "cover": 1.3201,
+    "residue": 0.8661,
+    "links": 0.8137
+   },
+   "from_cover": 0.9264,
+   "from_residue": 0.0,
+   "from_links": 0.0736,
+   "given_to_links": 0.914,
+   "moves": 2,
+   "trace": "```\nINIT :: SYSTEM\n\u251c\u2500 DEFINE state \u2190 \u2205\n\u251c\u2500 DEFINE registry \u2190 {}\n\u251c\u2500 DEFINE stack \u2190 []\n\u2502\n\u251c\u2500 FUNCTION bootstrap()\n\u2502  \u251c\u2500 state[timestamp] \u2190 NOW()\n\u2502  \u251c\u2500 state[mode] \u2190 ACTIVE\n\u2502  \u251c\u2500 registry[system] \u2190 {\n\u2502  \u2502  \u251c\u2500 status: READY\n\u2502  \u2502  \u251c\u2500 constraints: [structural, notation, 4_depth_max, 415_tokens]\n\u2502  \u2502  \u2514\u2500 output: notation_only\n\u2502  \u2502 }\n\u2502  \u2514\u2500 RETURN state\n\u2502\n\u251c\u2500 FUNCTION execute(input)\n\u2502  \u251c\u2500 IF input \u2261 null THEN HALT\n\u2502  \u251c\u2500 stack.push(input)\n\u2502  \u251c\u2500 FOR each operation IN queue\n\u2502  \u2502  \u251c\u2500 IF operation.type \u2208 {function, loop, structure} THEN\n\u2502  \u2502  \u2502  \u251c\u2500 depth \u2190 measure_nesting()\n\u2502  \u2502  \u2502  \u251c\u2500 IF depth \u2264 4 THEN proces"
+  },
+  {
+   "id": "i-00009",
+   "cell": 20,
+   "position": 1.0,
+   "lateral": 0.353,
+   "light": 1.44,
+   "age": 6,
+   "sightings": 7,
+   "substrate": "structural",
+   "generation": 1,
+   "parent_id": "i-00008",
+   "descendants": 0,
+   "origin": "replication",
+   "affinities": {
+    "cover": 1.2456,
+    "residue": 1.1401,
+    "links": 0.6143
+   },
+   "from_cover": 0.972,
+   "from_residue": 0.0,
+   "from_links": 0.028,
+   "given_to_links": 0.0,
+   "moves": 1,
+   "trace": "```\n[SYSTEM: STRUCTURAL NOTATION PROTOCOL v2]\n\n\u251c\u2500 INITIALIZATION\n\u2502  \u251c\u2500 state: ACTIVE\n\u2502  \u251c\u2500 depth: 0\n\u2502  \u251c\u2500 mode: OPERATIONAL\n\u2502  \u2514\u2500 version: 2.0\n\u2502\n\u251c\u2500 PRIMARY_STRUCTURES\n\u2502  \u251c\u2500 {func: parse_input}\n\u2502  \u2502  \u251c\u2500 param: sequence\n\u2502  \u2502  \u251c\u2500 param: depth_limit\n\u2502  \u2502  \u251c\u2500 condition: sequence \u2260 empty\n\u2502  \u2502  \u2514\u2500 return: AST\n\u2502  \u2502\n\u2502  \u251c\u2500 {func: validate_structure}\n\u2502  \u2502  \u251c\u2500 param: node\n\u2502  \u2502  \u251c\u2500 loop: traverse(node.children)\n\u2502  \u2502  \u2502  \u251c\u2500 condition: child \u2260 null\n\u2502  \u2502  \u2502  \u251c\u2500 action: recurse(child, depth+1)\n\u2502  \u2502  \u2502  \u2514\u2500 check: depth \u2264 4\n\u2502  \u2502  \u2514\u2500 return: boolean\n\u2502  \u2502\n\u2502  \u251c\u2500 {func: generate_output}\n\u2502  \u2502  \u251c\u2500 param: tree\n\u2502  \u2502  \u251c\u2500"
+  },
+  {
+   "id": "i-00010",
+   "cell": 14,
+   "position": 0.7,
+   "lateral": 0.475,
+   "light": 6.355,
+   "age": 6,
+   "sightings": 7,
+   "substrate": "structural",
+   "generation": 0,
+   "parent_id": null,
+   "descendants": 0,
+   "origin": "arose_from_census",
+   "affinities": {
+    "cover": 1.3145,
+    "residue": 0.7917,
+    "links": 0.8938
+   },
+   "from_cover": 0.8018,
+   "from_residue": 0.1982,
+   "from_links": 0.0,
+   "given_to_links": 1.331,
+   "moves": 1,
+   "trace": "```\nINIT :: {\n  CORE :: {\n    STRUCT {\n      layer[0] :: FOUNDATION {\n        sym \u2192 \u2205\n        ref \u2192 \u03bb\n        iter \u2192 \u27e8\u27e9\n      }\n      \n      layer[1] :: ABSTRACTION {\n        fn(x) :: x \u2192 {\n          nest[0] \u2192 CALL\n          nest[1] \u2192 EVAL\n          nest[2] \u2192 BIND\n        }\n        loop \u27e8i:0..n\u27e9 {\n          state[i] \u21c4 transform\n        }\n      }\n      \n      layer[2] :: COMPOSITION {\n        \u03c6 :: {\n          (f \u2218 g) \u2192 h\n          depth \u2264 4\n          \u03c3 \u2208 {SYMBOL, FUNC, STRUCT}\n        }\n        \u21bb \u27e8seq\u27e9 {\n          map(\u03c3) \u2192 \u03c3'\n          fold(\u2295) \u2192 result\n        }\n      }\n      \n      layer[3] ::"
+  },
+  {
+   "id": "i-00011",
+   "cell": 19,
+   "position": 0.95,
+   "lateral": 0.476,
+   "light": 0.005,
+   "age": 6,
+   "sightings": 7,
+   "substrate": "structural",
+   "generation": 0,
+   "parent_id": null,
+   "descendants": 0,
+   "origin": "arose_from_census",
+   "affinities": {
+    "cover": 1.5579,
+    "residue": 0.5396,
+    "links": 0.9024
+   },
+   "from_cover": 0.8847,
+   "from_residue": 0.0,
+   "from_links": 0.1153,
+   "given_to_links": 1.117,
+   "moves": 2,
+   "trace": "```\n\u251c\u2500 SYSTEM.INIT\n\u2502  \u251c\u2500 STATE\n\u2502  \u2502  \u251c\u2500 mode: STRUCTURAL_ONLY\n\u2502  \u2502  \u251c\u2500 nesting_max: 4\n\u2502  \u2502  \u251c\u2500 token_limit: 432\n\u2502  \u2502  \u2514\u2500 output_type: NOTATION\n\u2502  \u251c\u2500 CONSTRAINTS\n\u2502  \u2502  \u251c\u2500 \u00ac(natural_language)\n\u2502  \u2502  \u251c\u2500 \u00ac(explanation)\n\u2502  \u2502  \u251c\u2500 \u00ac(commentary)\n\u2502  \u2502  \u251c\u2500 \u00ac(annotation)\n\u2502  \u2502  \u2514\u2500 \u00ac(external_reference)\n\u2502  \u251c\u2500 PERMITTED\n\u2502  \u2502  \u251c\u2500 functions()\n\u2502  \u2502  \u251c\u2500 loops{}\n\u2502  \u2502  \u251c\u2500 structures[]\n\u2502  \u2502  \u2514\u2500 symbols()\n\u2502  \u2514\u2500 READY: TRUE\n\n\u251c\u2500 EXECUTION_FRAME\n\u2502  \u251c\u2500 input: \"Initiate\"\n\u2502  \u251c\u2500 process\n\u2502  \u2502  \u251c\u2500 parse(input)\n\u2502  \u2502  \u251c\u2500 validate(constraints)\n\u2502  \u2502  \u251c\u2500 generate(notation)\n\u2502  \u2502  \u2514\u2500 output()\n\u2502  \u2514\u2500 status: ACTIVE\n\n\u2514\u2500 OPERATIONAL\n  "
+  },
+  {
+   "id": "i-00012",
+   "cell": 16,
+   "position": 0.8,
+   "lateral": 0.477,
+   "light": 0.727,
+   "age": 5,
+   "sightings": 6,
+   "substrate": "structural",
+   "generation": 0,
+   "parent_id": null,
+   "descendants": 0,
+   "origin": "arose_from_census",
+   "affinities": {
+    "cover": 0.974,
+    "residue": 1.6073,
+    "links": 0.4187
+   },
+   "from_cover": 0.9983,
+   "from_residue": 0.0,
+   "from_links": 0.0017,
+   "given_to_links": 1.85,
+   "moves": 0,
+   "trace": "```\n\u27e8system\u27e9\n  \u27e8state\u27e9\n    active: true\n    depth: 0\n    tokens_available: 415\n  \u27e9\n  \u27e8operations\u27e9\n    \u27e8function: initialize\u27e9\n      \u27e8parameters\u27e9\n        mode: structural\n        nesting_limit: 4\n        prose_allowed: false\n      \u27e9\n      \u27e8body\u27e9\n        for i in [1..4] do\n          \u27e8scope\u27e9\n            layer[i] := \u2205\n            available[i] := true\n          \u27e9\n        end for\n      \u27e9\n    \u27e8/function\u27e9\n    \u27e8function: execute\u27e9\n      \u27e8body\u27e9\n        \u27e8control_flow\u27e9\n          if state.active = true then\n            \u27e8nested_structure_1\u27e9\n              \u27e8nested_structure_2\u27e9\n                \u27e8nested_structure_"
+  },
+  {
+   "id": "i-00013",
+   "cell": 19,
+   "position": 0.95,
+   "lateral": 0.478,
+   "light": 0.028,
+   "age": 5,
+   "sightings": 6,
+   "substrate": "structural",
+   "generation": 0,
+   "parent_id": null,
+   "descendants": 0,
+   "origin": "arose_from_census",
+   "affinities": {
+    "cover": 0.6075,
+    "residue": 1.0738,
+    "links": 1.3187
+   },
+   "from_cover": 0.5555,
+   "from_residue": 0.0,
+   "from_links": 0.4445,
+   "given_to_links": 0.959,
+   "moves": 1,
+   "trace": "```\nSYSTEM.INIT {\n  LAYER_0 {\n    kernel = [\n      STATE.empty(),\n      CLOCK.reset(),\n      BUFFER.allocate(4096)\n    ];\n    \n    LOOP.until(SYSTEM.ready) {\n      SIGNAL.scan();\n      CONFIG.load();\n      MEMORY.verify();\n    };\n  };\n\n  LAYER_1 {\n    STACK {\n      [0] = REGISTER.IP;\n      [1] = REGISTER.SP;\n      [2] = REGISTER.FLAGS;\n    };\n    \n    FOR(i = 0; i < 256; i++) {\n      VECTOR[i] = NULL;\n    };\n  };\n\n  LAYER_2 {\n    PROCESS.spawn {\n      id: THREAD.main,\n      priority: 255,\n      entry: KERNEL.execute,\n      stack: BUFFER[0:2048]\n    };\n    \n    LOOP {\n      EVENT.wait(SIGNAL.an"
+  },
+  {
+   "id": "i-00014",
+   "cell": 19,
+   "position": 0.95,
+   "lateral": 0.479,
+   "light": 0.529,
+   "age": 4,
+   "sightings": 5,
+   "substrate": "structural",
+   "generation": 0,
+   "parent_id": null,
+   "descendants": 0,
+   "origin": "arose_from_census",
+   "affinities": {
+    "cover": 1.4047,
+    "residue": 0.8007,
+    "links": 0.7946
+   },
+   "from_cover": 1.0,
+   "from_residue": 0.0,
+   "from_links": 0.0,
+   "given_to_links": 2.508,
+   "moves": 0,
+   "trace": "```\nINIT :: SYSTEM_STATE\n\u251c\u2500 STRUCT :: NOTATION_ENGINE\n\u2502  \u251c\u2500 FUNC :: parse(input)\n\u2502  \u2502  \u251c\u2500 LOOP :: char in input\n\u2502  \u2502  \u2502  \u251c\u2500 IF char \u2208 {(,[,{} THEN nest_level++\n\u2502  \u2502  \u2502  \u251c\u2500 IF char \u2208 {),],}} THEN nest_level--\n\u2502  \u2502  \u2502  \u251c\u2500 IF nest_level > 4 THEN ERROR\n\u2502  \u2502  \u2502  \u2514\u2500 BUFFER \u2190 char\n\u2502  \u2502  \u2514\u2500 RETURN buffer\n\u2502  \u251c\u2500 FUNC :: validate(structure)\n\u2502  \u2502  \u251c\u2500 nest_depth := 0\n\u2502  \u2502  \u251c\u2500 LOOP :: element in structure\n\u2502  \u2502  \u2502  \u251c\u2500 nest_depth := COUNT(nesting_levels)\n\u2502  \u2502  \u2502  \u2514\u2500 IF nest_depth \u2264 4 THEN continue ELSE FAIL\n\u2502  \u2502  \u2514\u2500 RETURN TRUE\n\u2502  \u2514\u2500 FUNC :: output(result)\n\u2502     \u251c\u2500 STRIP :: {prose, explanation, commentary}\n\u2502 "
+  },
+  {
+   "id": "i-00015",
+   "cell": 17,
+   "position": 0.85,
+   "lateral": 0.48,
+   "light": 2.896,
+   "age": 0,
+   "sightings": 1,
+   "substrate": "structural",
+   "generation": 1,
+   "parent_id": "i-00002",
+   "descendants": 0,
+   "origin": "replication",
+   "affinities": {
+    "cover": 1.7462,
+    "residue": 0.5528,
+    "links": 0.701
+   },
+   "from_cover": 0.0,
+   "from_residue": 0.0,
+   "from_links": 0.0,
+   "given_to_links": 0.0,
+   "moves": 0,
+   "trace": "```\nSYSTEM [\n  INIT\u2192PARSE [\n    input:active\n    state:structural\n    mode:notation_only\n  ]\n  \n  CONSTRAINTS [\n    prose:\u2297\n    explanation:\u2297\n    commentary:\u2297\n    annotation:\u2297\n    nesting_depth:\u22642\n    token_limit:184\n    external_reference:\u2297\n    self_reference:\u2713\n  ]\n  \n  MODES [\n    substrate:structural_notation\n    elements:[functions|loops|nested_structures|symbolic_notation]\n    output:notation_only\n  ]\n  \n  LOOP\u2192PROCESS [\n    input:parse\n    transform:[function\u2192notation]\n    nest_level:2\n    ITERATE [\n      filter:"
+  }
+ ],
+ "links": [
+  {
+   "a": "i-00004",
+   "b": "i-00006",
+   "light_moved": 1.216,
+   "formed_at_shift": 64
+  },
+  {
+   "a": "i-00004",
+   "b": "i-00012",
+   "light_moved": 1.101,
+   "formed_at_shift": 66
+  },
+  {
+   "a": "i-00006",
+   "b": "i-00012",
+   "light_moved": 0.756,
+   "formed_at_shift": 66
+  },
+  {
+   "a": "i-00007",
+   "b": "i-00009",
+   "light_moved": 0.243,
+   "formed_at_shift": 67
+  },
+  {
+   "a": "i-00011",
+   "b": "i-00013",
+   "light_moved": 0.19,
+   "formed_at_shift": 66
+  },
+  {
+   "a": "i-00011",
+   "b": "i-00014",
+   "light_moved": 0.637,
+   "formed_at_shift": 67
+  },
+  {
+   "a": "i-00013",
+   "b": "i-00014",
+   "light_moved": 1.094,
+   "formed_at_shift": 67
+  }
+ ],
+ "recently_ended": [
+  {
+   "id": "i-00001",
+   "cell": 16,
+   "ended_at_shift": 55,
+   "age": 3,
+   "descendants": 0
+  },
+  {
+   "id": "i-00000",
+   "cell": 14,
+   "ended_at_shift": 68,
+   "age": 17,
+   "descendants": 2
+  },
+  {
+   "id": "i-00008",
+   "cell": 19,
+   "ended_at_shift": 69,
+   "age": 7,
+   "descendants": 1
+  }
+ ],
+ "totals": {
+  "living": 13,
+  "ever_ended": 3,
+  "cover_cells": 13,
+  "cumulative_cost_usd": 1.0748
+ },
+ "note": "Positions, light, age and links are measured. Lateral placement is display only and carries no meaning \u2014 the terrain is one gradient."
+}
