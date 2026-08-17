@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import json
 import os
+import socket
 import urllib.error
 import urllib.request
 from typing import Dict, List, Optional, Tuple
@@ -74,7 +75,8 @@ TERRAIN_NAME = "BASIN-01"
 
 OLLAMA_MODEL = "gemma3:4b"          # steward-selected; see build notes
 OLLAMA_ENDPOINT = "http://127.0.0.1:11434/api/generate"
-OLLAMA_TIMEOUT_SECONDS = 180
+OLLAMA_TIMEOUT_SECONDS = 600      # CPU inference on the local model is slow;
+                                  # this is a hardware allowance, not terrain physics
 
 CLAUDE_ROUTINE_MODEL = "claude-haiku-4-5"
 CLAUDE_STRONG_MODEL = "claude-sonnet-5"   # available if the steward raises Namer
@@ -578,7 +580,17 @@ def _call_ollama(
             request, timeout=OLLAMA_TIMEOUT_SECONDS
         ) as response:
             body = json.loads(response.read().decode("utf-8"))
-    except urllib.error.URLError as exc:
+    except socket.timeout:
+        # Surfaced as ModelUnavailable rather than escaping as a raw socket
+        # error, so the shift loop closes cleanly and commits what it has
+        # instead of dying mid-shift with a traceback.
+        raise ModelUnavailable(
+            "local model exceeded the %ds timeout generating up to %d tokens. "
+            "On CPU this is a hardware limit, not a fault: either raise "
+            "OLLAMA_TIMEOUT_SECONDS or lower the role's output cap."
+            % (OLLAMA_TIMEOUT_SECONDS, max_output_tokens)
+        )
+    except OSError as exc:                 # covers URLError and connection loss
         raise ModelUnavailable(
             "local model backend unreachable at %s (%s). Is `ollama serve` "
             "running, and has %s been pulled?" % (OLLAMA_ENDPOINT, exc, model)

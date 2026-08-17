@@ -505,6 +505,19 @@ class _ClassifierWriter(object):
         """The Namer's own system. Mutable by the Namer, by nothing else."""
         return self._txn.taxonomy.setdefault("native", {})
 
+    def replace_taxonomy_native(self, structure: Dict[str, Any]) -> None:
+        """Overwrite the native system with the Namer's own current version.
+
+        Wholesale replacement rather than a merge, because a merge would impose
+        a shape: it would require this module to decide what a category, a
+        member, or a relation is. The Namer's system is stored exactly as the
+        Namer authored it, whatever form that takes. That is what keeps the
+        falsification condition (physics.md Section 11) genuinely testable —
+        the terrain can only observe divergence from a flat list if the code
+        never hardcoded a flat list to begin with.
+        """
+        self._txn.taxonomy["native"] = structure
+
     def note_revision(self, note: str) -> None:
         self._txn.taxonomy.setdefault("revisions", []).append(
             {"shift": self._txn.shift_number, "at": _utc_now(), "note": note}

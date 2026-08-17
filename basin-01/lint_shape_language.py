@@ -40,9 +40,14 @@ FORBIDDEN_TERMS = (
     "creature-like", "lifeform", "lifeforms", "seedling", "sprout",
 )
 
+# README.md Section 3 binds the Generator files specifically; README.md
+# Section 9 extends the principle to the whole build — "mechanism only,
+# everywhere, including in code comments and internal naming" — so every agent
+# module is checked.
 DEFAULT_TARGETS = (
     "agents/generator_a.py",
     "agents/generator_b.py",
+    "agents/namer.py",
 )
 
 _PATTERN = re.compile(
