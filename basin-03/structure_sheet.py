@@ -41,7 +41,10 @@ import webbrowser
 from typing import Any, Dict, List, Optional, Tuple
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, PROJECT_ROOT)
 import config
+import dnt_chrome
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(ROOT, "structure.html")
@@ -279,8 +282,13 @@ def panel_hierarchy(data, w=470, h=390) -> str:
         x, y = pos[b["id"]]
         parts.append('<g transform="translate(%.1f,%.1f)">%s</g>' % (x, y, portrait(b, r)))
         parts.append('<text x="%.1f" y="%.1f" class="tl">%s</text>' % (x, y + r + 13, esc(b["_label"])))
-        parts.append('<text x="%.1f" y="%.1f" class="tn">%d shift(s)</text>'
-                     % (x, y + r + 24, int(b.get("age", 0))))
+        # Eight nodes across 470px leaves 58px a label, and "7 shift(s)" is
+        # wider than that — the counts ran into each other. A crowded row keeps
+        # the figure and drops the word.
+        crowded = len(gen[b["_label"].count("-")]) > 5
+        parts.append('<text x="%.1f" y="%.1f" class="tn">%d%s</text>'
+                     % (x, y + r + 24, int(b.get("age", 0)),
+                        "" if crowded else " shift(s)"))
     return ('<svg viewBox="0 0 %d %d" class="tree" role="img" aria-label="descent">%s</svg>'
             % (w, h, "".join(parts)),
             [('<i class="lline"></i>', 'parent &rarr; offspring (recorded parentage)'),
@@ -370,7 +378,9 @@ def panel_network(data, w=470, h=400) -> str:
 def panel_spectrum(data, w=470, h=400) -> str:
     chosen = data["_set"]
     if not chosen:
-        return '<p class="empty">Nothing living to place.</p>'
+        return ('<p class="empty">Nothing living to place.</p>', [],
+                'No specimen is alive in this terrain at this shift, so there is nothing '
+                'to position. The panel is empty rather than illustrative.')
     mx = max(b.get("_links", 0) for b in chosen) or 1
     my = max(int(b.get("age", 0)) for b in chosen) or 1
     parts = ['<rect x="52" y="24" width="%d" height="%d" class="frame"/>' % (w - 82, h - 96),
@@ -399,7 +409,9 @@ def panel_spectrum(data, w=470, h=400) -> str:
 def panel_sequence(data, w=470) -> str:
     chosen = sorted(data["_set"], key=lambda b: (b.get("arose_at_shift", 0), b["id"]))
     if not chosen:
-        return '<p class="empty">Nothing to order yet.</p>'
+        return ('<p class="empty">Nothing to order yet.</p>', [],
+                'No specimen has emerged in this terrain yet, so there is no order of '
+                'emergence to draw.')
     rowh = 30
     h = len(chosen) * rowh + 54
     idx = {b["id"]: n for n, b in enumerate(chosen)}
@@ -428,22 +440,8 @@ def panel_sequence(data, w=470) -> str:
             'the set shows no curve.')
 
 
-PAGE = """<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Classification Structure</title><style>
-:root{--paper:#EFEDE3;--ink:#14170F;--moss:#3B4A2F;--grey:#6B7168;--rule:#B9B5A4;
---panel:#F7F5EC;--serif:Georgia,'Iowan Old Style',serif;
---sans:ui-sans-serif,system-ui,-apple-system,sans-serif;
---mono:ui-monospace,SFMono-Regular,Menlo,monospace}
-/* A printed field document commits to paper on either host theme. */
-*{box-sizing:border-box}
-body{background:var(--paper);color:var(--ink);font:14px/1.6 var(--sans);margin:0;
-padding:0 clamp(14px,3vw,30px) 60px}
-.wrap{max-width:1180px;margin:0 auto;border:1px solid var(--ink);background:var(--paper);
-padding:0 clamp(16px,3vw,32px) 30px;margin-top:14px}
-.backbar{padding:10px 0;border-bottom:1px solid var(--rule)}
-.backbar a{color:var(--moss);text-decoration:none;font:11.5px var(--mono);letter-spacing:.06em}
-.masthead{display:grid;grid-template-columns:auto 1fr auto;gap:26px;align-items:start;
+SHEET_CSS = """
+.masthead{display:grid;grid-template-columns:1fr auto;gap:30px;align-items:start;
 border-bottom:3px double var(--ink);padding:22px 0 16px}
 .mark{width:52px;height:52px;border:2.5px solid var(--moss);position:relative}
 .mark:after{content:"";position:absolute;left:9px;right:9px;top:9px;bottom:-2px;
@@ -452,7 +450,8 @@ background:var(--paper);border-left:2.5px solid var(--moss);border-right:2.5px s
 color:var(--ink);margin-top:6px}
 .title h1{font:400 clamp(19px,2.3vw,27px)/1.18 var(--serif);margin:0;text-transform:uppercase}
 .title .sub{color:var(--grey);font:11px/1.6 var(--mono);margin-top:8px;max-width:62ch}
-table.doc{border-collapse:collapse;font:10.5px/1.7 var(--mono);color:var(--grey)}
+table.doc{border-collapse:collapse;font:10.5px/1.7 var(--mono);color:var(--grey);
+width:auto;min-width:0}
 table.doc td{padding:0 0 0 10px;white-space:nowrap}
 table.doc td.k{padding:0;color:var(--grey)}
 table.doc td.v{color:var(--ink)}
@@ -488,7 +487,7 @@ color:var(--grey);margin:0 0 7px}
 font:10.5px/1.65 var(--mono);display:flex;gap:11px;align-items:flex-start}
 .stamp .mark{width:26px;height:26px;border-width:2px;flex:0 0 auto}
 .stamp .mark:after{left:5px;right:5px;top:5px;border-width:2px}
-svg{width:100%;height:auto;display:block}
+.grid svg{width:100%;height:auto;display:block}
 .pbg{fill:var(--ink);opacity:.055}
 .pcore{fill:none;stroke:var(--ink);stroke-width:1.1}
 .pspoke{stroke:var(--ink);stroke-width:.7;opacity:.7}
@@ -519,10 +518,10 @@ transform:rotate(45deg);vertical-align:middle}
 .ls.strong{border-top:2.6px solid var(--ink)}
 .ls.moderate{border-top:1.4px solid var(--ink);opacity:.75}
 .ls.weak{border-top:.8px solid var(--ink);opacity:.45}
-</style></head><body><div class="wrap">
-<div class="backbar"><a href="http://127.0.0.1:8730/hub.html">&larr; Department index</a></div>
-<div class="masthead">
-  <div><div class="mark"></div><div class="dept">Department of<br>Nonhuman<br>Territories</div></div>
+"""
+
+
+SHEET_BODY = """<div class="masthead">
   <div class="title"><h1>DNT — Classification Structure,<br>Hypotheses Under Review</h1>
     <p class="sub">Exploratory models for organising synthform observations.<br>
     The Namer does not follow human systems. These are hypotheses, not prescriptions.</p></div>
@@ -551,7 +550,7 @@ transform:rotate(45deg);vertical-align:middle}
     edge weight and ordering alike. No layout was adjusted by hand.</p>
     <p>Revisions expected as the Namer continues to observe.</p></div>
 </div>
-</div></body></html>"""
+"""
 
 
 PANELS = [
@@ -621,14 +620,21 @@ def main(argv: List[str]) -> int:
             PANELS, (panel_hierarchy, panel_network, panel_spectrum, panel_sequence)):
         fig, legend, notes = fn(data)
         built.append(compose(letter, title, qual, lede, fig, legend, notes, meta))
-    page = (PAGE.replace("__A__", built[0])
-                .replace("__B__", built[1])
-                .replace("__C__", built[2])
-                .replace("__D__", built[3])
-                .replace("__TERRAIN__", esc(data["memory"].get("terrain_name")))
-                .replace("__SHIFT__", esc(data["memory"].get("last_committed_shift")))
-                .replace("__COUNT__", esc(len(data["_set"])))
-                .replace("__POP__", esc(len(data["world"].get("individuals") or {}))))
+    sheet = (SHEET_BODY.replace("__A__", built[0])
+                 .replace("__B__", built[1])
+                 .replace("__C__", built[2])
+                 .replace("__D__", built[3])
+                 .replace("__TERRAIN__", terrain)
+                 .replace("__SHIFT__", shift)
+                 .replace("__COUNT__", esc(nset))
+                 .replace("__POP__", esc(pop)))
+    terrain_dir = os.path.basename(config.TERRAIN_ROOT.rstrip(os.sep))
+    page = dnt_chrome.page(
+        "Classification Structure — " + terrain, dnt_chrome.PAPER, SHEET_CSS, sheet,
+        [terrain, "FIELD COMPENDIUM", "CLASSIFICATION STRUCTURE"],
+        dnt_chrome.sidebar(PROJECT_ROOT, terrain_dir, "structure.html"),
+        '<a href="/%s/codex.html">Field compendium</a>' % terrain_dir,
+        "DNT FIELD MANUAL v1.0")
     with open(OUT, "w", encoding="utf-8") as stream:
         stream.write(page)
     print("wrote %s" % OUT)

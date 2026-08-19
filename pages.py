@@ -133,13 +133,18 @@ def terrain_record(t: str, port: int) -> str:
         '<th>logged</th></tr></thead><tbody>%s</tbody></table></div>'
         '<p class="cap">%d event(s) on the record. Each is a logged amendment or occurrence, '
         'never a summary.</p></section>' % (evrows, len(events)),
+        # Only what exists. BASIN-04 has no crosswalk because the Archivist has
+        # not run there yet, and a link to a sheet nobody has written is a 404.
         '<section><h3>Elsewhere</h3><div class="links">'
-        '<a class="go" href="http://127.0.0.1:%d/index.html">Observation deck</a>'
-        '<a class="go" href="/%s/codex.html">Field compendium</a>'
-        '<a class="go" href="/%s/structure.html">Classification structure</a>'
-        '<a class="go" href="/%s/crosswalk.html">Linnaean crosswalk</a>'
-        '<a class="go" href="/%s/shiftlog.html">Shift log</a>'
-        '</div></section>' % (port, t, t, t, t),
+        '<a class="go" href="http://127.0.0.1:%d/index.html">Observation deck</a>%s'
+        '</div></section>'
+        % (port, "".join(
+            '<a class="go" href="/%s/%s">%s</a>' % (t, f, label)
+            for f, label in (("codex.html", "Field compendium"),
+                             ("structure.html", "Classification structure"),
+                             ("crosswalk.html", "Linnaean crosswalk"),
+                             ("shiftlog.html", "Shift log"))
+            if os.path.exists(os.path.join(ROOT, t, f)))),
     ]
     return frame(
         esc(m.get("terrain_name")) + " \u2014 Terrain Record", t, "terrain.html",

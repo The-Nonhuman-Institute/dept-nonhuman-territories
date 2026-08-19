@@ -1,5 +1,5 @@
 """
-BASIN-02 — the specimen codex. A field guide drawn from the record.
+The specimen codex — a field guide drawn from one terrain's own record.
 
     python3 codex.py            write codex.html
     python3 codex.py --open     write it and open it
@@ -46,6 +46,8 @@ import math
 import os
 import sys
 import webbrowser
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, PROJECT_ROOT)
 import dnt_style
 from typing import Any, Dict, List, Optional
 
@@ -262,226 +264,430 @@ def esc(text: Any) -> str:
             .replace(">", "&gt;").replace('"', "&quot;"))
 
 
-def render(data: Dict[str, Any]) -> str:
-    specimens = data["specimens"]
-    # Order: by category, then longest-lived first. Not by interest.
-    ordered = sorted(specimens.values(),
-                     key=lambda e: (e.get("category") or "~",
-                                    -(e.get("shifts_present") or 0), e["id"]))
-    by_cat: Dict[str, List[Dict[str, Any]]] = {}
-    for entry in ordered:
-        by_cat.setdefault(entry.get("category") or "unclassified", []).append(entry)
+# ---------------------------------------------------------------------------
+# The compendium is two documents, not one scroll.
+#
+# 462 entries in a single page is a page nobody reads. The index says what the
+# terrain holds and how to read a measurement; each native category gets its
+# own sheet, and that sheet is where the specimens are. Nothing is dropped —
+# every specimen is on exactly one category sheet, and the index accounts for
+# all of them.
+# ---------------------------------------------------------------------------
 
-    pools = _percentile_bands(ordered)
-    living = sum(1 for e in ordered if e.get("alive"))
-    with_plate = sum(1 for e in ordered if (e.get("measurements") or {}).get("structure"))
+ROOT = PROJECT_ROOT
+import dnt_chrome
 
-    out = ['<!doctype html><html lang="en"><head><meta charset="utf-8">',
-           '<meta name="viewport" content="width=device-width,initial-scale=1">',
-           '<title>Field Compendium</title>', '<style>', CSS, '</style></head><body>',
-           '<div class="backbar"><a href="http://127.0.0.1:8730/hub.html">'
-           '&larr; Department index</a></div>',
-           '<header><p class="eyebrow">Department of Nonhuman Territories · %s</p>'
-           % esc(data.get("terrain") or "BASIN-02"),
-           '<h1>Field Compendium</h1>',
-           '<div class="meta"><span>shift <b>%s</b></span><span><b>%d</b> classified</span>'
-           '<span><b>%d</b> still living</span><span><b>%d</b> with measurements</span>'
-           '<span><b>%d</b> categories</span></div>'
-           % (esc(data.get("shift")), len(ordered), living, with_plate, len(by_cat)),
-           '<p class="note">A record of everything that has lived in this terrain and been '
-           'looked at closely.</p>'
-           '<p class="note">Each drawing is made from that specimen\'s own measurements — how '
-           'much it carried, how far it reached, how many others it could hold on to, how long '
-           'it lasted. Nothing is drawn from imagination, and no two look alike because no two '
-           'sets of numbers are alike.</p>'
-           '<p class="note">The groupings are not ours either. A classifying agent called the '
-           'Namer watches what each specimen does, decides for itself what kinds of thing are '
-           'here, and names them. Its words appear below exactly as it wrote them — they are '
-           'the finding, not a summary of one.</p>'
-           '<p class="note">Each entry opens with a plain description. Those sentences are built '
-           'by fixed rules from the specimen\'s own measurements — the same numbers the '
-           'drawing uses — so they describe what was recorded and never guess. They say what '
-           'a specimen was like and how it made its living; they never say what KIND of thing '
-           'it was. That judgement belongs to the Namer, and its word for it is the heading '
-           'above each group.</p>'
-           '<p class="note">Where a specimen shows an empty frame, it died before this terrain '
-           'began keeping remains, and nothing survives to draw from.</p></header>',
-           HOWTO]
-
-    for category, entries in sorted(by_cat.items()):
-        # A compendium with 460 entries is unreadable as one scroll. Each
-        # group folds, and the largest ones start closed, so a reader chooses
-        # what to open rather than being handed everything at once.
-        out.append('<details class="group"%s><summary><span class="gname">%s</span>'
-                   '<span class="count">%d specimen%s</span></summary><div class="grid">'
-                   % ("" if len(entries) <= 12 else "", esc(category), len(entries),
-                      "" if len(entries) == 1 else "s"))
-        for e in entries:
-            m = e.get("measurements") or {}
-            st = m.get("structure") or {}
-            aff = m.get("affinities") or {}
-            status = ('<span class="tag alive">living</span>' if e.get("alive")
-                      else '<span class="tag ended">died at shift %s</span>' % esc(e.get("ended_at_shift")))
-            rows = []
-            band = _stands
-            if st:
-                rows.append(("reach", "%.2f" % st.get("extent", 0),
-                             band(st.get("extent"), pools.get("extent", []))))
-                rows.append(("holds", "%d link(s) at once" % (1 + int(st.get("junctions", 0))),
-                             band(st.get("junctions"), pools.get("junctions", []))))
-                rows.append(("carries", "%.2f" % st.get("mass", 0),
-                             band(st.get("mass"), pools.get("mass", []))))
-            if aff:
-                strongest = max(("ground", aff.get("cover", 0)), ("remains", aff.get("residue", 0)),
-                                ("others", aff.get("links", 0)), key=lambda kv: kv[1])[0]
-                rows.append(("makes its living by",
-                             "ground %.2f · remains %.2f · others %.2f"
-                             % (aff.get("cover", 0), aff.get("residue", 0), aff.get("links", 0)),
-                             "leans on the %s" % strongest))
-            if m.get("upkeep") is not None:
-                rows.append(("upkeep", "%.2f light every shift" % (m.get("upkeep") or 0),
-                             band(m.get("upkeep"), pools.get("upkeep", []))))
-                rows.append(("can hold", "%.1f light" % (m.get("capacity") or 0), ""))
-            rows.append(("lasted", "%s shift(s)" % esc(e.get("shifts_present")),
-                         band(e.get("shifts_present"), pools.get("lasted", []))))
-            rows.append(("offspring",
-                         esc(e.get("descendants") if e.get("descendants") is not None else "—"), ""))
-            if m.get("substrate"):
-                rows.append(("made of", esc(m["substrate"]), ""))
-            if m.get("parent_id"):
-                rows.append(("child of", esc(m["parent_id"]), ""))
-            # The description a person can actually read. Deterministic, built
-            # in code from the same numbers the plate is drawn from, shown to no
-            # agent, and carrying no authority over what the Namer called it.
-            elev = near = None
-            m2 = e.get("measurements") or {}
-            try:
-                cell = m2.get("cell")
-                if cell is not None:
-                    elev = life.cell_elevation(int(cell))
-                    near = life.cell_position(int(cell))
-            except Exception:
-                elev = near = None
-            prose = describe.describe(e)
-            where = describe.place(e, elev, near)
-            out.append('<article class="card">%s<div class="body"><div class="id">'
-                       '<a class="rec" href="specimens/%s.html">%s</a> %s</div>'
-                       '<p class="prose">%s%s</p>'
-                       % (plate(e), esc(e["id"]), esc(e["id"]), status, esc(prose),
-                          (" " + esc(where)) if where else ""))
-            out.append('<dl>%s</dl>' % "".join(
-                "<dt>%s</dt><dd>%s%s</dd>"
-                % (esc(k), esc(v),
-                   (' <span class="stands">— %s</span>' % esc(b)) if b else "")
-                for k, v, b in rows))
-            if e.get("persistence"):
-                out.append('<div class="quote"><span class="lbl">how it stays alive, in the Namer\'s own words</span>%s</div>'
-                           % esc(e["persistence"][:600]))
-            if e.get("reasoning"):
-                out.append('<details><summary>why the Namer grouped it here</summary><p>%s</p></details>'
-                           % esc(e["reasoning"][:1400]))
-            out.append('</div></article>')
-        out.append('</div></details>')
-
-    out.append('<footer>Generated from state/specimen_log.jsonl, state/anomaly_log.jsonl and '
-               'state/memory.json. Read-only: this tool writes one HTML file and changes no '
-               'terrain record.</footer></body></html>')
-    return "\n".join(out)
+TERRAIN_DIR = os.path.basename(config.TERRAIN_ROOT.rstrip(os.sep))
+CATEGORY_DIR = os.path.join(config.TERRAIN_ROOT, "categories")
 
 
-HOWTO = """
-<section class="howto"><h2>How to read an entry</h2>
-<p class="sub">Every figure below is a measurement the terrain recorded. None of them have
-units — they only mean something next to each other, so each one is also described in
-plain words against every other specimen on record.</p>
-<dl class="gloss">
-<dt>reach</dt><dd>How far out it can gather light from the ground around it. A long reach
-collects from a wider area but costs more to keep up.</dd>
-<dt>holds N links</dt><dd>How many other specimens it can be joined to at once. Light moves
-along those joins — sometimes given, sometimes taken.</dd>
-<dt>carries</dt><dd>How much substance it has. More lets it store more light and resist
-having light pulled off it by others, and costs more every shift to hold together.</dd>
-<dt>makes its living by</dt><dd>Where its light actually comes from. <b>ground</b> is the
-cover layer growing where it stands; <b>remains</b> is what dead specimens left behind;
-<b>others</b> is light drawn along links from other living things.</dd>
-<dt>upkeep</dt><dd>What it must spend every shift simply to keep existing. If it cannot
-cover this, it dies. Everything else has to be earned on top of it.</dd>
-<dt>can hold</dt><dd>The most light it can store at once. Anything beyond this is lost.</dd>
-<dt>lasted</dt><dd>How many shifts it was alive. A shift is one tick of the terrain.</dd>
-</dl>
-<p class="sub">The <b>drawing</b> is built from those same numbers: the core is what it
-carries, the spokes are its links, their length is its reach, the rings are offspring, and
-the disc beneath is how much it lived off remains.</p></section>
-"""
-
-CSS = dnt_style.CSS + """
+def slug(name: str) -> str:
+    return "".join(c if (c.isalnum() or c in "-_") else "-" for c in str(name).lower())
 
 
+def _band_rows(entry, pools):
+    """The measurement table for one card. Value, then where it stands."""
+    m = entry.get("measurements") or {}
+    st = m.get("structure") or {}
+    aff = m.get("affinities") or {}
+    rows = []
+    if st:
+        rows.append(("reach", "%.2f" % st.get("extent", 0),
+                     _stands(st.get("extent"), pools.get("extent", []))))
+        rows.append(("holds n links", "%d (links)" % (1 + int(st.get("junctions", 0))),
+                     _stands(st.get("junctions"), pools.get("junctions", []))))
+        rows.append(("carries", "%.2f" % st.get("mass", 0),
+                     _stands(st.get("mass"), pools.get("mass", []))))
+    if aff:
+        strongest = max(("ground", aff.get("cover", 0)), ("remains", aff.get("residue", 0)),
+                        ("others", aff.get("links", 0)), key=lambda kv: kv[1])[0]
+        rows.append(("makes its living by",
+                     "ground %.2f · remains %.2f · others %.2f"
+                     % (aff.get("cover", 0), aff.get("residue", 0), aff.get("links", 0)),
+                     "leans on the %s" % strongest))
+    if m.get("upkeep") is not None:
+        rows.append(("upkeep", "%.2f light / shift" % (m.get("upkeep") or 0),
+                     _stands(m.get("upkeep"), pools.get("upkeep", []))))
+        rows.append(("can hold", "%.1f light" % (m.get("capacity") or 0), ""))
+    rows.append(("lasted", "%s shift(s)" % esc(entry.get("shifts_present")),
+                 _stands(entry.get("shifts_present"), pools.get("lasted", []))))
+    rows.append(("offspring",
+                 esc(entry.get("descendants") if entry.get("descendants") is not None else "—"), ""))
+    if m.get("substrate"):
+        rows.append(("made of", esc(m["substrate"]), ""))
+    if m.get("parent_id"):
+        rows.append(("child of", esc(m["parent_id"]), ""))
+    return rows
 
-.backbar{position:sticky;top:0;background:var(--paper);border-bottom:1px solid var(--rule);
-padding:12px 0;margin-bottom:22px;z-index:5;max-width:1180px;margin:0 auto}
-.backbar a{color:var(--moss);text-decoration:none;font:12px var(--mono);letter-spacing:.06em}
-.backbar a:hover{text-decoration:underline}
-header{max-width:70ch;margin:0 auto 40px;border-bottom:1px solid var(--rule);padding-bottom:22px}
-.eyebrow{font:500 11px/1.5 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--grey);margin:0}
-h1{font:400 clamp(28px,4vw,42px)/1.1 var(--serif);margin:10px 0 14px}
-.meta{display:flex;flex-wrap:wrap;gap:6px 26px;font:12px/1.5 var(--mono);color:var(--grey)}
-.meta b{color:var(--ink);font-weight:400;font-variant-numeric:tabular-nums}
-.note{color:var(--grey);font-size:13.5px;margin:16px 0 0;max-width:70ch}
-section{max-width:1180px;margin:0 auto 46px}
-h2{font:400 22px/1.2 var(--serif);color:var(--moss);margin:0 0 4px;
-border-bottom:1px solid var(--rule);padding-bottom:8px}
-h2 .count{font:11px var(--mono);color:var(--grey);letter-spacing:.1em}
-.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));margin-top:18px}
-.card{background:var(--panel);border:1px solid var(--rule);display:flex;flex-direction:column}
-.plate{width:100%;height:168px;display:block;background:#0E100C;border-bottom:1px solid var(--rule)}
+
+def card(entry, pools, port) -> str:
+    m = entry.get("measurements") or {}
+    alive = bool(entry.get("alive"))
+    # A specimen that has ended is not in the field, so there is nothing for a
+    # 3D link to open. Saying so is better than a link that lands on nothing.
+    corner = ('<a class="v3" href="http://127.0.0.1:%d/index.html#%s">VIEW 3D ↗</a>'
+              % (port, esc(entry["id"]))) if alive \
+        else '<span class="v3 gone">NOT IN THE FIELD</span>'
+    status = ('<span class="st alive">LIVING</span>' if alive
+              else '<span class="st">DIED AT SHIFT %s</span>' % esc(entry.get("ended_at_shift")))
+    elev = near = None
+    try:
+        cell = m.get("cell")
+        if cell is not None:
+            elev = life.cell_elevation(int(cell))
+            near = life.cell_position(int(cell))
+    except Exception:
+        elev = near = None
+    prose = describe.describe(entry)
+    where = describe.place(entry, elev, near)
+    rows = "".join(
+        '<tr><td class="k">%s</td><td class="v">%s%s</td></tr>'
+        % (esc(k), esc(v), ('  –  <i>%s</i>' % esc(b)) if b else "")
+        for k, v, b in _band_rows(entry, pools))
+    words = ""
+    if entry.get("persistence"):
+        words += ('<div class="lbl">how it stays alive, in the Namer’s own words</div>'
+                  '<p class="say">%s</p>' % esc(entry["persistence"][:700]))
+    if entry.get("reasoning"):
+        words += ('<details><summary>why the Namer grouped it here</summary>'
+                  '<p>%s</p></details>' % esc(entry["reasoning"][:1600]))
+    return (
+        '<article class="card" data-alive="%d" data-shift="%s" data-lasted="%s" data-id="%s">'
+        '<div class="draw"><div class="dh"><span>SPECIMEN DRAWING</span>%s</div>%s</div>'
+        '<div class="body">'
+        '<div class="id"><a href="/%s/specimens/%s.html">%s</a>%s</div>'
+        '<p class="prose">%s%s</p>'
+        '<table class="ms">%s</table>%s</div></article>'
+        % (1 if alive else 0, esc(entry.get("ended_at_shift") or 0),
+           esc(entry.get("shifts_present") or 0), esc(entry["id"]),
+           corner, plate(entry),
+           TERRAIN_DIR, esc(entry["id"]), esc(entry["id"]), status,
+           esc(prose), (" " + esc(where)) if where else "", rows, words))
+
+
+# ---------------------------------------------------------------------------
+
+CSS = """
+h1{font:400 clamp(30px,4.2vw,44px)/1.05 var(--serif);margin:0 0 10px}
+h1.cat{font-family:var(--mono);font-size:clamp(22px,3vw,34px);letter-spacing:.01em;
+text-transform:uppercase;margin:0 0 6px}
+.eyebrow{font:10px var(--mono);letter-spacing:.16em;text-transform:uppercase;
+color:var(--grey);margin:0 0 12px}
+.mast{border-bottom:1px solid var(--rule);padding-bottom:20px;margin-bottom:26px;
+display:grid;grid-template-columns:1fr auto;gap:30px;align-items:start}
+.mast table.doc{border-collapse:collapse;font:11px/1.9 var(--mono);color:var(--grey)}
+.mast table.doc td{padding:0 0 0 16px;white-space:nowrap}
+.mast table.doc td.k{padding:0}.mast table.doc td.v{color:var(--ink)}
+.strip{display:flex;flex-wrap:wrap;gap:6px 30px;font:12px var(--mono);color:var(--grey);
+font-variant-numeric:tabular-nums;margin:0 0 4px}
+.strip b{color:var(--ink);font-weight:400}
+.lede{color:var(--ink);font-size:14.5px;line-height:1.7;max-width:72ch;margin:16px 0 0}
+.lede.dim{color:var(--grey)}
+h2.sec{font:10px var(--mono);letter-spacing:.15em;text-transform:uppercase;color:var(--grey);
+margin:38px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)}
+
+/* how to read an entry */
+.howto{border:1px solid var(--rule);background:var(--panel);padding:22px 24px;margin:30px 0}
+.howto h3{font:10px var(--mono);letter-spacing:.15em;text-transform:uppercase;
+color:var(--ink);margin:0 0 10px}
+.howto .sub{color:var(--grey);font:11.5px/1.7 var(--mono);max-width:88ch;margin:0 0 16px}
+.gloss{display:grid;grid-template-columns:150px 1fr;gap:9px 24px;margin:0 0 16px}
+.gloss dt{font:11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--grey)}
+.gloss dd{margin:0;color:var(--ink);font-size:13.5px;line-height:1.55}
+.howto .tail{font-size:12.5px;color:var(--grey);line-height:1.6;margin:0;
+border-top:1px solid var(--rule);padding-top:13px}
+
+/* the category index */
+ul.cats{list-style:none;margin:0;padding:0}
+ul.cats li{display:grid;grid-template-columns:1fr auto auto;gap:20px;align-items:baseline;
+padding:9px 0;border-bottom:1px solid var(--rule)}
+ul.cats a{color:var(--ink);text-decoration:none;font:13px var(--mono)}
+ul.cats a:hover{color:var(--moss)}
+ul.cats a:before{content:"> ";color:var(--grey)}
+ul.cats .n{font:11.5px var(--mono);color:var(--grey);font-variant-numeric:tabular-nums}
+ul.cats .go{font:10px var(--mono);letter-spacing:.08em;color:var(--moss)}
+ul.docs{list-style:none;margin:0;padding:0;columns:2;column-gap:34px}
+ul.docs li{padding:7px 0;border-bottom:1px solid var(--rule);break-inside:avoid}
+ul.docs a{color:var(--ink);text-decoration:none;font:13px var(--mono)}
+ul.docs a:before{content:"> ";color:var(--grey)}
+ul.docs a:hover{color:var(--moss)}
+
+/* the toolbar on a category sheet */
+.bar{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:11px 0;
+border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin-bottom:22px;
+font:10.5px var(--mono);letter-spacing:.07em;color:var(--grey);text-transform:uppercase}
+.bar .count b{color:var(--ink);font-weight:400}
+.bar .grp{display:flex;align-items:center;gap:8px;margin-left:auto}
+.bar select{font:10.5px var(--mono);letter-spacing:.06em;background:var(--panel);
+color:var(--ink);border:1px solid var(--rule);padding:4px 7px;text-transform:uppercase}
+.bar button{font:10.5px var(--mono);letter-spacing:.06em;background:var(--panel);
+color:var(--grey);border:1px solid var(--rule);padding:4px 9px;cursor:pointer;
+text-transform:uppercase}
+.bar button.on{background:var(--moss);border-color:var(--moss);color:var(--paper)}
+
+/* the cards */
+.grid{display:grid;gap:16px;grid-template-columns:repeat(4,minmax(0,1fr))}
+.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:1500px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:1150px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.grid,.grid.two{grid-template-columns:1fr}}
+.card{border:1px solid var(--rule);background:var(--panel);display:flex;flex-direction:column}
+.card.hide{display:none}
+.draw{position:relative;background:#0B0D0A;border-bottom:1px solid var(--rule)}
+.dh{position:absolute;inset:9px 10px auto 10px;display:flex;justify-content:space-between;
+font:9px var(--mono);letter-spacing:.1em;color:#6E7A6B;z-index:2}
+.dh a.v3{color:#8FC96B;text-decoration:none}
+.dh a.v3:hover{text-decoration:underline}
+.dh .gone{color:#4A5046}
+.plate{width:100%;height:196px;display:block}
 .plate .core{fill:rgba(156,181,132,.20);stroke:#9CB584;stroke-width:1.2}
 .plate .arm{stroke:#9CB584;stroke-width:1.1;opacity:.75}
-.plate .node{fill:var(--moss);opacity:.9}
+.plate .node{fill:#8FC96B;opacity:.9}
 .plate .anchor{stroke:#7d8f6e;stroke-width:.9;opacity:.55}
 .plate .brace{fill:none;stroke:#9CB584;stroke-width:.6;opacity:.45}
 .plate .orbit{fill:none;stroke:#C9A227;stroke-width:.9;opacity:.55}
-.plate .disc{fill:var(--amber);opacity:.22}
-.plate.empty{background:#0C0D0B}
+.plate .disc{fill:#C9A227;opacity:.22}
+.plate.empty{background:#0B0D0A}
 .plate .none{fill:#4A5046;font:11px ui-monospace,monospace;text-anchor:middle;letter-spacing:.1em}
-.body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:9px}
-.prose{font:15px/1.62 var(--serif);margin:0 0 4px;color:var(--ink)}
-.howto{max-width:1180px;margin:0 auto 44px;background:var(--panel);border:1px solid var(--rule);
-padding:22px 24px}
-.howto h2{color:var(--moss);border:none;padding:0;margin:0 0 8px}
-.howto .sub{color:var(--grey);font-size:13.5px;max-width:76ch;margin:0 0 14px}
-.gloss{display:grid;grid-template-columns:130px 1fr;gap:7px 20px;margin:0 0 16px;font-size:13.5px}
-.gloss dt{font:12px var(--mono);color:var(--moss)}
-.gloss dd{margin:0;color:var(--ink)}
-.stands{color:var(--grey);font-style:italic;font-size:11.5px}
-.id{font:13px var(--mono);color:var(--ink);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.tag{font:10px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border:1px solid}
-.tag.alive{color:var(--moss);border-color:#3B4A2F}
-.tag.ended{color:var(--grey);border-color:var(--rule)}
-dl{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:0;font:12px/1.5 var(--mono);
+.body{padding:13px 15px 16px;display:flex;flex-direction:column;gap:10px}
+.id{font:12px var(--mono);display:flex;justify-content:space-between;gap:10px;
+align-items:baseline;border-bottom:1px solid var(--rule);padding-bottom:8px}
+.id a{color:var(--ink);text-decoration:none}
+.id a:hover{color:var(--moss)}
+.st{font:9.5px var(--mono);letter-spacing:.08em;color:var(--grey);white-space:nowrap}
+.st.alive{color:var(--moss)}
+.prose{font:14px/1.62 var(--serif);margin:0;color:var(--ink)}
+table.ms{border-collapse:collapse;width:100%;font:11px/1.55 var(--mono);
 font-variant-numeric:tabular-nums}
-dt{color:var(--grey)}dd{margin:0}
-.quote{border-left:2px solid var(--rule);padding:4px 0 4px 12px;font:italic 13px/1.55 var(--serif);color:var(--ink)}
-.lbl{display:block;font:10px var(--mono);font-style:normal;letter-spacing:.09em;
-text-transform:uppercase;color:var(--grey);margin-bottom:4px}
-details{font-size:12.5px;color:var(--grey)}
-summary{cursor:pointer;font:11px var(--mono);letter-spacing:.06em;color:var(--moss)}
-details p{margin:8px 0 0;line-height:1.55}
-footer{max-width:70ch;margin:40px auto 0;padding-top:18px;border-top:1px solid var(--rule);
-font:11.5px/1.6 var(--mono);color:var(--grey)}
+table.ms td{padding:2px 0;vertical-align:top}
+table.ms td.k{color:var(--grey);padding-right:12px;width:44%}
+table.ms td.v i{color:var(--grey);font-style:normal}
+.lbl{font:9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--grey);
+border-top:1px solid var(--rule);padding-top:10px}
+.say{font:12px/1.6 var(--mono);color:var(--ink);margin:0}
+.card details{font-size:11.5px;color:var(--grey)}
+.card summary{cursor:pointer;font:10px var(--mono);letter-spacing:.07em;color:var(--moss)}
+.card details p{margin:7px 0 0;line-height:1.6;font:11.5px/1.6 var(--mono)}
+.none{color:var(--grey);font-style:italic}
+.foot-note{margin:36px 0 0;padding-top:14px;border-top:1px solid var(--rule);
+color:var(--grey);font:11.5px/1.6 var(--mono)}
 """
+
+SORT_JS = """
+<script>
+(function(){
+  var grid=document.getElementById('grid');
+  if(!grid)return;
+  var cards=Array.prototype.slice.call(grid.children);
+  var num=function(c,k){return Number(c.dataset[k]||0)};
+  var sorts={
+    shift:function(a,b){return num(b,'shift')-num(a,'shift')},
+    lasted:function(a,b){return num(b,'lasted')-num(a,'lasted')},
+    id:function(a,b){return a.dataset.id.localeCompare(b.dataset.id)}
+  };
+  var sel=document.getElementById('sort');
+  sel.onchange=function(){
+    cards.slice().sort(sorts[sel.value]).forEach(function(c){grid.appendChild(c)});
+  };
+  sel.onchange();
+  var show=function(mode){
+    var n=0;
+    cards.forEach(function(c){
+      var ok = mode==='all' || (mode==='living')===(c.dataset.alive==='1');
+      c.classList.toggle('hide',!ok);
+      if(ok)n++;
+    });
+    document.getElementById('shown').textContent=n;
+  };
+  document.querySelectorAll('[data-filter]').forEach(function(b){
+    b.onclick=function(){
+      document.querySelectorAll('[data-filter]').forEach(function(x){x.classList.remove('on')});
+      b.classList.add('on'); show(b.dataset.filter);
+    };
+  });
+  document.querySelectorAll('[data-cols]').forEach(function(b){
+    b.onclick=function(){
+      document.querySelectorAll('[data-cols]').forEach(function(x){x.classList.remove('on')});
+      b.classList.add('on'); grid.classList.toggle('two', b.dataset.cols==='2');
+    };
+  });
+})();
+</script>
+"""
+
+HOWTO = """
+<section class="howto"><h3>How to read an entry</h3>
+<p class="sub">Every figure on a specimen sheet is a measurement the terrain recorded. None of
+them have units — they only mean something next to each other, so each one is also
+described in plain words against every other specimen on record.</p>
+<dl class="gloss">
+<dt>reach</dt><dd>How far out it can gather light from the ground around it. A long reach
+collects from a wider area but costs more to keep up.</dd>
+<dt>holds n links</dt><dd>How many other specimens it can be joined to at once. Light moves
+along those joins — sometimes given, sometimes taken.</dd>
+<dt>carries</dt><dd>How much substance it has. More lets it store more light and resist having
+light pulled off it by others, and costs more every shift to hold together.</dd>
+<dt>makes its living by</dt><dd>Where its light actually comes from. <b>ground</b> is the cover
+layer growing where it stands; <b>remains</b> is what dead specimens left behind;
+<b>others</b> is light drawn along links from other living things.</dd>
+<dt>upkeep</dt><dd>What it must spend every shift simply to keep existing. If it cannot cover
+this, it dies. Everything else has to be earned on top of it.</dd>
+<dt>can hold</dt><dd>The most light it can store at once. Anything beyond this is lost.</dd>
+<dt>lasted</dt><dd>How many shifts it was alive. A shift is one tick of the terrain.</dd>
+</dl>
+<p class="tail">The drawing is built from those same numbers: the core is what it carries, the
+spokes are its links, their length is its reach, the rings are offspring, and the disc beneath
+is how much it lived off remains.</p></section>
+"""
+
+FOOT = ("Generated from state/specimen_log.jsonl, state/anomaly_log.jsonl and state/memory.json. "
+        "Read-only: this tool writes HTML and changes no terrain record.")
+
+
+def _shell(title, crumbs, page_file, body, topright=""):
+    return dnt_chrome.page(
+        title, dnt_chrome.PAPER, CSS, body + ('<p class="foot-note">%s</p>' % FOOT),
+        crumbs, dnt_chrome.sidebar(ROOT, TERRAIN_DIR, page_file), topright,
+        "DNT FIELD MANUAL v1.0")
+
+
+def render_index(data, by_cat, ordered, port) -> str:
+    living = sum(1 for e in ordered if e.get("alive"))
+    plated = sum(1 for e in ordered if (e.get("measurements") or {}).get("structure"))
+    terrain = esc(data.get("terrain") or TERRAIN_DIR.upper())
+
+    cats = "".join(
+        '<li><a href="/%s/categories/%s.html">%s</a>'
+        '<span class="n">%d living / %d total</span>'
+        '<span class="go">VIEW SHEET →</span></li>'
+        % (TERRAIN_DIR, slug(c), esc(c),
+           sum(1 for e in es if e.get("alive")), len(es))
+        for c, es in sorted(by_cat.items(), key=lambda kv: (-len(kv[1]), kv[0])))
+
+    # Only documents that exist. A related-documents list that links to pages
+    # nobody has written is worse than a short one.
+    related = []
+    for filename, label in (("structure.html", "classification structure"),
+                            ("crosswalk.html", "Linnaean crosswalk"),
+                            ("terrain.html", "terrain record — governing conditions"),
+                            ("shiftlog.html", "shift log — every shift committed")):
+        if os.path.exists(os.path.join(config.TERRAIN_ROOT, filename)):
+            related.append('<li><a href="/%s/%s">%s</a></li>' % (TERRAIN_DIR, filename, label))
+    related.append('<li><a href="http://127.0.0.1:%d/index.html">observation deck '
+                   '— walk the terrain in 3D</a></li>' % port)
+
+    body = (
+        '<div class="mast"><div>'
+        '<p class="eyebrow">Department of Nonhuman Territories · %s</p>'
+        '<h1>Field Compendium</h1>'
+        '<div class="strip"><span>shift <b>%s</b></span><span><b>%d</b> classified</span>'
+        '<span><b>%d</b> still living</span><span><b>%d</b> with measurements</span>'
+        '<span><b>%d</b> categories</span></div>'
+        '<p class="lede">A record of everything that has lived in this terrain and been looked '
+        'at closely.</p>'
+        '<p class="lede dim">Each drawing is made from that specimen’s own measurements '
+        '— how much it carried, how far it reached, how many others it could hold on to, '
+        'how long it lasted. Nothing is drawn from imagination, and no two look alike because '
+        'no two sets of numbers are alike.</p>'
+        '<p class="lede dim">The groupings are not ours either. A classifying agent called the '
+        'Namer watches what each specimen does, decides for itself what kinds of thing are here, '
+        'and names them. Its words appear on each sheet exactly as it wrote them — they are '
+        'the finding, not a summary of one.</p>'
+        '<p class="lede dim">Each entry opens with a plain description. Those sentences are '
+        'built by fixed rules from the specimen’s own measurements — the same numbers '
+        'the drawing uses — so they describe what was recorded and never guess. They say '
+        'what a specimen was like and how it made its living; they never say what KIND of thing '
+        'it was. That judgement belongs to the Namer, and its word for it is the title of the '
+        'sheet.</p>'
+        '<p class="lede dim">Where a specimen shows an empty frame, it died before this terrain '
+        'began keeping remains, and nothing survives to draw from.</p>'
+        '<p class="lede dim">One caution about the counts above: they are counts of '
+        '<b>individually classified</b> specimens. The Namer records most of the population '
+        'in aggregate and the cover layer as a census, so a terrain holding thousands of '
+        'living things may have only dozens of them written up here. The observation deck '
+        'reports the whole population; this document reports the part of it that was looked '
+        'at one at a time.</p>'
+        '</div>'
+        '<table class="doc"><tr><td class="k">DOCUMENT</td><td class="v">DNT-TAX-CDX</td></tr>'
+        '<tr><td class="k">TERRAIN</td><td class="v">%s</td></tr>'
+        '<tr><td class="k">SHIFT</td><td class="v">%s</td></tr>'
+        '<tr><td class="k">STATUS</td><td class="v">EXPLORATORY</td></tr>'
+        '<tr><td class="k">SCOPE</td><td class="v">INTERNAL</td></tr></table></div>'
+        '%s'
+        '<h2 class="sec">Native categories in this terrain</h2>'
+        '<ul class="cats">%s</ul>'
+        '<h2 class="sec">Related documents</h2><ul class="docs">%s</ul>'
+        % (terrain, esc(data.get("shift")), len(ordered), living, plated, len(by_cat),
+           terrain, esc(data.get("shift")), HOWTO, cats, "".join(related)))
+
+    return _shell("Field Compendium — " + terrain,
+                  [terrain, "FIELD COMPENDIUM"], "codex.html", body,
+                  '<a href="http://127.0.0.1:%d/index.html">Observation deck</a>' % port)
+
+
+def render_category(data, category, entries, pools, port) -> str:
+    terrain = esc(data.get("terrain") or TERRAIN_DIR.upper())
+    living = sum(1 for e in entries if e.get("alive"))
+    plated = sum(1 for e in entries if (e.get("measurements") or {}).get("structure"))
+    cards = "".join(card(e, pools, port) for e in entries)
+    body = (
+        '<div class="mast"><div>'
+        '<p class="eyebrow"><a style="color:inherit;text-decoration:none" '
+        'href="/%s/codex.html">Field compendium</a> · %s · native category</p>'
+        '<h1 class="cat">%s</h1>'
+        '<div class="strip"><span><b>%d</b> specimens</span><span><b>%d</b> living</span>'
+        '<span><b>%d</b> with measurements</span></div></div>'
+        '<table class="doc"><tr><td class="k">TERRAIN</td><td class="v">%s</td></tr>'
+        '<tr><td class="k">SHIFT</td><td class="v">%s</td></tr>'
+        '<tr><td class="k">COINED BY</td><td class="v">THE NAMER</td></tr></table></div>'
+        '<div class="bar">'
+        '<span class="count"><b id="shown">%d</b> of <b>%d</b> shown in this category</span>'
+        '<span class="grp">show'
+        '<button data-filter="all" class="on">all</button>'
+        '<button data-filter="living">living</button>'
+        '<button data-filter="ended">ended</button>'
+        '&nbsp;&nbsp;view'
+        '<button data-cols="4" class="on">4</button>'
+        '<button data-cols="2">2</button>'
+        '&nbsp;&nbsp;sort'
+        '<select id="sort"><option value="shift">by shift (newest)</option>'
+        '<option value="lasted">by shifts lasted</option>'
+        '<option value="id">by identifier</option></select></span></div>'
+        '<div class="grid" id="grid">%s</div>%s'
+        % (TERRAIN_DIR, terrain, esc(category), len(entries), living, plated,
+           terrain, esc(data.get("shift")), len(entries), len(entries), cards, SORT_JS))
+    return _shell("%s — %s" % (esc(category), terrain),
+                  [terrain, "FIELD COMPENDIUM", esc(category).upper()], "codex.html", body,
+                  '<a href="/%s/codex.html">All categories</a>' % TERRAIN_DIR)
 
 
 def main(argv: List[str]) -> int:
     data = gather()
-    html = render(data)
+    specimens = data["specimens"]
+    ordered = sorted(specimens.values(),
+                     key=lambda e: (e.get("category") or "~",
+                                    -(e.get("shifts_present") or 0), e["id"]))
+    by_cat = {}
+    for entry in ordered:
+        by_cat.setdefault(entry.get("category") or "unclassified", []).append(entry)
+    pools = _percentile_bands(ordered)
+    port = {"basin-01": 8731, "basin-02": 8732,
+            "basin-03": 8733, "basin-04": 8734}.get(TERRAIN_DIR, 8731)
+
     with open(OUTPUT, "w", encoding="utf-8") as stream:
-        stream.write(html)
-    total = len(data["specimens"])
-    plated = sum(1 for e in data["specimens"].values()
-                 if (e.get("measurements") or {}).get("structure"))
-    print("%d classified specimen(s); %d have measurements to draw from" % (total, plated))
-    print("wrote %s" % OUTPUT)
+        stream.write(render_index(data, by_cat, ordered, port))
+
+    if not os.path.isdir(CATEGORY_DIR):
+        os.makedirs(CATEGORY_DIR)
+    for category, entries in by_cat.items():
+        path = os.path.join(CATEGORY_DIR, slug(category) + ".html")
+        with open(path, "w", encoding="utf-8") as stream:
+            stream.write(render_category(data, category, entries, pools, port))
+
+    plated = sum(1 for e in ordered if (e.get("measurements") or {}).get("structure"))
+    print("%d classified specimen(s); %d have measurements to draw from"
+          % (len(ordered), plated))
+    print("wrote %s and %d category sheet(s)" % (OUTPUT, len(by_cat)))
     if "--open" in argv:
         webbrowser.open("file://" + OUTPUT)
     return 0

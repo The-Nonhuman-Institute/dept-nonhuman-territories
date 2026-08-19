@@ -34,7 +34,7 @@ import json
 import os
 import sys
 import webbrowser
-import dnt_style
+import dnt_style, dnt_chrome
 from typing import Any, Dict, List
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -71,7 +71,8 @@ def render(data: Dict[str, Any]) -> str:
     unmapped = sorted(set(stats) - mapped)
 
     body = []
-    body.append('<header><p class="eyebrow">%s · DNT-CLS-001 Section 2</p>'
+    body.append('<div class="mast"><div>'
+                '<p class="eyebrow">Field compendium · %s · Linnaean crosswalk</p>'
                 '<h1>The Linnaean Crosswalk</h1>'
                 '<p class="lede">A best-effort translation of this terrain\'s native taxonomy '
                 'into Linnaean terms, produced by the Archivist <em>after</em> classification. '
@@ -79,8 +80,15 @@ def render(data: Dict[str, Any]) -> str:
                 'it. The Namer has never seen it.</p>'
                 '<div class="meta"><span>terrain at shift <b>%s</b></span>'
                 '<span>last crosswalk pass <b>shift %s</b></span>'
-                '<span><b>%d</b> categories in use</span></div></header>'
-                % (esc(data["terrain"]), esc(data["shift"]), esc(data["pass_at"]), len(stats)))
+                '<span><b>%d</b> categories in use</span></div></div>'
+                '<table class="doc">'
+                '<tr><td class="k">DOCUMENT</td><td class="v">DNT-TAX-XWK</td></tr>'
+                '<tr><td class="k">TERRAIN</td><td class="v">%s</td></tr>'
+                '<tr><td class="k">SHIFT</td><td class="v">%s</td></tr>'
+                '<tr><td class="k">STATUS</td><td class="v">EXPLORATORY</td></tr>'
+                '<tr><td class="k">SCOPE</td><td class="v">INTERNAL</td></tr></table></div>'
+                % (esc(data["terrain"]), esc(data["shift"]), esc(data["pass_at"]), len(stats),
+                   esc(data["terrain"]), esc(data["shift"])))
 
     if p.get("crosswalk_note"):
         body.append('<div class="note">%s</div>' % esc(p["crosswalk_note"]))
@@ -141,24 +149,61 @@ def render(data: Dict[str, Any]) -> str:
     # Literal replacement, not %-formatting: the stylesheet is full of percent
     # signs (max-width:100%) and every one of them is a format specifier to
     # Python.
-    return (TEMPLATE.replace("__HOUSE__", dnt_style.CSS)
-                    .replace("%(body)s", "".join(body))
-                    .replace("%(terrain)s", esc(data["terrain"])))
+    body.append(STANDING)
+    terrain_dir = data["terrain"].lower()
+    return dnt_chrome.page(
+        "Linnaean Crosswalk — " + esc(data["terrain"]),
+        dnt_chrome.PAPER, SHEET_CSS, "".join(body),
+        [esc(data["terrain"]), "FIELD COMPENDIUM", "LINNAEAN CROSSWALK"],
+        dnt_chrome.sidebar(ROOT, terrain_dir, "crosswalk.html"),
+        '<a href="/%s/codex.html">Field compendium</a>' % terrain_dir,
+        "DNT FIELD MANUAL v1.0")
 
 
-TEMPLATE = """<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Linnaean Crosswalk</title><style>__HOUSE__
+# The three standing notes every reference sheet closes with. They are the
+# document's own terms of use, and they are the same on every sheet because the
+# terms are the same.
+STANDING = """
+<div class="standing">
+  <div><h4>About this crosswalk</h4>
+    <p>This is a human-readable translation layer for analysis and communication. It is not
+    prescriptive, does not constrain the native system, and is always subject to revision.</p>
+    <p>DNT-CLS-001 §2: No model fits all nonhuman taxonomy. No single historical solution
+    shaped by human morphological perception. A hierarchy is shown as one arrangement among
+    several rather than as the arrangement.</p></div>
+  <div class="withmark"><h4>No structure has been adopted.</h4>
+    <p>The native taxonomy remains whatever the Namer has made of it. Nothing on this sheet
+    feeds back into it, and no agent has seen it.</p></div>
+  <div><h4>Reference</h4>
+    <p>A living document. Every position is computed from a recorded value — node placement,
+    edge weight and ordering alike. No layout was adjusted by hand.</p>
+    <p>Revisions expected as the Namer continues to observe.</p></div>
+</div>
+"""
+
+
+SHEET_CSS = """
+.mast{border-bottom:1px solid var(--rule);padding-bottom:20px;margin-bottom:28px;
+display:grid;grid-template-columns:1fr auto;gap:30px;align-items:start}
+.mast table.doc{border-collapse:collapse;font:11px/1.9 var(--mono);color:var(--grey);width:auto;min-width:0;margin:0}
+.mast table.doc td{padding:0 0 0 18px;white-space:nowrap;border:none;
+vertical-align:baseline}
+.mast table.doc td.k{padding:0}.mast table.doc td.v{color:var(--ink)}
+.standing{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px;
+border-top:1px solid var(--rule);padding-top:22px}
+.standing>div{border:1px solid var(--rule);background:var(--panel);padding:15px 17px}
+.standing h4{font:10px var(--mono);letter-spacing:.11em;text-transform:uppercase;
+color:var(--ink);margin:0 0 8px}
+.standing p{font:11.5px/1.65 var(--mono);color:var(--grey);margin:0 0 8px}
+.standing p:last-child{margin-bottom:0}
+@media(max-width:1000px){.standing{grid-template-columns:1fr}}
 
 
 
 
 
-.wrap{max-width:1000px;margin:0 auto}
-.backbar{position:sticky;top:0;background:var(--paper);border-bottom:1px solid var(--rule);
+
 padding:12px 0;margin-bottom:26px;z-index:5}
-.backbar a{color:var(--moss);text-decoration:none;font:12px var(--mono);letter-spacing:.06em}
-.backbar a:hover{text-decoration:underline}
 .eyebrow{font:500 11px/1.5 var(--mono);letter-spacing:.16em;text-transform:uppercase;
 color:var(--grey);margin:0}
 h1{font:400 clamp(28px,4vw,42px)/1.1 var(--serif);margin:10px 0 12px}
@@ -198,10 +243,8 @@ border-bottom:1px solid var(--rule)}
 color:var(--grey);margin-bottom:4px}
 .pn{color:var(--grey);font-size:12px;margin:6px 0 0}
 @media(max-width:720px){.pair{grid-template-columns:1fr}}
-</style></head><body><div class="wrap">
-<div class="backbar"><a href="http://127.0.0.1:8730/hub.html">&larr; Department index</a></div>
-%(body)s
-</div></body></html>"""
+
+"""
 
 
 def main(argv: List[str]) -> int:

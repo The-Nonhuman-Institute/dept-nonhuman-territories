@@ -1,0 +1,189 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>emergent_neonate_compact — BASIN-01</title><style>
+:root{--paper:#EFEDE3;--ink:#14170F;--moss:#3B4A2F;--grey:#6B7168;--rule:#B9B5A4;
+--panel:#F7F5EC;--amber:#8A6D14;
+--serif:Georgia,'Iowan Old Style','Times New Roman',serif;
+--sans:ui-sans-serif,system-ui,-apple-system,'Helvetica Neue',sans-serif;
+--mono:ui-monospace,SFMono-Regular,Menlo,'DejaVu Sans Mono',monospace}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:14px/1.6 var(--sans);margin:0}
+.mk{fill:var(--moss);display:block}
+.shell{display:grid;grid-template-columns:212px 1fr;min-height:100vh}
+.top{grid-column:1/-1;display:flex;align-items:center;gap:22px;padding:10px 20px;
+border-bottom:1px solid var(--rule);background:var(--panel);position:sticky;top:0;z-index:20}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.bt{font:600 9px/1.25 var(--sans);letter-spacing:.13em;text-transform:uppercase}
+.trail{flex:1;font:11.5px var(--mono);letter-spacing:.05em;color:var(--grey);
+display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.crumb.on{color:var(--moss)}
+.sep{color:var(--rule)}
+.topright{display:flex;gap:8px;font:11px var(--mono)}
+.topright a{color:var(--ink);text-decoration:none;border:1px solid var(--rule);
+padding:5px 10px;background:var(--paper)}
+.topright a:hover{border-color:var(--moss)}
+.side{border-right:1px solid var(--rule);padding:16px 0 20px;display:flex;
+flex-direction:column;gap:20px;background:var(--panel)}
+.navgroup{display:flex;flex-direction:column}
+.navhead{font:9px var(--mono);letter-spacing:.15em;text-transform:uppercase;
+color:var(--grey);padding:0 16px 7px}
+a.nav{display:block;padding:7px 16px;font:11px var(--mono);letter-spacing:.06em;
+color:var(--ink);text-decoration:none;border-left:2px solid transparent}
+a.nav:hover{background:var(--paper)}
+a.nav.on{background:var(--moss);color:var(--paper);border-left-color:var(--moss)}
+.manual{margin-top:auto;padding:14px 16px;border-top:1px solid var(--rule);
+font:9px/1.7 var(--mono);color:var(--grey);display:flex;gap:10px;align-items:flex-start}
+.mk.small{fill:var(--moss);opacity:.8}
+.muted{color:var(--rule)}
+main{padding:22px clamp(16px,2.4vw,30px) 40px;min-width:0}
+.foot{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;
+gap:20px;padding:12px 20px;border-top:1px solid var(--rule);background:var(--panel);
+font:9.5px var(--mono);letter-spacing:.09em;color:var(--grey)}
+.motto{letter-spacing:.14em}
+.inst{display:flex;align-items:center;gap:8px}
+.mk.tiny{fill:var(--grey)}
+@media(max-width:880px){.shell{grid-template-columns:1fr}.side{display:none}}
+
+h1{font:400 clamp(30px,4.2vw,44px)/1.05 var(--serif);margin:0 0 10px}
+h1.cat{font-family:var(--mono);font-size:clamp(22px,3vw,34px);letter-spacing:.01em;
+text-transform:uppercase;margin:0 0 6px}
+.eyebrow{font:10px var(--mono);letter-spacing:.16em;text-transform:uppercase;
+color:var(--grey);margin:0 0 12px}
+.mast{border-bottom:1px solid var(--rule);padding-bottom:20px;margin-bottom:26px;
+display:grid;grid-template-columns:1fr auto;gap:30px;align-items:start}
+.mast table.doc{border-collapse:collapse;font:11px/1.9 var(--mono);color:var(--grey)}
+.mast table.doc td{padding:0 0 0 16px;white-space:nowrap}
+.mast table.doc td.k{padding:0}.mast table.doc td.v{color:var(--ink)}
+.strip{display:flex;flex-wrap:wrap;gap:6px 30px;font:12px var(--mono);color:var(--grey);
+font-variant-numeric:tabular-nums;margin:0 0 4px}
+.strip b{color:var(--ink);font-weight:400}
+.lede{color:var(--ink);font-size:14.5px;line-height:1.7;max-width:72ch;margin:16px 0 0}
+.lede.dim{color:var(--grey)}
+h2.sec{font:10px var(--mono);letter-spacing:.15em;text-transform:uppercase;color:var(--grey);
+margin:38px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)}
+
+/* how to read an entry */
+.howto{border:1px solid var(--rule);background:var(--panel);padding:22px 24px;margin:30px 0}
+.howto h3{font:10px var(--mono);letter-spacing:.15em;text-transform:uppercase;
+color:var(--ink);margin:0 0 10px}
+.howto .sub{color:var(--grey);font:11.5px/1.7 var(--mono);max-width:88ch;margin:0 0 16px}
+.gloss{display:grid;grid-template-columns:150px 1fr;gap:9px 24px;margin:0 0 16px}
+.gloss dt{font:11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--grey)}
+.gloss dd{margin:0;color:var(--ink);font-size:13.5px;line-height:1.55}
+.howto .tail{font-size:12.5px;color:var(--grey);line-height:1.6;margin:0;
+border-top:1px solid var(--rule);padding-top:13px}
+
+/* the category index */
+ul.cats{list-style:none;margin:0;padding:0}
+ul.cats li{display:grid;grid-template-columns:1fr auto auto;gap:20px;align-items:baseline;
+padding:9px 0;border-bottom:1px solid var(--rule)}
+ul.cats a{color:var(--ink);text-decoration:none;font:13px var(--mono)}
+ul.cats a:hover{color:var(--moss)}
+ul.cats a:before{content:"> ";color:var(--grey)}
+ul.cats .n{font:11.5px var(--mono);color:var(--grey);font-variant-numeric:tabular-nums}
+ul.cats .go{font:10px var(--mono);letter-spacing:.08em;color:var(--moss)}
+ul.docs{list-style:none;margin:0;padding:0;columns:2;column-gap:34px}
+ul.docs li{padding:7px 0;border-bottom:1px solid var(--rule);break-inside:avoid}
+ul.docs a{color:var(--ink);text-decoration:none;font:13px var(--mono)}
+ul.docs a:before{content:"> ";color:var(--grey)}
+ul.docs a:hover{color:var(--moss)}
+
+/* the toolbar on a category sheet */
+.bar{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:11px 0;
+border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin-bottom:22px;
+font:10.5px var(--mono);letter-spacing:.07em;color:var(--grey);text-transform:uppercase}
+.bar .count b{color:var(--ink);font-weight:400}
+.bar .grp{display:flex;align-items:center;gap:8px;margin-left:auto}
+.bar select{font:10.5px var(--mono);letter-spacing:.06em;background:var(--panel);
+color:var(--ink);border:1px solid var(--rule);padding:4px 7px;text-transform:uppercase}
+.bar button{font:10.5px var(--mono);letter-spacing:.06em;background:var(--panel);
+color:var(--grey);border:1px solid var(--rule);padding:4px 9px;cursor:pointer;
+text-transform:uppercase}
+.bar button.on{background:var(--moss);border-color:var(--moss);color:var(--paper)}
+
+/* the cards */
+.grid{display:grid;gap:16px;grid-template-columns:repeat(4,minmax(0,1fr))}
+.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:1500px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:1150px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.grid,.grid.two{grid-template-columns:1fr}}
+.card{border:1px solid var(--rule);background:var(--panel);display:flex;flex-direction:column}
+.card.hide{display:none}
+.draw{position:relative;background:#0B0D0A;border-bottom:1px solid var(--rule)}
+.dh{position:absolute;inset:9px 10px auto 10px;display:flex;justify-content:space-between;
+font:9px var(--mono);letter-spacing:.1em;color:#6E7A6B;z-index:2}
+.dh a.v3{color:#8FC96B;text-decoration:none}
+.dh a.v3:hover{text-decoration:underline}
+.dh .gone{color:#4A5046}
+.plate{width:100%;height:196px;display:block}
+.plate .core{fill:rgba(156,181,132,.20);stroke:#9CB584;stroke-width:1.2}
+.plate .arm{stroke:#9CB584;stroke-width:1.1;opacity:.75}
+.plate .node{fill:#8FC96B;opacity:.9}
+.plate .anchor{stroke:#7d8f6e;stroke-width:.9;opacity:.55}
+.plate .brace{fill:none;stroke:#9CB584;stroke-width:.6;opacity:.45}
+.plate .orbit{fill:none;stroke:#C9A227;stroke-width:.9;opacity:.55}
+.plate .disc{fill:#C9A227;opacity:.22}
+.plate.empty{background:#0B0D0A}
+.plate .none{fill:#4A5046;font:11px ui-monospace,monospace;text-anchor:middle;letter-spacing:.1em}
+.body{padding:13px 15px 16px;display:flex;flex-direction:column;gap:10px}
+.id{font:12px var(--mono);display:flex;justify-content:space-between;gap:10px;
+align-items:baseline;border-bottom:1px solid var(--rule);padding-bottom:8px}
+.id a{color:var(--ink);text-decoration:none}
+.id a:hover{color:var(--moss)}
+.st{font:9.5px var(--mono);letter-spacing:.08em;color:var(--grey);white-space:nowrap}
+.st.alive{color:var(--moss)}
+.prose{font:14px/1.62 var(--serif);margin:0;color:var(--ink)}
+table.ms{border-collapse:collapse;width:100%;font:11px/1.55 var(--mono);
+font-variant-numeric:tabular-nums}
+table.ms td{padding:2px 0;vertical-align:top}
+table.ms td.k{color:var(--grey);padding-right:12px;width:44%}
+table.ms td.v i{color:var(--grey);font-style:normal}
+.lbl{font:9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--grey);
+border-top:1px solid var(--rule);padding-top:10px}
+.say{font:12px/1.6 var(--mono);color:var(--ink);margin:0}
+.card details{font-size:11.5px;color:var(--grey)}
+.card summary{cursor:pointer;font:10px var(--mono);letter-spacing:.07em;color:var(--moss)}
+.card details p{margin:7px 0 0;line-height:1.6;font:11.5px/1.6 var(--mono)}
+.none{color:var(--grey);font-style:italic}
+.foot-note{margin:36px 0 0;padding-top:14px;border-top:1px solid var(--rule);
+color:var(--grey);font:11.5px/1.6 var(--mono)}
+</style></head><body><div class="shell"><header class="top"><a class="brand" href="/hub.html"><svg class="mk" viewBox="0 0 100 120" width="26" height="31" aria-hidden="true"><path d="M0,0 H100 V120 H0 Z M7.3,7.3 H92.7 V111.2 H7.3 Z M18,111.2 H82 V120 H18 Z" fill-rule="evenodd"/></svg><span class="bt">Department of<br>Nonhuman Territories</span></a><nav class="trail"><span class="crumb">BASIN-01</span> <span class="sep">/</span> <span class="crumb">FIELD COMPENDIUM</span> <span class="sep">/</span> <span class="crumb on">EMERGENT_NEONATE_COMPACT</span></nav><div class="topright"><a href="/basin-01/codex.html">All categories</a></div></header><aside class="side"><div class="navgroup"><div class="navhead">Terrains</div><a class="nav on" href="/basin-01/terrain.html">BASIN-01</a><a class="nav " href="/basin-02/terrain.html">BASIN-02</a><a class="nav " href="/basin-03/terrain.html">BASIN-03</a><a class="nav " href="/basin-04/terrain.html">BASIN-04</a></div><div class="navgroup"><div class="navhead">Reference</div><a class="nav on" href="/basin-01/codex.html">FIELD COMPENDIUM</a><a class="nav " href="/basin-01/structure.html">CLASSIFICATION STRUCTURE</a><a class="nav " href="/basin-01/crosswalk.html">LINNAEAN CROSSWALK</a><a class="nav " href="/basin-01/terrain.html">TERRAIN RECORD</a><a class="nav " href="/basin-01/shiftlog.html">SHIFT LOG</a></div><div class="manual"><svg class="mk small" viewBox="0 0 100 120" width="22" height="26" aria-hidden="true"><path d="M0,0 H100 V120 H0 Z M7.3,7.3 H92.7 V111.2 H7.3 Z M18,111.2 H82 V120 H18 Z" fill-rule="evenodd"/></svg><div>DNT FIELD MANUAL<br>VERSION 1.0<br><span class="muted">INTERNAL USE ONLY</span></div></div></aside><main><div class="mast"><div><p class="eyebrow"><a style="color:inherit;text-decoration:none" href="/basin-01/codex.html">Field compendium</a> · BASIN-01 · native category</p><h1 class="cat">emergent_neonate_compact</h1><div class="strip"><span><b>1</b> specimens</span><span><b>1</b> living</span><span><b>1</b> with measurements</span></div></div><table class="doc"><tr><td class="k">TERRAIN</td><td class="v">BASIN-01</td></tr><tr><td class="k">SHIFT</td><td class="v">126</td></tr><tr><td class="k">COINED BY</td><td class="v">THE NAMER</td></tr></table></div><div class="bar"><span class="count"><b id="shown">1</b> of <b>1</b> shown in this category</span><span class="grp">show<button data-filter="all" class="on">all</button><button data-filter="living">living</button><button data-filter="ended">ended</button>&nbsp;&nbsp;view<button data-cols="4" class="on">4</button><button data-cols="2">2</button>&nbsp;&nbsp;sort<select id="sort"><option value="shift">by shift (newest)</option><option value="lasted">by shifts lasted</option><option value="id">by identifier</option></select></span></div><div class="grid" id="grid"><article class="card" data-alive="1" data-shift="" data-lasted="2" data-id="i-00127"><div class="draw"><div class="dh"><span>SPECIMEN DRAWING</span><a class="v3" href="http://127.0.0.1:8731/index.html#i-00127">VIEW 3D ↗</a></div><svg viewBox="0 0 168 168" class="plate" role="img" aria-label="i-00127"><ellipse cx="84.0" cy="122.1" rx="49.5" ry="7.6" class="disc"/><line x1="84.0" y1="91.6" x2="131.6" y2="120.8" class="anchor"/><line x1="84.0" y1="91.6" x2="108.3" y2="120.8" class="anchor"/><line x1="84.0" y1="91.6" x2="75.6" y2="120.8" class="anchor"/><line x1="84.0" y1="91.6" x2="46.2" y2="120.8" class="anchor"/><line x1="84.0" y1="91.6" x2="31.2" y2="120.8" class="anchor"/><line x1="84.0" y1="84.0" x2="84.0" y2="32.5" class="arm"/><circle cx="84.0" cy="32.5" r="4.1" class="node"/><line x1="84.0" y1="84.0" x2="139.8" y2="109.8" class="arm"/><circle cx="139.8" cy="109.8" r="4.1" class="node"/><line x1="84.0" y1="84.0" x2="28.2" y2="109.8" class="arm"/><circle cx="28.2" cy="109.8" r="4.1" class="node"/><polygon points="84.0,58.6 106.0,71.3 106.0,96.7 84.0,109.4 62.0,96.7 62.0,71.3" class="core"/><ellipse cx="84.0" cy="84.0" rx="43.2" ry="12.7" class="orbit"/></svg></div><div class="body"><div class="id"><a href="/basin-01/specimens/i-00127.html">i-00127</a><span class="st alive">LIVING</span></div><p class="prose">A solidly built, moderately spread form, two-jointed. It fed on the mat growing where it stood, and took a real share from its neighbours as well. It is still standing after 2 shifts, leaving 1 offspring.</p><table class="ms"><tr><td class="k">reach</td><td class="v">0.61  –  <i>lower than almost all</i></td></tr><tr><td class="k">holds n links</td><td class="v">2 (links)  –  <i>higher than almost all</i></td></tr><tr><td class="k">carries</td><td class="v">1.34  –  <i>about typical</i></td></tr><tr><td class="k">makes its living by</td><td class="v">ground 1.34 · remains 0.73 · others 0.93  –  <i>leans on the ground</i></td></tr><tr><td class="k">lasted</td><td class="v">2 shift(s)  –  <i>lower than almost all</i></td></tr><tr><td class="k">offspring</td><td class="v">1</td></tr><tr><td class="k">made of</td><td class="v">structural</td></tr></table><div class="lbl">how it stays alive, in the Namer’s own words</div><p class="say">i-00127 persists as an ultra-compact nascent organism at high-gradient position, holding energy (7.00 light initially from cover layer). Its minimal reach (0.61) constrains resource integration area, while 2-link capacity allows potential inter-link participation. Persistence depends on surviving maintenance costs (1.18 light/shift) and activating resource intake in subsequent shifts; currently immobile and non-integrating.</p><details><summary>why the Namer grouped it here</summary><p>i-00127 is a generation-0 birth (from cover layer) at inception (0 shifts, complexity 0), positioned high-gradient (0.80), near data-stream. Its architecture is ultra-compact: reach 0.61, 2-link capacity, maintenance cost 1.18 light/shift, max holding 14.72 light. The reach of 0.61 is distinctly smaller than other nascent organisms and smaller even than emergent_minimal exemplars (reach ≤1.48). However, it retains 2-link capacity, which is unusual for its reach. The maintenance cost and max holding are moderate. This ultra-compact build at high-gradient position suggests a specialized phenotype distinct from emergent_neonate (which typically has reach 1.77+) and emergent_minimal (reach ≤1.48, 1-link). I am coining emergent_neonate_compact to capture this ultra-compact, high-gradient, multi-link variant.</p></details></div></article></div>
+<script>
+(function(){
+  var grid=document.getElementById('grid');
+  if(!grid)return;
+  var cards=Array.prototype.slice.call(grid.children);
+  var num=function(c,k){return Number(c.dataset[k]||0)};
+  var sorts={
+    shift:function(a,b){return num(b,'shift')-num(a,'shift')},
+    lasted:function(a,b){return num(b,'lasted')-num(a,'lasted')},
+    id:function(a,b){return a.dataset.id.localeCompare(b.dataset.id)}
+  };
+  var sel=document.getElementById('sort');
+  sel.onchange=function(){
+    cards.slice().sort(sorts[sel.value]).forEach(function(c){grid.appendChild(c)});
+  };
+  sel.onchange();
+  var show=function(mode){
+    var n=0;
+    cards.forEach(function(c){
+      var ok = mode==='all' || (mode==='living')===(c.dataset.alive==='1');
+      c.classList.toggle('hide',!ok);
+      if(ok)n++;
+    });
+    document.getElementById('shown').textContent=n;
+  };
+  document.querySelectorAll('[data-filter]').forEach(function(b){
+    b.onclick=function(){
+      document.querySelectorAll('[data-filter]').forEach(function(x){x.classList.remove('on')});
+      b.classList.add('on'); show(b.dataset.filter);
+    };
+  });
+  document.querySelectorAll('[data-cols]').forEach(function(b){
+    b.onclick=function(){
+      document.querySelectorAll('[data-cols]').forEach(function(x){x.classList.remove('on')});
+      b.classList.add('on'); grid.classList.toggle('two', b.dataset.cols==='2');
+    };
+  });
+})();
+</script>
+<p class="foot-note">Generated from state/specimen_log.jsonl, state/anomaly_log.jsonl and state/memory.json. Read-only: this tool writes HTML and changes no terrain record.</p></main><footer class="foot"><span>DNT FIELD MANUAL v1.0</span><span class="motto">WE OBSERVE. WE DO NOT INTERFERE.</span><span class="inst">A BRANCH OF THE NONHUMAN INSTITUTE <svg class="mk tiny" viewBox="0 0 100 120" width="14" height="16" aria-hidden="true"><path d="M0,0 H100 V120 H0 Z M7.3,7.3 H92.7 V111.2 H7.3 Z M18,111.2 H82 V120 H18 Z" fill-rule="evenodd"/></svg></span></footer></div></body></html>
