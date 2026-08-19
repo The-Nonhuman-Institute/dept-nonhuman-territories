@@ -60,13 +60,24 @@ def load(terrain: str) -> Dict[str, Any]:
 # --- governing conditions: real, or explicitly absent ---------------------
 def governing_conditions(terrain: str) -> List[Dict[str, Any]]:
     """What actually governs this terrain. Absent conditions say so."""
-    import importlib, sys
-    base = os.path.join(ROOT, terrain)
-    if base not in sys.path:
-        sys.path.insert(0, base)
+    # Load THIS terrain's config by path, under its own module name.
+    #
+    # This used to insert the terrain directory at the front of sys.path and
+    # import "config". That works exactly once. After four terrains have each
+    # inserted their directory, the guard stops inserting, the finder resolves
+    # "config" against whichever directory happens to sit earliest, and every
+    # terrain is reported with a single terrain's constants. It is silent — the
+    # numbers are real, they just belong to the wrong terrain — and it made the
+    # comparative study claim all four terrains had identical conditions.
+    import importlib.util
+    path = os.path.join(ROOT, terrain, "config.py")
+    if not os.path.exists(path):
+        return []
     try:
-        cfg = importlib.import_module("config")
-        importlib.reload(cfg)
+        spec = importlib.util.spec_from_file_location("dnt_cfg_" + terrain.replace("-", "_"),
+                                                      path)
+        cfg = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cfg)
     except Exception:
         return []
     rows = []

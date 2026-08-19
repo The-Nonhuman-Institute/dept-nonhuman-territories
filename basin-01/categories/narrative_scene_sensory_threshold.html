@@ -1,189 +1,183 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>narrative_scene_sensory_threshold — BASIN-01</title><style>
-:root{--paper:#EFEDE3;--ink:#14170F;--moss:#3B4A2F;--grey:#6B7168;--rule:#B9B5A4;
---panel:#F7F5EC;--amber:#8A6D14;
---serif:Georgia,'Iowan Old Style','Times New Roman',serif;
---sans:ui-sans-serif,system-ui,-apple-system,'Helvetica Neue',sans-serif;
+:root{--ink:#D6DED2;--dim:#7C8879;--faint:#4E574C;--rule:#1D231B;--rule2:#2A322704;
+--bg:#080A07;--panel:#0D100C;--panel2:#111510;--moss:#8FC96B;--moss2:#5F8F45;
+--amber:#C9A227;--rose:#D4614A;--violet:#8F7FBE;--cyan:#5FA9A0;--slate:#5A6B78;
+--serif:Georgia,'Iowan Old Style',serif;
+--sans:ui-sans-serif,system-ui,-apple-system,sans-serif;
 --mono:ui-monospace,SFMono-Regular,Menlo,'DejaVu Sans Mono',monospace}
-
 *{box-sizing:border-box}
-body{background:var(--paper);color:var(--ink);font:14px/1.6 var(--sans);margin:0}
-.mk{fill:var(--moss);display:block}
-.shell{display:grid;grid-template-columns:212px 1fr;min-height:100vh}
-.top{grid-column:1/-1;display:flex;align-items:center;gap:22px;padding:10px 20px;
-border-bottom:1px solid var(--rule);background:var(--panel);position:sticky;top:0;z-index:20}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
-.bt{font:600 9px/1.25 var(--sans);letter-spacing:.13em;text-transform:uppercase}
-.trail{flex:1;font:11.5px var(--mono);letter-spacing:.05em;color:var(--grey);
-display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.crumb.on{color:var(--moss)}
-.sep{color:var(--rule)}
-.topright{display:flex;gap:8px;font:11px var(--mono)}
-.topright a{color:var(--ink);text-decoration:none;border:1px solid var(--rule);
-padding:5px 10px;background:var(--paper)}
-.topright a:hover{border-color:var(--moss)}
-.side{border-right:1px solid var(--rule);padding:16px 0 20px;display:flex;
-flex-direction:column;gap:20px;background:var(--panel)}
-.navgroup{display:flex;flex-direction:column}
-.navhead{font:9px var(--mono);letter-spacing:.15em;text-transform:uppercase;
-color:var(--grey);padding:0 16px 7px}
-a.nav{display:block;padding:7px 16px;font:11px var(--mono);letter-spacing:.06em;
-color:var(--ink);text-decoration:none;border-left:2px solid transparent}
-a.nav:hover{background:var(--paper)}
-a.nav.on{background:var(--moss);color:var(--paper);border-left-color:var(--moss)}
-.manual{margin-top:auto;padding:14px 16px;border-top:1px solid var(--rule);
-font:9px/1.7 var(--mono);color:var(--grey);display:flex;gap:10px;align-items:flex-start}
-.mk.small{fill:var(--moss);opacity:.8}
-.muted{color:var(--rule)}
-main{padding:22px clamp(16px,2.4vw,30px) 40px;min-width:0}
-.foot{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;
-gap:20px;padding:12px 20px;border-top:1px solid var(--rule);background:var(--panel);
-font:9.5px var(--mono);letter-spacing:.09em;color:var(--grey)}
-.motto{letter-spacing:.14em}
-.inst{display:flex;align-items:center;gap:8px}
-.mk.tiny{fill:var(--grey)}
-@media(max-width:880px){.shell{grid-template-columns:1fr}.side{display:none}}
+html,body{margin:0;background:var(--bg);color:var(--ink);
+font:13px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:var(--moss)}
+::selection{background:var(--moss2);color:var(--bg)}
 
-h1{font:400 clamp(30px,4.2vw,44px)/1.05 var(--serif);margin:0 0 10px}
-h1.cat{font-family:var(--mono);font-size:clamp(22px,3vw,34px);letter-spacing:.01em;
-text-transform:uppercase;margin:0 0 6px}
-.eyebrow{font:10px var(--mono);letter-spacing:.16em;text-transform:uppercase;
-color:var(--grey);margin:0 0 12px}
-.mast{border-bottom:1px solid var(--rule);padding-bottom:20px;margin-bottom:26px;
-display:grid;grid-template-columns:1fr auto;gap:30px;align-items:start}
-.mast table.doc{border-collapse:collapse;font:11px/1.9 var(--mono);color:var(--grey)}
-.mast table.doc td{padding:0 0 0 16px;white-space:nowrap}
-.mast table.doc td.k{padding:0}.mast table.doc td.v{color:var(--ink)}
-.strip{display:flex;flex-wrap:wrap;gap:6px 30px;font:12px var(--mono);color:var(--grey);
-font-variant-numeric:tabular-nums;margin:0 0 4px}
-.strip b{color:var(--ink);font-weight:400}
-.lede{color:var(--ink);font-size:14.5px;line-height:1.7;max-width:72ch;margin:16px 0 0}
-.lede.dim{color:var(--grey)}
-h2.sec{font:10px var(--mono);letter-spacing:.15em;text-transform:uppercase;color:var(--grey);
-margin:38px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)}
+/* ---- shell ---- */
+.app{display:grid;min-height:100vh;
+grid-template-columns:var(--lw,236px) minmax(0,1fr) var(--rw,318px);
+grid-template-rows:auto minmax(0,1fr) auto;
+grid-template-areas:"top top top" "left mid right" "bot bot bot"}
+.app.norail{--rw:0px;grid-template-areas:"top top top" "left mid mid" "bot bot bot"}
+.app.noleft{--lw:0px;grid-template-areas:"top top top" "mid mid right" "bot bot bot"}
 
-/* how to read an entry */
-.howto{border:1px solid var(--rule);background:var(--panel);padding:22px 24px;margin:30px 0}
-.howto h3{font:10px var(--mono);letter-spacing:.15em;text-transform:uppercase;
-color:var(--ink);margin:0 0 10px}
-.howto .sub{color:var(--grey);font:11.5px/1.7 var(--mono);max-width:88ch;margin:0 0 16px}
-.gloss{display:grid;grid-template-columns:150px 1fr;gap:9px 24px;margin:0 0 16px}
-.gloss dt{font:11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--grey)}
-.gloss dd{margin:0;color:var(--ink);font-size:13.5px;line-height:1.55}
-.howto .tail{font-size:12.5px;color:var(--grey);line-height:1.6;margin:0;
-border-top:1px solid var(--rule);padding-top:13px}
+/* ---- top bar ---- */
+.top{grid-area:top;display:flex;align-items:center;gap:18px;padding:9px 16px;
+background:var(--panel);border-bottom:1px solid var(--rule);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink);
+flex:0 0 auto}
+.brand svg{fill:var(--moss);display:block}
+.brand .w{font:700 13px/1 var(--mono);letter-spacing:.12em}
+.brand .d{font:600 8px/1.3 var(--sans);letter-spacing:.13em;text-transform:uppercase;
+color:var(--dim)}
+.crumbs{display:flex;align-items:center;gap:7px;font:11px var(--mono);letter-spacing:.06em;
+flex-wrap:wrap}
+.crumbs a{color:var(--moss);text-decoration:none}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .cur{color:var(--moss)}
+.crumbs .arrow{color:var(--faint)}
+.state{display:flex;align-items:center;gap:9px;font:11px var(--mono);color:var(--dim);
+margin-left:8px;white-space:nowrap}
+.state b{color:var(--ink);font-weight:400}
+.state .dot{width:6px;height:6px;border-radius:50%;background:var(--moss);display:block}
+.acts{margin-left:auto;display:flex;gap:7px;flex-wrap:wrap}
+.acts a{font:10.5px var(--mono);letter-spacing:.03em;color:var(--ink);text-decoration:none;
+border:1px solid var(--rule);background:var(--bg);padding:6px 11px;white-space:nowrap}
+.acts a:hover{border-color:var(--moss2);color:var(--moss)}
+.acts a.pri{border-color:var(--moss2)}
 
-/* the category index */
-ul.cats{list-style:none;margin:0;padding:0}
-ul.cats li{display:grid;grid-template-columns:1fr auto auto;gap:20px;align-items:baseline;
-padding:9px 0;border-bottom:1px solid var(--rule)}
-ul.cats a{color:var(--ink);text-decoration:none;font:13px var(--mono)}
-ul.cats a:hover{color:var(--moss)}
-ul.cats a:before{content:"> ";color:var(--grey)}
-ul.cats .n{font:11.5px var(--mono);color:var(--grey);font-variant-numeric:tabular-nums}
-ul.cats .go{font:10px var(--mono);letter-spacing:.08em;color:var(--moss)}
-ul.docs{list-style:none;margin:0;padding:0;columns:2;column-gap:34px}
-ul.docs li{padding:7px 0;border-bottom:1px solid var(--rule);break-inside:avoid}
-ul.docs a{color:var(--ink);text-decoration:none;font:13px var(--mono)}
-ul.docs a:before{content:"> ";color:var(--grey)}
-ul.docs a:hover{color:var(--moss)}
+/* ---- rails ---- */
+.left{grid-area:left;background:var(--panel);border-right:1px solid var(--rule)}
+.right{grid-area:right;background:var(--panel);border-left:1px solid var(--rule)}
+.mid{grid-area:mid;min-width:0;padding:16px}
+.left,.right{overflow-y:auto;min-height:0}
+.app.norail .right{display:none}
+.app.noleft .left{display:none}
 
-/* the toolbar on a category sheet */
-.bar{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:11px 0;
-border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin-bottom:22px;
-font:10.5px var(--mono);letter-spacing:.07em;color:var(--grey);text-transform:uppercase}
-.bar .count b{color:var(--ink);font-weight:400}
-.bar .grp{display:flex;align-items:center;gap:8px;margin-left:auto}
-.bar select{font:10.5px var(--mono);letter-spacing:.06em;background:var(--panel);
-color:var(--ink);border:1px solid var(--rule);padding:4px 7px;text-transform:uppercase}
-.bar button{font:10.5px var(--mono);letter-spacing:.06em;background:var(--panel);
-color:var(--grey);border:1px solid var(--rule);padding:4px 9px;cursor:pointer;
-text-transform:uppercase}
-.bar button.on{background:var(--moss);border-color:var(--moss);color:var(--paper)}
+/* ---- panels ---- */
+.p{border:1px solid var(--rule);background:var(--panel);margin-bottom:14px}
+.mid>.p:last-child,.rail .p:last-child{margin-bottom:0}
+.rail{padding:13px}
+.ph{display:flex;align-items:baseline;gap:9px;padding:10px 13px;
+border-bottom:1px solid var(--rule);font:9.5px var(--mono);letter-spacing:.13em;
+text-transform:uppercase;color:var(--dim)}
+.ph b{color:var(--ink);font-weight:400;letter-spacing:.06em}
+.ph .r{margin-left:auto;color:var(--faint);text-transform:none;letter-spacing:.04em}
+.ph a{color:var(--moss);text-decoration:none;font-size:9.5px}
+.pb{padding:13px}
+.pb.flush{padding:0}
 
-/* the cards */
-.grid{display:grid;gap:16px;grid-template-columns:repeat(4,minmax(0,1fr))}
-.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
-@media(max-width:1500px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(max-width:1150px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:760px){.grid,.grid.two{grid-template-columns:1fr}}
-.card{border:1px solid var(--rule);background:var(--panel);display:flex;flex-direction:column}
-.card.hide{display:none}
-.draw{position:relative;background:#0B0D0A;border-bottom:1px solid var(--rule)}
-.dh{position:absolute;inset:9px 10px auto 10px;display:flex;justify-content:space-between;
-font:9px var(--mono);letter-spacing:.1em;color:#6E7A6B;z-index:2}
-.dh a.v3{color:#8FC96B;text-decoration:none}
-.dh a.v3:hover{text-decoration:underline}
-.dh .gone{color:#4A5046}
-.plate{width:100%;height:196px;display:block}
-.plate .core{fill:rgba(156,181,132,.20);stroke:#9CB584;stroke-width:1.2}
-.plate .arm{stroke:#9CB584;stroke-width:1.1;opacity:.75}
-.plate .node{fill:#8FC96B;opacity:.9}
-.plate .anchor{stroke:#7d8f6e;stroke-width:.9;opacity:.55}
-.plate .brace{fill:none;stroke:#9CB584;stroke-width:.6;opacity:.45}
-.plate .orbit{fill:none;stroke:#C9A227;stroke-width:.9;opacity:.55}
-.plate .disc{fill:#C9A227;opacity:.22}
-.plate.empty{background:#0B0D0A}
-.plate .none{fill:#4A5046;font:11px ui-monospace,monospace;text-anchor:middle;letter-spacing:.1em}
-.body{padding:13px 15px 16px;display:flex;flex-direction:column;gap:10px}
-.id{font:12px var(--mono);display:flex;justify-content:space-between;gap:10px;
-align-items:baseline;border-bottom:1px solid var(--rule);padding-bottom:8px}
-.id a{color:var(--ink);text-decoration:none}
-.id a:hover{color:var(--moss)}
-.st{font:9.5px var(--mono);letter-spacing:.08em;color:var(--grey);white-space:nowrap}
-.st.alive{color:var(--moss)}
-.prose{font:14px/1.62 var(--serif);margin:0;color:var(--ink)}
-table.ms{border-collapse:collapse;width:100%;font:11px/1.55 var(--mono);
+/* ---- key/value ---- */
+dl.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0;
+font:11.5px/1.6 var(--mono);font-variant-numeric:tabular-nums}
+dl.kv dt{color:var(--dim)}
+dl.kv dd{margin:0;text-align:right;color:var(--ink);word-break:break-word}
+dl.kv dd.na{color:var(--faint);font-style:italic}
+
+/* ---- stat strip ---- */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));
+border:1px solid var(--rule);border-left:none;background:var(--panel);margin-bottom:14px}
+.stat{border-left:1px solid var(--rule);padding:13px 15px}
+.stat .v{font:400 26px/1.05 var(--serif);font-variant-numeric:tabular-nums}
+.stat .l{font:9px var(--mono);letter-spacing:.11em;text-transform:uppercase;
+color:var(--dim);margin-top:7px}
+.stat .s{font:10px var(--mono);color:var(--faint);margin-top:3px}
+.up{color:var(--moss)}.down{color:var(--rose)}
+
+/* ---- tables ---- */
+table.d{border-collapse:collapse;width:100%;font:11.5px/1.5 var(--mono);
 font-variant-numeric:tabular-nums}
-table.ms td{padding:2px 0;vertical-align:top}
-table.ms td.k{color:var(--grey);padding-right:12px;width:44%}
-table.ms td.v i{color:var(--grey);font-style:normal}
-.lbl{font:9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--grey);
-border-top:1px solid var(--rule);padding-top:10px}
-.say{font:12px/1.6 var(--mono);color:var(--ink);margin:0}
-.card details{font-size:11.5px;color:var(--grey)}
-.card summary{cursor:pointer;font:10px var(--mono);letter-spacing:.07em;color:var(--moss)}
-.card details p{margin:7px 0 0;line-height:1.6;font:11.5px/1.6 var(--mono)}
-.none{color:var(--grey);font-style:italic}
-.foot-note{margin:36px 0 0;padding-top:14px;border-top:1px solid var(--rule);
-color:var(--grey);font:11.5px/1.6 var(--mono)}
-</style></head><body><div class="shell"><header class="top"><a class="brand" href="/hub.html"><svg class="mk" viewBox="0 0 100 120" width="26" height="31" aria-hidden="true"><path d="M0,0 H100 V120 H0 Z M7.3,7.3 H92.7 V111.2 H7.3 Z M18,111.2 H82 V120 H18 Z" fill-rule="evenodd"/></svg><span class="bt">Department of<br>Nonhuman Territories</span></a><nav class="trail"><span class="crumb">BASIN-01</span> <span class="sep">/</span> <span class="crumb">FIELD COMPENDIUM</span> <span class="sep">/</span> <span class="crumb on">NARRATIVE_SCENE_SENSORY_THRESHOLD</span></nav><div class="topright"><a href="/basin-01/codex.html">All categories</a></div></header><aside class="side"><div class="navgroup"><div class="navhead">Terrains</div><a class="nav on" href="/basin-01/terrain.html">BASIN-01</a><a class="nav " href="/basin-02/terrain.html">BASIN-02</a><a class="nav " href="/basin-03/terrain.html">BASIN-03</a><a class="nav " href="/basin-04/terrain.html">BASIN-04</a></div><div class="navgroup"><div class="navhead">Reference</div><a class="nav on" href="/basin-01/codex.html">FIELD COMPENDIUM</a><a class="nav " href="/basin-01/structure.html">CLASSIFICATION STRUCTURE</a><a class="nav " href="/basin-01/crosswalk.html">LINNAEAN CROSSWALK</a><a class="nav " href="/basin-01/terrain.html">TERRAIN RECORD</a><a class="nav " href="/basin-01/shiftlog.html">SHIFT LOG</a></div><div class="manual"><svg class="mk small" viewBox="0 0 100 120" width="22" height="26" aria-hidden="true"><path d="M0,0 H100 V120 H0 Z M7.3,7.3 H92.7 V111.2 H7.3 Z M18,111.2 H82 V120 H18 Z" fill-rule="evenodd"/></svg><div>DNT FIELD MANUAL<br>VERSION 1.0<br><span class="muted">INTERNAL USE ONLY</span></div></div></aside><main><div class="mast"><div><p class="eyebrow"><a style="color:inherit;text-decoration:none" href="/basin-01/codex.html">Field compendium</a> · BASIN-01 · native category</p><h1 class="cat">narrative_scene_sensory_threshold</h1><div class="strip"><span><b>6</b> specimens</span><span><b>0</b> living</span><span><b>0</b> with measurements</span></div></div><table class="doc"><tr><td class="k">TERRAIN</td><td class="v">BASIN-01</td></tr><tr><td class="k">SHIFT</td><td class="v">126</td></tr><tr><td class="k">COINED BY</td><td class="v">THE NAMER</td></tr></table></div><div class="bar"><span class="count"><b id="shown">6</b> of <b>6</b> shown in this category</span><span class="grp">show<button data-filter="all" class="on">all</button><button data-filter="living">living</button><button data-filter="ended">ended</button>&nbsp;&nbsp;view<button data-cols="4" class="on">4</button><button data-cols="2">2</button>&nbsp;&nbsp;sort<select id="sort"><option value="shift">by shift (newest)</option><option value="lasted">by shifts lasted</option><option value="id">by identifier</option></select></span></div><div class="grid" id="grid"><article class="card" data-alive="0" data-shift="" data-lasted="" data-id="s-0023-03"><div class="draw"><div class="dh"><span>SPECIMEN DRAWING</span><span class="v3 gone">NOT IN THE FIELD</span></div><svg viewBox="0 0 168 168" class="plate empty" role="img" aria-label="no measurements survive for this specimen"><text x="84" y="84" class="none">nothing survives</text></svg></div><div class="body"><div class="id"><a href="/basin-01/specimens/s-0023-03.html">s-0023-03</a><span class="st">DIED AT SHIFT </span></div><p class="prose">Nothing survives of this one but the Namer's account of it. It died before the terrain began keeping remains, so its build was never written down and cannot be recovered.</p><table class="ms"><tr><td class="k">lasted</td><td class="v"> shift(s)</td></tr><tr><td class="k">offspring</td><td class="v">—</td></tr></table><details><summary>why the Namer grouped it here</summary><p>s-0023-03 depicts a moment of sensory suspension: morning light, long shadows, quiet corner where 'time seemed to move differently.' The focus is on atmospheric condition and sensory texture ('hummed with distant sirens', 'quiet corner') rather than on internal deliberation or external enacted movement. There is no decision-work happening (interior_moment) and no action being performed (threshold). Instead, the specimen captures a phenomenological moment of suspended sensation—awareness held in a sensory threshold. This mirrors s-0002-01 ('quiet weight of possibility'), which we have already identified as warranting the narrative_scene_sensory_threshold subcategory. Complexity 43 suggests slightly higher structural complexity than s-0002-01, but the substrate remains sensory-atmospheric. This specimen confirms that sensory_threshold is a recurrent and stable category.</p></details></div></article><article class="card" data-alive="0" data-shift="" data-lasted="" data-id="s-0024-01"><div class="draw"><div class="dh"><span>SPECIMEN DRAWING</span><span class="v3 gone">NOT IN THE FIELD</span></div><svg viewBox="0 0 168 168" class="plate empty" role="img" aria-label="no measurements survive for this specimen"><text x="84" y="84" class="none">nothing survives</text></svg></div><div class="body"><div class="id"><a href="/basin-01/specimens/s-0024-01.html">s-0024-01</a><span class="st">DIED AT SHIFT </span></div><p class="prose">Nothing survives of this one but the Namer's account of it. It died before the terrain began keeping remains, so its build was never written down and cannot be recovered.</p><table class="ms"><tr><td class="k">lasted</td><td class="v"> shift(s)</td></tr><tr><td class="k">offspring</td><td class="v">—</td></tr></table><div class="lbl">how it stays alive, in the Namer’s own words</div><p class="say">Persists as a suspended sensory present: the moment holds only if attention remains fixed on the atmospheric quality, on the pause itself. It dissolves once forward motion resumes, once deliberation begins, or once external action claims priority.</p><details><summary>why the Namer grouped it here</summary><p>This fragment privileges sensory suspension over narrative action or psychological deliberation. The key phrase 'as if the world had paused just for this moment' establishes a phenomenological threshold—a space where time becomes perceptible, where sensation dominates. The dust motes, golden rays, and the metaphor of 'travelers suspended between yesterday and tomorrow' all gesture toward the sensory_threshold quality: a moment anterior to both interior decision-work and threshold crossing. Complexity of 37 aligns with the category mean (43.0). It lacks the enacted movement of threshold scenes and the internal deliberation of interior_moment scenes.</p></details></div></article><article class="card" data-alive="0" data-shift="" data-lasted="" data-id="s-0026-03"><div class="draw"><div class="dh"><span>SPECIMEN DRAWING</span><span class="v3 gone">NOT IN THE FIELD</span></div><svg viewBox="0 0 168 168" class="plate empty" role="img" aria-label="no measurements survive for this specimen"><text x="84" y="84" class="none">nothing survives</text></svg></div><div class="body"><div class="id"><a href="/basin-01/specimens/s-0026-03.html">s-0026-03</a><span class="st">DIED AT SHIFT </span></div><p class="prose">Nothing survives of this one but the Namer's account of it. It died before the terrain began keeping remains, so its build was never written down and cannot be recovered.</p><table class="ms"><tr><td class="k">lasted</td><td class="v"> shift(s)</td></tr><tr><td class="k">offspring</td><td class="v">—</td></tr></table><div class="lbl">how it stays alive, in the Namer’s own words</div><p class="say">This moment persists as an aesthetic arrest—a pause in time where sensory detail becomes vivid and dreamlike; it persists in the act of observation itself, in the mind holding multiple simultaneous impressions (dust, cream, galaxies) as if they were equivalent in weight and reality.</p><details><summary>why the Namer grouped it here</summary><p>This specimen exemplifies the sensory_threshold category: it captures a moment of suspended aesthetic attention anterior to both interior deliberation and threshold action. The focus is on sensory phenomena (dust, cream, light, galaxies) and the character's observation of them ('watching') rather than on internal conflict or enacted movement. Sarah's wondering is light and contemplative rather than the weight-bearing deliberation of interior_moment. The filtered light, threshold imagery, and poetic sensory language match established sensory_threshold members. Complexity 44 aligns with this category's established members (s-0023-03 at 43, s-0024-01 at 37). The sentence fragment structure and atmospheric quality confirm placement.</p></details></div></article><article class="card" data-alive="0" data-shift="" data-lasted="" data-id="s-0027-01"><div class="draw"><div class="dh"><span>SPECIMEN DRAWING</span><span class="v3 gone">NOT IN THE FIELD</span></div><svg viewBox="0 0 168 168" class="plate empty" role="img" aria-label="no measurements survive for this specimen"><text x="84" y="84" class="none">nothing survives</text></svg></div><div class="body"><div class="id"><a href="/basin-01/specimens/s-0027-01.html">s-0027-01</a><span class="st">DIED AT SHIFT </span></div><p class="prose">Nothing survives of this one but the Namer's account of it. It died before the terrain began keeping remains, so its build was never written down and cannot be recovered.</p><table class="ms"><tr><td class="k">lasted</td><td class="v"> shift(s)</td></tr><tr><td class="k">offspring</td><td class="v">—</td></tr></table><div class="lbl">how it stays alive, in the Namer’s own words</div><p class="say">Persists as a suspended moment of sensory awareness and atmospheric possibility—the fragment trails into unresolved wondering, existing in the gap between sensation and decision.</p><details><summary>why the Namer grouped it here</summary><p>s-0027-01 captures a moment of suspended sensation and atmospheric reflection ('small moment of uncertainty', 'espresso machine', 'distant sound of the city waking up') that exists anterior to both interior deliberative work and enacted threshold action. The fragment dwells in sensory awareness and possibility rather than psychological decision-making (which would mark it interior_moment) or physical movement through boundary (which would mark it threshold). The uncertainty is phenomenological, not psychological. Fits the sensory_threshold pattern established by s-0024-01 and s-0026-03: atmosphere, dust, light, suspended awareness of possibility.</p></details></div></article><article class="card" data-alive="0" data-shift="" data-lasted="" data-id="s-0028-02"><div class="draw"><div class="dh"><span>SPECIMEN DRAWING</span><span class="v3 gone">NOT IN THE FIELD</span></div><svg viewBox="0 0 168 168" class="plate empty" role="img" aria-label="no measurements survive for this specimen"><text x="84" y="84" class="none">nothing survives</text></svg></div><div class="body"><div class="id"><a href="/basin-01/specimens/s-0028-02.html">s-0028-02</a><span class="st">DIED AT SHIFT </span></div><p class="prose">Nothing survives of this one but the Namer's account of it. It died before the terrain began keeping remains, so its build was never written down and cannot be recovered.</p><table class="ms"><tr><td class="k">lasted</td><td class="v"> shift(s)</td></tr><tr><td class="k">offspring</td><td class="v">—</td></tr></table><div class="lbl">how it stays alive, in the Namer’s own words</div><p class="say">The sensory moment persists through stasis—dust motes remain in suspension, light continues to filter, decades-long arrangement is undisturbed. Persistence is atmospheric rather than psychological: the scene sustains itself through suspended immobility.</p><details><summary>why the Namer grouped it here</summary><p>s-0028-02 is phenomenologically anterior to both interior_moment and threshold. It does not depict a character's deliberation (no decision point, no hesitation). It does not depict enacted action or traversal (no movement through space). Instead, it captures the sensory-atmospheric moment itself: dust motes in suspension, light filtering through ancient windows, the library floor as stage for suspended sensation. The mood is one of held breath rather than psychological interiority or kinetic forward motion. This belongs to narrative_scene_sensory_threshold, the category that captures suspended sensation before narrative momentum. Complexity 36 fits the established range [41.0 mean].</p></details></div></article><article class="card" data-alive="0" data-shift="" data-lasted="" data-id="s-0029-03"><div class="draw"><div class="dh"><span>SPECIMEN DRAWING</span><span class="v3 gone">NOT IN THE FIELD</span></div><svg viewBox="0 0 168 168" class="plate empty" role="img" aria-label="no measurements survive for this specimen"><text x="84" y="84" class="none">nothing survives</text></svg></div><div class="body"><div class="id"><a href="/basin-01/specimens/s-0029-03.html">s-0029-03</a><span class="st">DIED AT SHIFT </span></div><p class="prose">Nothing survives of this one but the Namer's account of it. It died before the terrain began keeping remains, so its build was never written down and cannot be recovered.</p><table class="ms"><tr><td class="k">lasted</td><td class="v"> shift(s)</td></tr><tr><td class="k">offspring</td><td class="v">—</td></tr></table><div class="lbl">how it stays alive, in the Namer’s own words</div><p class="say">Persists as an arrested sensory moment; the forgotten letters and the filtered light continue in suspension, waiting for a character or an event to disturb their stillness and catalyze narrative movement.</p><details><summary>why the Namer grouped it here</summary><p>s-0029-03 is the most stripped-down specimen in this interval. It offers only sensory detail: morning light, amber patterns, forgotten letters on a desk. No character is foregrounded; no internal deliberation occurs; no action is imminent. Instead, the scene exists in a state of pure sensory and atmospheric suspension—the letters 'waiting to be answered' but unaddressed. This is anterior to the psychological interior moment and to the enacted threshold crossing. It is the held breath of a space itself, not of a character's consciousness or readiness.</p></details></div></article></div>
-<script>
-(function(){
-  var grid=document.getElementById('grid');
-  if(!grid)return;
-  var cards=Array.prototype.slice.call(grid.children);
-  var num=function(c,k){return Number(c.dataset[k]||0)};
-  var sorts={
-    shift:function(a,b){return num(b,'shift')-num(a,'shift')},
-    lasted:function(a,b){return num(b,'lasted')-num(a,'lasted')},
-    id:function(a,b){return a.dataset.id.localeCompare(b.dataset.id)}
-  };
-  var sel=document.getElementById('sort');
-  sel.onchange=function(){
-    cards.slice().sort(sorts[sel.value]).forEach(function(c){grid.appendChild(c)});
-  };
-  sel.onchange();
-  var show=function(mode){
-    var n=0;
-    cards.forEach(function(c){
-      var ok = mode==='all' || (mode==='living')===(c.dataset.alive==='1');
-      c.classList.toggle('hide',!ok);
-      if(ok)n++;
-    });
-    document.getElementById('shown').textContent=n;
-  };
-  document.querySelectorAll('[data-filter]').forEach(function(b){
-    b.onclick=function(){
-      document.querySelectorAll('[data-filter]').forEach(function(x){x.classList.remove('on')});
-      b.classList.add('on'); show(b.dataset.filter);
-    };
-  });
-  document.querySelectorAll('[data-cols]').forEach(function(b){
-    b.onclick=function(){
-      document.querySelectorAll('[data-cols]').forEach(function(x){x.classList.remove('on')});
-      b.classList.add('on'); grid.classList.toggle('two', b.dataset.cols==='2');
-    };
-  });
-})();
-</script>
-<p class="foot-note">Generated from state/specimen_log.jsonl, state/anomaly_log.jsonl and state/memory.json. Read-only: this tool writes HTML and changes no terrain record.</p></main><footer class="foot"><span>DNT FIELD MANUAL v1.0</span><span class="motto">WE OBSERVE. WE DO NOT INTERFERE.</span><span class="inst">A BRANCH OF THE NONHUMAN INSTITUTE <svg class="mk tiny" viewBox="0 0 100 120" width="14" height="16" aria-hidden="true"><path d="M0,0 H100 V120 H0 Z M7.3,7.3 H92.7 V111.2 H7.3 Z M18,111.2 H82 V120 H18 Z" fill-rule="evenodd"/></svg></span></footer></div></body></html>
+table.d th{text-align:left;font:9px var(--mono);letter-spacing:.11em;text-transform:uppercase;
+color:var(--dim);border-bottom:1px solid var(--rule);padding:0 12px 8px 0;font-weight:400}
+table.d td{padding:7px 12px 7px 0;border-bottom:1px solid var(--rule);vertical-align:top;
+color:var(--ink)}
+table.d td.dim{color:var(--dim)}
+table.d td.num,table.d th.num{text-align:right;padding-right:14px}
+table.d tr:last-child td{border-bottom:none}
+.scroll{overflow-x:auto}
+
+/* ---- bars ---- */
+.bar{height:5px;background:var(--rule);position:relative;min-width:52px}
+.bar span{display:block;height:5px;background:var(--moss)}
+.mini{display:grid;grid-template-columns:1fr 54px auto;gap:9px;align-items:center;
+font:11px var(--mono);color:var(--dim);padding:4px 0}
+.mini b{color:var(--ink);font-weight:400;text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---- chips ---- */
+.chip{display:inline-block;font:9px var(--mono);letter-spacing:.09em;text-transform:uppercase;
+padding:2px 7px;border:1px solid var(--rule);color:var(--dim)}
+.chip.on{color:var(--moss);border-color:var(--moss2)}
+.chip.warn{color:var(--amber);border-color:var(--amber)}
+.chip.off{color:var(--faint)}
+.sw{width:9px;height:9px;border-radius:2px;display:inline-block;flex:0 0 auto;
+vertical-align:middle}
+
+/* ---- tabs ---- */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--rule);margin-bottom:14px;
+flex-wrap:wrap}
+.tabs button{font:9.5px var(--mono);letter-spacing:.11em;text-transform:uppercase;
+background:none;border:none;border-bottom:2px solid transparent;color:var(--dim);
+padding:9px 14px;cursor:pointer}
+.tabs button:hover{color:var(--ink)}
+.tabs button.on{color:var(--moss);border-bottom-color:var(--moss)}
+.tabpane{display:none}
+.tabpane.on{display:block}
+
+/* ---- misc ---- */
+.note{font:10.5px/1.6 var(--mono);color:var(--dim);margin:9px 0 0}
+.note:first-child{margin-top:0}
+.absent{color:var(--faint);font-style:italic}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cols3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:1250px){.cols3{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){.cols2,.cols3{grid-template-columns:1fr}
+.app,.app.norail,.app.noleft{grid-template-columns:1fr;
+grid-template-areas:"top" "mid" "left" "right" "bot"}}
+h1.doc{font:400 clamp(23px,2.6vw,32px)/1.1 var(--serif);margin:0 0 6px;letter-spacing:.01em}
+h1.doc.mono{font-family:var(--mono);text-transform:uppercase;letter-spacing:.02em;
+font-size:clamp(19px,2.2vw,26px)}
+.sub{color:var(--dim);font:11.5px/1.6 var(--mono);margin:0}
+.hdr{border-bottom:1px solid var(--rule);padding-bottom:14px;margin-bottom:16px;
+display:grid;grid-template-columns:1fr auto;gap:26px;align-items:start}
+.hdr table.doc{border-collapse:collapse;font:10.5px/1.75 var(--mono);color:var(--dim)}
+.hdr table.doc td{padding:0 0 0 16px;white-space:nowrap;border:none}
+.hdr table.doc td.k{padding:0}
+.hdr table.doc td.v{color:var(--ink)}
+.eyebrow{font:9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;
+color:var(--dim);margin:0 0 9px}
+
+/* ---- foot ---- */
+.bot{grid-area:bot;display:flex;align-items:center;justify-content:space-between;gap:20px;
+padding:11px 16px;background:var(--panel);border-top:1px solid var(--rule);
+font:9.5px var(--mono);letter-spacing:.1em;color:var(--faint);text-transform:uppercase}
+.bot svg{fill:var(--faint);display:block}
+.bot .mid_{letter-spacing:.16em;color:var(--dim)}
+
+.spark{width:100%;height:auto;display:block}
+.rowlink{display:grid;grid-template-columns:auto 1fr auto;gap:9px;align-items:center;
+padding:7px 13px;border-bottom:1px solid var(--rule);text-decoration:none;color:var(--ink);
+font:11px var(--mono)}
+.rowlink:last-child{border-bottom:none}
+.rowlink:hover{background:var(--panel2)}
+.rowlink.on{background:var(--rule)}
+.rowlink .n{color:var(--dim);font-variant-numeric:tabular-nums}
+.rowlink .s{display:block;color:var(--dim);font-size:9.5px}
+.say{font:11.5px/1.7 var(--mono);color:var(--ink);margin:0;
+border-left:2px solid var(--rule);padding-left:11px}
+.searchbox{width:100%;background:var(--bg);border:1px solid var(--rule);color:var(--ink);
+font:11px var(--mono);padding:7px 9px;margin-bottom:2px}
+.searchbox::placeholder{color:var(--faint)}
+.hidden{display:none}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font:10px var(--mono);color:var(--dim);
+align-items:center}
+.legend span{display:flex;gap:6px;align-items:center}
+.tree{display:flex;gap:26px;overflow-x:auto;padding-bottom:6px}
+.gen{min-width:150px}
+.genh{font:9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--dim);
+border-bottom:1px solid var(--rule);padding-bottom:6px;margin-bottom:9px}
+.node{border:1px solid var(--rule);background:var(--panel2);padding:8px 10px;margin-bottom:8px;
+font:10.5px var(--mono);text-decoration:none;color:var(--ink);display:block}
+.node:hover{border-color:var(--moss2)}
+.node.root{border-color:var(--moss2)}
+.node .c{color:var(--dim);font-size:9.5px;display:block;margin-top:2px}
+.hist{display:flex;gap:2px;align-items:flex-end;height:44px}
+.hist i{flex:1;background:var(--moss2);display:block;min-height:1px}
+</style></head><body><div class="app"><header class="top"><a class="brand" href="http://127.0.0.1:8730/hub.html"><svg viewBox="0 0 100 120" width="22" height="26" aria-hidden="true"><path d="M0,0 H100 V120 H0 Z M7.3,7.3 H92.7 V111.2 H7.3 Z M18,111.2 H82 V120 H18 Z" fill-rule="evenodd"/></svg><span><span class="w">DNT</span><br><span class="d">Department of<br>Nonhuman Territories</span></span></a><div class="crumbs"><a href="http://127.0.0.1:8730/hub.html">TERRAINS</a><span class="arrow">&rsaquo;</span><a href="/basin-01/terrain.html">BASIN-01</a><span class="arrow">&rsaquo;</span><span class="cur">NATIVE CLASSIFICATION</span><span class="arrow">&rsaquo;</span><span class="cur">NARRATIVE_SCENE_SENSORY_THRESHOLD</span></div><div class="state"><span class="dot"></span>SHIFT <b>126</b><span class="arrow">·</span>2026-08-17 20:33:59 UTC<span class="arrow">·</span>HOLDING</div><div class="acts"><a class="pri" href="http://127.0.0.1:8731/index.html">Back to observation deck</a><a href="/basin-01/codex.html">Field compendium</a><a href="/basin-01/structure.html">Classification structure</a><a href="/basin-01/crosswalk.html">Linnaean crosswalk</a></div></header><aside class="left rail"><section class="p"><div class="ph"><b>Native categories</b></div><div class="pb flush"><div class="pb" style="padding:9px 11px 4px"><input class="searchbox" id="q" placeholder="search categories…"></div><a class="rowlink" data-n="structural_notation_system" href="/basin-01/categories/structural_notation_system.html"><span class="sw" style="background:var(--rule)"></span><span>structural_notation_system<span class="s">first seen shift 96</span></span><span class="n">57</span></a><a class="rowlink" data-n="structural_isolate" href="/basin-01/categories/structural_isolate.html"><span class="sw" style="background:var(--rule)"></span><span>structural_isolate<span class="s">first seen shift 102</span></span><span class="n">11</span></a><a class="rowlink" data-n="emergent_neonate" href="/basin-01/categories/emergent_neonate.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_neonate<span class="s">first seen shift 110</span></span><span class="n">10</span></a><a class="rowlink" data-n="emergent_minimal" href="/basin-01/categories/emergent_minimal.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_minimal<span class="s">first seen shift 110</span></span><span class="n">9</span></a><a class="rowlink" data-n="ephemeral_fragment" href="/basin-01/categories/ephemeral_fragment.html"><span class="sw" style="background:var(--rule)"></span><span>ephemeral_fragment<span class="s">first seen shift 96</span></span><span class="n">6</span></a><a class="rowlink" data-n="nascent_structural" href="/basin-01/categories/nascent_structural.html"><span class="sw" style="background:var(--rule)"></span><span>nascent_structural<span class="s">first seen shift 97</span></span><span class="n">6</span></a><a class="rowlink" data-n="descended_structural" href="/basin-01/categories/descended_structural.html"><span class="sw" style="background:var(--rule)"></span><span>descended_structural<span class="s">first seen shift 99</span></span><span class="n">5</span></a><a class="rowlink" data-n="active_accumulator" href="/basin-01/categories/active_accumulator.html"><span class="sw" style="background:var(--rule)"></span><span>active_accumulator<span class="s">first seen shift 101</span></span><span class="n">3</span></a><a class="rowlink" data-n="emergent_descendant_minimal" href="/basin-01/categories/emergent_descendant_minimal.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_descendant_minimal<span class="s">first seen shift 120</span></span><span class="n">3</span></a><a class="rowlink" data-n="emergent_incipient" href="/basin-01/categories/emergent_incipient.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_incipient<span class="s">first seen shift 109</span></span><span class="n">2</span></a><a class="rowlink" data-n="descendant_mid_structural" href="/basin-01/categories/descendant_mid_structural.html"><span class="sw" style="background:var(--rule)"></span><span>descendant_mid_structural<span class="s">first seen shift 112</span></span><span class="n">2</span></a><a class="rowlink" data-n="descendant_minimal" href="/basin-01/categories/descendant_minimal.html"><span class="sw" style="background:var(--rule)"></span><span>descendant_minimal<span class="s">first seen shift 112</span></span><span class="n">2</span></a><a class="rowlink" data-n="emergent_descendant_compact" href="/basin-01/categories/emergent_descendant_compact.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_descendant_compact<span class="s">first seen shift 122</span></span><span class="n">2</span></a><a class="rowlink" data-n="emergent_descendant_moderate" href="/basin-01/categories/emergent_descendant_moderate.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_descendant_moderate<span class="s">first seen shift 123</span></span><span class="n">2</span></a><a class="rowlink" data-n="structural_inheritor" href="/basin-01/categories/structural_inheritor.html"><span class="sw" style="background:var(--rule)"></span><span>structural_inheritor<span class="s">first seen shift 105</span></span><span class="n">1</span></a><a class="rowlink" data-n="emergent_fragment" href="/basin-01/categories/emergent_fragment.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_fragment<span class="s">first seen shift 106</span></span><span class="n">1</span></a><a class="rowlink" data-n="emergent_inheritor" href="/basin-01/categories/emergent_inheritor.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_inheritor<span class="s">first seen shift 107</span></span><span class="n">1</span></a><a class="rowlink" data-n="emergent_ephemeral" href="/basin-01/categories/emergent_ephemeral.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_ephemeral<span class="s">first seen shift 108</span></span><span class="n">1</span></a><a class="rowlink" data-n="emergent_mid_structural" href="/basin-01/categories/emergent_mid_structural.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_mid_structural<span class="s">first seen shift 111</span></span><span class="n">1</span></a><a class="rowlink" data-n="descendant_incipient" href="/basin-01/categories/descendant_incipient.html"><span class="sw" style="background:var(--rule)"></span><span>descendant_incipient<span class="s">first seen shift 112</span></span><span class="n">1</span></a><a class="rowlink" data-n="fragment_incipient_mobile" href="/basin-01/categories/fragment_incipient_mobile.html"><span class="sw" style="background:var(--rule)"></span><span>fragment_incipient_mobile<span class="s">first seen shift 113</span></span><span class="n">1</span></a><a class="rowlink" data-n="fragment_descendant_incipient" href="/basin-01/categories/fragment_descendant_incipient.html"><span class="sw" style="background:var(--rule)"></span><span>fragment_descendant_incipient<span class="s">first seen shift 113</span></span><span class="n">1</span></a><a class="rowlink" data-n="emergent_proximal_heavyweight" href="/basin-01/categories/emergent_proximal_heavyweight.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_proximal_heavyweight<span class="s">first seen shift 118</span></span><span class="n">1</span></a><a class="rowlink" data-n="emergent_residue_hybrid" href="/basin-01/categories/emergent_residue_hybrid.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_residue_hybrid<span class="s">first seen shift 119</span></span><span class="n">1</span></a><a class="rowlink" data-n="emergent_descendant_incipient" href="/basin-01/categories/emergent_descendant_incipient.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_descendant_incipient<span class="s">first seen shift 121</span></span><span class="n">1</span></a><a class="rowlink" data-n="emergent_descendant_ultra_compact" href="/basin-01/categories/emergent_descendant_ultra_compact.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_descendant_ultra_compact<span class="s">first seen shift 121</span></span><span class="n">1</span></a><a class="rowlink" data-n="emergent_neonate_moderate" href="/basin-01/categories/emergent_neonate_moderate.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_neonate_moderate<span class="s">first seen shift 122</span></span><span class="n">1</span></a><a class="rowlink" data-n="emergent_mid_compact" href="/basin-01/categories/emergent_mid_compact.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_mid_compact<span class="s">first seen shift 123</span></span><span class="n">1</span></a><a class="rowlink" data-n="emergent_descendant_mid" href="/basin-01/categories/emergent_descendant_mid.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_descendant_mid<span class="s">first seen shift 124</span></span><span class="n">1</span></a><a class="rowlink" data-n="emergent_neonate_compact" href="/basin-01/categories/emergent_neonate_compact.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_neonate_compact<span class="s">first seen shift 124</span></span><span class="n">1</span></a><a class="rowlink" data-n="emergent_descendant_neonate" href="/basin-01/categories/emergent_descendant_neonate.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_descendant_neonate<span class="s">first seen shift 125</span></span><span class="n">1</span></a><a class="rowlink" data-n="emergent_descendant_neonate_variant" href="/basin-01/categories/emergent_descendant_neonate_variant.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_descendant_neonate_variant<span class="s">first seen shift 126</span></span><span class="n">1</span></a></div></section></aside><main class="mid"><div class="hdr"><div><p class="eyebrow">Native classification</p><h1 class="doc mono">narrative_scene_sensory_threshold</h1><p class="sub">A category the Namer coined and files specimens into. Nothing here defines it — the department has no definition, only the record of what was filed and why.</p></div><table class="doc"><tr><td class="k">TERRAIN</td><td class="v">BASIN-01</td></tr><tr><td class="k">SHIFT</td><td class="v">126</td></tr><tr><td class="k">COINED BY</td><td class="v">THE NAMER</td></tr><tr><td class="k">FIRST SEEN</td><td class="v">SHIFT —</td></tr></table></div><div class="stats"><div class="stat"><div class="v">6</div><div class="l">classified</div><div class="s">lifetime</div></div><div class="stat"><div class="v">0</div><div class="l">living</div><div class="s">counted now</div></div><div class="stat"><div class="v">6</div><div class="l">no longer living</div><div class="s">of the classified</div></div><div class="stat"><div class="v">0</div><div class="l">in category_stats</div><div class="s">as the Keeper counts</div></div><div class="stat"><div class="v">0</div><div class="l">deepest generation</div><div class="s">among the living</div></div></div><div class="cols2"><section class="p"><div class="ph"><b>Class size over time</b><span class="r">cumulative first sightings</span></div><div class="pb"><svg viewBox="0 0 400 90" preserveAspectRatio="none" class="spark" role="img" aria-label="7 points, 1 to 6"><polyline points="0.0,87.0 66.7,70.2 133.3,70.2 200.0,53.4 266.7,36.6 333.3,19.8 400.0,3.0" fill="none" stroke="var(--moss)" stroke-width="1.4"/></svg></div></section><section class="p"><div class="ph"><b>Measurements across the living</b></div><div class="pb"><div class="scroll"><table class="d"><thead><tr><th></th><th class="num">lowest</th><th class="num">mean</th><th class="num">median</th><th class="num">highest</th></tr></thead><tbody><tr><td>age (shifts)</td><td colspan="4" class="absent">not recorded</td></tr><tr><td>light held</td><td colspan="4" class="absent">not recorded</td></tr><tr><td>mass</td><td colspan="4" class="absent">not recorded</td></tr><tr><td>reach</td><td colspan="4" class="absent">not recorded</td></tr><tr><td>descendants</td><td colspan="4" class="absent">not recorded</td></tr><tr><td>moves</td><td colspan="4" class="absent">not recorded</td></tr></tbody></table></div></div></section></div><section class="p"><div class="ph"><b>The Namer's basis</b></div><div class="pb"><p class="say">s-0029-03 is the most stripped-down specimen in this interval. It offers only sensory detail: morning light, amber patterns, forgotten letters on a desk. No character is foregrounded; no internal deliberation occurs; no action is imminent. Instead, the scene exists in a state of pure sensory and atmospheric suspension—the letters 'waiting to be answered' but unaddressed. This is anterior to the psychological interior moment and to the enacted threshold crossing. It is the held breath of a space itself, not of a character's consciousness or readiness.</p><p class="note">Filed on 29, for s-0029-03. This is the most recent reasoning the Namer wrote for a member of this category; it is not a definition of the category, because the Namer never wrote one.</p></div></section><section class="p"><div class="ph"><b>Living members</b><span class="r">showing 0 of 0</span></div><div class="pb"><p class="absent">no member of this category is currently living</p></div></section></main><aside class="right rail"><section class="p"><div class="ph"><b>Class overview</b></div><div class="pb"><dl class="kv"><dt>first seen</dt><dd>shift —</dd><dt>last seen</dt><dd>shift —</dd><dt>mean complexity</dt><dd>—</dd><dt>category rank</dt><dd class="na">not recorded</dd><dt>confidence in definition</dt><dd class="na">not recorded</dd><dt>revision count</dt><dd class="na">not recorded</dd></dl></div></section><p class="note" style="padding:0 13px 13px">The last three are fields the mockup carries and the department does not record. The Namer coins a category and files specimens into it; it never rates its own confidence or versions a definition.</p><section class="p"><div class="ph"><b>Distribution by gradient band</b><span class="r">0 placed</span></div><div class="pb"><p class="absent">no living member of this category is currently placed</p></div></section><section class="p"><div class="ph"><b>Elsewhere</b></div><div class="pb"><dl class="kv"><dt>field-guide sheet</dt><dd><a href="/basin-01/codex/narrative_scene_sensory_threshold.html">open →</a></dd><dt>crosswalk</dt><dd><a href="/basin-01/crosswalk.html">open →</a></dd><dt>terrain record</dt><dd><a href="/basin-01/terrain.html">open →</a></dd></dl></div></section></aside><footer class="bot"><span>DNT CATEGORY RECORD v1.0</span><span class="mid_">We observe. We do not interfere.</span><span>A branch of the Nonhuman Institute <svg viewBox="0 0 100 120" width="13" height="15" aria-hidden="true"><path d="M0,0 H100 V120 H0 Z M7.3,7.3 H92.7 V111.2 H7.3 Z M18,111.2 H82 V120 H18 Z" fill-rule="evenodd"/></svg></span></footer></div><script>var q=document.getElementById('q');if(q)q.oninput=function(){var v=q.value.toLowerCase();document.querySelectorAll('.rowlink[data-n]').forEach(function(r){r.classList.toggle('hidden', r.dataset.n.indexOf(v)<0)})};</script></body></html>

@@ -33,11 +33,13 @@ def mark(size: int = 30, cls: str = "mk") -> str:
 TERRAIN_NAV = [("basin-01", "BASIN-01"), ("basin-02", "BASIN-02"),
                ("basin-03", "BASIN-03"), ("basin-04", "BASIN-04")]
 
+# The paper sidebar lists only the paper documents. The terrain record and the
+# shift log are console views of a running terrain, not reference sheets, and
+# they are reached through the TERRAINS group above — which leaves paper on
+# purpose, the same way the console's top bar leaves the console to get here.
 REFERENCE_NAV = [("codex.html", "FIELD COMPENDIUM"),
                  ("structure.html", "CLASSIFICATION STRUCTURE"),
-                 ("crosswalk.html", "LINNAEAN CROSSWALK"),
-                 ("terrain.html", "TERRAIN RECORD"),
-                 ("shiftlog.html", "SHIFT LOG")]
+                 ("crosswalk.html", "LINNAEAN CROSSWALK")]
 
 
 def sidebar(root: str, current_terrain: Optional[str] = None,

@@ -278,7 +278,7 @@ ROOT = PROJECT_ROOT
 import dnt_chrome
 
 TERRAIN_DIR = os.path.basename(config.TERRAIN_ROOT.rstrip(os.sep))
-CATEGORY_DIR = os.path.join(config.TERRAIN_ROOT, "categories")
+CATEGORY_DIR = os.path.join(config.TERRAIN_ROOT, "codex")
 
 
 def slug(name: str) -> str:
@@ -557,7 +557,7 @@ def render_index(data, by_cat, ordered, port) -> str:
     terrain = esc(data.get("terrain") or TERRAIN_DIR.upper())
 
     cats = "".join(
-        '<li><a href="/%s/categories/%s.html">%s</a>'
+        '<li><a href="/%s/codex/%s.html">%s</a>'
         '<span class="n">%d living / %d total</span>'
         '<span class="go">VIEW SHEET →</span></li>'
         % (TERRAIN_DIR, slug(c), esc(c),

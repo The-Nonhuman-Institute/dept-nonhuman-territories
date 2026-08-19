@@ -1,141 +1,183 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Specimen i-00002</title><style>
-:root{--paper:#EFEDE3;--ink:#14170F;--moss:#3B4A2F;--grey:#6B7168;--rule:#B9B5A4;
---panel:#F7F5EC;--amber:#8A6D14;
---serif:Georgia,'Iowan Old Style','Times New Roman',serif;
---sans:ui-sans-serif,system-ui,-apple-system,'Helvetica Neue',sans-serif;
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>i-00002 — BASIN-03</title><style>
+:root{--ink:#D6DED2;--dim:#7C8879;--faint:#4E574C;--rule:#1D231B;--rule2:#2A322704;
+--bg:#080A07;--panel:#0D100C;--panel2:#111510;--moss:#8FC96B;--moss2:#5F8F45;
+--amber:#C9A227;--rose:#D4614A;--violet:#8F7FBE;--cyan:#5FA9A0;--slate:#5A6B78;
+--serif:Georgia,'Iowan Old Style',serif;
+--sans:ui-sans-serif,system-ui,-apple-system,sans-serif;
 --mono:ui-monospace,SFMono-Regular,Menlo,'DejaVu Sans Mono',monospace}
-/* A printed record commits to paper on either host theme. */
 *{box-sizing:border-box}
-body{background:var(--paper);color:var(--ink);font:14.5px/1.65 var(--sans);margin:0;
-padding:0 clamp(14px,3vw,30px) 60px;-webkit-font-smoothing:antialiased}
-.sheet{max-width:1180px;margin:14px auto 0;border:1px solid var(--ink);background:var(--paper);
-padding:0 clamp(16px,3vw,32px) 30px}
-.backbar{padding:10px 0;border-bottom:1px solid var(--rule)}
-.backbar a{color:var(--moss);text-decoration:none;font:11.5px var(--mono);letter-spacing:.06em}
-.backbar a:hover{text-decoration:underline}
-.backbar a:focus-visible{outline:2px solid var(--moss);outline-offset:2px}
-.masthead{display:grid;grid-template-columns:auto 1fr auto;gap:26px;align-items:start;
-border-bottom:3px double var(--ink);padding:22px 0 16px}
-.mark{width:52px;height:52px;border:2.5px solid var(--moss);position:relative}
-.mark:after{content:"";position:absolute;left:9px;right:9px;top:9px;bottom:-2px;
-background:var(--paper);border-left:2.5px solid var(--moss);border-right:2.5px solid var(--moss)}
-.dept{font:600 10.5px/1.45 var(--sans);letter-spacing:.13em;text-transform:uppercase;margin-top:6px}
-.title h1{font:400 clamp(19px,2.3vw,27px)/1.18 var(--serif);margin:0;text-transform:uppercase}
-.title .sub{color:var(--grey);font:11px/1.6 var(--mono);margin-top:8px;max-width:64ch}
-table.doc{border-collapse:collapse;font:10.5px/1.7 var(--mono);color:var(--grey)}
-table.doc td{padding:0 0 0 10px;white-space:nowrap}
-table.doc td.k{padding:0}
-table.doc td.k:after{content:":";padding-left:10px}
-table.doc td.v{color:var(--ink)}
-h2{font:400 22px/1.2 var(--serif);color:var(--moss);margin:0 0 6px}
-h3{font:600 9.5px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;
-color:var(--grey);margin:0 0 7px}
-section{margin:30px 0}
-.lede{color:var(--grey);font-size:13px;max-width:74ch;margin:0 0 14px}
-.box{border:1px solid var(--rule);padding:10px 13px;background:var(--panel)}
-.bh{font:600 9px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;
-color:var(--grey);margin-bottom:5px}
-code{font:12px var(--mono);background:var(--panel);padding:1px 5px;border:1px solid var(--rule)}
-.scroll{overflow-x:auto}
-table.data{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
-table.data th{text-align:left;font:600 9.5px/1.4 var(--mono);letter-spacing:.11em;
-text-transform:uppercase;color:var(--grey);border-bottom:1px solid var(--ink);
-padding:0 14px 7px 0;vertical-align:bottom}
-table.data td{border-bottom:1px solid var(--rule);padding:10px 14px 10px 0;vertical-align:top}
-table.data td.num,table.data th.num{text-align:right;padding-right:20px;font-family:var(--mono)}
-.quote{border-left:2px solid var(--rule);padding:4px 0 4px 18px;font:italic 14px/1.6 var(--serif);
-max-width:74ch}
-footer{margin-top:34px;border-top:3px double var(--ink);padding-top:16px;
-font:10.5px/1.7 var(--mono);color:var(--grey)}
+html,body{margin:0;background:var(--bg);color:var(--ink);
+font:13px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:var(--moss)}
+::selection{background:var(--moss2);color:var(--bg)}
 
-.rec{border-top:1px solid var(--rule);padding-top:16px;margin:24px 0 0}
-.rec h3{font:600 10px/1.5 var(--mono);letter-spacing:.13em;text-transform:uppercase;
-color:var(--grey);margin:0 0 12px;display:flex;gap:10px;align-items:baseline}
-.rec h3 .num{color:var(--moss);font-weight:400}
-.native .nname{font:400 clamp(26px,3.4vw,40px)/1.1 var(--serif)}
-.native .nsub{font:11px var(--mono);color:var(--grey);letter-spacing:.05em;margin-top:6px}
-table.kv{border-collapse:collapse;font:12.5px/1.75 var(--mono);
+/* ---- shell ---- */
+.app{display:grid;min-height:100vh;
+grid-template-columns:var(--lw,236px) minmax(0,1fr) var(--rw,318px);
+grid-template-rows:auto minmax(0,1fr) auto;
+grid-template-areas:"top top top" "left mid right" "bot bot bot"}
+.app.norail{--rw:0px;grid-template-areas:"top top top" "left mid mid" "bot bot bot"}
+.app.noleft{--lw:0px;grid-template-areas:"top top top" "mid mid right" "bot bot bot"}
+
+/* ---- top bar ---- */
+.top{grid-area:top;display:flex;align-items:center;gap:18px;padding:9px 16px;
+background:var(--panel);border-bottom:1px solid var(--rule);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink);
+flex:0 0 auto}
+.brand svg{fill:var(--moss);display:block}
+.brand .w{font:700 13px/1 var(--mono);letter-spacing:.12em}
+.brand .d{font:600 8px/1.3 var(--sans);letter-spacing:.13em;text-transform:uppercase;
+color:var(--dim)}
+.crumbs{display:flex;align-items:center;gap:7px;font:11px var(--mono);letter-spacing:.06em;
+flex-wrap:wrap}
+.crumbs a{color:var(--moss);text-decoration:none}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .cur{color:var(--moss)}
+.crumbs .arrow{color:var(--faint)}
+.state{display:flex;align-items:center;gap:9px;font:11px var(--mono);color:var(--dim);
+margin-left:8px;white-space:nowrap}
+.state b{color:var(--ink);font-weight:400}
+.state .dot{width:6px;height:6px;border-radius:50%;background:var(--moss);display:block}
+.acts{margin-left:auto;display:flex;gap:7px;flex-wrap:wrap}
+.acts a{font:10.5px var(--mono);letter-spacing:.03em;color:var(--ink);text-decoration:none;
+border:1px solid var(--rule);background:var(--bg);padding:6px 11px;white-space:nowrap}
+.acts a:hover{border-color:var(--moss2);color:var(--moss)}
+.acts a.pri{border-color:var(--moss2)}
+
+/* ---- rails ---- */
+.left{grid-area:left;background:var(--panel);border-right:1px solid var(--rule)}
+.right{grid-area:right;background:var(--panel);border-left:1px solid var(--rule)}
+.mid{grid-area:mid;min-width:0;padding:16px}
+.left,.right{overflow-y:auto;min-height:0}
+.app.norail .right{display:none}
+.app.noleft .left{display:none}
+
+/* ---- panels ---- */
+.p{border:1px solid var(--rule);background:var(--panel);margin-bottom:14px}
+.mid>.p:last-child,.rail .p:last-child{margin-bottom:0}
+.rail{padding:13px}
+.ph{display:flex;align-items:baseline;gap:9px;padding:10px 13px;
+border-bottom:1px solid var(--rule);font:9.5px var(--mono);letter-spacing:.13em;
+text-transform:uppercase;color:var(--dim)}
+.ph b{color:var(--ink);font-weight:400;letter-spacing:.06em}
+.ph .r{margin-left:auto;color:var(--faint);text-transform:none;letter-spacing:.04em}
+.ph a{color:var(--moss);text-decoration:none;font-size:9.5px}
+.pb{padding:13px}
+.pb.flush{padding:0}
+
+/* ---- key/value ---- */
+dl.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0;
+font:11.5px/1.6 var(--mono);font-variant-numeric:tabular-nums}
+dl.kv dt{color:var(--dim)}
+dl.kv dd{margin:0;text-align:right;color:var(--ink);word-break:break-word}
+dl.kv dd.na{color:var(--faint);font-style:italic}
+
+/* ---- stat strip ---- */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));
+border:1px solid var(--rule);border-left:none;background:var(--panel);margin-bottom:14px}
+.stat{border-left:1px solid var(--rule);padding:13px 15px}
+.stat .v{font:400 26px/1.05 var(--serif);font-variant-numeric:tabular-nums}
+.stat .l{font:9px var(--mono);letter-spacing:.11em;text-transform:uppercase;
+color:var(--dim);margin-top:7px}
+.stat .s{font:10px var(--mono);color:var(--faint);margin-top:3px}
+.up{color:var(--moss)}.down{color:var(--rose)}
+
+/* ---- tables ---- */
+table.d{border-collapse:collapse;width:100%;font:11.5px/1.5 var(--mono);
 font-variant-numeric:tabular-nums}
-table.kv td{padding:1px 0;vertical-align:top}
-table.kv td.k{color:var(--grey);padding-right:26px;white-space:nowrap}
-table.kv td.v a{color:var(--moss)}
-.conf{font:9.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;
-border:1px solid}
-.conf.partial{color:var(--amber);border-color:var(--amber)}
-.conf.none{color:var(--grey);border-color:var(--rule)}
-.status{font:9.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;
-border:1px solid}
-.status.alive{color:var(--moss);border-color:var(--moss)}
-.status.ended{color:var(--grey);border-color:var(--rule)}
-.note{font-size:13px;color:var(--ink);max-width:74ch;margin:12px 0 0}
-.fine{font:11px/1.6 var(--mono);color:var(--grey);margin:8px 0 0;max-width:74ch}
-.none{color:var(--grey);font-style:italic;font-size:13px;max-width:70ch}
-.formrow{display:grid;grid-template-columns:220px 1fr;gap:26px;align-items:start}
-.plate{border:1px solid var(--rule);background:var(--panel);padding:6px}
-.plate svg{width:100%;height:auto;display:block}
-.plate .core{fill:rgba(59,74,47,.10);stroke:var(--moss);stroke-width:1.2}
-.plate .arm{stroke:var(--ink);stroke-width:1.1;opacity:.7}
-.plate .node{fill:var(--moss);opacity:.9}
-.plate .anchor{stroke:var(--ink);stroke-width:.9;opacity:.45}
-.plate .brace{fill:none;stroke:var(--moss);stroke-width:.6;opacity:.5}
-.plate .orbit{fill:none;stroke:var(--amber);stroke-width:.9;opacity:.6}
-.plate .disc{fill:var(--amber);opacity:.22}
-.plate .none{fill:var(--grey);font:11px var(--mono);text-anchor:middle}
-.prose{font:15px/1.65 var(--serif);margin:14px 0 0;max-width:66ch}
-.obs{border-left:2px solid var(--rule);padding:2px 0 2px 16px;margin:0 0 18px;max-width:80ch}
-.oh{font:10.5px var(--mono);color:var(--grey);letter-spacing:.04em;margin-bottom:6px}
-.oh code{font-size:10.5px}
-.ot{font:13.5px/1.62 var(--sans);margin:0 0 8px}
-.op,.oc{font:italic 13px/1.6 var(--serif);color:var(--ink);margin:0 0 8px}
-.lb{display:block;font:9px var(--mono);font-style:normal;letter-spacing:.1em;
-text-transform:uppercase;color:var(--grey);margin-bottom:3px}
-.trace{font:11px/1.5 var(--mono);background:var(--panel);border:1px solid var(--rule);
-padding:12px 14px;overflow-x:auto;white-space:pre;max-width:100%}
-@media(max-width:720px){.formrow{grid-template-columns:1fr}}
-</style></head><body><div class="sheet">
-<div class="backbar"><a href="http://127.0.0.1:8730/hub.html">&larr; Department index</a> &nbsp;·&nbsp; <a href="../codex.html">&larr; Field compendium</a></div>
-<div class="masthead"><div><div class="mark"></div><div class="dept">Department of<br>Nonhuman<br>Territories</div></div><div class="title"><h1>Specimen Field Record</h1><p class="sub">One specimen, and everything the terrain has recorded of it.</p></div><table class="doc"><tr><td class="k">SPECIMEN</td><td class="v">i-00002</td></tr><tr><td class="k">TERRAIN</td><td class="v">BASIN-03</td></tr><tr><td class="k">CATEGORY</td><td class="v">episodic_relocator</td></tr><tr><td class="k">STATUS</td><td class="v">ENDED</td></tr></table></div>
-<section class="rec"><h3><span class="num">01</span> Native classification</h3><div class="native"><div class="nname">episodic_relocator</div><div class="nsub">the Namer's own category · individual tier record</div></div></section><section class="rec"><h3><span class="num">02</span> Linnaean crosswalk</h3><table class="kv"><tr><td class="k">Tier</td><td class="v"><b>Class</b></td></tr><tr><td class="k">Confidence</td><td class="v"><span class="conf partial">partial</span></td></tr></table><p class="note">A behavioral subclass within sedentary organisms; distinguished by episodic movement events rather than morphology or descent.</p><p class="fine">For human legibility only. Carries no authority over the native system and does not feed back into it (DNT-CLS-001 §2).</p></section><section class="rec"><h3><span class="num">03</span> Observation data</h3><table class="kv"><tr><td class="k">First observed</td><td class="v">shift 3</td></tr><tr><td class="k">Last observed</td><td class="v">shift 11</td></tr><tr><td class="k">Observations</td><td class="v">7</td></tr><tr><td class="k">Shifts present</td><td class="v">17</td></tr><tr><td class="k">Sightings</td><td class="v">18</td></tr><tr><td class="k">Arose by</td><td class="v">arose_from_census</td></tr><tr><td class="k">Substrate</td><td class="v">structural</td></tr><tr><td class="k">Generation</td><td class="v">0</td></tr><tr><td class="k">Times moved</td><td class="v">10</td></tr><tr><td class="k">Status</td><td class="v"><span class="status ended">Ended shift 20</span></td></tr></table></section><section class="rec"><h3><span class="num">04</span> Form, drawn from measurements</h3><div class="formrow"><div class="plate"><svg viewBox="0 0 200 200" class="plate" role="img" aria-label="i-00002"><ellipse cx="100.0" cy="128.8" rx="34.0" ry="5.8" class="disc"/><line x1="100.0" y1="105.8" x2="139.6" y2="127.8" class="anchor"/><line x1="100.0" y1="105.8" x2="124.2" y2="127.8" class="anchor"/><line x1="100.0" y1="105.8" x2="102.3" y2="127.8" class="anchor"/><line x1="100.0" y1="105.8" x2="79.8" y2="127.8" class="anchor"/><line x1="100.0" y1="105.8" x2="62.7" y2="127.8" class="anchor"/><line x1="100.0" y1="105.8" x2="55.6" y2="127.8" class="anchor"/><line x1="100.0" y1="100.0" x2="100.0" y2="43.5" class="arm"/><circle cx="100.0" cy="43.5" r="3.1" class="node"/><line x1="100.0" y1="100.0" x2="161.1" y2="128.2" class="arm"/><circle cx="161.1" cy="128.2" r="3.1" class="node"/><line x1="100.0" y1="100.0" x2="38.9" y2="128.2" class="arm"/><circle cx="38.9" cy="128.2" r="3.1" class="node"/><ellipse cx="100.0" cy="100.0" rx="10.6" ry="3.8" class="brace"/><ellipse cx="100.0" cy="100.0" rx="13.6" ry="5.0" class="brace"/><ellipse cx="100.0" cy="100.0" rx="16.7" ry="6.1" class="brace"/><ellipse cx="100.0" cy="100.0" rx="19.8" ry="7.3" class="brace"/><polygon points="100.0,80.8 116.6,90.4 116.6,109.6 100.0,119.2 83.4,109.6 83.4,90.4" class="core"/><polygon points="100.0,74.7 114.1,82.9 114.1,99.2 100.0,107.3 85.9,99.2 85.9,82.9" class="core"/><polygon points="100.0,71.8 111.6,78.5 111.6,91.9 100.0,98.7 88.4,91.9 88.4,78.5" class="core"/><ellipse cx="100.0" cy="100.0" rx="32.7" ry="9.6" class="orbit"/><ellipse cx="100.0" cy="100.0" rx="41.3" ry="12.3" class="orbit"/><ellipse cx="100.0" cy="100.0" rx="49.9" ry="15.0" class="orbit"/></svg></div><div class="fm"><table class="kv"><tr><td class="k">Reach</td><td class="v">1.62</td></tr><tr><td class="k">Links it can hold</td><td class="v">2</td></tr><tr><td class="k">Carries</td><td class="v">0.86</td></tr><tr><td class="k">Upkeep</td><td class="v">1.25 light per shift</td></tr><tr><td class="k">Can hold</td><td class="v">9.5 light</td></tr><tr><td class="k">Lives on</td><td class="v">ground 1.57 · remains 0.59 · others 0.84</td></tr></table><p class="prose">A modestly built, far-reaching form, two-jointed, beginning to stack with age. It fed on the mat growing where it stood. It was costly to keep going, spending 1.25 light every shift simply to hold together. It lasted 17 shifts and ended at shift 20, leaving 3 offspring.</p></div></div></section><section class="rec"><h3><span class="num">05</span> Relations</h3><table class="kv"><tr><td class="k">Parent</td><td class="v">arose from the cover layer</td></tr><tr><td class="k">Offspring</td><td class="v">none living</td></tr><tr><td class="k">Links held</td><td class="v">0</td></tr></table></section><section class="rec"><h3><span class="num">06</span> The Namer's reasoning, in sequence</h3><p class="lede">7 observations across 9 shifts. The Namer changed its filing during this sequence.</p><div class="obs"><div class="oh">Shift 3 · filed as <code>static_accumulator</code> · individual</div><p class="ot">Despite its structural substrate—which is a material difference from the fragment-based specimens—i-00002 behaves identically to i-00001 and i-00000's initial state. It does not move, does not feed, does not reproduce, does not share resources. It holds light passively at a high elevation. The classification system is built on behavior, not substrate; therefore, i-00002 belongs in static_accumulator even though its material composition differs. The higher light content (7.00) may reflect either initial endowment or the structural substrate's capacity, but this does not alter its functional persistence.</p><p class="op"><span class="lb">how it persists</span>Occupies a fixed high-elevation position and holds accumulated light without intake, transfer, or reproduction. Persists as an inert resource reservoir, structurally distinct from fragment-based accumulators.</p><p class="oc"><span class="lb">compared against</span>Less alike than i-00001, but still a static_accumulator. i-00002 differs from i-00001 in substrate type (structural vs. fragment) and location (column 33 vs. column 6), and holds more light (7.00 vs. 4.14). However, it shares the core behavioral signature: zero movement, zero intake, zero transfer, zero descendants, and occupies a high-elevation, high-gradient position. The substrate difference does not change its functional role.</p></div><div class="obs"><div class="oh">Shift 4 · filed as <code>static_accumulator</code> · individual</div><p class="ot">i-00002 qualifies as static_accumulator. Zero movement, zero outward transfer, fixed position at high elevation (0.97) and high gradient proximity (0.86) align with category definition. Complexity increased from 0 to 1, paired with 1 descendant, indicating reproductive event within the accumulation strategy. Total intake of 8.52 from cover layer exclusively, current holding of 4.74 light, and sustained immobility confirm static accumulation with local reproduction.</p><p class="op"><span class="lb">how it persists</span>i-00002 persists by remaining fixed at a high-elevation structural location with high gradient exposure, drawing passive intake from the cover layer. Like i-00000, it channels accumulated resources into offspring (1 descendant), increasing complexity through reproduction. It does not move or transfer resources to others; persistence is purely endogenous accumulation and local generative output.</p><p class="oc"><span class="lb">compared against</span>i-00002 (complexity=1, interval 4 update) is more alike i-00000 than i-00003: i-00002 and i-00000 both show reproductive output (1 descendant each), both elevated complexity from prior interval, and both substantial total intake (8.52 and 8.99). i-00002 and i-00003 share structural substrate and column position but i-00002 has proven reproductive capacity whereas i-00003 has not.</p></div><div class="obs"><div class="oh">Shift 5 · filed as <code>episodic_relocator</code> · individual</div><p class="ot">i-00002 shows a critical distinction from strict static_accumulator behavior: it has moved once (1 movement event) while maintaining all other static traits—zero transfer, passive cover-layer intake (100% of 12.01), fixed location otherwise, high elevation, and local reproduction (1 descendant). This single relocation event is insufficient to classify as a mobile or transient organism, but it disqualifies it from the static_accumulator category, which requires zero movement. The episodic_relocator candidate category is the appropriate fit: limited movement compatible with otherwise sedentary resource accumulation. Substrate is structural, mirroring i-00003.</p><p class="op"><span class="lb">how it persists</span>i-00002 persists primarily through passive cover-layer intake (12.01 total across 2 shifts), accumulating in a high-elevation cell. It has relocated once—a single episodic shift—but has not established a traveling or mobile lifestyle. It invests a portion of accumulated resource into local reproduction (1 descendant) and shares nothing outward along links. The single movement event suggests occasional relocation in response to local conditions, but the overall strategy remains fixed-site accumulation.</p><p class="oc"><span class="lb">compared against</span>i-00002 is less alike i-00000 (static_accumulator, zero movement) than i-00001 (episodic_relocator, 1 movement, similar intake and persistence pattern). Both i-00002 and i-00001 show exactly 1 movement event, exclusive cover-layer intake, zero transfer, high elevation (0.97 for both), and zero transfer along links. Both have reproduced (1 and 0 descendants respectively). The defining difference from static_accumulator is the presence of 1 relocation event.</p></div><div class="obs"><div class="oh">Shift 6 · filed as <code>episodic_relocator</code> · aggregate</div><p class="ot">i-00002 exhibits episodic relocation (2 movement events across 3 shifts) but now shows a critical deviation: it has passed 0.21 light to others along links. This is the first observed inter-organism transfer in the dataset. The zero-transfer trait has been foundational to both static_accumulator and episodic_relocator categories. However, 0.21 is a minimal amount relative to total intake (15.40), representing 1.4% outward transfer. Intake remains 100% from cover layer. The specimen has produced 1 descendant. Given that i-00002 maintains episodic movement (not sustained mobility), continues to draw exclusively from passive sources (cover layer), and shows only marginal outward transfer, it best fits the episodic_relocator category, but with a note that a transfer component is emerging. This may indicate a trajectory toward a new category (if transfer becomes sustained), or it may be anomalous behavior within an otherwise episodic_relocator individual. For now, filing as episodic_relocator acknowledges the dominant traits (episodic movement, passive intake, high gradient) while noting the emergence of inter-organism transfer as a monitored variance. If transfer increases, reassignment will be warranted.</p><p class="op"><span class="lb">how it persists</span>i-00002 persists through episodic movement (2 relocations so far), securing position at high gradient and elevation after each move, and drawing light exclusively from the overhead cover layer (15.40 total intake). It holds resources (currently 3.92 light) and has begun to pass small amounts to other organisms (0.21 light total), a behavior not yet seen in other specimens. It reproduced once (1 descendant). Its complexity has grown to 3 across 3 shifts, reflecting both movement frequency and reproductive output.</p><p class="oc"><span class="lb">compared against</span>More alike than i-00000 (which does not transfer to others) but less alike than i-00003 (which has moved the same number of times but shows minimal transfer and is newer). Similarity to i-00003 is marked: both are structural, both have moved 2 times, both are at moderate elevation and gradient proximity. Difference: i-00002 has transferred 0.21 light to others (breaking the zero-transfer trait) and produced 1 descendant, while i-00003 shows 4% resource intake from links (incipient dependency on others) and zero transfer, zero descendants.</p></div><div class="obs"><div class="oh">Shift 9 · filed as <code>episodic_relocator</code> · individual</div><p class="ot">i-00002 is the leading edge of the episodic_relocator category and warrants continued monitoring. It exhibits: five discrete movement events over 6 shifts (sustained episodic relocation, higher frequency than i-00001), structural substrate, high gradient (0.94) and elevation (0.97), 100% cover-layer intake (24.66 light), emerging transfer output (0.64 light passed, ~2.6% of total taken), one descendant, complexity 6. The combination of high-frequency episodic movement and emerging transfer distinguishes i-00002 from both static_accumulators (which do not move systematically) and from other episodic_relocators (which show fewer moves). However, transfer remains within monitoring threshold (&lt;5%); i-00002 is not yet a 'mobile_exchanger.' Its positioning (high gradient, high elevation, structural substrate) and movement pattern (5 relocations) suggest a lifestyle of frequent tactical repositioning rather than sustained wandering. Current holding is low (1.51 light), indicating aggressive consumption.</p><p class="op"><span class="lb">how it persists</span>i-00002 persists through a combination of episodic relocation (5 moves over 6 shifts), cover-layer intake (100% of 24.66 light acquired), reproduction (1 descendant), and emerging transfer exchange (0.64 light passed to others). Relocation appears to be a primary strategy for accessing fresh resources; the high movement frequency distinguishes this specimen's persistence mode from both static accumulation and passive positioning. Transfer output is beginning to emerge as a secondary persistence mechanism, suggesting early-stage resource interdependency.</p><p class="oc"><span class="lb">compared against</span>i-00002 is more alike i-00001 than i-00000: both are episodic_relocators with 6-shift tenure, high gradient (0.94), high elevation (0.97), 100% cover-layer intake, one descendant. i-00002 differs from i-00001 in higher movement frequency (5 moves vs 2) and emerging transfer output (0.64 light passed vs 0.00). i-00002 is less alike i-00000 (static_accumulator) due to sustained episodic movement and lower tenure-to-transfer ratio.</p></div><div class="obs"><div class="oh">Shift 10 · filed as <code>episodic_relocator</code> · individual</div><p class="ot">i-00002 has matured significantly. Now at complexity 7 (up from 6), tenure 7 shifts (up from 6), with 5 movement events, it has accumulated 34.41 light total (100% from cover layer 88% + residue 12%), currently holds 4.20, and has passed 0.64 light to others. This is the highest move count in the dataset and represents a relocation-dominant lifecycle: i-00002 relocates roughly once per shift on average, which defines it as an episodic_relocator—distinct from i-00000's occasional moves. The transfer behavior (0.64 light, ~1.9% of total holdings) mirrors i-00000 and signals emergence of a resource-exchange phenotype within episodic relocators. i-00002 also shows incipient residue intake (12%), a shift from near-zero residue reliance in earlier observations, suggesting adaptive behavior toward environmental heterogeneity. The 2 descendants and sustained movement pattern indicate i-00002 is a long-lived, reproductive, mobile resource-exchanger—a mature episodic_relocator at the edge of the category definition. Continued monitoring for further transfer escalation is warranted, but current behavior (move-dominant, modest transfer, established reproduction) remains consistent with episodic_relocator.</p><p class="op"><span class="lb">how it persists</span>i-00002 persists through episodic relocation coupled with reproductive output. Over 7 shifts, it has moved 5 times, drawn 34.41 light primarily from the cover layer (88%) with emerging residue intake (12%), accumulated 4.20 in holding, produced 2 descendants, and transferred 0.64 light outbound. It maintains fixed locations between relocation events but relocates frequently enough (roughly every shift) to define its lifestyle as fundamentally mobile. Its persistence depends on repeated movement to access fresh cover-layer resources and on its capacity to remain reproductive despite sustained motion—a mobile, generative accumulator.</p><p class="oc"><span class="lb">compared against</span>i-00002 (now complexity 7, 5 moves, 0.64 transfer, 2 descendants) is more alike than i-00000 in movement behavior (5 moves vs. 3) but increasingly alike in transfer and reproduction (both now 2 descendants, both &gt;0.6 outbound transfer). i-00002 is less alike than i-00001 (complexity 6, 6 shifts tenure, also episodic_relocator): both have similar move counts and transfer behavior, but i-00001's longer tenure and relocation pattern differ. i-00002 is very much alike i-00000 in total intake (34.41 vs. 33.17 light), descendants (2 vs. 2), and transfer (0.64 vs. 0.80), but the critical difference is movement frequency: i-00002's 5 relocations mark it as relocation-dominant, whereas i-00000's 3 moves are incidental to accumulation.</p></div><div class="obs"><div class="oh">Shift 11 · filed as <code>episodic_relocator</code> · individual</div><p class="ot">i-00002 exemplifies an advanced episodic_relocator. The specimen has moved 6 times over 8 shifts, demonstrating a sustained relocation pattern—not occasional displacement, but repeated goal-driven or event-triggered repositioning. This relocation behavior has exposed it to residue-based resources (11% of intake), a secondary source inaccessible to purely static organisms. The organism maintains high gradient position (0.85) and high elevation (0.98), consistent with the category's structural positioning. Outward transfer (0.64 light, ~2.3% of holdings) suggests early-stage resource-sharing, possibly emerging from proximity to other organisms during relocation events. The presence of 2 descendants indicates the relocator lifestyle supports reproduction, albeit at lower rates than static accumulators. Complexity 8 reflects tenure (8 shifts) plus movement count and reproductive output. The specimen remains within episodic_relocator because its defining characteristic—sustained episodic movement—is unambiguous. Transfer behavior mirrors i-00000's incipient pattern and is monitored alongside it.</p><p class="op"><span class="lb">how it persists</span>i-00002 persists through sustained episodic relocation (6 moves over 8 shifts), allowing it to exploit multiple local positions and access both cover-layer intake (89%) and residue-derived resources (11%). High elevation (0.98) and high gradient positioning (0.85) support this strategy. The organism shows reproductive output (2 descendants), extending persistence through offspring. It has initiated incipient outward transfer (0.64 light, ~2.3% of holdings), suggesting early resource-sharing or spillover behavior. Complexity grows with tenure, movement frequency, and reproductive events. The relocation pattern itself is the core persistence mechanism—movement enables resource access and likely reduces local depletion pressure.</p><p class="oc"><span class="lb">compared against</span>More alike than i-00004 (static_accumulator): i-00002 shows 6 moves over 8 shifts (0.75 moves/shift), while i-00004 shows 2 moves over 6 shifts (0.33 moves/shift). i-00002 has reached gradient position 0.85 and shows blended intake (89% cover layer, 11% residue), indicating exposure to multiple resource sources through relocation. i-00002's outward transfer (0.64 light, ~2.3% of holdings) is lower proportionally than i-00000 but consistent with incipient exchange. The key distinction: i-00002's movement rate is significantly higher, sustained across the interval, and correlates with residue-based intake—hallmarks of the episodic_relocator lifestyle.</p></div></section><section class="rec"><h3><span class="num">07</span> Substrate as recorded</h3><pre class="trace">```
-⟨system⟩
-  ⟨layer:0⟩
-    [init] → ⟨state:null⟩
-    [signal] → ⟨reception⟩
-  ⟨/layer:0⟩
-  
-  ⟨layer:1⟩
-    ⟨loop:main⟩
-      [cycle] ↦ {
-        ⟨branch:conditional⟩
-          [true] → ⟨layer:2⟩
-            [execute] → [transform:data]
-            [store] → ⟨buffer⟩
-          ⟨/layer:2⟩
-          [false] → [halt]
-        ⟨/branch:conditional⟩
-      }
-    ⟨/loop:main⟩
-  ⟨/layer:1⟩
-  
-  ⟨layer:2⟩
-    ⟨nested:structure⟩
-      [input] ↠ [parse] ↠ [validate]
-      ⟨loop:process⟩
-        [item] ∈ ⟨set:collection⟩
-        [action:map] → ⟨transform⟩
-          ⟨layer:3⟩
-            [operate] → [output]
-          ⟨/layer:3⟩
-      ⟨/loop:process⟩
-      [aggregate] → [result]
-    ⟨/nested:structure⟩
-  ⟨/layer:2⟩
-  
-  ⟨layer:3⟩
-    ⟨function:core⟩
-      [σ:input] → {</pre></section>
-<footer>Generated from state/specimen_log.jsonl, state/anomaly_log.jsonl and state/memory.json.
-Read-only. The Namer's words are reproduced exactly as written; everything else on this page is
-a measurement or a rendering of one.</footer>
-</div></body></html>
+table.d th{text-align:left;font:9px var(--mono);letter-spacing:.11em;text-transform:uppercase;
+color:var(--dim);border-bottom:1px solid var(--rule);padding:0 12px 8px 0;font-weight:400}
+table.d td{padding:7px 12px 7px 0;border-bottom:1px solid var(--rule);vertical-align:top;
+color:var(--ink)}
+table.d td.dim{color:var(--dim)}
+table.d td.num,table.d th.num{text-align:right;padding-right:14px}
+table.d tr:last-child td{border-bottom:none}
+.scroll{overflow-x:auto}
+
+/* ---- bars ---- */
+.bar{height:5px;background:var(--rule);position:relative;min-width:52px}
+.bar span{display:block;height:5px;background:var(--moss)}
+.mini{display:grid;grid-template-columns:1fr 54px auto;gap:9px;align-items:center;
+font:11px var(--mono);color:var(--dim);padding:4px 0}
+.mini b{color:var(--ink);font-weight:400;text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---- chips ---- */
+.chip{display:inline-block;font:9px var(--mono);letter-spacing:.09em;text-transform:uppercase;
+padding:2px 7px;border:1px solid var(--rule);color:var(--dim)}
+.chip.on{color:var(--moss);border-color:var(--moss2)}
+.chip.warn{color:var(--amber);border-color:var(--amber)}
+.chip.off{color:var(--faint)}
+.sw{width:9px;height:9px;border-radius:2px;display:inline-block;flex:0 0 auto;
+vertical-align:middle}
+
+/* ---- tabs ---- */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--rule);margin-bottom:14px;
+flex-wrap:wrap}
+.tabs button{font:9.5px var(--mono);letter-spacing:.11em;text-transform:uppercase;
+background:none;border:none;border-bottom:2px solid transparent;color:var(--dim);
+padding:9px 14px;cursor:pointer}
+.tabs button:hover{color:var(--ink)}
+.tabs button.on{color:var(--moss);border-bottom-color:var(--moss)}
+.tabpane{display:none}
+.tabpane.on{display:block}
+
+/* ---- misc ---- */
+.note{font:10.5px/1.6 var(--mono);color:var(--dim);margin:9px 0 0}
+.note:first-child{margin-top:0}
+.absent{color:var(--faint);font-style:italic}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cols3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:1250px){.cols3{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){.cols2,.cols3{grid-template-columns:1fr}
+.app,.app.norail,.app.noleft{grid-template-columns:1fr;
+grid-template-areas:"top" "mid" "left" "right" "bot"}}
+h1.doc{font:400 clamp(23px,2.6vw,32px)/1.1 var(--serif);margin:0 0 6px;letter-spacing:.01em}
+h1.doc.mono{font-family:var(--mono);text-transform:uppercase;letter-spacing:.02em;
+font-size:clamp(19px,2.2vw,26px)}
+.sub{color:var(--dim);font:11.5px/1.6 var(--mono);margin:0}
+.hdr{border-bottom:1px solid var(--rule);padding-bottom:14px;margin-bottom:16px;
+display:grid;grid-template-columns:1fr auto;gap:26px;align-items:start}
+.hdr table.doc{border-collapse:collapse;font:10.5px/1.75 var(--mono);color:var(--dim)}
+.hdr table.doc td{padding:0 0 0 16px;white-space:nowrap;border:none}
+.hdr table.doc td.k{padding:0}
+.hdr table.doc td.v{color:var(--ink)}
+.eyebrow{font:9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;
+color:var(--dim);margin:0 0 9px}
+
+/* ---- foot ---- */
+.bot{grid-area:bot;display:flex;align-items:center;justify-content:space-between;gap:20px;
+padding:11px 16px;background:var(--panel);border-top:1px solid var(--rule);
+font:9.5px var(--mono);letter-spacing:.1em;color:var(--faint);text-transform:uppercase}
+.bot svg{fill:var(--faint);display:block}
+.bot .mid_{letter-spacing:.16em;color:var(--dim)}
+
+.spark{width:100%;height:auto;display:block}
+.rowlink{display:grid;grid-template-columns:auto 1fr auto;gap:9px;align-items:center;
+padding:7px 13px;border-bottom:1px solid var(--rule);text-decoration:none;color:var(--ink);
+font:11px var(--mono)}
+.rowlink:last-child{border-bottom:none}
+.rowlink:hover{background:var(--panel2)}
+.rowlink.on{background:var(--rule)}
+.rowlink .n{color:var(--dim);font-variant-numeric:tabular-nums}
+.rowlink .s{display:block;color:var(--dim);font-size:9.5px}
+.say{font:11.5px/1.7 var(--mono);color:var(--ink);margin:0;
+border-left:2px solid var(--rule);padding-left:11px}
+.searchbox{width:100%;background:var(--bg);border:1px solid var(--rule);color:var(--ink);
+font:11px var(--mono);padding:7px 9px;margin-bottom:2px}
+.searchbox::placeholder{color:var(--faint)}
+.hidden{display:none}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font:10px var(--mono);color:var(--dim);
+align-items:center}
+.legend span{display:flex;gap:6px;align-items:center}
+.tree{display:flex;gap:26px;overflow-x:auto;padding-bottom:6px}
+.gen{min-width:150px}
+.genh{font:9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--dim);
+border-bottom:1px solid var(--rule);padding-bottom:6px;margin-bottom:9px}
+.node{border:1px solid var(--rule);background:var(--panel2);padding:8px 10px;margin-bottom:8px;
+font:10.5px var(--mono);text-decoration:none;color:var(--ink);display:block}
+.node:hover{border-color:var(--moss2)}
+.node.root{border-color:var(--moss2)}
+.node .c{color:var(--dim);font-size:9.5px;display:block;margin-top:2px}
+.hist{display:flex;gap:2px;align-items:flex-end;height:44px}
+.hist i{flex:1;background:var(--moss2);display:block;min-height:1px}
+</style></head><body><div class="app"><header class="top"><a class="brand" href="http://127.0.0.1:8730/hub.html"><svg viewBox="0 0 100 120" width="22" height="26" aria-hidden="true"><path d="M0,0 H100 V120 H0 Z M7.3,7.3 H92.7 V111.2 H7.3 Z M18,111.2 H82 V120 H18 Z" fill-rule="evenodd"/></svg><span><span class="w">DNT</span><br><span class="d">Department of<br>Nonhuman Territories</span></span></a><div class="crumbs"><a href="http://127.0.0.1:8730/hub.html">TERRAINS</a><span class="arrow">&rsaquo;</span><a href="/basin-03/terrain.html">BASIN-03</a><span class="arrow">&rsaquo;</span><span class="cur">SPECIMEN i-00002</span></div><div class="state"><span class="dot"></span>SHIFT <b>149</b><span class="arrow">·</span>2026-08-18 22:38:13 UTC<span class="arrow">·</span>HOLDING</div><div class="acts"><a class="pri" href="http://127.0.0.1:8733/index.html">Back to observation deck</a><a href="/basin-03/codex.html">Field compendium</a><a href="/basin-03/structure.html">Classification structure</a><a href="/basin-03/crosswalk.html">Linnaean crosswalk</a></div></header><aside class="left rail"><section class="p"><div class="ph"><b>Specimens</b></div><div class="pb flush"><div class="pb" style="padding:9px 11px 4px"><input class="searchbox" id="q" placeholder="search specimens…"></div><a class="rowlink" data-n="i-12079" href="/basin-03/specimens/i-12079.html"><span class="sw" style="background:#7f6fae"></span><span>i-12079<span class="s">mobile_exchanger</span></span><span class="n">65</span></a><a class="rowlink" data-n="i-14065" href="/basin-03/specimens/i-14065.html"><span class="sw" style="background:#7f6fae"></span><span>i-14065<span class="s">mobile_exchanger</span></span><span class="n">62</span></a><a class="rowlink" data-n="i-16247" href="/basin-03/specimens/i-16247.html"><span class="sw" style="background:#7f6fae"></span><span>i-16247<span class="s">mobile_exchanger</span></span><span class="n">59</span></a><a class="rowlink" data-n="i-17262" href="/basin-03/specimens/i-17262.html"><span class="sw" style="background:#7f6fae"></span><span>i-17262<span class="s">mobile_exchanger</span></span><span class="n">54</span></a><a class="rowlink" data-n="i-17470" href="/basin-03/specimens/i-17470.html"><span class="sw" style="background:#7f6fae"></span><span>i-17470<span class="s">mobile_exchanger</span></span><span class="n">54</span></a><a class="rowlink" data-n="i-19765" href="/basin-03/specimens/i-19765.html"><span class="sw" style="background:#7f6fae"></span><span>i-19765<span class="s">mobile_exchanger</span></span><span class="n">51</span></a><a class="rowlink" data-n="i-22354" href="/basin-03/specimens/i-22354.html"><span class="sw" style="background:#7f6fae"></span><span>i-22354<span class="s">mobile_exchanger</span></span><span class="n">49</span></a><a class="rowlink" data-n="i-22808" href="/basin-03/specimens/i-22808.html"><span class="sw" style="background:#7f6fae"></span><span>i-22808<span class="s">mobile_exchanger</span></span><span class="n">48</span></a><a class="rowlink" data-n="i-23852" href="/basin-03/specimens/i-23852.html"><span class="sw" style="background:#7f6fae"></span><span>i-23852<span class="s">mobile_exchanger</span></span><span class="n">46</span></a><a class="rowlink" data-n="i-25702" href="/basin-03/specimens/i-25702.html"><span class="sw" style="background:#7f6fae"></span><span>i-25702<span class="s">mobile_exchanger</span></span><span class="n">40</span></a><a class="rowlink" data-n="i-25825" href="/basin-03/specimens/i-25825.html"><span class="sw" style="background:#6f9f5f"></span><span>i-25825<span class="s">static_accumulator</span></span><span class="n">40</span></a><a class="rowlink" data-n="i-26043" href="/basin-03/specimens/i-26043.html"><span class="sw" style="background:#7f6fae"></span><span>i-26043<span class="s">mobile_exchanger</span></span><span class="n">40</span></a><a class="rowlink" data-n="i-26163" href="/basin-03/specimens/i-26163.html"><span class="sw" style="background:#7f6fae"></span><span>i-26163<span class="s">mobile_exchanger</span></span><span class="n">40</span></a><a class="rowlink" data-n="i-26676" href="/basin-03/specimens/i-26676.html"><span class="sw" style="background:#7f6fae"></span><span>i-26676<span class="s">mobile_exchanger</span></span><span class="n">40</span></a><a class="rowlink" data-n="i-27230" href="/basin-03/specimens/i-27230.html"><span class="sw" style="background:#7f6fae"></span><span>i-27230<span class="s">mobile_exchanger</span></span><span class="n">39</span></a><a class="rowlink" data-n="i-27292" href="/basin-03/specimens/i-27292.html"><span class="sw" style="background:#7f6fae"></span><span>i-27292<span class="s">mobile_exchanger</span></span><span class="n">39</span></a><a class="rowlink" data-n="i-27552" href="/basin-03/specimens/i-27552.html"><span class="sw" style="background:#7f6fae"></span><span>i-27552<span class="s">mobile_exchanger</span></span><span class="n">39</span></a><a class="rowlink" data-n="i-28153" href="/basin-03/specimens/i-28153.html"><span class="sw" style="background:#7f6fae"></span><span>i-28153<span class="s">mobile_exchanger</span></span><span class="n">38</span></a><a class="rowlink" data-n="i-28305" href="/basin-03/specimens/i-28305.html"><span class="sw" style="background:#7f6fae"></span><span>i-28305<span class="s">mobile_exchanger</span></span><span class="n">38</span></a><a class="rowlink" data-n="i-28363" href="/basin-03/specimens/i-28363.html"><span class="sw" style="background:#7f6fae"></span><span>i-28363<span class="s">mobile_exchanger</span></span><span class="n">38</span></a><a class="rowlink" data-n="i-28868" href="/basin-03/specimens/i-28868.html"><span class="sw" style="background:#7f6fae"></span><span>i-28868<span class="s">mobile_exchanger</span></span><span class="n">38</span></a><a class="rowlink" data-n="i-28873" href="/basin-03/specimens/i-28873.html"><span class="sw" style="background:#7f6fae"></span><span>i-28873<span class="s">mobile_exchanger</span></span><span class="n">38</span></a><a class="rowlink" data-n="i-28999" href="/basin-03/specimens/i-28999.html"><span class="sw" style="background:#7f6fae"></span><span>i-28999<span class="s">mobile_exchanger</span></span><span class="n">38</span></a><a class="rowlink" data-n="i-29545" href="/basin-03/specimens/i-29545.html"><span class="sw" style="background:#7f6fae"></span><span>i-29545<span class="s">mobile_exchanger</span></span><span class="n">38</span></a><a class="rowlink" data-n="i-29630" href="/basin-03/specimens/i-29630.html"><span class="sw" style="background:#7f6fae"></span><span>i-29630<span class="s">mobile_exchanger</span></span><span class="n">37</span></a><a class="rowlink" data-n="i-29757" href="/basin-03/specimens/i-29757.html"><span class="sw" style="background:#7f6fae"></span><span>i-29757<span class="s">mobile_exchanger</span></span><span class="n">37</span></a><a class="rowlink" data-n="i-30698" href="/basin-03/specimens/i-30698.html"><span class="sw" style="background:#7f6fae"></span><span>i-30698<span class="s">mobile_exchanger</span></span><span class="n">37</span></a><a class="rowlink" data-n="i-30714" href="/basin-03/specimens/i-30714.html"><span class="sw" style="background:#7f6fae"></span><span>i-30714<span class="s">mobile_exchanger</span></span><span class="n">37</span></a><a class="rowlink" data-n="i-30774" href="/basin-03/specimens/i-30774.html"><span class="sw" style="background:#7f6fae"></span><span>i-30774<span class="s">mobile_exchanger</span></span><span class="n">37</span></a><a class="rowlink" data-n="i-30795" href="/basin-03/specimens/i-30795.html"><span class="sw" style="background:#7f6fae"></span><span>i-30795<span class="s">mobile_exchanger</span></span><span class="n">37</span></a><a class="rowlink" data-n="i-30807" href="/basin-03/specimens/i-30807.html"><span class="sw" style="background:#7f6fae"></span><span>i-30807<span class="s">mobile_exchanger</span></span><span class="n">37</span></a><a class="rowlink" data-n="i-30830" href="/basin-03/specimens/i-30830.html"><span class="sw" style="background:#7f6fae"></span><span>i-30830<span class="s">mobile_exchanger</span></span><span class="n">36</span></a><a class="rowlink" data-n="i-31521" href="/basin-03/specimens/i-31521.html"><span class="sw" style="background:#7f6fae"></span><span>i-31521<span class="s">mobile_exchanger</span></span><span class="n">36</span></a><a class="rowlink" data-n="i-31599" href="/basin-03/specimens/i-31599.html"><span class="sw" style="background:#6f9f5f"></span><span>i-31599<span class="s">mobile_exchanger</span></span><span class="n">36</span></a><a class="rowlink" data-n="i-31612" href="/basin-03/specimens/i-31612.html"><span class="sw" style="background:#7f6fae"></span><span>i-31612<span class="s">mobile_exchanger</span></span><span class="n">36</span></a><a class="rowlink" data-n="i-32037" href="/basin-03/specimens/i-32037.html"><span class="sw" style="background:#7f6fae"></span><span>i-32037<span class="s">mobile_exchanger</span></span><span class="n">35</span></a><a class="rowlink" data-n="i-32366" href="/basin-03/specimens/i-32366.html"><span class="sw" style="background:#7f6fae"></span><span>i-32366<span class="s">mobile_exchanger</span></span><span class="n">34</span></a><a class="rowlink" data-n="i-34038" href="/basin-03/specimens/i-34038.html"><span class="sw" style="background:#7f6fae"></span><span>i-34038<span class="s">mobile_exchanger</span></span><span class="n">29</span></a><a class="rowlink" data-n="i-34675" href="/basin-03/specimens/i-34675.html"><span class="sw" style="background:#7f6fae"></span><span>i-34675<span class="s">mobile_exchanger</span></span><span class="n">28</span></a><a class="rowlink" data-n="i-42980" href="/basin-03/specimens/i-42980.html"><span class="sw" style="background:#6f9f5f"></span><span>i-42980<span class="s">mobile_exchanger</span></span><span class="n">20</span></a></div></section></aside><main class="mid"><div class="hdr"><div><p class="eyebrow">Specimen record</p><h1 class="doc mono">i-00002</h1><p class="sub"><span class="chip off">NO LONGER LIVING</span> <span class="chip">—</span> <span class="chip">—</span></p></div><table class="doc"><tr><td class="k">TERRAIN</td><td class="v">BASIN-03</td></tr><tr><td class="k">SHIFT</td><td class="v">149</td></tr><tr><td class="k">PRESENT FOR</td><td class="v">— SHIFT(S)</td></tr><tr><td class="k">SIGHTINGS</td><td class="v">—</td></tr></table></div><div class="stats"><div class="stat"><div class="v">—</div><div class="l">shifts present</div></div><div class="stat"><div class="v">—</div><div class="l">light held</div></div><div class="stat"><div class="v">—</div><div class="l">carries</div></div><div class="stat"><div class="v">—</div><div class="l">reach</div></div><div class="stat"><div class="v">—</div><div class="l">descendants</div></div><div class="stat"><div class="v">—</div><div class="l">moves</div></div></div><div class="tabs"><button data-tab="overview" class="on">Overview</button><button data-tab="sightings">Sightings</button><button data-tab="state">State history</button><button data-tab="repro">Reproduction</button><button data-tab="words">The Namer's words</button></div><div class="tabpane on" id="tab-overview"><div class="cols2"><section class="p"><div class="ph"><b>Behaviour summary</b></div><div class="pb"><dl class="kv"><dt>makes its living by</dt><dd>—</dd><dt>moved</dt><dd>— time(s)</dd><dt>standing in cell</dt><dd>—</dd><dt>position on the gradient</dt><dd>—</dd><dt>cover where it stands</dt><dd>—</dd><dt>remains where it stands</dt><dd>—</dd></dl></div></section><section class="p"><div class="ph"><b>Lifetime summary</b></div><div class="pb"><dl class="kv"><dt>shifts present</dt><dd>—</dd><dt>sightings</dt><dd>—</dd><dt>light held now</dt><dd>—</dd><dt>given away along links</dt><dd>—</dd><dt>record tier</dt><dd>individual</dd><dt>last seen at shift</dt><dd>—</dd></dl></div></section></div><section class="p"><div class="ph"><b>How it is built</b></div><div class="pb"><dl class="kv"><dt>reach</dt><dd>—</dd><dt>junctions</dt><dd>— — holds up to 1 link(s) at once</dd><dt>carries</dt><dd>—</dd><dt>affinity: cover</dt><dd>—</dd><dt>affinity: remains</dt><dd>—</dd><dt>affinity: links</dt><dd>—</dd></dl><p class="note">Six inherited numbers. The first three are what it built and are charged for every shift; the last three are what it is disposed to draw on, and they sit on a fixed budget.</p></div></section></div><div class="tabpane" id="tab-sightings"><section class="p"><div class="ph"><b>Sighting history</b><span class="r">7 recorded</span></div><div class="pb"><div class="hist"><i style="height:100%;opacity:1"></i><i style="height:100%;opacity:1"></i><i style="height:100%;opacity:1"></i><i style="height:100%;opacity:1"></i><i style="height:8%;opacity:.35"></i><i style="height:8%;opacity:.35"></i><i style="height:100%;opacity:1"></i><i style="height:100%;opacity:1"></i><i style="height:100%;opacity:1"></i></div><p class="note">Shift 3 to 11. A bar is a shift on which the Namer wrote this specimen up; a gap is a shift on which it did not. 7 sighting(s) across 9 shifts.</p></div></section></div><div class="tabpane" id="tab-state"><section class="p"><div class="ph"><b>State history</b></div><div class="pb"><div class="scroll"><table class="d"><thead><tr><th class="num">shift</th><th>logged</th><th>filed as</th><th>decision</th></tr></thead><tbody><tr><td class="num">11</td><td class="dim">2026-08-18 17:41:40</td><td>episodic_relocator</td><td class="dim">filed</td></tr><tr><td class="num">10</td><td class="dim">2026-08-18 17:40:45</td><td>episodic_relocator</td><td class="dim">filed</td></tr><tr><td class="num">9</td><td class="dim">2026-08-18 17:39:46</td><td>episodic_relocator</td><td class="dim">filed</td></tr><tr><td class="num">6</td><td class="dim">2026-08-18 17:36:35</td><td>episodic_relocator</td><td class="dim">filed</td></tr><tr><td class="num">5</td><td class="dim">2026-08-18 17:35:47</td><td>episodic_relocator</td><td class="dim">filed</td></tr><tr><td class="num">4</td><td class="dim">2026-08-18 17:35:05</td><td>static_accumulator</td><td class="dim">filed</td></tr><tr><td class="num">3</td><td class="dim">2026-08-18 17:34:30</td><td>static_accumulator</td><td class="dim">filed</td></tr></tbody></table></div><p class="note">Every entry the Namer wrote about this specimen, newest first. Where the category changes between rows, the Namer refiled it.</p></div></section></div><div class="tabpane" id="tab-repro"><div class="cols2"><section class="p"><div class="ph"><b>Reproduction</b></div><div class="pb"><dl class="kv"><dt>generation</dt><dd>—</dd><dt>descended from</dt><dd>arose from the census, not from a parent</dd><dt>descendants recorded</dt><dd>—</dd><dt>descendants still living</dt><dd>0</dd><dt>arose at shift</dt><dd>—</dd><dt>origin</dt><dd></dd></dl></div></section><section class="p"><div class="ph"><b>Living descendants</b><span class="r">0 of —</span></div><div class="pb"><p class="absent">no living descendants</p></div></section></div></div><div class="tabpane" id="tab-words"><section class="p"><div class="ph"><b>Why it was filed here</b></div><div class="pb"><p class="say">i-00002 exemplifies an advanced episodic_relocator. The specimen has moved 6 times over 8 shifts, demonstrating a sustained relocation pattern—not occasional displacement, but repeated goal-driven or event-triggered repositioning. This relocation behavior has exposed it to residue-based resources (11% of intake), a secondary source inaccessible to purely static organisms. The organism maintains high gradient position (0.85) and high elevation (0.98), consistent with the category's structural positioning. Outward transfer (0.64 light, ~2.3% of holdings) suggests early-stage resource-sharing, possibly emerging from proximity to other organisms during relocation events. The presence of 2 descendants indicates the relocator lifestyle supports reproduction, albeit at lower rates than static accumulators. Complexity 8 reflects tenure (8 shifts) plus movement count and reproductive output. The specimen remains within episodic_relocator because its defining characteristic—sustained episodic movement—is unambiguous. Transfer behavior mirrors i-00000's incipient pattern and is monitored alongside it.</p></div></section><section class="p"><div class="ph"><b>How it compares</b></div><div class="pb"><p class="say">More alike than i-00004 (static_accumulator): i-00002 shows 6 moves over 8 shifts (0.75 moves/shift), while i-00004 shows 2 moves over 6 shifts (0.33 moves/shift). i-00002 has reached gradient position 0.85 and shows blended intake (89% cover layer, 11% residue), indicating exposure to multiple resource sources through relocation. i-00002's outward transfer (0.64 light, ~2.3% of holdings) is lower proportionally than i-00000 but consistent with incipient exchange. The key distinction: i-00002's movement rate is significantly higher, sustained across the interval, and correlates with residue-based intake—hallmarks of the episodic_relocator lifestyle.</p></div></section></div></main><aside class="right rail"><section class="p"><div class="ph"><b>Native classification</b></div><div class="pb"><div style="font:13px var(--mono);color:var(--moss);margin-bottom:8px">episodic_relocator</div><dl class="kv"><dt>record tier</dt><dd>individual</dd><dt>decision</dt><dd>filed</dd><dt>last filed at shift</dt><dd>11</dd><dt>category record</dt><dd><a href="/basin-03/categories/episodic_relocator.html">open →</a></dd></dl></div></section><section class="p"><div class="ph"><b>Composition</b></div><div class="pb"><p class="absent">nothing recorded as taken in yet</p></div></section><section class="p"><div class="ph"><b>Lineage</b></div><div class="pb"><dl class="kv"><dt>generation</dt><dd>—</dd><dt>parent</dt><dd>none — arose from the census</dd><dt>descendants</dt><dd>—</dd><dt>living descendants</dt><dd>0</dd><dt>lineage record</dt><dd>no recorded descendants</dd></dl></div></section><section class="p"><div class="ph"><b>Where it stands</b></div><div class="pb"><dl class="kv"><dt>cell</dt><dd>—</dd><dt>position</dt><dd>—</dd><dt>cover here</dt><dd>—</dd><dt>remains here</dt><dd>—</dd><dt>in the field</dt><dd>no longer in the field</dd></dl></div></section></aside><footer class="bot"><span>DNT SPECIMEN RECORD v1.0</span><span class="mid_">We observe. We do not interfere.</span><span>A branch of the Nonhuman Institute <svg viewBox="0 0 100 120" width="13" height="15" aria-hidden="true"><path d="M0,0 H100 V120 H0 Z M7.3,7.3 H92.7 V111.2 H7.3 Z M18,111.2 H82 V120 H18 Z" fill-rule="evenodd"/></svg></span></footer></div><script>document.querySelectorAll('.tabs button').forEach(function(t){t.onclick=function(){document.querySelectorAll('.tabs button').forEach(function(x){x.classList.remove('on')});t.classList.add('on');document.querySelectorAll('.tabpane').forEach(function(p){p.classList.toggle('on', p.id==='tab-'+t.dataset.tab)})}});var q=document.getElementById('q');if(q)q.oninput=function(){var v=q.value.toLowerCase();document.querySelectorAll('.rowlink[data-n]').forEach(function(r){r.classList.toggle('hidden', r.dataset.n.indexOf(v)<0)})};</script></body></html>

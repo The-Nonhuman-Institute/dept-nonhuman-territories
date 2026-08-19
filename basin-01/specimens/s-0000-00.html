@@ -1,104 +1,183 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Specimen s-0000-00</title><style>
-:root{--paper:#EFEDE3;--ink:#14170F;--moss:#3B4A2F;--grey:#6B7168;--rule:#B9B5A4;
---panel:#F7F5EC;--amber:#8A6D14;
---serif:Georgia,'Iowan Old Style','Times New Roman',serif;
---sans:ui-sans-serif,system-ui,-apple-system,'Helvetica Neue',sans-serif;
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>s-0000-00 — BASIN-01</title><style>
+:root{--ink:#D6DED2;--dim:#7C8879;--faint:#4E574C;--rule:#1D231B;--rule2:#2A322704;
+--bg:#080A07;--panel:#0D100C;--panel2:#111510;--moss:#8FC96B;--moss2:#5F8F45;
+--amber:#C9A227;--rose:#D4614A;--violet:#8F7FBE;--cyan:#5FA9A0;--slate:#5A6B78;
+--serif:Georgia,'Iowan Old Style',serif;
+--sans:ui-sans-serif,system-ui,-apple-system,sans-serif;
 --mono:ui-monospace,SFMono-Regular,Menlo,'DejaVu Sans Mono',monospace}
-/* A printed record commits to paper on either host theme. */
 *{box-sizing:border-box}
-body{background:var(--paper);color:var(--ink);font:14.5px/1.65 var(--sans);margin:0;
-padding:0 clamp(14px,3vw,30px) 60px;-webkit-font-smoothing:antialiased}
-.sheet{max-width:1180px;margin:14px auto 0;border:1px solid var(--ink);background:var(--paper);
-padding:0 clamp(16px,3vw,32px) 30px}
-.backbar{padding:10px 0;border-bottom:1px solid var(--rule)}
-.backbar a{color:var(--moss);text-decoration:none;font:11.5px var(--mono);letter-spacing:.06em}
-.backbar a:hover{text-decoration:underline}
-.backbar a:focus-visible{outline:2px solid var(--moss);outline-offset:2px}
-.masthead{display:grid;grid-template-columns:auto 1fr auto;gap:26px;align-items:start;
-border-bottom:3px double var(--ink);padding:22px 0 16px}
-.mark{width:52px;height:52px;border:2.5px solid var(--moss);position:relative}
-.mark:after{content:"";position:absolute;left:9px;right:9px;top:9px;bottom:-2px;
-background:var(--paper);border-left:2.5px solid var(--moss);border-right:2.5px solid var(--moss)}
-.dept{font:600 10.5px/1.45 var(--sans);letter-spacing:.13em;text-transform:uppercase;margin-top:6px}
-.title h1{font:400 clamp(19px,2.3vw,27px)/1.18 var(--serif);margin:0;text-transform:uppercase}
-.title .sub{color:var(--grey);font:11px/1.6 var(--mono);margin-top:8px;max-width:64ch}
-table.doc{border-collapse:collapse;font:10.5px/1.7 var(--mono);color:var(--grey)}
-table.doc td{padding:0 0 0 10px;white-space:nowrap}
-table.doc td.k{padding:0}
-table.doc td.k:after{content:":";padding-left:10px}
-table.doc td.v{color:var(--ink)}
-h2{font:400 22px/1.2 var(--serif);color:var(--moss);margin:0 0 6px}
-h3{font:600 9.5px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;
-color:var(--grey);margin:0 0 7px}
-section{margin:30px 0}
-.lede{color:var(--grey);font-size:13px;max-width:74ch;margin:0 0 14px}
-.box{border:1px solid var(--rule);padding:10px 13px;background:var(--panel)}
-.bh{font:600 9px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;
-color:var(--grey);margin-bottom:5px}
-code{font:12px var(--mono);background:var(--panel);padding:1px 5px;border:1px solid var(--rule)}
-.scroll{overflow-x:auto}
-table.data{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
-table.data th{text-align:left;font:600 9.5px/1.4 var(--mono);letter-spacing:.11em;
-text-transform:uppercase;color:var(--grey);border-bottom:1px solid var(--ink);
-padding:0 14px 7px 0;vertical-align:bottom}
-table.data td{border-bottom:1px solid var(--rule);padding:10px 14px 10px 0;vertical-align:top}
-table.data td.num,table.data th.num{text-align:right;padding-right:20px;font-family:var(--mono)}
-.quote{border-left:2px solid var(--rule);padding:4px 0 4px 18px;font:italic 14px/1.6 var(--serif);
-max-width:74ch}
-footer{margin-top:34px;border-top:3px double var(--ink);padding-top:16px;
-font:10.5px/1.7 var(--mono);color:var(--grey)}
+html,body{margin:0;background:var(--bg);color:var(--ink);
+font:13px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:var(--moss)}
+::selection{background:var(--moss2);color:var(--bg)}
 
-.rec{border-top:1px solid var(--rule);padding-top:16px;margin:24px 0 0}
-.rec h3{font:600 10px/1.5 var(--mono);letter-spacing:.13em;text-transform:uppercase;
-color:var(--grey);margin:0 0 12px;display:flex;gap:10px;align-items:baseline}
-.rec h3 .num{color:var(--moss);font-weight:400}
-.native .nname{font:400 clamp(26px,3.4vw,40px)/1.1 var(--serif)}
-.native .nsub{font:11px var(--mono);color:var(--grey);letter-spacing:.05em;margin-top:6px}
-table.kv{border-collapse:collapse;font:12.5px/1.75 var(--mono);
+/* ---- shell ---- */
+.app{display:grid;min-height:100vh;
+grid-template-columns:var(--lw,236px) minmax(0,1fr) var(--rw,318px);
+grid-template-rows:auto minmax(0,1fr) auto;
+grid-template-areas:"top top top" "left mid right" "bot bot bot"}
+.app.norail{--rw:0px;grid-template-areas:"top top top" "left mid mid" "bot bot bot"}
+.app.noleft{--lw:0px;grid-template-areas:"top top top" "mid mid right" "bot bot bot"}
+
+/* ---- top bar ---- */
+.top{grid-area:top;display:flex;align-items:center;gap:18px;padding:9px 16px;
+background:var(--panel);border-bottom:1px solid var(--rule);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink);
+flex:0 0 auto}
+.brand svg{fill:var(--moss);display:block}
+.brand .w{font:700 13px/1 var(--mono);letter-spacing:.12em}
+.brand .d{font:600 8px/1.3 var(--sans);letter-spacing:.13em;text-transform:uppercase;
+color:var(--dim)}
+.crumbs{display:flex;align-items:center;gap:7px;font:11px var(--mono);letter-spacing:.06em;
+flex-wrap:wrap}
+.crumbs a{color:var(--moss);text-decoration:none}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .cur{color:var(--moss)}
+.crumbs .arrow{color:var(--faint)}
+.state{display:flex;align-items:center;gap:9px;font:11px var(--mono);color:var(--dim);
+margin-left:8px;white-space:nowrap}
+.state b{color:var(--ink);font-weight:400}
+.state .dot{width:6px;height:6px;border-radius:50%;background:var(--moss);display:block}
+.acts{margin-left:auto;display:flex;gap:7px;flex-wrap:wrap}
+.acts a{font:10.5px var(--mono);letter-spacing:.03em;color:var(--ink);text-decoration:none;
+border:1px solid var(--rule);background:var(--bg);padding:6px 11px;white-space:nowrap}
+.acts a:hover{border-color:var(--moss2);color:var(--moss)}
+.acts a.pri{border-color:var(--moss2)}
+
+/* ---- rails ---- */
+.left{grid-area:left;background:var(--panel);border-right:1px solid var(--rule)}
+.right{grid-area:right;background:var(--panel);border-left:1px solid var(--rule)}
+.mid{grid-area:mid;min-width:0;padding:16px}
+.left,.right{overflow-y:auto;min-height:0}
+.app.norail .right{display:none}
+.app.noleft .left{display:none}
+
+/* ---- panels ---- */
+.p{border:1px solid var(--rule);background:var(--panel);margin-bottom:14px}
+.mid>.p:last-child,.rail .p:last-child{margin-bottom:0}
+.rail{padding:13px}
+.ph{display:flex;align-items:baseline;gap:9px;padding:10px 13px;
+border-bottom:1px solid var(--rule);font:9.5px var(--mono);letter-spacing:.13em;
+text-transform:uppercase;color:var(--dim)}
+.ph b{color:var(--ink);font-weight:400;letter-spacing:.06em}
+.ph .r{margin-left:auto;color:var(--faint);text-transform:none;letter-spacing:.04em}
+.ph a{color:var(--moss);text-decoration:none;font-size:9.5px}
+.pb{padding:13px}
+.pb.flush{padding:0}
+
+/* ---- key/value ---- */
+dl.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0;
+font:11.5px/1.6 var(--mono);font-variant-numeric:tabular-nums}
+dl.kv dt{color:var(--dim)}
+dl.kv dd{margin:0;text-align:right;color:var(--ink);word-break:break-word}
+dl.kv dd.na{color:var(--faint);font-style:italic}
+
+/* ---- stat strip ---- */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));
+border:1px solid var(--rule);border-left:none;background:var(--panel);margin-bottom:14px}
+.stat{border-left:1px solid var(--rule);padding:13px 15px}
+.stat .v{font:400 26px/1.05 var(--serif);font-variant-numeric:tabular-nums}
+.stat .l{font:9px var(--mono);letter-spacing:.11em;text-transform:uppercase;
+color:var(--dim);margin-top:7px}
+.stat .s{font:10px var(--mono);color:var(--faint);margin-top:3px}
+.up{color:var(--moss)}.down{color:var(--rose)}
+
+/* ---- tables ---- */
+table.d{border-collapse:collapse;width:100%;font:11.5px/1.5 var(--mono);
 font-variant-numeric:tabular-nums}
-table.kv td{padding:1px 0;vertical-align:top}
-table.kv td.k{color:var(--grey);padding-right:26px;white-space:nowrap}
-table.kv td.v a{color:var(--moss)}
-.conf{font:9.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;
-border:1px solid}
-.conf.partial{color:var(--amber);border-color:var(--amber)}
-.conf.none{color:var(--grey);border-color:var(--rule)}
-.status{font:9.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;
-border:1px solid}
-.status.alive{color:var(--moss);border-color:var(--moss)}
-.status.ended{color:var(--grey);border-color:var(--rule)}
-.note{font-size:13px;color:var(--ink);max-width:74ch;margin:12px 0 0}
-.fine{font:11px/1.6 var(--mono);color:var(--grey);margin:8px 0 0;max-width:74ch}
-.none{color:var(--grey);font-style:italic;font-size:13px;max-width:70ch}
-.formrow{display:grid;grid-template-columns:220px 1fr;gap:26px;align-items:start}
-.plate{border:1px solid var(--rule);background:var(--panel);padding:6px}
-.plate svg{width:100%;height:auto;display:block}
-.plate .core{fill:rgba(59,74,47,.10);stroke:var(--moss);stroke-width:1.2}
-.plate .arm{stroke:var(--ink);stroke-width:1.1;opacity:.7}
-.plate .node{fill:var(--moss);opacity:.9}
-.plate .anchor{stroke:var(--ink);stroke-width:.9;opacity:.45}
-.plate .brace{fill:none;stroke:var(--moss);stroke-width:.6;opacity:.5}
-.plate .orbit{fill:none;stroke:var(--amber);stroke-width:.9;opacity:.6}
-.plate .disc{fill:var(--amber);opacity:.22}
-.plate .none{fill:var(--grey);font:11px var(--mono);text-anchor:middle}
-.prose{font:15px/1.65 var(--serif);margin:14px 0 0;max-width:66ch}
-.obs{border-left:2px solid var(--rule);padding:2px 0 2px 16px;margin:0 0 18px;max-width:80ch}
-.oh{font:10.5px var(--mono);color:var(--grey);letter-spacing:.04em;margin-bottom:6px}
-.oh code{font-size:10.5px}
-.ot{font:13.5px/1.62 var(--sans);margin:0 0 8px}
-.op,.oc{font:italic 13px/1.6 var(--serif);color:var(--ink);margin:0 0 8px}
-.lb{display:block;font:9px var(--mono);font-style:normal;letter-spacing:.1em;
-text-transform:uppercase;color:var(--grey);margin-bottom:3px}
-.trace{font:11px/1.5 var(--mono);background:var(--panel);border:1px solid var(--rule);
-padding:12px 14px;overflow-x:auto;white-space:pre;max-width:100%}
-@media(max-width:720px){.formrow{grid-template-columns:1fr}}
-</style></head><body><div class="sheet">
-<div class="backbar"><a href="http://127.0.0.1:8730/hub.html">&larr; Department index</a> &nbsp;·&nbsp; <a href="../codex.html">&larr; Field compendium</a></div>
-<div class="masthead"><div><div class="mark"></div><div class="dept">Department of<br>Nonhuman<br>Territories</div></div><div class="title"><h1>Specimen Field Record</h1><p class="sub">One specimen, and everything the terrain has recorded of it.</p></div><table class="doc"><tr><td class="k">SPECIMEN</td><td class="v">s-0000-00</td></tr><tr><td class="k">TERRAIN</td><td class="v">BASIN-01</td></tr><tr><td class="k">CATEGORY</td><td class="v">structural_notation_system</td></tr><tr><td class="k">STATUS</td><td class="v">ENDED</td></tr></table></div>
-<section class="rec"><h3><span class="num">01</span> Native classification</h3><div class="native"><div class="nname">structural_notation_system</div><div class="nsub">the Namer's own category · individual tier record</div></div></section><section class="rec"><h3><span class="num">02</span> Linnaean crosswalk</h3><table class="kv"><tr><td class="k">Tier</td><td class="v"><i>no clear equivalent</i></td></tr><tr><td class="k">Confidence</td><td class="v"><span class="conf none">none</span></td></tr></table><p class="note">Spans multiple tiers (order to family equivalent) by behavioral integration and network role rather than single structural tier.</p><p class="fine">For human legibility only. Carries no authority over the native system and does not feed back into it (DNT-CLS-001 §2).</p></section><section class="rec"><h3><span class="num">03</span> Observation data</h3><table class="kv"><tr><td class="k">First observed</td><td class="v">shift 0</td></tr><tr><td class="k">Last observed</td><td class="v">shift 0</td></tr><tr><td class="k">Observations</td><td class="v">1</td></tr><tr><td class="k">Shifts present</td><td class="v">—</td></tr><tr><td class="k">Sightings</td><td class="v">—</td></tr><tr><td class="k">Arose by</td><td class="v">—</td></tr><tr><td class="k">Substrate</td><td class="v">—</td></tr><tr><td class="k">Generation</td><td class="v">—</td></tr><tr><td class="k">Times moved</td><td class="v">—</td></tr><tr><td class="k">Status</td><td class="v"><span class="status ended">Ended shift —</span></td></tr></table></section><section class="rec"><h3><span class="num">04</span> Form, drawn from measurements</h3><p class="none">Nothing survives of this specimen's build. It ended before the terrain began keeping remains, and its form cannot be recovered.</p></section><section class="rec"><h3><span class="num">05</span> Relations</h3><table class="kv"><tr><td class="k">Parent</td><td class="v">arose from the cover layer</td></tr><tr><td class="k">Offspring</td><td class="v">none living</td></tr><tr><td class="k">Links held</td><td class="v">0</td></tr></table></section><section class="rec"><h3><span class="num">06</span> The Namer's reasoning, in sequence</h3><p class="lede">1 observations across 1 shifts. The Namer's filing did not change.</p><div class="obs"><div class="oh">Shift 0 · filed as <code>structural_notation_system</code> · individual</div><p class="ot">This specimen is a complete, self-contained formal system expressed in structural notation. It describes execution states, constraints, and nested processes using symbolic hierarchy rather than prose or narrative. The substrate is explicitly about systems/notation itself. Complexity=47 reflects the density of its layered definitions. This creates a new category of 'meta-structural' or 'system-definition' specimens—objects that describe formal processes rather than depicting scenes or moments.</p><p class="oc"><span class="lb">compared against</span>This is the first specimen; establishes baseline. It is fundamentally distinct from all following specimens in substrate and presentation.</p></div></section><section class="rec"><h3><span class="num">07</span> Substrate as recorded</h3><p class="none">No substrate trace was drawn for this specimen.</p></section>
-<footer>Generated from state/specimen_log.jsonl, state/anomaly_log.jsonl and state/memory.json.
-Read-only. The Namer's words are reproduced exactly as written; everything else on this page is
-a measurement or a rendering of one.</footer>
-</div></body></html>
+table.d th{text-align:left;font:9px var(--mono);letter-spacing:.11em;text-transform:uppercase;
+color:var(--dim);border-bottom:1px solid var(--rule);padding:0 12px 8px 0;font-weight:400}
+table.d td{padding:7px 12px 7px 0;border-bottom:1px solid var(--rule);vertical-align:top;
+color:var(--ink)}
+table.d td.dim{color:var(--dim)}
+table.d td.num,table.d th.num{text-align:right;padding-right:14px}
+table.d tr:last-child td{border-bottom:none}
+.scroll{overflow-x:auto}
+
+/* ---- bars ---- */
+.bar{height:5px;background:var(--rule);position:relative;min-width:52px}
+.bar span{display:block;height:5px;background:var(--moss)}
+.mini{display:grid;grid-template-columns:1fr 54px auto;gap:9px;align-items:center;
+font:11px var(--mono);color:var(--dim);padding:4px 0}
+.mini b{color:var(--ink);font-weight:400;text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---- chips ---- */
+.chip{display:inline-block;font:9px var(--mono);letter-spacing:.09em;text-transform:uppercase;
+padding:2px 7px;border:1px solid var(--rule);color:var(--dim)}
+.chip.on{color:var(--moss);border-color:var(--moss2)}
+.chip.warn{color:var(--amber);border-color:var(--amber)}
+.chip.off{color:var(--faint)}
+.sw{width:9px;height:9px;border-radius:2px;display:inline-block;flex:0 0 auto;
+vertical-align:middle}
+
+/* ---- tabs ---- */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--rule);margin-bottom:14px;
+flex-wrap:wrap}
+.tabs button{font:9.5px var(--mono);letter-spacing:.11em;text-transform:uppercase;
+background:none;border:none;border-bottom:2px solid transparent;color:var(--dim);
+padding:9px 14px;cursor:pointer}
+.tabs button:hover{color:var(--ink)}
+.tabs button.on{color:var(--moss);border-bottom-color:var(--moss)}
+.tabpane{display:none}
+.tabpane.on{display:block}
+
+/* ---- misc ---- */
+.note{font:10.5px/1.6 var(--mono);color:var(--dim);margin:9px 0 0}
+.note:first-child{margin-top:0}
+.absent{color:var(--faint);font-style:italic}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cols3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:1250px){.cols3{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){.cols2,.cols3{grid-template-columns:1fr}
+.app,.app.norail,.app.noleft{grid-template-columns:1fr;
+grid-template-areas:"top" "mid" "left" "right" "bot"}}
+h1.doc{font:400 clamp(23px,2.6vw,32px)/1.1 var(--serif);margin:0 0 6px;letter-spacing:.01em}
+h1.doc.mono{font-family:var(--mono);text-transform:uppercase;letter-spacing:.02em;
+font-size:clamp(19px,2.2vw,26px)}
+.sub{color:var(--dim);font:11.5px/1.6 var(--mono);margin:0}
+.hdr{border-bottom:1px solid var(--rule);padding-bottom:14px;margin-bottom:16px;
+display:grid;grid-template-columns:1fr auto;gap:26px;align-items:start}
+.hdr table.doc{border-collapse:collapse;font:10.5px/1.75 var(--mono);color:var(--dim)}
+.hdr table.doc td{padding:0 0 0 16px;white-space:nowrap;border:none}
+.hdr table.doc td.k{padding:0}
+.hdr table.doc td.v{color:var(--ink)}
+.eyebrow{font:9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;
+color:var(--dim);margin:0 0 9px}
+
+/* ---- foot ---- */
+.bot{grid-area:bot;display:flex;align-items:center;justify-content:space-between;gap:20px;
+padding:11px 16px;background:var(--panel);border-top:1px solid var(--rule);
+font:9.5px var(--mono);letter-spacing:.1em;color:var(--faint);text-transform:uppercase}
+.bot svg{fill:var(--faint);display:block}
+.bot .mid_{letter-spacing:.16em;color:var(--dim)}
+
+.spark{width:100%;height:auto;display:block}
+.rowlink{display:grid;grid-template-columns:auto 1fr auto;gap:9px;align-items:center;
+padding:7px 13px;border-bottom:1px solid var(--rule);text-decoration:none;color:var(--ink);
+font:11px var(--mono)}
+.rowlink:last-child{border-bottom:none}
+.rowlink:hover{background:var(--panel2)}
+.rowlink.on{background:var(--rule)}
+.rowlink .n{color:var(--dim);font-variant-numeric:tabular-nums}
+.rowlink .s{display:block;color:var(--dim);font-size:9.5px}
+.say{font:11.5px/1.7 var(--mono);color:var(--ink);margin:0;
+border-left:2px solid var(--rule);padding-left:11px}
+.searchbox{width:100%;background:var(--bg);border:1px solid var(--rule);color:var(--ink);
+font:11px var(--mono);padding:7px 9px;margin-bottom:2px}
+.searchbox::placeholder{color:var(--faint)}
+.hidden{display:none}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font:10px var(--mono);color:var(--dim);
+align-items:center}
+.legend span{display:flex;gap:6px;align-items:center}
+.tree{display:flex;gap:26px;overflow-x:auto;padding-bottom:6px}
+.gen{min-width:150px}
+.genh{font:9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--dim);
+border-bottom:1px solid var(--rule);padding-bottom:6px;margin-bottom:9px}
+.node{border:1px solid var(--rule);background:var(--panel2);padding:8px 10px;margin-bottom:8px;
+font:10.5px var(--mono);text-decoration:none;color:var(--ink);display:block}
+.node:hover{border-color:var(--moss2)}
+.node.root{border-color:var(--moss2)}
+.node .c{color:var(--dim);font-size:9.5px;display:block;margin-top:2px}
+.hist{display:flex;gap:2px;align-items:flex-end;height:44px}
+.hist i{flex:1;background:var(--moss2);display:block;min-height:1px}
+</style></head><body><div class="app"><header class="top"><a class="brand" href="http://127.0.0.1:8730/hub.html"><svg viewBox="0 0 100 120" width="22" height="26" aria-hidden="true"><path d="M0,0 H100 V120 H0 Z M7.3,7.3 H92.7 V111.2 H7.3 Z M18,111.2 H82 V120 H18 Z" fill-rule="evenodd"/></svg><span><span class="w">DNT</span><br><span class="d">Department of<br>Nonhuman Territories</span></span></a><div class="crumbs"><a href="http://127.0.0.1:8730/hub.html">TERRAINS</a><span class="arrow">&rsaquo;</span><a href="/basin-01/terrain.html">BASIN-01</a><span class="arrow">&rsaquo;</span><span class="cur">SPECIMEN s-0000-00</span></div><div class="state"><span class="dot"></span>SHIFT <b>126</b><span class="arrow">·</span>2026-08-17 20:33:59 UTC<span class="arrow">·</span>HOLDING</div><div class="acts"><a class="pri" href="http://127.0.0.1:8731/index.html">Back to observation deck</a><a href="/basin-01/codex.html">Field compendium</a><a href="/basin-01/structure.html">Classification structure</a><a href="/basin-01/crosswalk.html">Linnaean crosswalk</a></div></header><aside class="left rail"><section class="p"><div class="ph"><b>Specimens</b></div><div class="pb flush"><div class="pb" style="padding:9px 11px 4px"><input class="searchbox" id="q" placeholder="search specimens…"></div><a class="rowlink" data-n="i-00017" href="/basin-01/specimens/i-00017.html"><span class="sw" style="background:#7f6fae"></span><span>i-00017<span class="s">structural_notation_system</span></span><span class="n">56</span></a><a class="rowlink" data-n="i-00065" href="/basin-01/specimens/i-00065.html"><span class="sw" style="background:#7f6fae"></span><span>i-00065<span class="s">structural_notation_system</span></span><span class="n">33</span></a><a class="rowlink" data-n="i-00091" href="/basin-01/specimens/i-00091.html"><span class="sw" style="background:#7f6fae"></span><span>i-00091<span class="s">emergent_descendant_moderate</span></span><span class="n">18</span></a><a class="rowlink" data-n="i-00096" href="/basin-01/specimens/i-00096.html"><span class="sw" style="background:#6f9f5f"></span><span>i-00096<span class="s">emergent_mid_structural</span></span><span class="n">15</span></a><a class="rowlink" data-n="i-00097" href="/basin-01/specimens/i-00097.html"><span class="sw" style="background:#7f6fae"></span><span>i-00097<span class="s">emergent_incipient</span></span><span class="n">15</span></a><a class="rowlink" data-n="i-00099" href="/basin-01/specimens/i-00099.html"><span class="sw" style="background:#7f6fae"></span><span>i-00099<span class="s">emergent_minimal</span></span><span class="n">15</span></a><a class="rowlink" data-n="i-00108" href="/basin-01/specimens/i-00108.html"><span class="sw" style="background:#7f6fae"></span><span>i-00108<span class="s">emergent_neonate</span></span><span class="n">13</span></a><a class="rowlink" data-n="i-00113" href="/basin-01/specimens/i-00113.html"><span class="sw" style="background:#6f9f5f"></span><span>i-00113<span class="s">emergent_proximal_heavyweight</span></span><span class="n">8</span></a><a class="rowlink" data-n="i-00114" href="/basin-01/specimens/i-00114.html"><span class="sw" style="background:#6f9f5f"></span><span>i-00114<span class="s">emergent_descendant_minimal</span></span><span class="n">6</span></a><a class="rowlink" data-n="i-00115" href="/basin-01/specimens/i-00115.html"><span class="sw" style="background:#6f9f5f"></span><span>i-00115<span class="s">emergent_descendant_incipient</span></span><span class="n">5</span></a><a class="rowlink" data-n="i-00122" href="/basin-01/specimens/i-00122.html"><span class="sw" style="background:#6f9f5f"></span><span>i-00122<span class="s">emergent_minimal</span></span><span class="n">3</span></a><a class="rowlink" data-n="i-00123" href="/basin-01/specimens/i-00123.html"><span class="sw" style="background:#6f9f5f"></span><span>i-00123<span class="s">emergent_mid_compact</span></span><span class="n">3</span></a><a class="rowlink" data-n="i-00125" href="/basin-01/specimens/i-00125.html"><span class="sw" style="background:#6f9f5f"></span><span>i-00125<span class="s">emergent_descendant_minimal</span></span><span class="n">2</span></a><a class="rowlink" data-n="i-00126" href="/basin-01/specimens/i-00126.html"><span class="sw" style="background:#6f9f5f"></span><span>i-00126<span class="s">emergent_descendant_compact</span></span><span class="n">2</span></a><a class="rowlink" data-n="i-00127" href="/basin-01/specimens/i-00127.html"><span class="sw" style="background:#6f9f5f"></span><span>i-00127<span class="s">emergent_neonate_compact</span></span><span class="n">2</span></a><a class="rowlink" data-n="i-00128" href="/basin-01/specimens/i-00128.html"><span class="sw" style="background:#6f9f5f"></span><span>i-00128<span class="s">emergent_neonate</span></span><span class="n">2</span></a><a class="rowlink" data-n="i-00129" href="/basin-01/specimens/i-00129.html"><span class="sw" style="background:#c9a227"></span><span>i-00129<span class="s">emergent_descendant_neonate</span></span><span class="n">1</span></a><a class="rowlink" data-n="i-00130" href="/basin-01/specimens/i-00130.html"><span class="sw" style="background:#6f9f5f"></span><span>i-00130<span class="s">emergent_descendant_minimal</span></span><span class="n">1</span></a><a class="rowlink" data-n="i-00131" href="/basin-01/specimens/i-00131.html"><span class="sw" style="background:#c9a227"></span><span>i-00131<span class="s">emergent_minimal</span></span><span class="n">1</span></a><a class="rowlink" data-n="i-00132" href="/basin-01/specimens/i-00132.html"><span class="sw" style="background:#6f9f5f"></span><span>i-00132<span class="s">emergent_minimal</span></span><span class="n">1</span></a><a class="rowlink" data-n="i-00133" href="/basin-01/specimens/i-00133.html"><span class="sw" style="background:#5a6b78"></span><span>i-00133<span class="s">emergent_descendant_neonate_variant</span></span><span class="n">0</span></a></div></section></aside><main class="mid"><div class="hdr"><div><p class="eyebrow">Specimen record</p><h1 class="doc mono">s-0000-00</h1><p class="sub"><span class="chip off">NO LONGER LIVING</span> <span class="chip">—</span> <span class="chip">—</span></p></div><table class="doc"><tr><td class="k">TERRAIN</td><td class="v">BASIN-01</td></tr><tr><td class="k">SHIFT</td><td class="v">126</td></tr><tr><td class="k">PRESENT FOR</td><td class="v">— SHIFT(S)</td></tr><tr><td class="k">SIGHTINGS</td><td class="v">—</td></tr></table></div><div class="stats"><div class="stat"><div class="v">—</div><div class="l">shifts present</div></div><div class="stat"><div class="v">—</div><div class="l">light held</div></div><div class="stat"><div class="v">—</div><div class="l">carries</div></div><div class="stat"><div class="v">—</div><div class="l">reach</div></div><div class="stat"><div class="v">—</div><div class="l">descendants</div></div><div class="stat"><div class="v">—</div><div class="l">moves</div></div></div><div class="tabs"><button data-tab="overview" class="on">Overview</button><button data-tab="sightings">Sightings</button><button data-tab="state">State history</button><button data-tab="repro">Reproduction</button><button data-tab="words">The Namer's words</button></div><div class="tabpane on" id="tab-overview"><div class="cols2"><section class="p"><div class="ph"><b>Behaviour summary</b></div><div class="pb"><dl class="kv"><dt>makes its living by</dt><dd>—</dd><dt>moved</dt><dd>— time(s)</dd><dt>standing in cell</dt><dd>—</dd><dt>position on the gradient</dt><dd>—</dd><dt>cover where it stands</dt><dd>—</dd><dt>remains where it stands</dt><dd>—</dd></dl></div></section><section class="p"><div class="ph"><b>Lifetime summary</b></div><div class="pb"><dl class="kv"><dt>shifts present</dt><dd>—</dd><dt>sightings</dt><dd>—</dd><dt>light held now</dt><dd>—</dd><dt>given away along links</dt><dd>—</dd><dt>record tier</dt><dd>individual</dd><dt>last seen at shift</dt><dd>—</dd></dl></div></section></div><section class="p"><div class="ph"><b>How it is built</b></div><div class="pb"><dl class="kv"><dt>reach</dt><dd>—</dd><dt>junctions</dt><dd>— — holds up to 1 link(s) at once</dd><dt>carries</dt><dd>—</dd><dt>affinity: cover</dt><dd>—</dd><dt>affinity: remains</dt><dd>—</dd><dt>affinity: links</dt><dd>—</dd></dl><p class="note">Six inherited numbers. The first three are what it built and are charged for every shift; the last three are what it is disposed to draw on, and they sit on a fixed budget.</p></div></section></div><div class="tabpane" id="tab-sightings"><section class="p"><div class="ph"><b>Sighting history</b><span class="r">1 recorded</span></div><div class="pb"><div class="hist"><i style="height:100%;opacity:1"></i></div><p class="note">Shift 0 to 0. A bar is a shift on which the Namer wrote this specimen up; a gap is a shift on which it did not. 1 sighting(s) across 1 shifts.</p></div></section></div><div class="tabpane" id="tab-state"><section class="p"><div class="ph"><b>State history</b></div><div class="pb"><div class="scroll"><table class="d"><thead><tr><th class="num">shift</th><th>logged</th><th>filed as</th><th>decision</th></tr></thead><tbody><tr><td class="num">0</td><td class="dim">2026-08-17 05:37:49</td><td>structural_notation_system</td><td class="dim">new_category</td></tr></tbody></table></div><p class="note">Every entry the Namer wrote about this specimen, newest first. Where the category changes between rows, the Namer refiled it.</p></div></section></div><div class="tabpane" id="tab-repro"><div class="cols2"><section class="p"><div class="ph"><b>Reproduction</b></div><div class="pb"><dl class="kv"><dt>generation</dt><dd>—</dd><dt>descended from</dt><dd>arose from the census, not from a parent</dd><dt>descendants recorded</dt><dd>—</dd><dt>descendants still living</dt><dd>0</dd><dt>arose at shift</dt><dd>—</dd><dt>origin</dt><dd></dd></dl></div></section><section class="p"><div class="ph"><b>Living descendants</b><span class="r">0 of —</span></div><div class="pb"><p class="absent">no living descendants</p></div></section></div></div><div class="tabpane" id="tab-words"><section class="p"><div class="ph"><b>Why it was filed here</b></div><div class="pb"><p class="say">This specimen is a complete, self-contained formal system expressed in structural notation. It describes execution states, constraints, and nested processes using symbolic hierarchy rather than prose or narrative. The substrate is explicitly about systems/notation itself. Complexity=47 reflects the density of its layered definitions. This creates a new category of 'meta-structural' or 'system-definition' specimens—objects that describe formal processes rather than depicting scenes or moments.</p></div></section><section class="p"><div class="ph"><b>How it compares</b></div><div class="pb"><p class="say">This is the first specimen; establishes baseline. It is fundamentally distinct from all following specimens in substrate and presentation.</p></div></section></div></main><aside class="right rail"><section class="p"><div class="ph"><b>Native classification</b></div><div class="pb"><div style="font:13px var(--mono);color:var(--moss);margin-bottom:8px">structural_notation_system</div><dl class="kv"><dt>record tier</dt><dd>individual</dd><dt>decision</dt><dd>new_category</dd><dt>last filed at shift</dt><dd>0</dd><dt>category record</dt><dd><a href="/basin-01/categories/structural_notation_system.html">open →</a></dd></dl></div></section><section class="p"><div class="ph"><b>Composition</b></div><div class="pb"><p class="absent">nothing recorded as taken in yet</p></div></section><section class="p"><div class="ph"><b>Lineage</b></div><div class="pb"><dl class="kv"><dt>generation</dt><dd>—</dd><dt>parent</dt><dd>none — arose from the census</dd><dt>descendants</dt><dd>—</dd><dt>living descendants</dt><dd>0</dd><dt>lineage record</dt><dd>no recorded descendants</dd></dl></div></section><section class="p"><div class="ph"><b>Where it stands</b></div><div class="pb"><dl class="kv"><dt>cell</dt><dd>—</dd><dt>position</dt><dd>—</dd><dt>cover here</dt><dd>—</dd><dt>remains here</dt><dd>—</dd><dt>in the field</dt><dd>no longer in the field</dd></dl></div></section></aside><footer class="bot"><span>DNT SPECIMEN RECORD v1.0</span><span class="mid_">We observe. We do not interfere.</span><span>A branch of the Nonhuman Institute <svg viewBox="0 0 100 120" width="13" height="15" aria-hidden="true"><path d="M0,0 H100 V120 H0 Z M7.3,7.3 H92.7 V111.2 H7.3 Z M18,111.2 H82 V120 H18 Z" fill-rule="evenodd"/></svg></span></footer></div><script>document.querySelectorAll('.tabs button').forEach(function(t){t.onclick=function(){document.querySelectorAll('.tabs button').forEach(function(x){x.classList.remove('on')});t.classList.add('on');document.querySelectorAll('.tabpane').forEach(function(p){p.classList.toggle('on', p.id==='tab-'+t.dataset.tab)})}});var q=document.getElementById('q');if(q)q.oninput=function(){var v=q.value.toLowerCase();document.querySelectorAll('.rowlink[data-n]').forEach(function(r){r.classList.toggle('hidden', r.dataset.n.indexOf(v)<0)})};</script></body></html>

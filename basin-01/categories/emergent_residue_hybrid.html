@@ -1,0 +1,183 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>emergent_residue_hybrid — BASIN-01</title><style>
+:root{--ink:#D6DED2;--dim:#7C8879;--faint:#4E574C;--rule:#1D231B;--rule2:#2A322704;
+--bg:#080A07;--panel:#0D100C;--panel2:#111510;--moss:#8FC96B;--moss2:#5F8F45;
+--amber:#C9A227;--rose:#D4614A;--violet:#8F7FBE;--cyan:#5FA9A0;--slate:#5A6B78;
+--serif:Georgia,'Iowan Old Style',serif;
+--sans:ui-sans-serif,system-ui,-apple-system,sans-serif;
+--mono:ui-monospace,SFMono-Regular,Menlo,'DejaVu Sans Mono',monospace}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);
+font:13px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:var(--moss)}
+::selection{background:var(--moss2);color:var(--bg)}
+
+/* ---- shell ---- */
+.app{display:grid;min-height:100vh;
+grid-template-columns:var(--lw,236px) minmax(0,1fr) var(--rw,318px);
+grid-template-rows:auto minmax(0,1fr) auto;
+grid-template-areas:"top top top" "left mid right" "bot bot bot"}
+.app.norail{--rw:0px;grid-template-areas:"top top top" "left mid mid" "bot bot bot"}
+.app.noleft{--lw:0px;grid-template-areas:"top top top" "mid mid right" "bot bot bot"}
+
+/* ---- top bar ---- */
+.top{grid-area:top;display:flex;align-items:center;gap:18px;padding:9px 16px;
+background:var(--panel);border-bottom:1px solid var(--rule);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink);
+flex:0 0 auto}
+.brand svg{fill:var(--moss);display:block}
+.brand .w{font:700 13px/1 var(--mono);letter-spacing:.12em}
+.brand .d{font:600 8px/1.3 var(--sans);letter-spacing:.13em;text-transform:uppercase;
+color:var(--dim)}
+.crumbs{display:flex;align-items:center;gap:7px;font:11px var(--mono);letter-spacing:.06em;
+flex-wrap:wrap}
+.crumbs a{color:var(--moss);text-decoration:none}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .cur{color:var(--moss)}
+.crumbs .arrow{color:var(--faint)}
+.state{display:flex;align-items:center;gap:9px;font:11px var(--mono);color:var(--dim);
+margin-left:8px;white-space:nowrap}
+.state b{color:var(--ink);font-weight:400}
+.state .dot{width:6px;height:6px;border-radius:50%;background:var(--moss);display:block}
+.acts{margin-left:auto;display:flex;gap:7px;flex-wrap:wrap}
+.acts a{font:10.5px var(--mono);letter-spacing:.03em;color:var(--ink);text-decoration:none;
+border:1px solid var(--rule);background:var(--bg);padding:6px 11px;white-space:nowrap}
+.acts a:hover{border-color:var(--moss2);color:var(--moss)}
+.acts a.pri{border-color:var(--moss2)}
+
+/* ---- rails ---- */
+.left{grid-area:left;background:var(--panel);border-right:1px solid var(--rule)}
+.right{grid-area:right;background:var(--panel);border-left:1px solid var(--rule)}
+.mid{grid-area:mid;min-width:0;padding:16px}
+.left,.right{overflow-y:auto;min-height:0}
+.app.norail .right{display:none}
+.app.noleft .left{display:none}
+
+/* ---- panels ---- */
+.p{border:1px solid var(--rule);background:var(--panel);margin-bottom:14px}
+.mid>.p:last-child,.rail .p:last-child{margin-bottom:0}
+.rail{padding:13px}
+.ph{display:flex;align-items:baseline;gap:9px;padding:10px 13px;
+border-bottom:1px solid var(--rule);font:9.5px var(--mono);letter-spacing:.13em;
+text-transform:uppercase;color:var(--dim)}
+.ph b{color:var(--ink);font-weight:400;letter-spacing:.06em}
+.ph .r{margin-left:auto;color:var(--faint);text-transform:none;letter-spacing:.04em}
+.ph a{color:var(--moss);text-decoration:none;font-size:9.5px}
+.pb{padding:13px}
+.pb.flush{padding:0}
+
+/* ---- key/value ---- */
+dl.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0;
+font:11.5px/1.6 var(--mono);font-variant-numeric:tabular-nums}
+dl.kv dt{color:var(--dim)}
+dl.kv dd{margin:0;text-align:right;color:var(--ink);word-break:break-word}
+dl.kv dd.na{color:var(--faint);font-style:italic}
+
+/* ---- stat strip ---- */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));
+border:1px solid var(--rule);border-left:none;background:var(--panel);margin-bottom:14px}
+.stat{border-left:1px solid var(--rule);padding:13px 15px}
+.stat .v{font:400 26px/1.05 var(--serif);font-variant-numeric:tabular-nums}
+.stat .l{font:9px var(--mono);letter-spacing:.11em;text-transform:uppercase;
+color:var(--dim);margin-top:7px}
+.stat .s{font:10px var(--mono);color:var(--faint);margin-top:3px}
+.up{color:var(--moss)}.down{color:var(--rose)}
+
+/* ---- tables ---- */
+table.d{border-collapse:collapse;width:100%;font:11.5px/1.5 var(--mono);
+font-variant-numeric:tabular-nums}
+table.d th{text-align:left;font:9px var(--mono);letter-spacing:.11em;text-transform:uppercase;
+color:var(--dim);border-bottom:1px solid var(--rule);padding:0 12px 8px 0;font-weight:400}
+table.d td{padding:7px 12px 7px 0;border-bottom:1px solid var(--rule);vertical-align:top;
+color:var(--ink)}
+table.d td.dim{color:var(--dim)}
+table.d td.num,table.d th.num{text-align:right;padding-right:14px}
+table.d tr:last-child td{border-bottom:none}
+.scroll{overflow-x:auto}
+
+/* ---- bars ---- */
+.bar{height:5px;background:var(--rule);position:relative;min-width:52px}
+.bar span{display:block;height:5px;background:var(--moss)}
+.mini{display:grid;grid-template-columns:1fr 54px auto;gap:9px;align-items:center;
+font:11px var(--mono);color:var(--dim);padding:4px 0}
+.mini b{color:var(--ink);font-weight:400;text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---- chips ---- */
+.chip{display:inline-block;font:9px var(--mono);letter-spacing:.09em;text-transform:uppercase;
+padding:2px 7px;border:1px solid var(--rule);color:var(--dim)}
+.chip.on{color:var(--moss);border-color:var(--moss2)}
+.chip.warn{color:var(--amber);border-color:var(--amber)}
+.chip.off{color:var(--faint)}
+.sw{width:9px;height:9px;border-radius:2px;display:inline-block;flex:0 0 auto;
+vertical-align:middle}
+
+/* ---- tabs ---- */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--rule);margin-bottom:14px;
+flex-wrap:wrap}
+.tabs button{font:9.5px var(--mono);letter-spacing:.11em;text-transform:uppercase;
+background:none;border:none;border-bottom:2px solid transparent;color:var(--dim);
+padding:9px 14px;cursor:pointer}
+.tabs button:hover{color:var(--ink)}
+.tabs button.on{color:var(--moss);border-bottom-color:var(--moss)}
+.tabpane{display:none}
+.tabpane.on{display:block}
+
+/* ---- misc ---- */
+.note{font:10.5px/1.6 var(--mono);color:var(--dim);margin:9px 0 0}
+.note:first-child{margin-top:0}
+.absent{color:var(--faint);font-style:italic}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cols3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:1250px){.cols3{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){.cols2,.cols3{grid-template-columns:1fr}
+.app,.app.norail,.app.noleft{grid-template-columns:1fr;
+grid-template-areas:"top" "mid" "left" "right" "bot"}}
+h1.doc{font:400 clamp(23px,2.6vw,32px)/1.1 var(--serif);margin:0 0 6px;letter-spacing:.01em}
+h1.doc.mono{font-family:var(--mono);text-transform:uppercase;letter-spacing:.02em;
+font-size:clamp(19px,2.2vw,26px)}
+.sub{color:var(--dim);font:11.5px/1.6 var(--mono);margin:0}
+.hdr{border-bottom:1px solid var(--rule);padding-bottom:14px;margin-bottom:16px;
+display:grid;grid-template-columns:1fr auto;gap:26px;align-items:start}
+.hdr table.doc{border-collapse:collapse;font:10.5px/1.75 var(--mono);color:var(--dim)}
+.hdr table.doc td{padding:0 0 0 16px;white-space:nowrap;border:none}
+.hdr table.doc td.k{padding:0}
+.hdr table.doc td.v{color:var(--ink)}
+.eyebrow{font:9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;
+color:var(--dim);margin:0 0 9px}
+
+/* ---- foot ---- */
+.bot{grid-area:bot;display:flex;align-items:center;justify-content:space-between;gap:20px;
+padding:11px 16px;background:var(--panel);border-top:1px solid var(--rule);
+font:9.5px var(--mono);letter-spacing:.1em;color:var(--faint);text-transform:uppercase}
+.bot svg{fill:var(--faint);display:block}
+.bot .mid_{letter-spacing:.16em;color:var(--dim)}
+
+.spark{width:100%;height:auto;display:block}
+.rowlink{display:grid;grid-template-columns:auto 1fr auto;gap:9px;align-items:center;
+padding:7px 13px;border-bottom:1px solid var(--rule);text-decoration:none;color:var(--ink);
+font:11px var(--mono)}
+.rowlink:last-child{border-bottom:none}
+.rowlink:hover{background:var(--panel2)}
+.rowlink.on{background:var(--rule)}
+.rowlink .n{color:var(--dim);font-variant-numeric:tabular-nums}
+.rowlink .s{display:block;color:var(--dim);font-size:9.5px}
+.say{font:11.5px/1.7 var(--mono);color:var(--ink);margin:0;
+border-left:2px solid var(--rule);padding-left:11px}
+.searchbox{width:100%;background:var(--bg);border:1px solid var(--rule);color:var(--ink);
+font:11px var(--mono);padding:7px 9px;margin-bottom:2px}
+.searchbox::placeholder{color:var(--faint)}
+.hidden{display:none}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font:10px var(--mono);color:var(--dim);
+align-items:center}
+.legend span{display:flex;gap:6px;align-items:center}
+.tree{display:flex;gap:26px;overflow-x:auto;padding-bottom:6px}
+.gen{min-width:150px}
+.genh{font:9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--dim);
+border-bottom:1px solid var(--rule);padding-bottom:6px;margin-bottom:9px}
+.node{border:1px solid var(--rule);background:var(--panel2);padding:8px 10px;margin-bottom:8px;
+font:10.5px var(--mono);text-decoration:none;color:var(--ink);display:block}
+.node:hover{border-color:var(--moss2)}
+.node.root{border-color:var(--moss2)}
+.node .c{color:var(--dim);font-size:9.5px;display:block;margin-top:2px}
+.hist{display:flex;gap:2px;align-items:flex-end;height:44px}
+.hist i{flex:1;background:var(--moss2);display:block;min-height:1px}
+</style></head><body><div class="app"><header class="top"><a class="brand" href="http://127.0.0.1:8730/hub.html"><svg viewBox="0 0 100 120" width="22" height="26" aria-hidden="true"><path d="M0,0 H100 V120 H0 Z M7.3,7.3 H92.7 V111.2 H7.3 Z M18,111.2 H82 V120 H18 Z" fill-rule="evenodd"/></svg><span><span class="w">DNT</span><br><span class="d">Department of<br>Nonhuman Territories</span></span></a><div class="crumbs"><a href="http://127.0.0.1:8730/hub.html">TERRAINS</a><span class="arrow">&rsaquo;</span><a href="/basin-01/terrain.html">BASIN-01</a><span class="arrow">&rsaquo;</span><span class="cur">NATIVE CLASSIFICATION</span><span class="arrow">&rsaquo;</span><span class="cur">EMERGENT_RESIDUE_HYBRID</span></div><div class="state"><span class="dot"></span>SHIFT <b>126</b><span class="arrow">·</span>2026-08-17 20:33:59 UTC<span class="arrow">·</span>HOLDING</div><div class="acts"><a class="pri" href="http://127.0.0.1:8731/index.html">Back to observation deck</a><a href="/basin-01/codex.html">Field compendium</a><a href="/basin-01/structure.html">Classification structure</a><a href="/basin-01/crosswalk.html">Linnaean crosswalk</a></div></header><aside class="left rail"><section class="p"><div class="ph"><b>Native categories</b></div><div class="pb flush"><div class="pb" style="padding:9px 11px 4px"><input class="searchbox" id="q" placeholder="search categories…"></div><a class="rowlink" data-n="structural_notation_system" href="/basin-01/categories/structural_notation_system.html"><span class="sw" style="background:var(--rule)"></span><span>structural_notation_system<span class="s">first seen shift 96</span></span><span class="n">57</span></a><a class="rowlink" data-n="structural_isolate" href="/basin-01/categories/structural_isolate.html"><span class="sw" style="background:var(--rule)"></span><span>structural_isolate<span class="s">first seen shift 102</span></span><span class="n">11</span></a><a class="rowlink" data-n="emergent_neonate" href="/basin-01/categories/emergent_neonate.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_neonate<span class="s">first seen shift 110</span></span><span class="n">10</span></a><a class="rowlink" data-n="emergent_minimal" href="/basin-01/categories/emergent_minimal.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_minimal<span class="s">first seen shift 110</span></span><span class="n">9</span></a><a class="rowlink" data-n="ephemeral_fragment" href="/basin-01/categories/ephemeral_fragment.html"><span class="sw" style="background:var(--rule)"></span><span>ephemeral_fragment<span class="s">first seen shift 96</span></span><span class="n">6</span></a><a class="rowlink" data-n="nascent_structural" href="/basin-01/categories/nascent_structural.html"><span class="sw" style="background:var(--rule)"></span><span>nascent_structural<span class="s">first seen shift 97</span></span><span class="n">6</span></a><a class="rowlink" data-n="descended_structural" href="/basin-01/categories/descended_structural.html"><span class="sw" style="background:var(--rule)"></span><span>descended_structural<span class="s">first seen shift 99</span></span><span class="n">5</span></a><a class="rowlink" data-n="active_accumulator" href="/basin-01/categories/active_accumulator.html"><span class="sw" style="background:var(--rule)"></span><span>active_accumulator<span class="s">first seen shift 101</span></span><span class="n">3</span></a><a class="rowlink" data-n="emergent_descendant_minimal" href="/basin-01/categories/emergent_descendant_minimal.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_descendant_minimal<span class="s">first seen shift 120</span></span><span class="n">3</span></a><a class="rowlink" data-n="emergent_incipient" href="/basin-01/categories/emergent_incipient.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_incipient<span class="s">first seen shift 109</span></span><span class="n">2</span></a><a class="rowlink" data-n="descendant_mid_structural" href="/basin-01/categories/descendant_mid_structural.html"><span class="sw" style="background:var(--rule)"></span><span>descendant_mid_structural<span class="s">first seen shift 112</span></span><span class="n">2</span></a><a class="rowlink" data-n="descendant_minimal" href="/basin-01/categories/descendant_minimal.html"><span class="sw" style="background:var(--rule)"></span><span>descendant_minimal<span class="s">first seen shift 112</span></span><span class="n">2</span></a><a class="rowlink" data-n="emergent_descendant_compact" href="/basin-01/categories/emergent_descendant_compact.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_descendant_compact<span class="s">first seen shift 122</span></span><span class="n">2</span></a><a class="rowlink" data-n="emergent_descendant_moderate" href="/basin-01/categories/emergent_descendant_moderate.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_descendant_moderate<span class="s">first seen shift 123</span></span><span class="n">2</span></a><a class="rowlink" data-n="structural_inheritor" href="/basin-01/categories/structural_inheritor.html"><span class="sw" style="background:var(--rule)"></span><span>structural_inheritor<span class="s">first seen shift 105</span></span><span class="n">1</span></a><a class="rowlink" data-n="emergent_fragment" href="/basin-01/categories/emergent_fragment.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_fragment<span class="s">first seen shift 106</span></span><span class="n">1</span></a><a class="rowlink" data-n="emergent_inheritor" href="/basin-01/categories/emergent_inheritor.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_inheritor<span class="s">first seen shift 107</span></span><span class="n">1</span></a><a class="rowlink" data-n="emergent_ephemeral" href="/basin-01/categories/emergent_ephemeral.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_ephemeral<span class="s">first seen shift 108</span></span><span class="n">1</span></a><a class="rowlink" data-n="emergent_mid_structural" href="/basin-01/categories/emergent_mid_structural.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_mid_structural<span class="s">first seen shift 111</span></span><span class="n">1</span></a><a class="rowlink" data-n="descendant_incipient" href="/basin-01/categories/descendant_incipient.html"><span class="sw" style="background:var(--rule)"></span><span>descendant_incipient<span class="s">first seen shift 112</span></span><span class="n">1</span></a><a class="rowlink" data-n="fragment_incipient_mobile" href="/basin-01/categories/fragment_incipient_mobile.html"><span class="sw" style="background:var(--rule)"></span><span>fragment_incipient_mobile<span class="s">first seen shift 113</span></span><span class="n">1</span></a><a class="rowlink" data-n="fragment_descendant_incipient" href="/basin-01/categories/fragment_descendant_incipient.html"><span class="sw" style="background:var(--rule)"></span><span>fragment_descendant_incipient<span class="s">first seen shift 113</span></span><span class="n">1</span></a><a class="rowlink" data-n="emergent_proximal_heavyweight" href="/basin-01/categories/emergent_proximal_heavyweight.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_proximal_heavyweight<span class="s">first seen shift 118</span></span><span class="n">1</span></a><a class="rowlink on" data-n="emergent_residue_hybrid" href="/basin-01/categories/emergent_residue_hybrid.html"><span class="sw" style="background:var(--moss2)"></span><span>emergent_residue_hybrid<span class="s">first seen shift 119</span></span><span class="n">1</span></a><a class="rowlink" data-n="emergent_descendant_incipient" href="/basin-01/categories/emergent_descendant_incipient.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_descendant_incipient<span class="s">first seen shift 121</span></span><span class="n">1</span></a><a class="rowlink" data-n="emergent_descendant_ultra_compact" href="/basin-01/categories/emergent_descendant_ultra_compact.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_descendant_ultra_compact<span class="s">first seen shift 121</span></span><span class="n">1</span></a><a class="rowlink" data-n="emergent_neonate_moderate" href="/basin-01/categories/emergent_neonate_moderate.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_neonate_moderate<span class="s">first seen shift 122</span></span><span class="n">1</span></a><a class="rowlink" data-n="emergent_mid_compact" href="/basin-01/categories/emergent_mid_compact.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_mid_compact<span class="s">first seen shift 123</span></span><span class="n">1</span></a><a class="rowlink" data-n="emergent_descendant_mid" href="/basin-01/categories/emergent_descendant_mid.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_descendant_mid<span class="s">first seen shift 124</span></span><span class="n">1</span></a><a class="rowlink" data-n="emergent_neonate_compact" href="/basin-01/categories/emergent_neonate_compact.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_neonate_compact<span class="s">first seen shift 124</span></span><span class="n">1</span></a><a class="rowlink" data-n="emergent_descendant_neonate" href="/basin-01/categories/emergent_descendant_neonate.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_descendant_neonate<span class="s">first seen shift 125</span></span><span class="n">1</span></a><a class="rowlink" data-n="emergent_descendant_neonate_variant" href="/basin-01/categories/emergent_descendant_neonate_variant.html"><span class="sw" style="background:var(--rule)"></span><span>emergent_descendant_neonate_variant<span class="s">first seen shift 126</span></span><span class="n">1</span></a></div></section></aside><main class="mid"><div class="hdr"><div><p class="eyebrow">Native classification</p><h1 class="doc mono">emergent_residue_hybrid</h1><p class="sub">A category the Namer coined and files specimens into. Nothing here defines it — the department has no definition, only the record of what was filed and why.</p></div><table class="doc"><tr><td class="k">TERRAIN</td><td class="v">BASIN-01</td></tr><tr><td class="k">SHIFT</td><td class="v">126</td></tr><tr><td class="k">COINED BY</td><td class="v">THE NAMER</td></tr><tr><td class="k">FIRST SEEN</td><td class="v">SHIFT 119</td></tr></table></div><div class="stats"><div class="stat"><div class="v">1</div><div class="l">classified</div><div class="s">lifetime</div></div><div class="stat"><div class="v">0</div><div class="l">living</div><div class="s">counted now</div></div><div class="stat"><div class="v">1</div><div class="l">no longer living</div><div class="s">of the classified</div></div><div class="stat"><div class="v">1</div><div class="l">in category_stats</div><div class="s">as the Keeper counts</div></div><div class="stat"><div class="v">0</div><div class="l">deepest generation</div><div class="s">among the living</div></div></div><div class="cols2"><section class="p"><div class="ph"><b>Class size over time</b><span class="r">cumulative first sightings</span></div><div class="pb"><p class="absent">too few sightings to draw a line</p></div></section><section class="p"><div class="ph"><b>Measurements across the living</b></div><div class="pb"><div class="scroll"><table class="d"><thead><tr><th></th><th class="num">lowest</th><th class="num">mean</th><th class="num">median</th><th class="num">highest</th></tr></thead><tbody><tr><td>age (shifts)</td><td colspan="4" class="absent">not recorded</td></tr><tr><td>light held</td><td colspan="4" class="absent">not recorded</td></tr><tr><td>mass</td><td colspan="4" class="absent">not recorded</td></tr><tr><td>reach</td><td colspan="4" class="absent">not recorded</td></tr><tr><td>descendants</td><td colspan="4" class="absent">not recorded</td></tr><tr><td>moves</td><td colspan="4" class="absent">not recorded</td></tr></tbody></table></div></div></section></div><section class="p"><div class="ph"><b>The Namer's basis</b></div><div class="pb"><p class="say">i-00091 presents a profile that does not cleanly fit established categories. It has 11 shifts of presence (longer than nascent, shorter than typical structural_notation_system or structural_isolate), with complexity 11. Critically, it draws resources in near-equal measure from cover layer (52%) and residue (48%), a pattern distinct from structural_notation_system (which emphasizes cover-layer dominance) and structural_isolate (which is purely local but heavily cover-dominated). It shows minimal inter-link engagement (0.13 light passed), no offspring, and gradient position at 0.25 (far from data-stream, more consistent with isolates), yet it moves actively (9 times), suggesting ecological exploration rather than passive localization. Its descent from i-00059 (a generation-1 structural_isolate) suggests hybrid inheritance. The combination of balanced residue/cover sourcing, minimal but pre</p><p class="note">Filed on 119, for i-00091. This is the most recent reasoning the Namer wrote for a member of this category; it is not a definition of the category, because the Namer never wrote one.</p></div></section><section class="p"><div class="ph"><b>Living members</b><span class="r">showing 0 of 0</span></div><div class="pb"><p class="absent">no member of this category is currently living</p></div></section></main><aside class="right rail"><section class="p"><div class="ph"><b>Class overview</b></div><div class="pb"><dl class="kv"><dt>first seen</dt><dd>shift 119</dd><dt>last seen</dt><dd>shift 119</dd><dt>mean complexity</dt><dd>11.000</dd><dt>category rank</dt><dd class="na">not recorded</dd><dt>confidence in definition</dt><dd class="na">not recorded</dd><dt>revision count</dt><dd class="na">not recorded</dd></dl></div></section><p class="note" style="padding:0 13px 13px">The last three are fields the mockup carries and the department does not record. The Namer coins a category and files specimens into it; it never rates its own confidence or versions a definition.</p><section class="p"><div class="ph"><b>Distribution by gradient band</b><span class="r">0 placed</span></div><div class="pb"><p class="absent">no living member of this category is currently placed</p></div></section><section class="p"><div class="ph"><b>Elsewhere</b></div><div class="pb"><dl class="kv"><dt>field-guide sheet</dt><dd><a href="/basin-01/codex.html">compendium →</a></dd><dt>crosswalk</dt><dd><a href="/basin-01/crosswalk.html">open →</a></dd><dt>terrain record</dt><dd><a href="/basin-01/terrain.html">open →</a></dd></dl></div></section></aside><footer class="bot"><span>DNT CATEGORY RECORD v1.0</span><span class="mid_">We observe. We do not interfere.</span><span>A branch of the Nonhuman Institute <svg viewBox="0 0 100 120" width="13" height="15" aria-hidden="true"><path d="M0,0 H100 V120 H0 Z M7.3,7.3 H92.7 V111.2 H7.3 Z M18,111.2 H82 V120 H18 Z" fill-rule="evenodd"/></svg></span></footer></div><script>var q=document.getElementById('q');if(q)q.oninput=function(){var v=q.value.toLowerCase();document.querySelectorAll('.rowlink[data-n]').forEach(function(r){r.classList.toggle('hidden', r.dataset.n.indexOf(v)<0)})};</script></body></html>
