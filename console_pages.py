@@ -129,6 +129,15 @@ def load(terrain: str) -> Optional[Dict[str, Any]]:
 
 CSS = """
 .spark{width:100%;height:auto;display:block}
+.dq{border-bottom:1px solid var(--rule);padding:0 0 14px;margin-bottom:14px}
+.dq:last-of-type{border-bottom:none;padding-bottom:0;margin-bottom:0}
+.dqh{display:flex;justify-content:space-between;align-items:baseline;gap:14px}
+.dqn{font:11px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--dim)}
+.dqv{font:400 25px/1 var(--serif);font-variant-numeric:tabular-nums;color:var(--ink)}
+.dqp{font:12.5px/1.65 var(--sans);color:var(--ink);margin:9px 0 0;max-width:74ch}
+.dqp b{color:var(--moss);font-weight:400;font-family:var(--mono)}
+.dqp i{color:var(--dim);font-style:normal;font-family:var(--mono);font-size:11.5px}
+.dqf{font:10.5px/1.6 var(--mono);color:var(--faint);margin:7px 0 0}
 .rowlink{display:grid;grid-template-columns:auto 1fr auto;gap:9px;align-items:center;
 padding:7px 13px;border-bottom:1px solid var(--rule);text-decoration:none;color:var(--ink);
 font:11px var(--mono)}
@@ -184,17 +193,63 @@ def terrain_record(d: Dict[str, Any]) -> str:
            esc(g["governs"]))
         for g in gov)
 
+    # A number nobody can read is not a published result, it is decoration.
+    # Each derived quantity carries three things: the value, a sentence saying
+    # what it means FOR THIS TERRAIN in words a reader can check against their
+    # own sense of the place, and the formula it came from. The formula stays —
+    # it is what makes the number checkable — but it is no longer the only
+    # explanation offered.
     div = dnt_data.shannon_diversity([c.get("count", 0) for c in cats.values()])
     stab = dnt_data.coefficient_of_variation(pop[-40:])
-    anom = dnt_data.per_hundred_shifts(
-        sum(r.get("anomalous", 0) or 0 for r in rows), len(rows))
+    anom_count = sum(r.get("anomalous", 0) or 0 for r in rows)
+    anom = dnt_data.per_hundred_shifts(anom_count, len(rows))
+
+    counts = sorted((c.get("count", 0) for c in cats.values()), reverse=True)
+    filed = sum(counts)
+    if div is not None and counts:
+        effective = math.exp(div)
+        biggest = (100.0 * counts[0] / filed) if filed else 0.0
+        div_plain = (
+            "As varied as <b>%.1f</b> evenly-filled categories, though <b>%d</b> have "
+            "been coined. The largest holds <b>%.0f%%</b> of everything filed, which is "
+            "why the two numbers disagree. A terrain where all %d were equally common "
+            "would read %.4f; one where everything sat in a single category would read 0."
+            % (effective, len(counts), biggest, len(counts), math.log(len(counts))))
+    else:
+        div_plain = "Not enough categories have been coined to measure spread."
+
+    window = pop[-40:]
+    if stab is not None and window:
+        mu = sum(window) / float(len(window))
+        div2 = len(window)
+        sd = (sum((v - mu) ** 2 for v in window) / div2) ** 0.5
+        stab_plain = (
+            "Across the last %d shifts the living population ran between <b>%s</b> and "
+            "<b>%s</b>, averaging <b>%s</b>. A typical shift sits about <b>%.0f%%</b> away "
+            "from that average. Lower is steadier; it is a description, not a grade."
+            % (len(window), num(min(window)), num(max(window)), num(int(round(mu))),
+               stab * 100.0))
+    else:
+        stab_plain = "Too few shifts recorded to measure how steady the population is."
+
+    anom_plain = (
+        "<b>%s</b> classification(s) the Namer could not fit into any category, across "
+        "<b>%s</b> shifts. That is the Namer reporting something it did not recognise — a "
+        "finding, not a fault. It is counted apart from <i>unresolved</i>, which is the "
+        "model failing to answer at all."
+        % (num(anom_count), num(len(rows))))
+
     derived = "".join(
-        '<tr><td>%s</td><td class="num">%s</td><td class="dim">%s · %s</td></tr>'
-        % (label, "—" if value is None else "%.4f" % value,
+        '<div class="dq"><div class="dqh"><span class="dqn">%s</span>'
+        '<span class="dqv">%s</span></div>'
+        '<p class="dqp">%s</p>'
+        '<p class="dqf">%s &nbsp;·&nbsp; %s</p></div>'
+        % (label, "—" if value is None else "%.4f" % value, plain,
            dnt_data.DEFINITIONS[key][0], dnt_data.DEFINITIONS[key][1])
-        for label, value, key in (("classification diversity", div, "diversity"),
-                                  ("population stability", stab, "stability"),
-                                  ("anomaly rate", anom, "anomaly rate")))
+        for label, value, key, plain in (
+            ("classification diversity", div, "diversity", div_plain),
+            ("population stability", stab, "stability", stab_plain),
+            ("anomaly rate", anom, "anomaly rate", anom_plain)))
 
     evrows = "".join(
         '<tr><td class="num">%s</td><td style="color:var(--moss)">%s</td>'
@@ -303,10 +358,9 @@ def terrain_record(d: Dict[str, Any]) -> str:
 
     mid += ('<div class="cols2">%s%s</div>'
             % (C.panel("Derived quantities",
-                       '<div class="scroll"><table class="d"><tbody>%s</tbody></table></div>'
-                       '<p class="note">Published definitions only. Each formula is printed '
-                       'beside its value so the number can be checked rather than trusted.'
-                       '</p>' % derived),
+                       '%s<p class="note">Published definitions only. Each value is said in '
+                       'plain words and then in the formula it came from, so it can be read '
+                       'and checked rather than trusted.</p>' % derived),
                C.panel("Native categories", catrows or
                        '<p class="absent">none coined yet</p>',
                        '<a href="/%s/codex.html">field compendium →</a>' % t
