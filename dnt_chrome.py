@@ -76,10 +76,11 @@ def topbar(crumbs: List[str], right: str = "") -> str:
         ('<span class="crumb on">%s</span>' % c) if i == len(crumbs) - 1
         else ('<span class="crumb">%s</span>' % c) for i, c in enumerate(crumbs))
     return ('<header class="top">'
-            '<a class="brand" href="/hub.html">%s<span class="bt">Department of<br>'
-            'Nonhuman Territories</span></a>'
+            '<a class="brand" href="/hub.html">'
+            '<span class="glyph">%s<span class="wm">DNT</span></span>'
+            '<span class="bt">Department of<br>Nonhuman Territories</span></a>'
             '<nav class="trail">%s</nav><div class="topright">%s</div></header>'
-            % (mark(26), trail, right))
+            % (mark(27), trail, right))
 
 
 def footer(left: str = "") -> str:
@@ -113,8 +114,17 @@ body{background:var(--paper);color:var(--ink);font:14px/1.6 var(--sans);margin:0
 .shell{display:grid;grid-template-columns:212px 1fr;min-height:100vh}
 .top{grid-column:1/-1;display:flex;align-items:center;gap:22px;padding:10px 20px;
 border-bottom:1px solid var(--rule);background:var(--panel);position:sticky;top:0;z-index:20}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
-.bt{font:600 9px/1.25 var(--sans);letter-spacing:.13em;text-transform:uppercase}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--ink)}
+/* The mark is a bracket with a gap in its base. The wordmark belongs in that
+   gap — below the frame, tucked between its two feet — not beside it. */
+.glyph{display:flex;flex-direction:column;align-items:center}
+.glyph .mk{display:block}
+/* The base of the bracket has a gap across its middle 64%. The wordmark is
+   pulled up into that gap and masks the line behind it, so the letters read as
+   part of the mark rather than as a caption under it. */
+.wm{font:700 9.5px/1 var(--mono);letter-spacing:.13em;color:var(--ink);
+margin-top:-8px;background:var(--panel);padding:1px 2px 0}
+.bt{font:600 9px/1.35 var(--sans);letter-spacing:.13em;text-transform:uppercase}
 .trail{flex:1;font:11.5px var(--mono);letter-spacing:.05em;color:var(--grey);
 display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .crumb.on{color:var(--moss)}

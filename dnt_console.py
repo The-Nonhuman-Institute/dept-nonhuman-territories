@@ -67,11 +67,18 @@ grid-template-areas:"top top top" "left mid right" "bot bot bot"}
 /* ---- top bar ---- */
 .top{grid-area:top;display:flex;align-items:center;gap:18px;padding:9px 16px;
 background:var(--panel);border-bottom:1px solid var(--rule);flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink);
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--ink);
 flex:0 0 auto}
-.brand svg{fill:var(--moss);display:block}
-.brand .w{font:700 13px/1 var(--mono);letter-spacing:.12em}
-.brand .d{font:600 8px/1.3 var(--sans);letter-spacing:.13em;text-transform:uppercase;
+/* The mark is a bracket with a gap in its base. The wordmark belongs in that
+   gap — below the frame, tucked between its two feet — not beside it. */
+.glyph{display:flex;flex-direction:column;align-items:center;flex:0 0 auto}
+.glyph svg{fill:var(--moss);display:block}
+/* The base of the bracket has a gap across its middle 64%. The wordmark is
+   pulled up into that gap and masks the line behind it, so the letters read as
+   part of the mark rather than as a caption under it. */
+.glyph .w{font:700 9.5px/1 var(--mono);letter-spacing:.13em;color:var(--ink);
+margin-top:-8px;background:var(--panel);padding:1px 2px 0}
+.brand .d{font:600 8px/1.4 var(--sans);letter-spacing:.13em;text-transform:uppercase;
 color:var(--dim)}
 .crumbs{display:flex;align-items:center;gap:7px;font:11px var(--mono);letter-spacing:.06em;
 flex-wrap:wrap}
@@ -165,6 +172,19 @@ padding:9px 14px;cursor:pointer}
 .tabs button.on{color:var(--moss);border-bottom-color:var(--moss)}
 .tabpane{display:none}
 .tabpane.on{display:block}
+
+/* ---- navigation ---- */
+.nav{display:block;border:1px solid var(--rule);background:var(--bg);text-decoration:none;
+color:var(--ink);padding:11px 13px;margin-bottom:8px}
+.nav:last-child{margin-bottom:0}
+.nav:hover{border-color:var(--moss2);background:var(--panel2)}
+.nav .t{font:11.5px var(--mono);letter-spacing:.04em;display:flex;
+justify-content:space-between;align-items:center;gap:10px}
+.nav .t .go{color:var(--moss)}
+.nav .s{display:block;font:9.5px/1.5 var(--mono);color:var(--dim);margin-top:4px}
+.nav.dead{border-style:dashed;background:none;cursor:default}
+.nav.dead .t,.nav.dead .t .go{color:var(--faint)}
+.nav.dead:hover{border-color:var(--rule);background:none}
 
 /* ---- misc ---- */
 .note{font:10.5px/1.6 var(--mono);color:var(--dim);margin:9px 0 0}
@@ -260,9 +280,9 @@ def page(title: str, doc_name: str, terrain_dir: str, crumb_items: Sequence,
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
         '<title>%s</title><style>%s%s</style></head><body><div class="%s">'
         '<header class="top">'
-        '<a class="brand" href="%s/hub.html">%s'
-        '<span><span class="w">DNT</span><br><span class="d">Department of<br>'
-        'Nonhuman Territories</span></span></a>'
+        '<a class="brand" href="%s/hub.html">'
+        '<span class="glyph">%s<span class="w">DNT</span></span>'
+        '<span class="d">Department of<br>Nonhuman Territories</span></a>'
         '%s%s%s</header>'
         '%s<main class="mid">%s</main>%s'
         '<footer class="bot"><span>DNT %s v1.0</span>'
@@ -270,7 +290,7 @@ def page(title: str, doc_name: str, terrain_dir: str, crumb_items: Sequence,
         '<span>A branch of the Nonhuman Institute %s</span></footer>'
         '</div>%s</body></html>'
         % (title, SKIN, css, cls,
-           HUB, mark(22),
+           HUB, mark(27),
            crumbs(crumb_items), status(shift, committed_at), actions(terrain_dir, current),
            ('<aside class="left rail">%s</aside>' % left) if left else "",
            mid,
@@ -304,6 +324,26 @@ def stats(items: Sequence[Tuple]) -> str:
         out.append('<div class="stat"><div class="v">%s</div><div class="l">%s</div>%s</div>'
                    % (row[0], row[1], ('<div class="s">%s</div>' % sub) if sub else ""))
     return '<div class="stats">%s</div>' % "".join(out)
+
+
+def nav(items) -> str:
+    """A list of places to go, sized to be clicked rather than found.
+
+    items: (label, href_or_None, sub). A destination that does not exist yet is
+    still listed, greyed and unclickable, so the reader learns it is coming
+    rather than that it is missing.
+    """
+    out = []
+    for label, href, sub in items:
+        if href:
+            out.append('<a class="nav" href="%s"><span class="t">%s'
+                       '<span class="go">&rarr;</span></span>'
+                       '<span class="s">%s</span></a>' % (href, label, sub))
+        else:
+            out.append('<div class="nav dead"><span class="t">%s'
+                       '<span class="go">&mdash;</span></span>'
+                       '<span class="s">%s</span></div>' % (label, sub))
+    return "".join(out)
 
 
 def bar(fraction: float, colour: str = "var(--moss)") -> str:

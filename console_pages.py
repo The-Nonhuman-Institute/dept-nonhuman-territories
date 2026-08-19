@@ -230,12 +230,22 @@ def terrain_record(d: Dict[str, Any]) -> str:
         % (" on" if x == t else "", x, x.upper(),
            esc((dnt_data.load(x) or {}).get("memory", {}).get("last_committed_shift", "—")))
         for x in TERRAINS if os.path.isdir(os.path.join(ROOT, x))), flush=True) + \
-        C.panel("This terrain", C.kv([
-            ("shift log", '<a href="/%s/shiftlog.html">open →</a>' % t),
-            ("checkpoints", '<a href="/%s/checkpoint.html">open →</a>' % t
-             if os.path.exists(os.path.join(ROOT, t, "checkpoint.html")) else "not yet built"),
-            ("comparative study", '<a href="/study.html">open →</a>'
-             if os.path.exists(os.path.join(ROOT, "study.html")) else "not yet built"),
+        C.panel("This terrain", C.nav([
+            ("Observation deck", "http://127.0.0.1:%d/index.html" % C.PORTS.get(t, 8731),
+             "walk the terrain in 3D"),
+            ("Shift log", "/%s/shiftlog.html" % t,
+             "every shift committed, and what changed"),
+            ("Checkpoint report",
+             ("/%s/checkpoint.html" % t)
+             if os.path.exists(os.path.join(ROOT, t, "checkpoint.html")) else None,
+             "state compared across a window of shifts"),
+            ("Comparative study",
+             "/study.html" if os.path.exists(os.path.join(ROOT, "study.html")) else None,
+             "this terrain beside the others"),
+            ("Field compendium",
+             ("/%s/codex.html" % t)
+             if os.path.exists(os.path.join(ROOT, t, "codex.html")) else None,
+             "every specimen ever classified"),
         ])) + \
         C.panel("About terrains",
                 '<p class="note">Terrains are bounded digital environments seeded and '
@@ -377,10 +387,15 @@ def shift_log(d: Dict[str, Any]) -> str:
         '<a class="rowlink%s" href="/%s/shiftlog.html"><span></span>'
         '<span>%s</span><span></span></a>' % (" on" if x == t else "", x, x.upper())
         for x in TERRAINS if os.path.isdir(os.path.join(ROOT, x))), flush=True) + \
-        C.panel("Log navigation", C.kv([
-            ("terrain record", '<a href="/%s/terrain.html">open →</a>' % t),
-            ("observation deck",
-             '<a href="http://127.0.0.1:%d/index.html">open →</a>' % C.PORTS.get(t, 8731)),
+        C.panel("Go to", C.nav([
+            ("Terrain record", "/%s/terrain.html" % t,
+             "governing conditions and current state"),
+            ("Observation deck", "http://127.0.0.1:%d/index.html" % C.PORTS.get(t, 8731),
+             "walk the terrain in 3D"),
+            ("Checkpoint report",
+             ("/%s/checkpoint.html" % t)
+             if os.path.exists(os.path.join(ROOT, t, "checkpoint.html")) else None,
+             "state compared across a window"),
         ])) + \
         C.panel("What a column means",
                 '<p class="note">Every column is a value the shift itself recorded when it '
@@ -566,14 +581,19 @@ def category_record(d: Dict[str, Any], name: str, members: List[str],
         C.panel("Distribution by gradient band", dist,
                 "%s placed" % num(positioned)) + \
         (C.panel("How its members feed", feeds) if feeds else "") + \
-        C.panel("Elsewhere", C.kv([
-            ("field-guide sheet", '<a href="/%s/codex/%s.html">open →</a>'
-             % (t, slug(name)) if os.path.exists(
-                 os.path.join(ROOT, t, "codex", slug(name) + ".html"))
-             else '<a href="/%s/codex.html">compendium →</a>' % t),
-            ("crosswalk", '<a href="/%s/crosswalk.html">open →</a>' % t
-             if os.path.exists(os.path.join(ROOT, t, "crosswalk.html")) else "no pass yet"),
-            ("terrain record", '<a href="/%s/terrain.html">open →</a>' % t),
+        C.panel("Go to", C.nav([
+            ("Field-guide sheet",
+             ("/%s/codex/%s.html" % (t, slug(name)))
+             if os.path.exists(os.path.join(ROOT, t, "codex", slug(name) + ".html"))
+             else (("/%s/codex.html" % t)
+                   if os.path.exists(os.path.join(ROOT, t, "codex.html")) else None),
+             "the same category, drawn and described"),
+            ("Linnaean crosswalk",
+             ("/%s/crosswalk.html" % t)
+             if os.path.exists(os.path.join(ROOT, t, "crosswalk.html")) else None,
+             "the Archivist's translation, if it has run"),
+            ("Terrain record", "/%s/terrain.html" % t,
+             "the terrain this category lives in"),
         ]))
 
     mid = ('<div class="hdr"><div><p class="eyebrow">Native classification</p>'
@@ -826,9 +846,23 @@ def specimen_record(d: Dict[str, Any], sid: str, sightings: List[Dict[str, Any]]
             ("position", num(cell.get("position"))),
             ("cover here", num(cell.get("census_density"))),
             ("remains here", num(cell.get("residue"))),
-            ("in the field",
-             '<a href="http://127.0.0.1:%d/index.html#%s">open the deck →</a>'
-             % (C.PORTS.get(t, 8731), esc(sid)) if alive else "no longer in the field"),
+        ])) + \
+        C.panel("Go to", C.nav([
+            ("See it in the field",
+             ("http://127.0.0.1:%d/index.html#%s" % (C.PORTS.get(t, 8731), esc(sid)))
+             if alive else None,
+             "opens the deck with this one selected" if alive
+             else "no longer in the field"),
+            ("Lineage record",
+             ("/%s/lineage/%s.html" % (t, esc(sid)))
+             if sid in d.get("_lineages", ()) else None,
+             "its descendants, generation by generation" if sid in d.get("_lineages", ())
+             else "no recorded descendants"),
+            ("Category record",
+             ("/%s/categories/%s.html" % (t, slug(named["category"])))
+             if named.get("category") else None,
+             "everything else the Namer filed here"),
+            ("Terrain record", "/%s/terrain.html" % t, "the terrain it lives in"),
         ]))
 
     mid = ('<div class="hdr"><div><p class="eyebrow">Specimen record</p>'
@@ -987,12 +1021,15 @@ def lineage_record(d: Dict[str, Any], root: str) -> str:
         '<div class="mini"><span>gen %d</span>%s<b>%d</b></div>'
         % (g, C.bar(len(gens[g]) / float(max(len(v) for v in gens.values()))), len(gens[g]))
         for g in sorted(gens))) + \
-        C.panel("Elsewhere", C.kv([
-            ("specimen record", '<a href="/%s/specimens/%s.html">open →</a>' % (t, esc(root))),
-            ("terrain record", '<a href="/%s/terrain.html">open →</a>' % t),
-            ("in the field",
-             '<a href="http://127.0.0.1:%d/index.html#%s">open the deck →</a>'
-             % (C.PORTS.get(t, 8731), esc(root)) if root in ind else "no longer in the field"),
+        C.panel("Go to", C.nav([
+            ("Specimen record", "/%s/specimens/%s.html" % (t, esc(root)),
+             "the root of this line, on its own"),
+            ("See it in the field",
+             ("http://127.0.0.1:%d/index.html#%s" % (C.PORTS.get(t, 8731), esc(root)))
+             if root in ind else None,
+             "opens the deck with the root selected" if root in ind
+             else "no longer in the field"),
+            ("Terrain record", "/%s/terrain.html" % t, "the terrain this line runs in"),
         ])) + \
         C.panel("What is traced",
                 '<p class="note">Only recorded parentage. Every edge on this page is a '
@@ -1091,11 +1128,12 @@ def checkpoint_report(d: Dict[str, Any], window: int = 14) -> str:
         '<a class="rowlink%s" href="/%s/checkpoint.html"><span></span>'
         '<span>%s<span class="s">shift %s → %s</span></span><span></span></a>'
         % (" on" if x == t else "", x, x.upper(), a, b) for x in [t]), flush=True) + \
-        C.panel("Report sections", C.kv([
-            ("terrain record", '<a href="/%s/terrain.html">open →</a>' % t),
-            ("shift log", '<a href="/%s/shiftlog.html">open →</a>' % t),
-            ("comparative study", '<a href="/study.html">open →</a>'
-             if os.path.exists(os.path.join(ROOT, "study.html")) else "not yet built"),
+        C.panel("Go to", C.nav([
+            ("Terrain record", "/%s/terrain.html" % t, "current state and conditions"),
+            ("Shift log", "/%s/shiftlog.html" % t, "the rows this report reads"),
+            ("Comparative study",
+             "/study.html" if os.path.exists(os.path.join(ROOT, "study.html")) else None,
+             "this terrain beside the others"),
         ])) + \
         C.panel("What a checkpoint is",
                 '<p class="note">Two rows of this terrain\'s own shift log and the '
@@ -1275,10 +1313,10 @@ def comparative_study(loaded: List[Dict[str, Any]]) -> str:
                 'variable and are a controlled comparison. BASIN-03 and BASIN-04 are not '
                 '— each took further amendments, so a difference between them and the '
                 'first two has more than one possible cause.</p>') + \
-        C.panel("Related", C.kv(
-            [("%s record" % d["name"], '<a href="/%s/terrain.html">open →</a>' % d["dir"])
-             for d in shown] +
-            [("department index", '<a href="%s/hub.html">open →</a>' % C.HUB)]))
+        C.panel("Go to", C.nav(
+            [("%s" % d["name"], "/%s/terrain.html" % d["dir"],
+              "terrain record · shift %s" % num(d["shift"])) for d in shown] +
+            [("Department index", C.HUB + "/hub.html", "every terrain and document")]))
 
     mid = ('<div class="hdr"><div><p class="eyebrow">Studies</p>'
            '<h1 class="doc">Comparative Terrain Study</h1>'
