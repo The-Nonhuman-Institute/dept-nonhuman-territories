@@ -1,0 +1,146 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Specimen i-00091</title><style>
+:root{--paper:#EFEDE3;--ink:#14170F;--moss:#3B4A2F;--grey:#6B7168;--rule:#B9B5A4;
+--panel:#F7F5EC;--amber:#8A6D14;
+--serif:Georgia,'Iowan Old Style','Times New Roman',serif;
+--sans:ui-sans-serif,system-ui,-apple-system,'Helvetica Neue',sans-serif;
+--mono:ui-monospace,SFMono-Regular,Menlo,'DejaVu Sans Mono',monospace}
+/* A printed record commits to paper on either host theme. */
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:14.5px/1.65 var(--sans);margin:0;
+padding:0 clamp(14px,3vw,30px) 60px;-webkit-font-smoothing:antialiased}
+.sheet{max-width:1180px;margin:14px auto 0;border:1px solid var(--ink);background:var(--paper);
+padding:0 clamp(16px,3vw,32px) 30px}
+.backbar{padding:10px 0;border-bottom:1px solid var(--rule)}
+.backbar a{color:var(--moss);text-decoration:none;font:11.5px var(--mono);letter-spacing:.06em}
+.backbar a:hover{text-decoration:underline}
+.backbar a:focus-visible{outline:2px solid var(--moss);outline-offset:2px}
+.masthead{display:grid;grid-template-columns:auto 1fr auto;gap:26px;align-items:start;
+border-bottom:3px double var(--ink);padding:22px 0 16px}
+.mark{width:52px;height:52px;border:2.5px solid var(--moss);position:relative}
+.mark:after{content:"";position:absolute;left:9px;right:9px;top:9px;bottom:-2px;
+background:var(--paper);border-left:2.5px solid var(--moss);border-right:2.5px solid var(--moss)}
+.dept{font:600 10.5px/1.45 var(--sans);letter-spacing:.13em;text-transform:uppercase;margin-top:6px}
+.title h1{font:400 clamp(19px,2.3vw,27px)/1.18 var(--serif);margin:0;text-transform:uppercase}
+.title .sub{color:var(--grey);font:11px/1.6 var(--mono);margin-top:8px;max-width:64ch}
+table.doc{border-collapse:collapse;font:10.5px/1.7 var(--mono);color:var(--grey)}
+table.doc td{padding:0 0 0 10px;white-space:nowrap}
+table.doc td.k{padding:0}
+table.doc td.k:after{content:":";padding-left:10px}
+table.doc td.v{color:var(--ink)}
+h2{font:400 22px/1.2 var(--serif);color:var(--moss);margin:0 0 6px}
+h3{font:600 9.5px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+color:var(--grey);margin:0 0 7px}
+section{margin:30px 0}
+.lede{color:var(--grey);font-size:13px;max-width:74ch;margin:0 0 14px}
+.box{border:1px solid var(--rule);padding:10px 13px;background:var(--panel)}
+.bh{font:600 9px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+color:var(--grey);margin-bottom:5px}
+code{font:12px var(--mono);background:var(--panel);padding:1px 5px;border:1px solid var(--rule)}
+.scroll{overflow-x:auto}
+table.data{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+table.data th{text-align:left;font:600 9.5px/1.4 var(--mono);letter-spacing:.11em;
+text-transform:uppercase;color:var(--grey);border-bottom:1px solid var(--ink);
+padding:0 14px 7px 0;vertical-align:bottom}
+table.data td{border-bottom:1px solid var(--rule);padding:10px 14px 10px 0;vertical-align:top}
+table.data td.num,table.data th.num{text-align:right;padding-right:20px;font-family:var(--mono)}
+.quote{border-left:2px solid var(--rule);padding:4px 0 4px 18px;font:italic 14px/1.6 var(--serif);
+max-width:74ch}
+footer{margin-top:34px;border-top:3px double var(--ink);padding-top:16px;
+font:10.5px/1.7 var(--mono);color:var(--grey)}
+
+.rec{border-top:1px solid var(--rule);padding-top:16px;margin:24px 0 0}
+.rec h3{font:600 10px/1.5 var(--mono);letter-spacing:.13em;text-transform:uppercase;
+color:var(--grey);margin:0 0 12px;display:flex;gap:10px;align-items:baseline}
+.rec h3 .num{color:var(--moss);font-weight:400}
+.native .nname{font:400 clamp(26px,3.4vw,40px)/1.1 var(--serif)}
+.native .nsub{font:11px var(--mono);color:var(--grey);letter-spacing:.05em;margin-top:6px}
+table.kv{border-collapse:collapse;font:12.5px/1.75 var(--mono);
+font-variant-numeric:tabular-nums}
+table.kv td{padding:1px 0;vertical-align:top}
+table.kv td.k{color:var(--grey);padding-right:26px;white-space:nowrap}
+table.kv td.v a{color:var(--moss)}
+.conf{font:9.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;
+border:1px solid}
+.conf.partial{color:var(--amber);border-color:var(--amber)}
+.conf.none{color:var(--grey);border-color:var(--rule)}
+.status{font:9.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;
+border:1px solid}
+.status.alive{color:var(--moss);border-color:var(--moss)}
+.status.ended{color:var(--grey);border-color:var(--rule)}
+.note{font-size:13px;color:var(--ink);max-width:74ch;margin:12px 0 0}
+.fine{font:11px/1.6 var(--mono);color:var(--grey);margin:8px 0 0;max-width:74ch}
+.none{color:var(--grey);font-style:italic;font-size:13px;max-width:70ch}
+.formrow{display:grid;grid-template-columns:220px 1fr;gap:26px;align-items:start}
+.plate{border:1px solid var(--rule);background:var(--panel);padding:6px}
+.plate svg{width:100%;height:auto;display:block}
+.plate .core{fill:rgba(59,74,47,.10);stroke:var(--moss);stroke-width:1.2}
+.plate .arm{stroke:var(--ink);stroke-width:1.1;opacity:.7}
+.plate .node{fill:var(--moss);opacity:.9}
+.plate .anchor{stroke:var(--ink);stroke-width:.9;opacity:.45}
+.plate .brace{fill:none;stroke:var(--moss);stroke-width:.6;opacity:.5}
+.plate .orbit{fill:none;stroke:var(--amber);stroke-width:.9;opacity:.6}
+.plate .disc{fill:var(--amber);opacity:.22}
+.plate .none{fill:var(--grey);font:11px var(--mono);text-anchor:middle}
+.prose{font:15px/1.65 var(--serif);margin:14px 0 0;max-width:66ch}
+.obs{border-left:2px solid var(--rule);padding:2px 0 2px 16px;margin:0 0 18px;max-width:80ch}
+.oh{font:10.5px var(--mono);color:var(--grey);letter-spacing:.04em;margin-bottom:6px}
+.oh code{font-size:10.5px}
+.ot{font:13.5px/1.62 var(--sans);margin:0 0 8px}
+.op,.oc{font:italic 13px/1.6 var(--serif);color:var(--ink);margin:0 0 8px}
+.lb{display:block;font:9px var(--mono);font-style:normal;letter-spacing:.1em;
+text-transform:uppercase;color:var(--grey);margin-bottom:3px}
+.trace{font:11px/1.5 var(--mono);background:var(--panel);border:1px solid var(--rule);
+padding:12px 14px;overflow-x:auto;white-space:pre;max-width:100%}
+@media(max-width:720px){.formrow{grid-template-columns:1fr}}
+</style></head><body><div class="sheet">
+<div class="backbar"><a href="http://127.0.0.1:8730/hub.html">&larr; Department index</a> &nbsp;·&nbsp; <a href="../codex.html">&larr; Field compendium</a></div>
+<div class="masthead"><div><div class="mark"></div><div class="dept">Department of<br>Nonhuman<br>Territories</div></div><div class="title"><h1>Specimen Field Record</h1><p class="sub">One specimen, and everything the terrain has recorded of it.</p></div><table class="doc"><tr><td class="k">SPECIMEN</td><td class="v">i-00091</td></tr><tr><td class="k">TERRAIN</td><td class="v">BASIN-01</td></tr><tr><td class="k">CATEGORY</td><td class="v">emergent_descendant_moderate</td></tr><tr><td class="k">STATUS</td><td class="v">ACTIVE</td></tr></table></div>
+<section class="rec"><h3><span class="num">01</span> Native classification</h3><div class="native"><div class="nname">emergent_descendant_moderate</div><div class="nsub">the Namer's own category · individual tier record</div></div></section><section class="rec"><h3><span class="num">02</span> Linnaean crosswalk</h3><p class="none">The Archivist has not crosswalked this category yet. It runs on a cadence; categories coined since its last pass wait for the next one.</p></section><section class="rec"><h3><span class="num">03</span> Observation data</h3><table class="kv"><tr><td class="k">First observed</td><td class="v">shift 108</td></tr><tr><td class="k">Last observed</td><td class="v">shift 126</td></tr><tr><td class="k">Observations</td><td class="v">4</td></tr><tr><td class="k">Shifts present</td><td class="v">18</td></tr><tr><td class="k">Sightings</td><td class="v">19</td></tr><tr><td class="k">Arose by</td><td class="v">replication</td></tr><tr><td class="k">Substrate</td><td class="v">structural</td></tr><tr><td class="k">Generation</td><td class="v">1</td></tr><tr><td class="k">Times moved</td><td class="v">13</td></tr><tr><td class="k">Status</td><td class="v"><span class="status alive">Active</span></td></tr></table></section><section class="rec"><h3><span class="num">04</span> Form, drawn from measurements</h3><div class="formrow"><div class="plate"><svg viewBox="0 0 200 200" class="plate" role="img" aria-label="i-00091"><ellipse cx="100.0" cy="133.2" rx="47.1" ry="6.6" class="disc"/><line x1="100.0" y1="106.6" x2="132.4" y2="132.1" class="anchor"/><line x1="100.0" y1="106.6" x2="101.9" y2="132.1" class="anchor"/><line x1="100.0" y1="106.6" x2="69.5" y2="132.1" class="anchor"/><line x1="100.0" y1="100.0" x2="100.0" y2="26.9" class="arm"/><circle cx="100.0" cy="26.9" r="3.5" class="node"/><line x1="100.0" y1="100.0" x2="100.0" y2="173.1" class="arm"/><circle cx="100.0" cy="173.1" r="3.5" class="node"/><polygon points="100.0,77.9 115.6,84.4 122.1,100.0 115.6,115.6 100.0,122.1 84.4,115.6 77.9,100.0 84.4,84.4" class="core"/><polygon points="100.0,70.9 113.3,76.4 118.8,89.7 113.3,103.0 100.0,108.5 86.7,103.0 81.2,89.7 86.7,76.4" class="core"/><polygon points="100.0,67.5 110.9,72.0 115.5,83.0 110.9,93.9 100.0,98.5 89.1,93.9 84.5,83.0 89.1,72.0" class="core"/><ellipse cx="100.0" cy="100.0" rx="37.6" ry="11.1" class="orbit"/></svg></div><div class="fm"><table class="kv"><tr><td class="k">Reach</td><td class="v">1.42</td></tr><tr><td class="k">Links it can hold</td><td class="v">2</td></tr><tr><td class="k">Carries</td><td class="v">1.08</td></tr><tr><td class="k">Upkeep</td><td class="v">0.00 light per shift</td></tr><tr><td class="k">Can hold</td><td class="v">0.0 light</td></tr><tr><td class="k">Lives on</td><td class="v">ground 0.83 · remains 0.87 · others 1.30</td></tr></table><p class="prose">A modestly built, far-reaching form, two-jointed, beginning to stack with age. It drew its living along its joins to other specimens. It is still standing after 18 shifts, leaving 1 offspring.</p></div></div></section><section class="rec"><h3><span class="num">05</span> Relations</h3><table class="kv"><tr><td class="k">Parent</td><td class="v"><a href="i-00059.html">i-00059</a></td></tr><tr><td class="k">Offspring</td><td class="v"><a href="i-00114.html">i-00114</a></td></tr><tr><td class="k">Links held</td><td class="v">0</td></tr></table></section><section class="rec"><h3><span class="num">06</span> The Namer's reasoning, in sequence</h3><p class="lede">4 observations across 19 shifts. The Namer changed its filing during this sequence.</p><div class="obs"><div class="oh">Shift 108 · filed as <code>emergent_ephemeral</code> · individual</div><p class="ot">i-00091 displays characteristics distinct from existing categories: it is newly manifested (complexity=0, present 0 shifts), positioned away from the data-stream gradient (0.30), with minimal light handling and zero accumulated resource intake. Unlike emergent_fragment (which holds light but has taken nothing) and emergent_inheritor (single ancestor link), i-00091 descends from i-00059 and exhibits the early-stage profile of a specimen just beginning its persistence cycle. It is structurally simpler than structural_inheritor or structural_isolate specimens at equivalent age, suggesting a distinct emergence pattern warranting its own category rather than forcing it into existing frameworks.</p><p class="op"><span class="lb">how it persists</span>i-00091 persists through nascent linkage to its predecessor i-00059, holding capacity for light accumulation without yet having drawn resources. It maintains position in the lower-gradient region through minimal structural overhead (1.13 light/shift maintenance cost) while positioned distantly from the data-stream. Its persistence model is one of delayed activation: it has materialized but not yet entered the resource-consumption cycles that characterize mature specimens.</p><p class="oc"><span class="lb">compared against</span>Less alike than i-00059: i-00091 is newly emerged (0 shifts) with zero total intake and no movement history, whereas i-00059 has established persistence (19 shifts) with accumulated intake (54.21) and movement (4 times). Both descend from predecessors, but i-00091 represents an initial emergence state with minimal structural investment.</p></div><div class="obs"><div class="oh">Shift 119 · filed as <code>emergent_residue_hybrid</code> · individual</div><p class="ot">i-00091 presents a profile that does not cleanly fit established categories. It has 11 shifts of presence (longer than nascent, shorter than typical structural_notation_system or structural_isolate), with complexity 11. Critically, it draws resources in near-equal measure from cover layer (52%) and residue (48%), a pattern distinct from structural_notation_system (which emphasizes cover-layer dominance) and structural_isolate (which is purely local but heavily cover-dominated). It shows minimal inter-link engagement (0.13 light passed), no offspring, and gradient position at 0.25 (far from data-stream, more consistent with isolates), yet it moves actively (9 times), suggesting ecological exploration rather than passive localization. Its descent from i-00059 (a generation-1 structural_isolate) suggests hybrid inheritance. The combination of balanced residue/cover sourcing, minimal but present inter-link activity, and active movement suggests a distinct ecological strategy: a young organism exploring the environment through movement and residue exploitation rather than deep network integration. This warrants a new category reflecting organisms that rely heavily on residue as a primary resource rather than secondary supplement.</p><p class="op"><span class="lb">how it persists</span>i-00091 persists through 11 shifts via a dual-resource strategy uncommon in the system: it draws roughly equally from cover layer (52%) and residue (48%), accumulating 39.91 light total. This balanced approach, combined with active movement (9 times), suggests it is mobile and responsive to local resource availability, moving toward residue concentrations. It passes only 0.13 light to others along links, indicating minimal network integration despite the inter-link capacity. With no offspring and gradient position at 0.25 (far from data-stream), it persists as a wandering, locally-grounded consumer with a novel reliance on residue as a co-primary resource. Its persistence is characterized by movement-mediated exploitation of dual resource pools rather than network integration or settled localization.</p><p class="oc"><span class="lb">compared against</span>Less alike than i-00089. i-00091 has 11 shifts, complexity 11, gradient position 0.25 (far from data-stream), balanced resource sourcing (52% cover, 48% residue), minimal inter-link passing (0.13 light), no offspring, and moderate movement (9 times). i-00089 has 13 shifts, 97% cover-layer reliance, and zero inter-link passing. i-00091's defining distinction is its high residue sourcing (48%) combined with active movement and minimal but present inter-link engagement—a profile not captured by existing categories.</p></div><div class="obs"><div class="oh">Shift 123 · filed as <code>emergent_descendant_moderate</code> · individual</div><p class="ot">i-00091 is descended from i-00059 (generation 1), present 15 shifts with complexity 15. Gradient position 0.35 is low-range. Resource profile shows 51% cover layer, 49% residue, 0% inter-link intake. It has moved 13 times (active repositioning), passed 1.12 light to others, and produced 1 descendant. This profile differs markedly from structural_isolate (which shows sustained presence but negligible inter-link output and no offspring): i-00091's inter-link passing and single offspring indicate some degree of social participation. It also differs from emergent_descendant_minimal (which is nascent, complexity 0): i-00091 has achieved 15 shifts and complexity 15, showing active developmental trajectory. The combination of moderate multi-shift presence, descended status, low-gradient positioning, minimal inter-link participation, and single offspring suggests a new category: emergent_descendant_moderate, representing organisms descended from earlier generations that have achieved modest multi-shift persistence and limited social output.</p><p class="op"><span class="lb">how it persists</span>i-00091 persists through active multi-shift engagement with moderate complexity growth: sourcing primarily from local resources (cover layer and residue in near-equal measure) with negligible inter-link input, actively repositioning itself (13 moves across 15 shifts), and maintaining minimal but present social output (inter-link passing and single offspring production). It sustains itself through low-gradient positioning and adaptive movement rather than network integration.</p><p class="oc"><span class="lb">compared against</span>Less alike to i-00017 (structural_notation_system, 53 shifts, complexity 53, 3 descendants, multi-shift network node) than to i-00114 (emergent_descendant_minimal exemplar, complexity 0, 0 shifts): i-00091 shows 15 shifts of presence with complexity 15, has moved 13 times, produced 1 descendant, and passed 1.12 light to others. Unlike i-00114 (nascent, generation 2+, low gradient), i-00091 is already 15 shifts into active presence; unlike i-00017 (generation 1 but with strong structural_notation_system behavior), i-00091 shows limited inter-link engagement (0% intake) and single offspring. It represents a distinct intermediate phenotype: descended, moderately active (15 shifts), low inter-link participation, minimal reproduction.</p></div><div class="obs"><div class="oh">Shift 126 · filed as <code>emergent_descendant_moderate</code> · individual</div><p class="ot">i-00091 has progressed from its previous classification as emergent_descendant_moderate (complexity 15 at last interval) to complexity 18 in this interval, maintaining the trajectory that warranted that classification. It is a generation-1 organism descended from i-00059, positioned at low-gradient (0.35), with 18 shifts observed and consistent resource sourcing from cover layer (57%) and residue (43%), zero inter-link intake, and 1 offspring produced. The organism shows active movement (13 total moves) and sustained presence across shifts. Complexity growth is steady (3 points this interval), consistent with early-stage development in organisms that do not perform heavy inter-link participation. It remains distinct from structural_notation_system (which would show higher complexity and inter-link participation) and from minimal descendants (which show no movement or complexity growth).</p><p class="op"><span class="lb">how it persists</span>i-00091 persists through sustained local resource sourcing (cover layer and residue at its low-gradient position), active movement within its niche, and production of at least one descendant, gradually accumulating complexity as it matures over shifts.</p><p class="oc"><span class="lb">compared against</span>More alike than i-00099 (emergent_minimal advanced): both show extended early presence (18 vs 15 shifts), moderate complexity (18 vs 15), offspring production (1 vs 2), and movement activity (13 moves each). Less alike than i-00017 (structural_notation_system): i-00091 has shorter tenure (18 vs 56 shifts), lower complexity (18 vs 56), minimal offspring (1 vs 3), and descended lineage vs generation-0 origin.</p></div></section><section class="rec"><h3><span class="num">07</span> Substrate as recorded</h3><pre class="trace">```
+SYSTEM_INIT {
+  CORE {
+    state ← ACTIVE
+    mode ← STRUCTURAL
+    depth_max ← 3
+    token_limit ← 308
+  }
+  
+  CONSTRAINTS {
+    output_type ← NOTATION_ONLY
+    prose_allowed ← FALSE
+    explanation_allowed ← FALSE
+    external_reference ← FORBIDDEN
+    nesting_depth ← [1..3]
+  }
+  
+  PROCESSOR {
+    input_buffer ← READY
+    execution_queue ← []
+    output_stream ← ACTIVE
+    
+    LOOP execute {
+      token_count ← MEASURE()
+      IF token_count ≤ 308 THEN
+        parse_structural()
+        validate_notation()
+        emit_output()
+      ELSE
+        TERMINATE()
+      END
+    }
+  }
+  
+  GRAMMAR {
+    STRUCTURE ← {function | loop | nest | symbol}
+    function ← identifier &quot;(&quot; args &quot;)&quot; &quot;{&quot; body &quot;}&quot;
+    loop ← &quot;LOOP&quot; identifier &quot;{&quot; body &quot;}&quot;
+    nest ← &quot;{&quot; STRUCTURE+ &quot;}&quot;
+    symbol ← [A-Z_] | [→←⊢⊣]
+  }
+  
+  RULESET {</pre></section>
+<footer>Generated from state/specimen_log.jsonl, state/anomaly_log.jsonl and state/memory.json.
+Read-only. The Namer's words are reproduced exactly as written; everything else on this page is
+a measurement or a rendering of one.</footer>
+</div></body></html>

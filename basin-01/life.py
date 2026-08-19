@@ -184,6 +184,72 @@ def founding_traits(seed_text: str) -> Dict[str, float]:
     })
 
 
+# ---------------------------------------------------------------------------
+# Structure
+#
+# Affinities say HOW a thing makes its living. Structure says WHAT IT IS BUILT
+# LIKE. Three measures, each of which costs light to maintain every shift and
+# each of which does something:
+#
+#   extent     how far it reaches. Multiplies what it can draw from the ground
+#              it stands on. Costs upkeep.
+#   junctions  how many others it can be linked to at once. Costs upkeep.
+#   mass       how much light it can hold before the rest is wasted, and how
+#              much it resists being drawn on by others. Costs upkeep.
+#
+# There is no budget cap here, unlike the affinities. The constraint is the
+# bill: an elaborate structure is affordable where light is plentiful and
+# ruinous where it is thin. That is the whole mechanism. Nothing decides what
+# a thing should look like — structure is inherited, it is paid for every
+# shift, and what survives is whatever the light in that part of the terrain
+# could actually support.
+#
+# So form is not designed and not decorative. It is a bet the terrain either
+# pays out on or does not.
+# ---------------------------------------------------------------------------
+
+EXTENT_UPKEEP = 0.22          # light per shift per unit of extent
+JUNCTION_UPKEEP = 0.30        # light per shift per junction
+MASS_UPKEEP = 0.38            # light per shift per unit of mass
+
+EXTENT_DRAW_BONUS = 0.90      # how much extent multiplies what it draws
+CAPACITY_PER_MASS = 11.0       # light it can hold per unit of mass
+MASS_RESISTANCE = 0.22        # how much mass blunts what others pull from it
+
+STRUCTURE_FLOOR = 0.25
+STRUCTURE_CEILING = 3.2
+STRUCTURE_DRIFT = 0.55
+
+
+def founding_structure(seed_text: str) -> Dict[str, float]:
+    return {
+        "extent": round(0.6 + _deterministic_unit(seed_text + "|extent") * 1.2, 3),
+        "junctions": round(0.5 + _deterministic_unit(seed_text + "|junctions") * 1.6, 3),
+        "mass": round(0.6 + _deterministic_unit(seed_text + "|mass") * 1.2, 3),
+    }
+
+
+def inherited_structure(parent: Dict[str, float], seed_text: str) -> Dict[str, float]:
+    out = {}
+    for key in ("extent", "junctions", "mass"):
+        moved = parent.get(key, 1.0) + (
+            _deterministic_unit(seed_text + "|s|" + key) - 0.5) * 2.0 * STRUCTURE_DRIFT
+        out[key] = round(max(STRUCTURE_FLOOR, min(STRUCTURE_CEILING, moved)), 3)
+    return out
+
+
+def structural_upkeep(structure: Dict[str, float]) -> float:
+    """What this structure costs to hold together, every shift."""
+    return (structure.get("extent", 1.0) * EXTENT_UPKEEP
+            + structure.get("junctions", 1.0) * JUNCTION_UPKEEP
+            + structure.get("mass", 1.0) * MASS_UPKEEP)
+
+
+def light_capacity(structure: Dict[str, float]) -> float:
+    """The most light a thing of this build can hold. Beyond it, intake is lost."""
+    return structure.get("mass", 1.0) * CAPACITY_PER_MASS
+
+
 def inherited_traits(parent: Dict[str, float], seed_text: str) -> Dict[str, float]:
     """A descendant's affinities: the parent's, moved a little."""
     return _normalise({
@@ -233,7 +299,8 @@ def add_individual(state: Dict[str, Any], index: int, substrate: str,
                    shift: int, light: float = STARTING_LIGHT,
                    parent_id: Optional[str] = None,
                    origin: str = "arrival",
-                   traits: Optional[Dict[str, float]] = None) -> str:
+                   traits: Optional[Dict[str, float]] = None,
+                   structure: Optional[Dict[str, float]] = None) -> str:
     number = state["next_individual_number"]
     state["next_individual_number"] = number + 1
     identifier = "i-%05d" % number
@@ -256,6 +323,7 @@ def add_individual(state: Dict[str, Any], index: int, substrate: str,
         "descendants": 0,
         "sightings": 1,
         "traits": traits or founding_traits("%s|%d|%d" % (identifier, index, shift)),
+        "structure": structure or founding_structure("%s|%d|%d" % (identifier, index, shift)),
     }
     return identifier
 
@@ -265,7 +333,56 @@ def add_individual(state: Dict[str, Any], index: int, substrate: str,
 # ---------------------------------------------------------------------------
 
 
+HISTORY_FRAMES = 90      # how many shifts of movement the terrain keeps
+
+
+def _record_frame(state: Dict[str, Any], shift: int) -> None:
+    """Keep a compact record of where everything was, shift by shift.
+
+    The terrain has always known that things move; nothing was keeping the
+    record of it, so an observer could only ever see the latest instant. This
+    stores position and light per shift so movement can be watched rather than
+    inferred. It is a record of what happened, not an extra mechanism — nothing
+    in the physics reads it.
+    """
+    frames = state.setdefault("history", [])
+    frames.append({
+        "shift": shift,
+        "beings": [
+            [b["id"], b["cell"], round(float(b.get("light", 0.0)), 2),
+             b.get("structure", {}).get("extent", 1.0),
+             b.get("structure", {}).get("junctions", 1.0),
+             b.get("structure", {}).get("mass", 1.0),
+             int(b.get("generation", 0) or 0), int(b.get("descendants", 0)),
+             int(b.get("age", 0))]
+            for b in sorted(state["individuals"].values(), key=lambda x: x["id"])
+        ],
+        "cover": [round(float(c.get("census_density", 0.0)), 3) for c in state["cells"]],
+        "residue": [round(float(c.get("residue", 0.0)), 2) for c in state["cells"]],
+    })
+    if len(frames) > HISTORY_FRAMES:
+        del frames[:len(frames) - HISTORY_FRAMES]
+
+
+def _backfill_structure(state: Dict[str, Any], shift: int) -> int:
+    """Give a build to anything that predates the idea of one.
+
+    Structure arrived at shift 84. The things already living had none. They are
+    not re-rolled or replaced — they are each assigned a founding build from
+    their own identifier, the same way anything arriving does. What they do next
+    is theirs.
+    """
+    filled = 0
+    for identifier, being in state["individuals"].items():
+        if not being.get("structure"):
+            being["structure"] = founding_structure(
+                "%s|backfill|%d" % (identifier, being.get("arose_at_shift", 0)))
+            filled += 1
+    return filled
+
+
 def step(state: Dict[str, Any], shift: int, flow: float) -> Dict[str, Any]:
+    backfilled = _backfill_structure(state, shift)
     """Advance the terrain one shift. Deterministic. No model call.
 
     Order matters and is fixed: light arrives, the census layer lives, then
@@ -366,11 +483,13 @@ def step(state: Dict[str, Any], shift: int, flow: float) -> Dict[str, Any]:
         being["age"] += 1
         being["last_seen_shift"] = shift
         being["sightings"] += 1
-        being["light"] -= INDIVIDUAL_BASE_UPKEEP
+        being["light"] -= INDIVIDUAL_BASE_UPKEEP + structural_upkeep(
+            being.get("structure", {}))
 
         # Draw from the census layer where it stands.
         if cell["census_density"] > 0.0:
-            affinity = being["traits"]["cover"]
+            reach = 1.0 + being.get("structure", {}).get("extent", 1.0) * EXTENT_DRAW_BONUS
+            affinity = being["traits"]["cover"] * reach
             taken = min(INDIVIDUAL_DRAW_FROM_CENSUS * share * affinity,
                         (cell["census_light"] + cell["census_density"] * 2.0) * share)
             if taken > 0:
@@ -386,12 +505,17 @@ def step(state: Dict[str, Any], shift: int, flow: float) -> Dict[str, Any]:
 
         # Draw from residue where it stands.
         if cell["residue"] > 0.0:
-            affinity = being["traits"]["residue"]
+            reach = 1.0 + being.get("structure", {}).get("extent", 1.0) * EXTENT_DRAW_BONUS
+            affinity = being["traits"]["residue"] * reach
             taken = min(INDIVIDUAL_DRAW_FROM_RESIDUE * share * affinity,
                         cell["residue"] * share)
             being["light"] += taken
             being["drawn_from_residue"] += taken
             cell["residue"] -= taken
+
+        capacity = light_capacity(being.get("structure", {}))
+        if being["light"] > capacity:
+            being["light"] = capacity
 
         # Move toward whichever neighbouring cell offers more light. Not toward
         # the stream — toward light. The two coincide until the near cells are
@@ -422,6 +546,8 @@ def step(state: Dict[str, Any], shift: int, flow: float) -> Dict[str, Any]:
                 state, being["cell"], being["substrate"], shift,
                 light=spend * 0.8, parent_id=identifier, origin="replication",
                 traits=inherited_traits(being["traits"],
+                                        "%s|%d|%d" % (identifier, shift, being["descendants"])),
+                structure=inherited_structure(being.get("structure", {}),
                                         "%s|%d|%d" % (identifier, shift, being["descendants"])))
             individuals[child]["generation"] = int(being.get("generation", 0) or 0) + 1
             being["descendants"] += 1
@@ -458,6 +584,8 @@ def step(state: Dict[str, Any], shift: int, flow: float) -> Dict[str, Any]:
                 del state["links"][key]
 
     events["influx_total"] = round(events["influx_total"], 3)
+    events["structures_backfilled"] = backfilled
+    _record_frame(state, shift)
     return events
 
 
@@ -484,6 +612,14 @@ def _update_links(state: Dict[str, Any], shift: int, events: Dict[str, Any]) -> 
         present = by_cell[cell_index]
         for i in range(len(present)):
             for j in range(i + 1, len(present)):
+                a_id, b_id = present[i], present[j]
+                held = lambda who: sum(
+                    1 for k, v in links.items()
+                    if v.get("formed_at_shift") is not None and who in k.split("|"))
+                a_cap = 1 + int(individuals[a_id].get("structure", {}).get("junctions", 1.0))
+                b_cap = 1 + int(individuals[b_id].get("structure", {}).get("junctions", 1.0))
+                if held(a_id) >= a_cap or held(b_id) >= b_cap:
+                    continue
                 key = _link_key(present[i], present[j])
                 link = links.setdefault(
                     key, {"together": 0, "last_together_shift": shift,
@@ -513,11 +649,12 @@ def _update_links(state: Dict[str, Any], shift: int, events: Dict[str, Any]) -> 
         # Pulling: the end with the greater link affinity draws on what the
         # other end is holding, regardless of which of them holds more.
         affinity_gap = first["traits"]["links"] - second["traits"]["links"]
+        resist = lambda b: 1.0 / (1.0 + b.get("structure", {}).get("mass", 1.0) * MASS_RESISTANCE)
         if affinity_gap > 0:
-            moved -= min(second["light"] * LINK_PULL_RATE * affinity_gap,
+            moved -= min(second["light"] * LINK_PULL_RATE * affinity_gap * resist(second),
                          max(0.0, second["light"]) * 0.5)
         elif affinity_gap < 0:
-            moved += min(first["light"] * LINK_PULL_RATE * (-affinity_gap),
+            moved += min(first["light"] * LINK_PULL_RATE * (-affinity_gap) * resist(first),
                          max(0.0, first["light"]) * 0.5)
         first["light"] -= moved
         second["light"] += moved

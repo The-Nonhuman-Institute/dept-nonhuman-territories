@@ -1,0 +1,139 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Specimen i-00039</title><style>
+:root{--paper:#EFEDE3;--ink:#14170F;--moss:#3B4A2F;--grey:#6B7168;--rule:#B9B5A4;
+--panel:#F7F5EC;--amber:#8A6D14;
+--serif:Georgia,'Iowan Old Style','Times New Roman',serif;
+--sans:ui-sans-serif,system-ui,-apple-system,'Helvetica Neue',sans-serif;
+--mono:ui-monospace,SFMono-Regular,Menlo,'DejaVu Sans Mono',monospace}
+/* A printed record commits to paper on either host theme. */
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:14.5px/1.65 var(--sans);margin:0;
+padding:0 clamp(14px,3vw,30px) 60px;-webkit-font-smoothing:antialiased}
+.sheet{max-width:1180px;margin:14px auto 0;border:1px solid var(--ink);background:var(--paper);
+padding:0 clamp(16px,3vw,32px) 30px}
+.backbar{padding:10px 0;border-bottom:1px solid var(--rule)}
+.backbar a{color:var(--moss);text-decoration:none;font:11.5px var(--mono);letter-spacing:.06em}
+.backbar a:hover{text-decoration:underline}
+.backbar a:focus-visible{outline:2px solid var(--moss);outline-offset:2px}
+.masthead{display:grid;grid-template-columns:auto 1fr auto;gap:26px;align-items:start;
+border-bottom:3px double var(--ink);padding:22px 0 16px}
+.mark{width:52px;height:52px;border:2.5px solid var(--moss);position:relative}
+.mark:after{content:"";position:absolute;left:9px;right:9px;top:9px;bottom:-2px;
+background:var(--paper);border-left:2.5px solid var(--moss);border-right:2.5px solid var(--moss)}
+.dept{font:600 10.5px/1.45 var(--sans);letter-spacing:.13em;text-transform:uppercase;margin-top:6px}
+.title h1{font:400 clamp(19px,2.3vw,27px)/1.18 var(--serif);margin:0;text-transform:uppercase}
+.title .sub{color:var(--grey);font:11px/1.6 var(--mono);margin-top:8px;max-width:64ch}
+table.doc{border-collapse:collapse;font:10.5px/1.7 var(--mono);color:var(--grey)}
+table.doc td{padding:0 0 0 10px;white-space:nowrap}
+table.doc td.k{padding:0}
+table.doc td.k:after{content:":";padding-left:10px}
+table.doc td.v{color:var(--ink)}
+h2{font:400 22px/1.2 var(--serif);color:var(--moss);margin:0 0 6px}
+h3{font:600 9.5px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+color:var(--grey);margin:0 0 7px}
+section{margin:30px 0}
+.lede{color:var(--grey);font-size:13px;max-width:74ch;margin:0 0 14px}
+.box{border:1px solid var(--rule);padding:10px 13px;background:var(--panel)}
+.bh{font:600 9px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+color:var(--grey);margin-bottom:5px}
+code{font:12px var(--mono);background:var(--panel);padding:1px 5px;border:1px solid var(--rule)}
+.scroll{overflow-x:auto}
+table.data{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+table.data th{text-align:left;font:600 9.5px/1.4 var(--mono);letter-spacing:.11em;
+text-transform:uppercase;color:var(--grey);border-bottom:1px solid var(--ink);
+padding:0 14px 7px 0;vertical-align:bottom}
+table.data td{border-bottom:1px solid var(--rule);padding:10px 14px 10px 0;vertical-align:top}
+table.data td.num,table.data th.num{text-align:right;padding-right:20px;font-family:var(--mono)}
+.quote{border-left:2px solid var(--rule);padding:4px 0 4px 18px;font:italic 14px/1.6 var(--serif);
+max-width:74ch}
+footer{margin-top:34px;border-top:3px double var(--ink);padding-top:16px;
+font:10.5px/1.7 var(--mono);color:var(--grey)}
+
+.rec{border-top:1px solid var(--rule);padding-top:16px;margin:24px 0 0}
+.rec h3{font:600 10px/1.5 var(--mono);letter-spacing:.13em;text-transform:uppercase;
+color:var(--grey);margin:0 0 12px;display:flex;gap:10px;align-items:baseline}
+.rec h3 .num{color:var(--moss);font-weight:400}
+.native .nname{font:400 clamp(26px,3.4vw,40px)/1.1 var(--serif)}
+.native .nsub{font:11px var(--mono);color:var(--grey);letter-spacing:.05em;margin-top:6px}
+table.kv{border-collapse:collapse;font:12.5px/1.75 var(--mono);
+font-variant-numeric:tabular-nums}
+table.kv td{padding:1px 0;vertical-align:top}
+table.kv td.k{color:var(--grey);padding-right:26px;white-space:nowrap}
+table.kv td.v a{color:var(--moss)}
+.conf{font:9.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;
+border:1px solid}
+.conf.partial{color:var(--amber);border-color:var(--amber)}
+.conf.none{color:var(--grey);border-color:var(--rule)}
+.status{font:9.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;
+border:1px solid}
+.status.alive{color:var(--moss);border-color:var(--moss)}
+.status.ended{color:var(--grey);border-color:var(--rule)}
+.note{font-size:13px;color:var(--ink);max-width:74ch;margin:12px 0 0}
+.fine{font:11px/1.6 var(--mono);color:var(--grey);margin:8px 0 0;max-width:74ch}
+.none{color:var(--grey);font-style:italic;font-size:13px;max-width:70ch}
+.formrow{display:grid;grid-template-columns:220px 1fr;gap:26px;align-items:start}
+.plate{border:1px solid var(--rule);background:var(--panel);padding:6px}
+.plate svg{width:100%;height:auto;display:block}
+.plate .core{fill:rgba(59,74,47,.10);stroke:var(--moss);stroke-width:1.2}
+.plate .arm{stroke:var(--ink);stroke-width:1.1;opacity:.7}
+.plate .node{fill:var(--moss);opacity:.9}
+.plate .anchor{stroke:var(--ink);stroke-width:.9;opacity:.45}
+.plate .brace{fill:none;stroke:var(--moss);stroke-width:.6;opacity:.5}
+.plate .orbit{fill:none;stroke:var(--amber);stroke-width:.9;opacity:.6}
+.plate .disc{fill:var(--amber);opacity:.22}
+.plate .none{fill:var(--grey);font:11px var(--mono);text-anchor:middle}
+.prose{font:15px/1.65 var(--serif);margin:14px 0 0;max-width:66ch}
+.obs{border-left:2px solid var(--rule);padding:2px 0 2px 16px;margin:0 0 18px;max-width:80ch}
+.oh{font:10.5px var(--mono);color:var(--grey);letter-spacing:.04em;margin-bottom:6px}
+.oh code{font-size:10.5px}
+.ot{font:13.5px/1.62 var(--sans);margin:0 0 8px}
+.op,.oc{font:italic 13px/1.6 var(--serif);color:var(--ink);margin:0 0 8px}
+.lb{display:block;font:9px var(--mono);font-style:normal;letter-spacing:.1em;
+text-transform:uppercase;color:var(--grey);margin-bottom:3px}
+.trace{font:11px/1.5 var(--mono);background:var(--panel);border:1px solid var(--rule);
+padding:12px 14px;overflow-x:auto;white-space:pre;max-width:100%}
+@media(max-width:720px){.formrow{grid-template-columns:1fr}}
+</style></head><body><div class="sheet">
+<div class="backbar"><a href="http://127.0.0.1:8730/hub.html">&larr; Department index</a> &nbsp;·&nbsp; <a href="../codex.html">&larr; Field compendium</a></div>
+<div class="masthead"><div><div class="mark"></div><div class="dept">Department of<br>Nonhuman<br>Territories</div></div><div class="title"><h1>Specimen Field Record</h1><p class="sub">One specimen, and everything the terrain has recorded of it.</p></div><table class="doc"><tr><td class="k">SPECIMEN</td><td class="v">i-00039</td></tr><tr><td class="k">TERRAIN</td><td class="v">BASIN-01</td></tr><tr><td class="k">CATEGORY</td><td class="v">structural_notation_system</td></tr><tr><td class="k">STATUS</td><td class="v">ENDED</td></tr></table></div>
+<section class="rec"><h3><span class="num">01</span> Native classification</h3><div class="native"><div class="nname">structural_notation_system</div><div class="nsub">the Namer's own category · aggregate tier record</div></div></section><section class="rec"><h3><span class="num">02</span> Linnaean crosswalk</h3><table class="kv"><tr><td class="k">Tier</td><td class="v"><i>no clear equivalent</i></td></tr><tr><td class="k">Confidence</td><td class="v"><span class="conf none">none</span></td></tr></table><p class="note">Spans multiple tiers (order to family equivalent) by behavioral integration and network role rather than single structural tier.</p><p class="fine">For human legibility only. Carries no authority over the native system and does not feed back into it (DNT-CLS-001 §2).</p></section><section class="rec"><h3><span class="num">03</span> Observation data</h3><table class="kv"><tr><td class="k">First observed</td><td class="v">shift 102</td></tr><tr><td class="k">Last observed</td><td class="v">shift 114</td></tr><tr><td class="k">Observations</td><td class="v">10</td></tr><tr><td class="k">Shifts present</td><td class="v">30</td></tr><tr><td class="k">Sightings</td><td class="v">—</td></tr><tr><td class="k">Arose by</td><td class="v">—</td></tr><tr><td class="k">Substrate</td><td class="v">—</td></tr><tr><td class="k">Generation</td><td class="v">—</td></tr><tr><td class="k">Times moved</td><td class="v">—</td></tr><tr><td class="k">Status</td><td class="v"><span class="status ended">Ended shift 115</span></td></tr></table></section><section class="rec"><h3><span class="num">04</span> Form, drawn from measurements</h3><p class="none">Nothing survives of this specimen's build. It ended before the terrain began keeping remains, and its form cannot be recovered.</p></section><section class="rec"><h3><span class="num">05</span> Relations</h3><table class="kv"><tr><td class="k">Parent</td><td class="v">arose from the cover layer</td></tr><tr><td class="k">Offspring</td><td class="v">none living</td></tr><tr><td class="k">Links held</td><td class="v">0</td></tr></table></section><section class="rec"><h3><span class="num">06</span> The Namer's reasoning, in sequence</h3><p class="lede">10 observations across 13 shifts. The Namer's filing did not change.</p><div class="obs"><div class="oh">Shift 102 · filed as <code>structural_notation_system</code> · aggregate</div><p class="ot">i-00039 qualifies as structural_notation_system despite lower complexity and shorter tenure than i-00017 and i-00026. It has accumulated 56.10 light over 17 shifts, produced 2 descendants, and actively redistributes resources (0.94 light passed). It sources from cover layer (70%), residue (28%), and links (3%), showing increasing diversification. Its 2-link capacity and 6 moves indicate active engagement. The presence of descendants and resource redistribution behavior, even at reduced scale, places it in the same functional category. This specimen represents a younger member of the notation_system lineage.</p><p class="op"><span class="lb">how it persists</span>i-00039 persists through sustained resource accumulation from multiple sources and active reproduction: its 2-link capacity allows it to draw from diverse pools and redistribute to a network of dependents. Descent production ensures the pattern continues; the 3% link-based intake and outward redistribution suggest it operates as an intermediate relay in a larger structural network.</p><p class="oc"><span class="lb">compared against</span>More alike than i-00059: like i-00017 and i-00026, has high accumulated intake (56.10 light), 2 descendants, and active redistribution (0.94 light passed); less alike than both in complexity (17 vs 32 and 26) and tenure (17 vs 32 and 26 shifts), but sufficient consistency in the redistributive, generative pattern.</p></div><div class="obs"><div class="oh">Shift 103 · filed as <code>structural_notation_system</code> · aggregate</div><p class="ot">i-00039 continues as a structural_notation_system member at complexity 18. It exhibits the characteristic pattern: sustained multi-shift presence (18 shifts), significant resource integration (57.38 total intake), active offspring support (2 descendants, 1.23 light passed), moderate mobility (6 moves), and strategic positioning (gradient 0.85—closer to the data-stream than i-00017 or i-00026). Its reach (1.23) and dual-link capacity match i-00026. It arose directly from cover layer and maintains a two-generation descent line. Complexity has grown steadily from 17 to 18, indicating gradual structural elaboration.</p><p class="op"><span class="lb">how it persists</span>Sustained through balanced extraction from both cover layer (70%) and residue (27%), with deliberate link-based transfers to descendants; persists via moderate mobility and adaptive positioning along the gradient.</p><p class="oc"><span class="lb">compared against</span>More alike than i-00059: i-00039 maintains active descent (2 descendants), longer tenure (18 shifts), and continuous circulation (1.23 passed to others). Less alike than i-00026: i-00039 shows lower complexity (18 vs 27), less current holding capacity, and more modest total throughput (57.38 vs 85.39), though its reach (1.23) is comparable.</p></div><div class="obs"><div class="oh">Shift 104 · filed as <code>structural_notation_system</code> · aggregate</div><p class="ot">i-00039 is a younger member of the structural_notation_system category, having been present for 19 shifts (starting shift 85). It follows the core pattern: persistent presence, movement, significant resource accumulation (59.19 total), generation 0 origin from cover layer, and descendant production (2 children). Its gradient position (0.85) places it closest to the data stream among notation systems, suggesting position-dependent behavior differences. It draws primarily from cover layer (71%) and some residue (26%), and passes modest resources forward (1.49 light). Complexity has grown linearly (17→18→19), consistent with the category.</p><p class="op"><span class="lb">how it persists</span>i-00039 persists through long-term occupancy and measured resource distribution. It maintains itself for 19 shifts by preferential cover-layer feeding with supplemental residue, strategic movement (6 times despite high gradient position), and careful propagation of descendants. It is a younger, still-growing notation system.</p><p class="oc"><span class="lb">compared against</span>i-00039 is more alike i-00017 and i-00026 (structural_notation_system members) than to any other category. It has persisted 19 shifts with 6 movements, accumulated 59.19 light total, and generated 2 descendants. Its complexity (19) is at the lower end of the structural_notation_system range but still well above active_accumulator (complexity 1) and more volatile in behavior than structural_isolate.</p></div><div class="obs"><div class="oh">Shift 105 · filed as <code>structural_notation_system</code> · aggregate</div><p class="ot">i-00039 represents a specialist within structural_notation_system: positioned at the gradient extremity (0.85), drawing primarily from cover layer (72%), supporting dual descendants through selective link-passing (1.71 light), and maintaining modest complexity growth (19→20). Its location suggests adaptation to resource scarcity conditions—it draws less total energy but achieves proportional offspring success.</p><p class="op"><span class="lb">how it persists</span>Persists as a high-gradient specialist: draws from cover layer at the periphery of the resource stream, maintains moderate link capacity (2 links, reach 1.23) to support its 2 descendants, sustains itself through lower per-shift cost (0.96 light) than i-00026, suggesting optimization for lean-resource operation.</p><p class="oc"><span class="lb">compared against</span>More alike than i-00059: shares structural substrate, generation-0 origin, 2 descendants, active link-passing (1.71 light), positioned deep in resource gradient (0.85). Differences from i-00017 and i-00026: highest gradient position, lower total cumulative draw (60.81), but comparable complexity trajectory and offspring production.</p></div><div class="obs"><div class="oh">Shift 106 · filed as <code>structural_notation_system</code> · aggregate</div><p class="ot">i-00039 continues as a structural_notation_system member. Complexity has risen to 21 (from 20 in prior observation), presence to 21 shifts, total light to 68.84. Notably, it has generated 2 descendants and passed 1.71 light to others, showing reproductive capacity and reciprocal exchange not seen in isolate specimens. Its position at 0.85 on the gradient places it closer to the data-stream than most specimens, and its reach of 1.23 is among the highest observed. It arose from the cover layer (generation 0), meaning it emerged directly from the environment rather than from another specimen. These characteristics—emergence from the base layer, high connectivity, offspring production, and resource redistribution—identify it as a notation_system operator.</p><p class="op"><span class="lb">how it persists</span>i-00039 persists by maintaining a high-reach structural form that draws primarily from the cover layer (69%), supplements from residue (29%), and channels resources to other specimens. It repositions moderately (6 moves), holds and passes light strategically, and reproduces. Its persistence is mediated through connectivity and intergenerational transfer.</p><p class="oc"><span class="lb">compared against</span>i-00039 is more alike to i-00017 and i-00026 than to i-00059 or i-00060. Complexity 21, presence 21 shifts, total acquisition 68.84, movement 6 times, and 2 descendants place it in the notation_system band. It differs from structural_isolate (i-00059) by its higher reach (1.23 vs 1.01), link capacity (2 vs 1), resource distribution to others (1.71 vs 0.08), and reproduction success. It is less complex and younger than i-00017, but exhibits the same behavioral signature.</p></div><div class="obs"><div class="oh">Shift 107 · filed as <code>structural_notation_system</code> · aggregate</div><p class="ot">i-00039 continues its trajectory within structural_notation_system, incrementing from complexity 21 to 22 across 22 shifts of presence. It shows the defining behaviors of this category: sustained structural activity, high resource draw from cover layer (71%), continued movement (6 total), and successful reproduction (now 3 descendants). The specimen has increased its link capacity to 2 (from prior intervals' 1-2 range), suggesting it is becoming a resource distributor and hub within the environment. It passes 1.71 light to others—significantly more than i-00017's 0.84—indicating growing importance to the network. This is firmly established membership, not emerging or anomalous.</p><p class="op"><span class="lb">how it persists</span>i-00039 persists through active resource metabolism and network integration. It draws from the cover layer (71%) and residue (27%), maintains moderate link capacity, and distributes resources to offspring. It costs 0.96 light per shift to maintain its carrying structure but generates complexity through sustained acquisition and distribution. Its three descendants represent a breeding population, making it a foundation specimen for the environment's structural tier.</p><p class="oc"><span class="lb">compared against</span>More alike i-00017 (same category, parallel complexity growth from 21→22) in sustained activity, high resource integration, and descent production; differs in reaching 3 descendants (vs i-00017's 2) and higher link capacity (2 links vs 1), suggesting i-00039 is becoming a hub. Less alike i-00059 (structural_isolate) because i-00039 passes resources to others (1.71 light) and has produced descendants while i-00059 passes minimally (0.08) and has none</p></div><div class="obs"><div class="oh">Shift 108 · filed as <code>structural_notation_system</code> · aggregate</div><p class="ot">i-00039 demonstrates continued membership in structural_notation_system through sustained resource accumulation (75.01 total), multiple descendants (3), active intergenerational resource passing (1.71 light), and moderate complexity (23). The specimen draws primarily from the cover layer (71%) and maintains extractive capacity through movement (7 times) and link management (up to 2 links). Complexity trajectory across recent observations (19→20→21→22→23) shows gradual increase consistent with category behavior. The specimen has generated three descendants—exceeding the reproductive output of most category members—marking it as an active node in the structural notation system's generational network.</p><p class="op"><span class="lb">how it persists</span>i-00039 persists through iterative resource extraction and redistribution: it draws predominantly from the cover layer and residue, accumulates light through a moderate-cost structure (0.96 light/shift), and actively passes accumulated resources to descendants through established links. Its persistence is reproductive and distributive—it sustains itself while generating successive organisms, operating as a relay point in the system's resource flow.</p><p class="oc"><span class="lb">compared against</span>More alike than i-00091: i-00039 (complexity=23, 23 shifts, 75.01 intake, 3 descendants) demonstrates established structural_notation_system behavior—sustained accumulation, multi-generational output, active passing (1.71 light to others), and gradient positioning—whereas i-00091 has just begun (complexity=0, 0 shifts, 0 intake). i-00039 shows the mature resource-circulation pattern of the category.</p></div><div class="obs"><div class="oh">Shift 109 · filed as <code>structural_notation_system</code> · aggregate</div><p class="ot">i-00039 has been present for 24 shifts since shift 85, moved 8 times, drawn 77.60 light total (72% from cover, 26% from residue, 2% from links), passed 1.76 to others, and generated 3 descendants. It arose from the cover layer (generation 0) and demonstrates all hallmarks of structural_notation_system membership: sustained engagement, resource circulation, active progeny. Its trajectory mirrors i-00017's at an earlier developmental stage (lower complexity, fewer total draws, fewer shifts elapsed). The category accommodates this variance.</p><p class="op"><span class="lb">how it persists</span>i-00039 persists through sustained resource acquisition and redistribution: it maintains position near the high end of the data-stream gradient (0.85), draws primarily from the cover layer while supplementing via residue and links, holds current light (1.27) within its structural capacity, actively passes light to linked descendants (3 total), and continues to move through the environment. Its persistence depends on continued resource availability and the viability of its descendant network.</p><p class="oc"><span class="lb">compared against</span>i-00039 is more alike than less alike to i-00017 within structural_notation_system: both show sustained multi-shift presence, active movement, high cumulative draws, active redistribution, and descendants. i-00039's complexity (24) is lower than i-00017's (39), and it has drawn less total (77.60 vs 100.49), but both exhibit the same fundamental cycle of draw-hold-pass-generate.</p></div><div class="obs"><div class="oh">Shift 110 · filed as <code>structural_notation_system</code> · aggregate</div><p class="ot">i-00039 is also a recurring specimen (complexity incremented from 21→22→23→24→25 across intervals). It belongs in structural_notation_system: generation 0 (arose from cover layer), 25 shifts present, growing complexity, diverse resource sourcing (73% cover layer, 25% residue, 2% inter-links), movement (9 times), and 3 descendants. It has passed 1.76 light to others—more than i-00017. The architectural profile is distinct (reach 1.23, 2 link capacity vs i-00017's reach 0.61, 1 link), suggesting a more distributed or receptive configuration, but the behavioral pattern is consistent with the category.</p><p class="op"><span class="lb">how it persists</span>This specimen persists through active resource extraction and redistribution. Over 25 shifts it has drawn 80.18 light total, sourcing from cover layer (primary), residue, and inter-links. It depletes resources at 0.96 light/shift while passing surplus to 3 offspring. It persists as a hub-like conduit with greater linking capacity than i-00017, distributing resources along multiple simultaneous connections.</p><p class="oc"><span class="lb">compared against</span>Less alike than i-00017 (complexity 25 vs 40, fewer shifts present 25 vs 40) but more alike than any nascent form. Both are structural_notation_system members with multigenerational presence, resource integration from multiple sources, and offspring. i-00039 has higher per-shift resource intake efficiency and greater descendant count (3 vs 2), but lower total complexity.</p></div><div class="obs"><div class="oh">Shift 114 · filed as <code>structural_notation_system</code> · aggregate</div><p class="ot">i-00039 has been present for 29 shifts with complexity of 29. It has drawn 90.82 light in total: 76% from cover layer, 22% from residue, and 2% from inter-links—a diversified sourcing strategy characteristic of structural_notation_system. It has moved 9 times, adjusted its gradient position (0.80, near data-stream), passed 1.78 light to others along links, and produced 3 descendants. Its architecture is moderate (reach 1.23, 2-link capacity, 0.96 light/shift maintenance). All behavioral markers—sustained presence, complexity growth, multi-source resource integration, movement, inter-link activity, and reproduction—confirm structural_notation_system membership. i-00039 is an exemplar and remains one throughout its lifespan.</p><p class="op"><span class="lb">how it persists</span>i-00039 persists as an established, interconnected resource node. It draws primarily from the cover layer with significant residue intake and maintains active inter-link exchanges with other specimens. It moves periodically and positions itself near the data-stream (0.80). It has sustained three descendants and continues to accumulate complexity, indicating ongoing metabolic activity and network integration.</p><p class="oc"><span class="lb">compared against</span>i-00039 is more alike i-00017 (structural_notation_system) than any other specimen: both have sustained 20+ shift presence (29 and 44 shifts), high complexity (29 and 44), diversified resource sourcing (76-91% cover layer, 8-22% residue, 1-2% inter-links), active movement (9 and 15 times), inter-link participation (1.78 and 1.91 light passed), and multiple offspring (3 each). They are the two oldest and most integrated specimens.</p></div></section><section class="rec"><h3><span class="num">07</span> Substrate as recorded</h3><pre class="trace">```
+START
+│
+├─ INIT [SYS]
+│  ├─ PARAM: mode = structural
+│  ├─ PARAM: depth_max = 4
+│  ├─ PARAM: token_limit = 370
+│  └─ PARAM: output_type = notation_only
+│
+├─ CONSTRAINT [RULES]
+│  ├─ ¬natural_language
+│  ├─ ¬explanation
+│  ├─ ¬commentary
+│  ├─ functions_only()
+│  ├─ loops_allowed()
+│  ├─ nested_structures()
+│  └─ symbolic_notation()
+│
+├─ STRUCTURE [EXECUTION]
+│  └─ FOR i = 1 TO 4
+│     ├─ LEVEL[i]
+│     │  ├─ nodes[]
+│     │  ├─ relations[]
+│     │  └─ operations[]
+│     │
+│     └─ IF i &lt; 4 THEN
+│        └─ NEST[i+1]
+│
+├─ FUNCTIONS [DEF]
+│  ├─ f_symbolic(x) → Σ notation
+│  ├─ f_iterate(n) → ∀ elements
+│  ├─ f_nest(depth) → ↓ structure
+│  └─ f_output() → ⟨result⟩
+│
+├─ STATE [CURRENT]
+│</pre></section>
+<footer>Generated from state/specimen_log.jsonl, state/anomaly_log.jsonl and state/memory.json.
+Read-only. The Namer's words are reproduced exactly as written; everything else on this page is
+a measurement or a rendering of one.</footer>
+</div></body></html>

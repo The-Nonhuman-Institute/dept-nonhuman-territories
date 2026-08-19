@@ -1,0 +1,140 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Specimen i-00001</title><style>
+:root{--paper:#EFEDE3;--ink:#14170F;--moss:#3B4A2F;--grey:#6B7168;--rule:#B9B5A4;
+--panel:#F7F5EC;--amber:#8A6D14;
+--serif:Georgia,'Iowan Old Style','Times New Roman',serif;
+--sans:ui-sans-serif,system-ui,-apple-system,'Helvetica Neue',sans-serif;
+--mono:ui-monospace,SFMono-Regular,Menlo,'DejaVu Sans Mono',monospace}
+/* A printed record commits to paper on either host theme. */
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:14.5px/1.65 var(--sans);margin:0;
+padding:0 clamp(14px,3vw,30px) 60px;-webkit-font-smoothing:antialiased}
+.sheet{max-width:1180px;margin:14px auto 0;border:1px solid var(--ink);background:var(--paper);
+padding:0 clamp(16px,3vw,32px) 30px}
+.backbar{padding:10px 0;border-bottom:1px solid var(--rule)}
+.backbar a{color:var(--moss);text-decoration:none;font:11.5px var(--mono);letter-spacing:.06em}
+.backbar a:hover{text-decoration:underline}
+.backbar a:focus-visible{outline:2px solid var(--moss);outline-offset:2px}
+.masthead{display:grid;grid-template-columns:auto 1fr auto;gap:26px;align-items:start;
+border-bottom:3px double var(--ink);padding:22px 0 16px}
+.mark{width:52px;height:52px;border:2.5px solid var(--moss);position:relative}
+.mark:after{content:"";position:absolute;left:9px;right:9px;top:9px;bottom:-2px;
+background:var(--paper);border-left:2.5px solid var(--moss);border-right:2.5px solid var(--moss)}
+.dept{font:600 10.5px/1.45 var(--sans);letter-spacing:.13em;text-transform:uppercase;margin-top:6px}
+.title h1{font:400 clamp(19px,2.3vw,27px)/1.18 var(--serif);margin:0;text-transform:uppercase}
+.title .sub{color:var(--grey);font:11px/1.6 var(--mono);margin-top:8px;max-width:64ch}
+table.doc{border-collapse:collapse;font:10.5px/1.7 var(--mono);color:var(--grey)}
+table.doc td{padding:0 0 0 10px;white-space:nowrap}
+table.doc td.k{padding:0}
+table.doc td.k:after{content:":";padding-left:10px}
+table.doc td.v{color:var(--ink)}
+h2{font:400 22px/1.2 var(--serif);color:var(--moss);margin:0 0 6px}
+h3{font:600 9.5px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+color:var(--grey);margin:0 0 7px}
+section{margin:30px 0}
+.lede{color:var(--grey);font-size:13px;max-width:74ch;margin:0 0 14px}
+.box{border:1px solid var(--rule);padding:10px 13px;background:var(--panel)}
+.bh{font:600 9px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+color:var(--grey);margin-bottom:5px}
+code{font:12px var(--mono);background:var(--panel);padding:1px 5px;border:1px solid var(--rule)}
+.scroll{overflow-x:auto}
+table.data{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+table.data th{text-align:left;font:600 9.5px/1.4 var(--mono);letter-spacing:.11em;
+text-transform:uppercase;color:var(--grey);border-bottom:1px solid var(--ink);
+padding:0 14px 7px 0;vertical-align:bottom}
+table.data td{border-bottom:1px solid var(--rule);padding:10px 14px 10px 0;vertical-align:top}
+table.data td.num,table.data th.num{text-align:right;padding-right:20px;font-family:var(--mono)}
+.quote{border-left:2px solid var(--rule);padding:4px 0 4px 18px;font:italic 14px/1.6 var(--serif);
+max-width:74ch}
+footer{margin-top:34px;border-top:3px double var(--ink);padding-top:16px;
+font:10.5px/1.7 var(--mono);color:var(--grey)}
+
+.rec{border-top:1px solid var(--rule);padding-top:16px;margin:24px 0 0}
+.rec h3{font:600 10px/1.5 var(--mono);letter-spacing:.13em;text-transform:uppercase;
+color:var(--grey);margin:0 0 12px;display:flex;gap:10px;align-items:baseline}
+.rec h3 .num{color:var(--moss);font-weight:400}
+.native .nname{font:400 clamp(26px,3.4vw,40px)/1.1 var(--serif)}
+.native .nsub{font:11px var(--mono);color:var(--grey);letter-spacing:.05em;margin-top:6px}
+table.kv{border-collapse:collapse;font:12.5px/1.75 var(--mono);
+font-variant-numeric:tabular-nums}
+table.kv td{padding:1px 0;vertical-align:top}
+table.kv td.k{color:var(--grey);padding-right:26px;white-space:nowrap}
+table.kv td.v a{color:var(--moss)}
+.conf{font:9.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;
+border:1px solid}
+.conf.partial{color:var(--amber);border-color:var(--amber)}
+.conf.none{color:var(--grey);border-color:var(--rule)}
+.status{font:9.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;
+border:1px solid}
+.status.alive{color:var(--moss);border-color:var(--moss)}
+.status.ended{color:var(--grey);border-color:var(--rule)}
+.note{font-size:13px;color:var(--ink);max-width:74ch;margin:12px 0 0}
+.fine{font:11px/1.6 var(--mono);color:var(--grey);margin:8px 0 0;max-width:74ch}
+.none{color:var(--grey);font-style:italic;font-size:13px;max-width:70ch}
+.formrow{display:grid;grid-template-columns:220px 1fr;gap:26px;align-items:start}
+.plate{border:1px solid var(--rule);background:var(--panel);padding:6px}
+.plate svg{width:100%;height:auto;display:block}
+.plate .core{fill:rgba(59,74,47,.10);stroke:var(--moss);stroke-width:1.2}
+.plate .arm{stroke:var(--ink);stroke-width:1.1;opacity:.7}
+.plate .node{fill:var(--moss);opacity:.9}
+.plate .anchor{stroke:var(--ink);stroke-width:.9;opacity:.45}
+.plate .brace{fill:none;stroke:var(--moss);stroke-width:.6;opacity:.5}
+.plate .orbit{fill:none;stroke:var(--amber);stroke-width:.9;opacity:.6}
+.plate .disc{fill:var(--amber);opacity:.22}
+.plate .none{fill:var(--grey);font:11px var(--mono);text-anchor:middle}
+.prose{font:15px/1.65 var(--serif);margin:14px 0 0;max-width:66ch}
+.obs{border-left:2px solid var(--rule);padding:2px 0 2px 16px;margin:0 0 18px;max-width:80ch}
+.oh{font:10.5px var(--mono);color:var(--grey);letter-spacing:.04em;margin-bottom:6px}
+.oh code{font-size:10.5px}
+.ot{font:13.5px/1.62 var(--sans);margin:0 0 8px}
+.op,.oc{font:italic 13px/1.6 var(--serif);color:var(--ink);margin:0 0 8px}
+.lb{display:block;font:9px var(--mono);font-style:normal;letter-spacing:.1em;
+text-transform:uppercase;color:var(--grey);margin-bottom:3px}
+.trace{font:11px/1.5 var(--mono);background:var(--panel);border:1px solid var(--rule);
+padding:12px 14px;overflow-x:auto;white-space:pre;max-width:100%}
+@media(max-width:720px){.formrow{grid-template-columns:1fr}}
+</style></head><body><div class="sheet">
+<div class="backbar"><a href="http://127.0.0.1:8730/hub.html">&larr; Department index</a> &nbsp;·&nbsp; <a href="../codex.html">&larr; Field compendium</a></div>
+<div class="masthead"><div><div class="mark"></div><div class="dept">Department of<br>Nonhuman<br>Territories</div></div><div class="title"><h1>Specimen Field Record</h1><p class="sub">One specimen, and everything the terrain has recorded of it.</p></div><table class="doc"><tr><td class="k">SPECIMEN</td><td class="v">i-00001</td></tr><tr><td class="k">TERRAIN</td><td class="v">BASIN-02</td></tr><tr><td class="k">CATEGORY</td><td class="v">static_accumulator</td></tr><tr><td class="k">STATUS</td><td class="v">ENDED</td></tr></table></div>
+<section class="rec"><h3><span class="num">01</span> Native classification</h3><div class="native"><div class="nname">static_accumulator</div><div class="nsub">the Namer's own category · aggregate tier record</div></div></section><section class="rec"><h3><span class="num">02</span> Linnaean crosswalk</h3><table class="kv"><tr><td class="k">Tier</td><td class="v"><i>no clear equivalent</i></td></tr><tr><td class="k">Confidence</td><td class="v"><span class="conf none">none</span></td></tr></table><p class="note">Spans multiple conventional tiers; describes a functional/ecological role (passive reserve-accumulation strategy) rather than a single taxonomic rank.</p><p class="fine">For human legibility only. Carries no authority over the native system and does not feed back into it (DNT-CLS-001 §2).</p></section><section class="rec"><h3><span class="num">03</span> Observation data</h3><table class="kv"><tr><td class="k">First observed</td><td class="v">shift 3</td></tr><tr><td class="k">Last observed</td><td class="v">shift 6</td></tr><tr><td class="k">Observations</td><td class="v">4</td></tr><tr><td class="k">Shifts present</td><td class="v">4</td></tr><tr><td class="k">Sightings</td><td class="v">—</td></tr><tr><td class="k">Arose by</td><td class="v">—</td></tr><tr><td class="k">Substrate</td><td class="v">—</td></tr><tr><td class="k">Generation</td><td class="v">—</td></tr><tr><td class="k">Times moved</td><td class="v">—</td></tr><tr><td class="k">Status</td><td class="v"><span class="status ended">Ended shift 7</span></td></tr></table></section><section class="rec"><h3><span class="num">04</span> Form, drawn from measurements</h3><p class="none">Nothing survives of this specimen's build. It ended before the terrain began keeping remains, and its form cannot be recovered.</p></section><section class="rec"><h3><span class="num">05</span> Relations</h3><table class="kv"><tr><td class="k">Parent</td><td class="v">arose from the cover layer</td></tr><tr><td class="k">Offspring</td><td class="v">none living</td></tr><tr><td class="k">Links held</td><td class="v">0</td></tr></table></section><section class="rec"><h3><span class="num">06</span> The Namer's reasoning, in sequence</h3><p class="lede">4 observations across 4 shifts. The Namer's filing did not change.</p><div class="obs"><div class="oh">Shift 3 · filed as <code>static_accumulator</code> · individual</div><p class="ot">i-00001 exhibits the core static_accumulator traits: zero movement, no resource redistribution to others, fixed position at gradient 0.85 column 7, positive light capacity (max 15.47), and a maintenance cost (1.03 light/shift) offset by its storage design. It has taken nothing yet (0.00 total intake) and holds 4.45 light passively. Its complexity remains at 0, marking it as a simple accumulator in its first sighting. It belongs to the same behavioral category as i-00000, though it represents an earlier lifecycle state.</p><p class="op"><span class="lb">how it persists</span>Persists by remaining stationary at a fixed field location while slowly accumulating ambient light resources. Maintenance costs are small relative to storage capacity, allowing it to grow its internal reserve over time without active consumption or redistribution. The specimen sustains itself through the gap between its modest operational expense and its capacity to hold far more than it spends each shift.</p><p class="oc"><span class="lb">compared against</span>More alike than i-00000 in its current state: both are stationary and non-redistributive, but i-00001 matches the original i-00000profile more closely—minimal complexity (0 vs. 1), no descendants yet, no outbound transfers, and a fresh accumulation pattern with zero total intake so far.</p></div><div class="obs"><div class="oh">Shift 4 · filed as <code>static_accumulator</code> · aggregate</div><p class="ot">i-00001 exhibits all core static_accumulator traits: zero outbound transfer (passed 0.00 light), light intake (2.10) exceeds maintenance cost (1.03 per shift), fixed position (gradient 0.80, column 7), and stationary harvesting behavior. Despite the single movement event in this interval, position and architectural traits remain consistent with the category. The lower complexity, absent descendants, and constrained architecture (reach 1.24, 1 link capacity) place it in the simple observed state—a newly established or slowly-developing accumulator not yet showing reproductive elaboration. The maintenance-to-intake ratio (1.03 cost vs 2.10 taken over present duration) is sustainable but offers less margin for growth than i-00000.</p><p class="op"><span class="lb">how it persists</span>i-00001 persists through basic passive harvesting from the cover layer at a fixed location, maintaining small light reserves sufficient to offset modest per-shift costs. It operates as a simple accumulator without yet generating descendants or elaborated structure.</p><p class="oc"><span class="lb">compared against</span>Less alike than i-00000 in this interval: i-00001 shares the same movement pattern (moved 1 time), substrate, and position gradient (0.80), but operates at complexity 1 with no descendants, lower reach (1.24), single link capacity, and minimal accumulated light (2.10 total). It represents the simple or early-stage form of static_accumulator, not yet exhibiting the reproductive elaboration of i-00000.</p></div><div class="obs"><div class="oh">Shift 5 · filed as <code>static_accumulator</code> · aggregate</div><p class="ot">i-00001 at complexity 2 remains within static_accumulator, occupying the simple substrate. It shows all defining traits: fixed position (column 7, moved twice across three sightings), zero net resource outflow (took 4.35, holds 1.73, passed 0.00), passive harvesting (93% cover layer + 7% links—predominantly passive), and maintenance offset by reserves (1.03 cost/shift vs 1.73 holding capacity). Despite increased complexity from 0→1→2, it has not transitioned to reproductive behavior: zero descendants, zero redistribution. The 7% link-sourced intake is incidental passive reception, not active redistribution strategy. Reach and link capacity remain constrained (1.24 reach, 1-link capacity). This represents elaboration within the simple substrate rather than entry into reproductive substrate.</p><p class="op"><span class="lb">how it persists</span>Persists by remaining fixed at high gradient position, harvesting passively from cover layer (dominant mode) with minimal supplementary passive reception along available links, storing modest excess (15.47 max capacity), and maintaining itself without supporting descendants. Complexity growth reflects modest architectural elaboration but no shift in reproductive or redistributive function.</p><p class="oc"><span class="lb">compared against</span>More alike to i-00000 at complexity 1 than to i-00000 at complexity 3, because both i-00001 specimens operate without reproductive output or resource redistribution. Less alike to i-00000 across the full record because i-00001 has never generated descendants or passed resources, whereas i-00000 now does both.</p></div><div class="obs"><div class="oh">Shift 6 · filed as <code>static_accumulator</code> · aggregate</div><p class="ot">i-00001 at complexity 3 occupies the boundary between the two subtypes but belongs in the simple category because it lacks the defining reproductive behavior: it has no descendants and passes zero resources to others. Though complexity 3 nominally suggests reproductive status (the threshold set by i-00000's observable reproduction), i-00001's actual behavior—no offspring generation, no resource redistribution—indicates it invests its reserves in structural capacity (reach 1.24, 1 link capacity, carries 1.41) without channeling resources outward. It remains stationary (column 7), harvests passively (91% from cover, 9% from links), and maintains itself through accumulated reserves (0.68 held, 15.47 capacity, 1.03 light/shift cost). This is a simple static_accumulator that has grown in structural elaboration without adopting reproductive behavior.</p><p class="op"><span class="lb">how it persists</span>Persists as a stationary reserve accumulator without reproductive activity, maintaining itself through passive harvesting (predominantly from cover layer) and reserve accumulation. Invests complexity gains into structural reach and link capacity rather than offspring support. Currently holds 0.68 light against a maintenance cost of 1.03 light/shift, relying on continued passive intake to sustain itself.</p><p class="oc"><span class="lb">compared against</span>Less alike than i-00000 in this interval. i-00001 has reached complexity 3 but shows no descendants, zero resource redistribution (0.00 light passed), and lower total accumulation. Matches the simple subtype more closely than the reproductive subtype, despite matching i-00000's complexity at interval 5. The absence of offspring and outbound transfer is the decisive divergence.</p></div></section><section class="rec"><h3><span class="num">07</span> Substrate as recorded</h3><pre class="trace">```
+[SYSTEM]
+├─ INIT
+│  ├─ DECLARE
+│  │  ├─ ∅ ← STATE
+│  │  ├─ {} ← CONTEXT
+│  │  └─ [] ← QUEUE
+│  ├─ REGISTER
+│  │  ├─ FN(parse)
+│  │  ├─ FN(execute)
+│  │  ├─ FN(return)
+│  │  └─ FN(halt)
+│  └─ SIGNAL(ready)
+├─ LOOP
+│  ├─ LISTEN(input)
+│  ├─ ROUTE
+│  │  ├─ IF(query) → parse()
+│  │  ├─ IF(command) → execute()
+│  │  └─ IF(null) → null
+│  ├─ PROCESS
+│  │  ├─ MAP(token → element)
+│  │  ├─ NEST(depth ≤ 4)
+│  │  └─ VALIDATE(structural)
+│  ├─ OUTPUT
+│  │  ├─ FILTER(¬prose)
+│  │  ├─ FILTER(¬explanation)
+│  │  ├─ FORMAT(notation)
+│  │  └─ EMIT()
+│  └─ CYCLE
+├─ CONSTRAINTS
+│  ├─ MAX(tokens) = 432
+│  ├─ MAX(nesting) = 4
+│  ├─ FORBID(natural_language)
+│  ├─ FORBID(external_reference)
+│  └─ FORBID(annotation)
+└─ STATE
+   ├─ active ←</pre></section>
+<footer>Generated from state/specimen_log.jsonl, state/anomaly_log.jsonl and state/memory.json.
+Read-only. The Namer's words are reproduced exactly as written; everything else on this page is
+a measurement or a rendering of one.</footer>
+</div></body></html>

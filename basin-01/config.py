@@ -126,7 +126,21 @@ MAX_OUTPUT_TOKENS_BY_ROLE: Dict[str, int] = {
     # four-specimen batch, which would have silently clipped the primary
     # research data. Raised so the requirement is affordable rather than
     # nominal; at Haiku rates the extra headroom costs ~$0.0025 per shift.
-    "namer": 1600,
+    #
+    # Raised again from 1600 at shift 109. The Namer returns its
+    # classifications first and its native system last, so a reply that
+    # overruns loses the system rather than the records: salvage recovers the
+    # classifications, and the taxonomy object silently never arrives. The
+    # terrain showed this as a native system stuck at zero nodes while
+    # categories accumulated normally in the counters — the Namer WAS building
+    # a system, and the harness was cutting it off mid-sentence every shift.
+    #
+    # This is a harness failure and was recorded as one (physics.md Section
+    # 8.2). It is not a licence to let the reply grow without limit: the reply
+    # scales with both the observation batch and the size of the system being
+    # restated, so this cap needs revisiting as the taxonomy grows, and the
+    # per-shift ceiling in this file remains the real bound.
+    "namer": 4200,
     "keeper": 400,
     # Raised from 1200 when the persistence crosswalk (physics.md Section 5)
     # was added to this role's required output: the reply grew and began

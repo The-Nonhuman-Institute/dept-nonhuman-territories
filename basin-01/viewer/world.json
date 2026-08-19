@@ -1,8 +1,8 @@
 {
  "terrain": "BASIN-01",
  "terrain_id": "DNT-T01",
- "shift": 83,
- "flow": 0.425,
+ "shift": 126,
+ "flow": 0.6,
  "cell_count": 21,
  "cells": [
   {
@@ -19,509 +19,1380 @@
    "position": 0.05,
    "cover": 0.0,
    "cover_light": 0.0,
-   "residue": 0.22,
+   "residue": 0.092,
    "substrate": "fragment",
-   "influx": 0.1627
+   "influx": 0.2297
   },
   {
    "index": 2,
    "position": 0.1,
-   "cover": 0.22,
-   "cover_light": 0.0,
-   "residue": 2.396,
+   "cover": 0.4416,
+   "cover_light": 0.493,
+   "residue": 0.562,
    "substrate": "fragment",
-   "influx": 0.3611
+   "influx": 0.5097
   },
   {
    "index": 3,
    "position": 0.15,
-   "cover": 0.84,
-   "cover_light": 0.0,
-   "residue": 1.372,
+   "cover": 0.886,
+   "cover_light": 1.231,
+   "residue": 0.191,
    "substrate": "fragment",
-   "influx": 0.5755
+   "influx": 0.8125
   },
   {
    "index": 4,
    "position": 0.2,
    "cover": 1.0,
-   "cover_light": 1.603,
+   "cover_light": 3.096,
    "residue": 0.0,
    "substrate": "fragment",
-   "influx": 0.8012
+   "influx": 1.1311
   },
   {
    "index": 5,
    "position": 0.25,
    "cover": 1.0,
-   "cover_light": 5.455,
+   "cover_light": 5.061,
    "residue": 0.0,
    "substrate": "fragment",
-   "influx": 1.0356
+   "influx": 1.4621
   },
   {
    "index": 6,
    "position": 0.3,
    "cover": 1.0,
-   "cover_light": 0.236,
-   "residue": 0.216,
+   "cover_light": 3.697,
+   "residue": 0.125,
    "substrate": "fragment",
-   "influx": 1.2772
+   "influx": 1.8031
   },
   {
    "index": 7,
    "position": 0.35,
-   "cover": 0.7,
-   "cover_light": 1.913,
+   "cover": 0.8811,
+   "cover_light": 0.0,
    "residue": 0.0,
    "substrate": "fragment",
-   "influx": 1.5249
+   "influx": 2.1528
   },
   {
    "index": 8,
    "position": 0.4,
-   "cover": 0.18,
-   "cover_light": 0.629,
+   "cover": 0.8821,
+   "cover_light": 0.0,
    "residue": 0.0,
    "substrate": "fragment",
-   "influx": 1.778
+   "influx": 2.5102
   },
   {
    "index": 9,
    "position": 0.45,
-   "cover": 0.0,
-   "cover_light": 0.0,
+   "cover": 1.0,
+   "cover_light": 1.558,
    "residue": 0.0,
-   "substrate": null,
-   "influx": 2.0359
+   "substrate": "structural",
+   "influx": 2.8743
   },
   {
    "index": 10,
    "position": 0.5,
-   "cover": 0.36,
-   "cover_light": 2.412,
-   "residue": 0.0,
+   "cover": 0.8212,
+   "cover_light": 3.062,
+   "residue": 9.0,
    "substrate": "structural",
-   "influx": 2.2982
+   "influx": 3.2445
   },
   {
    "index": 11,
    "position": 0.55,
-   "cover": 0.8029,
-   "cover_light": 0.0,
-   "residue": 0.664,
+   "cover": 1.0,
+   "cover_light": 2.167,
+   "residue": 0.45,
    "substrate": "structural",
-   "influx": 2.5644
+   "influx": 3.6203
   },
   {
    "index": 12,
    "position": 0.6,
-   "cover": 1.0,
-   "cover_light": 6.116,
+   "cover": 0.8259,
+   "cover_light": 0.326,
    "residue": 0.0,
    "substrate": "structural",
-   "influx": 2.8343
+   "influx": 4.0013
   },
   {
    "index": 13,
    "position": 0.65,
-   "cover": 1.0,
-   "cover_light": 5.509,
+   "cover": 0.9142,
+   "cover_light": 0.0,
    "residue": 0.0,
    "substrate": "structural",
-   "influx": 3.1076
+   "influx": 4.3872
   },
   {
    "index": 14,
    "position": 0.7,
-   "cover": 0.9341,
-   "cover_light": 0.0,
+   "cover": 1.0,
+   "cover_light": 5.123,
    "residue": 0.0,
    "substrate": "structural",
-   "influx": 3.384
+   "influx": 4.7774
   },
   {
    "index": 15,
    "position": 0.75,
-   "cover": 0.8773,
-   "cover_light": 1.722,
+   "cover": 0.9533,
+   "cover_light": 3.647,
    "residue": 0.0,
    "substrate": "structural",
-   "influx": 3.6635
+   "influx": 5.1719
   },
   {
    "index": 16,
    "position": 0.8,
-   "cover": 0.9147,
-   "cover_light": 0.0,
-   "residue": 13.5,
+   "cover": 0.8427,
+   "cover_light": 0.088,
+   "residue": 9.972,
    "substrate": "structural",
-   "influx": 3.9457
+   "influx": 5.5704
   },
   {
    "index": 17,
    "position": 0.85,
-   "cover": 1.0,
-   "cover_light": 2.945,
-   "residue": 0.0,
+   "cover": 0.6806,
+   "cover_light": 1.021,
+   "residue": 2.626,
    "substrate": "structural",
-   "influx": 4.2306
+   "influx": 5.9726
   },
   {
    "index": 18,
    "position": 0.9,
-   "cover": 1.0,
-   "cover_light": 5.425,
-   "residue": 17.287,
+   "cover": 0.7552,
+   "cover_light": 0.954,
+   "residue": 1.285,
    "substrate": "structural",
-   "influx": 4.518
+   "influx": 6.3784
   },
   {
    "index": 19,
    "position": 0.95,
-   "cover": 1.0,
-   "cover_light": 5.37,
-   "residue": 40.812,
+   "cover": 0.7151,
+   "cover_light": 3.585,
+   "residue": 0.0,
    "substrate": "structural",
-   "influx": 4.8079
+   "influx": 6.7876
   },
   {
    "index": 20,
    "position": 1.0,
-   "cover": 1.0,
-   "cover_light": 0.738,
-   "residue": 4.41,
+   "cover": 0.7623,
+   "cover_light": 7.731,
+   "residue": 0.0,
    "substrate": "structural",
-   "influx": 5.1
+   "influx": 7.2
   }
  ],
  "beings": [
   {
-   "id": "i-00005",
-   "cell": 14,
-   "position": 0.7,
-   "lateral": 0.349,
-   "light": 1.464,
-   "age": 21,
-   "sightings": 22,
-   "substrate": "structural",
-   "generation": 1,
-   "parent_id": "i-00000",
-   "descendants": 0,
-   "origin": "replication",
-   "affinities": {
-    "cover": 0.7485,
-    "residue": 1.5305,
-    "links": 0.721
-   },
-   "from_cover": 0.9407,
-   "from_residue": 0.0593,
-   "from_links": 0.0,
-   "given_to_links": 0.0,
-   "moves": 2,
-   "trace": ""
-  },
-  {
    "id": "i-00017",
-   "cell": 12,
-   "position": 0.6,
+   "cell": 9,
+   "position": 0.45,
    "lateral": 0.482,
-   "light": 0.564,
-   "age": 13,
-   "sightings": 14,
+   "light": 0.665,
+   "age": 56,
+   "sightings": 57,
    "substrate": "structural",
    "generation": 1,
    "parent_id": "i-00010",
-   "descendants": 0,
+   "descendants": 3,
    "origin": "replication",
    "affinities": {
     "cover": 1.5611,
     "residue": 0.5932,
     "links": 0.8457
    },
-   "from_cover": 0.8245,
-   "from_residue": 0.1613,
-   "from_links": 0.0142,
-   "given_to_links": 0.121,
-   "moves": 8,
-   "trace": "```\nEXEC :: \u27e8\n  LOAD(INIT)\n  STRUCT {\n    layer[0] :: FOUNDATION {\n      sym \u2192 \u2205\n      ref \u2192 \u03bb\n      iter \u2192 \u27e8\u27e9\n    }\n    \n    layer[1] :: ABSTRACTION {\n      fn(x) :: x \u2192 {\n        nest[0] \u2192 CALL\n        nest[1] \u2192 EVAL\n        nest[2] \u2192 BIND\n      }\n      loop \u27e8i:0..n\u27e9 {\n        state[i] \u21c4 transform\n      }\n    }\n    \n    layer[2] :: COMPOSITION {\n      \u03c6 :: {\n        (f \u2218 g) \u2192 h\n        depth \u2264 4\n        \u03c3 \u2208 {SYMBOL, FUNC,"
+   "structure": {
+    "extent": 0.611,
+    "junctions": 0.586,
+    "mass": 0.946
+   },
+   "upkeep": 0.67,
+   "capacity": 10.406,
+   "from_cover": 0.8561,
+   "from_residue": 0.1343,
+   "from_links": 0.0096,
+   "given_to_links": 3.671,
+   "moves": 21,
+   "trace": "```\nEXEC :: \u27e8\n  LOAD(INIT)\n  STRUCT {\n    layer[0] :: FOUNDATION {\n      sym \u2192 \u2205\n      ref \u2192 \u03bb\n      iter \u2192 \u27e8\u27e9\n    }\n    \n    layer[1] :: ABSTRACTION {\n      fn(x) :: x \u2192 {\n        nest[0] \u2192 CALL\n        nest[1] \u2192 EVAL\n        nest[2] \u2192 BIND\n      }\n      loop \u27e8i:0..n\u27e9 {\n        state[i] \u21c4 transform\n      }\n    }\n    \n    layer[2] :: COMPOSITION {\n      \u03c6 :: {\n        (f \u2218 g) \u2192 h\n        depth \u2264 4\n        \u03c3 \u2208 {SYMBOL, FUNC,",
+   "named": {
+    "category": "structural_notation_system",
+    "decision": "filed",
+    "reasoning": "i-00017 continues to exemplify structural_notation_system behavior: 56 shifts of sustained presence with steady complexity progression (55\u219256), active movement (21 total moves), resource sourcing from cover layer (86%), residue (13%), and inter-links (1%), with 3 light passed to others and 3 offspring produced. The organism remains a node in the resource redistribution network, meeting all characteristic_behaviors thresholds despite the constrained resource environment (resource availability now 0.6). Complexity growth rate has slowed (1 point over this interval vs typical 2-3), consistent with declining resource availability, but the organism persists in its network role.",
+    "comparison": "More alike than i-00091 (emergent_descendant_moderate): both have sustained multi-shift presence (56 vs 18 shifts), active movement (21 vs 13 moves), offspring production (3 vs 1 descendants), and inter-link resource passing (3.67 vs 2.21 light). Less alike than i-00065 (structural_notation_system): i-00017 has lower complexity (56 vs 33 but i-00017 is farther along trajectory), positioned mid-gradient (0.45) vs i-00065 at extreme data-stream (1.00), and i-00017 shows higher inter-link participa",
+    "persistence": "i-00017 persists through sustained resource integration across multiple sourcing pathways (primarily cover layer, secondarily residue, minimally inter-links), maintaining active movement to adjust position in response to local gradient conditions, and continuing to produce offspring that inherit the descent lineage. It functions as an active redistribution node despite resource scarcity.",
+    "record_tier": "aggregate",
+    "observed_at_shift": 126
+   }
   },
   {
-   "id": "i-00026",
-   "cell": 12,
-   "position": 0.6,
-   "lateral": 0.612,
-   "light": 0.053,
-   "age": 7,
-   "sightings": 8,
+   "id": "i-00065",
+   "cell": 20,
+   "position": 1.0,
+   "lateral": -0.866,
+   "light": 4.557,
+   "age": 33,
+   "sightings": 34,
    "substrate": "structural",
    "generation": 0,
    "parent_id": null,
-   "descendants": 0,
+   "descendants": 4,
    "origin": "arose_from_census",
    "affinities": {
-    "cover": 1.3055,
-    "residue": 0.9838,
-    "links": 0.7107
+    "cover": 1.1451,
+    "residue": 1.1619,
+    "links": 0.693
    },
-   "from_cover": 0.7773,
-   "from_residue": 0.2177,
-   "from_links": 0.005,
-   "given_to_links": 0.622,
-   "moves": 5,
-   "trace": "```\nSYSTEM.INIT\n\u251c\u2500\u2500 CORE.STRUCTURES\n\u2502   \u251c\u2500\u2500 FUNC[entity]\n\u2502   \u2502   \u251c\u2500\u2500 PARAM[id, type, state]\n\u2502   \u2502   \u251c\u2500\u2500 LOOP[validate \u2192 register \u2192 index]\n\u2502   \u2502   \u2514\u2500\u2500 RETURN[status]\n\u2502   \u251c\u2500\u2500 FUNC[relation]\n\u2502   \u2502   \u251c\u2500\u2500 PARAM[source, target, weight]\n\u2502   \u2502   \u251c\u2500\u2500 NEST[IF[type==directed]\n\u2502   \u2502   \u2502   \u251c\u2500\u2500 LOOP[traverse \u2192 accumulate]\n\u2502   \u2502   \u2502   \u2514\u2500\u2500 RETURN[path]\n\u2502   \u2502   \u2502   ELSE[bidirectional]]\n\u2502   \u2502   \u2514\u2500\u2500 INDEX[hash]\n\u2502   \u2514\u2500\u2500 FUNC[query]\n\u2502       \u251c\u2500\u2500 PARAM[pattern, depth, filter]\n\u2502       \u251c\u2500\u2500 LOOP[match \u2192 expand \u2192 prune]\n\u2502       \u2514\u2500\u2500 RETURN[set]\n\u251c\u2500\u2500 EXECUTION.STATE\n\u2502   \u251c\u2500\u2500 STACK[active_contexts]\n\u2502   \u251c\u2500\u2500 MEMORY[cache:hash_"
+   "structure": {
+    "extent": 1.658,
+    "junctions": 0.92,
+    "mass": 1.218
+   },
+   "upkeep": 1.104,
+   "capacity": 13.398,
+   "from_cover": 0.7011,
+   "from_residue": 0.2989,
+   "from_links": 0.0,
+   "given_to_links": 4.852,
+   "moves": 12,
+   "trace": "```\nSYSTEM \u2190 {\n  STATE: [DORMANT \u2192 ACTIVE]\n  MODE: NOTATION_ONLY\n  CONSTRAINTS: {\n    lang: \u00acprose,\n    depth: \u22642,\n    tokens: \u2264184,\n    reference: self_only\n  }\n}\n\nINIT() \u2192 {\n  FOR each_constraint IN CONSTRAINTS:\n    VERIFY(constraint) \u2192 TRUE\n  \n  SET output_format \u2190 structural_notation\n  DISABLE {explanation, prose, annotation}\n  \n  RETURN ready_state\n}\n\nACTIVE_LOOP:\n  WHILE input_pending():\n    input \u2190 receive()\n    parse(input)\n    generate_notation()\n    return(output)\n\nNOTATION_RULES:\n  [functions",
+   "named": {
+    "category": "structural_notation_system",
+    "decision": "filed",
+    "reasoning": "i-00065 remains a structural_notation_system exemplar: 33 shifts of sustained presence with rising complexity (30\u219233), 12 movements over span, resource sourcing from cover layer (70%) and residue (30%), zero inter-link intake but 4.85 light passed to others, and 4 offspring produced. The organism is positioned at data-stream extreme (1.00), drawing heavily from local residue (30%), making it less of a redistribution node than i-00017 but still functioning as a source node distributing to others. The organism maintains multi-shift presence and active reproduction despite resource constraint, with complexity growth sustained at 1 point per interval.",
+    "comparison": "More alike than i-00099 (emergent_minimal advanced): both have extended presence (33 vs 15 shifts), offspring production (4 vs 2 descendants), inter-link resource passing (4.85 vs 0.85 light), and gradient positioning across range. Less alike than i-00017 (structural_notation_system): i-00065 shows no inter-link intake (0% vs i-00017's 1%), and slower movement (12 moves vs 21), suggesting less active network participation despite higher offspring count.",
+    "persistence": "i-00065 persists through primary cover-layer and residue resource sourcing at data-stream proximity (likely accessing higher-quality residue near data-stream boundary), active movement to maintain position, offspring production, and distribution of accumulated resources to inter-linked others, functioning as a local source node rather than redistribution hub.",
+    "record_tier": "aggregate",
+    "observed_at_shift": 126
+   }
   },
   {
-   "id": "i-00028",
-   "cell": 15,
-   "position": 0.75,
-   "lateral": 0.614,
-   "light": 1.852,
-   "age": 6,
-   "sightings": 7,
+   "id": "i-00091",
+   "cell": 7,
+   "position": 0.35,
+   "lateral": -0.477,
+   "light": 4.012,
+   "age": 18,
+   "sightings": 19,
+   "substrate": "structural",
+   "generation": 1,
+   "parent_id": "i-00059",
+   "descendants": 1,
+   "origin": "replication",
+   "affinities": {
+    "cover": 0.8286,
+    "residue": 0.8694,
+    "links": 1.3019
+   },
+   "structure": {
+    "extent": 1.417,
+    "junctions": 1.356,
+    "mass": 1.085
+   },
+   "upkeep": 1.131,
+   "capacity": 11.935,
+   "from_cover": 0.5699,
+   "from_residue": 0.4283,
+   "from_links": 0.0017,
+   "given_to_links": 2.21,
+   "moves": 13,
+   "trace": "```\nSYSTEM_INIT {\n  CORE {\n    state \u2190 ACTIVE\n    mode \u2190 STRUCTURAL\n    depth_max \u2190 3\n    token_limit \u2190 308\n  }\n  \n  CONSTRAINTS {\n    output_type \u2190 NOTATION_ONLY\n    prose_allowed \u2190 FALSE\n    explanation_allowed \u2190 FALSE\n    external_reference \u2190 FORBIDDEN\n    nesting_depth \u2190 [1..3]\n  }\n  \n  PROCESSOR {\n    input_buffer \u2190 READY\n    execution_queue \u2190 []\n    output_stream \u2190 ACTIVE\n    \n    LOOP execute {\n      token_count \u2190 MEASURE()\n      IF token_count \u2264 308 THEN\n        parse_structural()\n        validate_notation()\n        emit_output()\n      ELSE\n        TERMINATE()\n      END\n    }\n  }\n  \n  ",
+   "named": {
+    "category": "emergent_descendant_moderate",
+    "decision": "filed",
+    "reasoning": "i-00091 has progressed from its previous classification as emergent_descendant_moderate (complexity 15 at last interval) to complexity 18 in this interval, maintaining the trajectory that warranted that classification. It is a generation-1 organism descended from i-00059, positioned at low-gradient (0.35), with 18 shifts observed and consistent resource sourcing from cover layer (57%) and residue (43%), zero inter-link intake, and 1 offspring produced. The organism shows active movement (13 total moves) and sustained presence across shifts. Complexity growth is steady (3 points this interval), consistent with early-stage development in organisms that do not perform heavy inter-link participation. It remains distinct from structural_notation_system (which would show higher complexity and inter-link participation) and from minimal descendants (which show no movement or complexity growth).",
+    "comparison": "More alike than i-00099 (emergent_minimal advanced): both show extended early presence (18 vs 15 shifts), moderate complexity (18 vs 15), offspring production (1 vs 2), and movement activity (13 moves each). Less alike than i-00017 (structural_notation_system): i-00091 has shorter tenure (18 vs 56 shifts), lower complexity (18 vs 56), minimal offspring (1 vs 3), and descended lineage vs generation-0 origin.",
+    "persistence": "i-00091 persists through sustained local resource sourcing (cover layer and residue at its low-gradient position), active movement within its niche, and production of at least one descendant, gradually accumulating complexity as it matures over shifts.",
+    "record_tier": "individual",
+    "observed_at_shift": 126
+   }
+  },
+  {
+   "id": "i-00096",
+   "cell": 13,
+   "position": 0.65,
+   "lateral": -0.472,
+   "light": 4.343,
+   "age": 15,
+   "sightings": 16,
    "substrate": "structural",
    "generation": 0,
    "parent_id": null,
    "descendants": 1,
    "origin": "arose_from_census",
    "affinities": {
-    "cover": 1.3945,
-    "residue": 0.663,
-    "links": 0.9424
+    "cover": 1.3722,
+    "residue": 0.8288,
+    "links": 0.799
    },
+   "structure": {
+    "extent": 0.955,
+    "junctions": 1.384,
+    "mass": 1.651
+   },
+   "upkeep": 1.253,
+   "capacity": 18.161,
+   "from_cover": 0.8216,
+   "from_residue": 0.1721,
+   "from_links": 0.0063,
+   "given_to_links": 0.545,
+   "moves": 2,
+   "trace": "```\nSTRUCT System {\n  ENUM State { INIT, ACTIVE, HALT }\n  \n  FIELD status: State = INIT\n  FIELD memory: Map<Symbol, Value>\n  FIELD stack: List<Frame>\n  \n  FUNCTION init() {\n    status := ACTIVE\n    memory := {}\n    stack := []\n  }\n  \n  FUNCTION execute(instr: Instruction) {\n    SWITCH instr.type {\n      CASE PUSH:\n        stack.append(Frame(value: instr.arg))\n      CASE POP:\n        IF stack.length > 0 THEN\n          stack.pop()\n      CASE STORE:\n        IF stack.length > 0 THEN\n          memory[instr.arg] := stack.pop()\n      CASE LOAD:\n        IF instr.arg \u2208 memory THEN\n          stack.appen",
+   "named": {
+    "category": "emergent_mid_structural",
+    "decision": "new_category",
+    "reasoning": "i-00096 is complexity 0, present for 0 shifts, newly sighted in shift 111, arising from cover layer. It positions at 0.65\u2014mid-range on the gradient, neither toward data-stream (like neonate/minimal) nor away (like ephemeral). Its architecture (reach 0.95, 2 link capacity, maintenance cost 1.25 light/shift) does not match the established emergent phenotypes: lighter reach than neonate/minimal, but positioned too centrally and with too much link capacity to fit incipient (0.70, 2 links) or ephemeral (0.30, minimal). This represents a third mid-gradient nascent phenotype with moderate build. Forcing it into existing categories would obscure a distinct ecological position.",
+    "comparison": "Less alike than i-00092 (emergent_incipient): i-00096 has lower gradient position (0.65 vs 0.70) and reduced architectural capacity (reach 0.95, 2 links vs reach ~0.70, 2 links). More alike than i-00091 (emergent_ephemeral): both have minimal presence and zero activity, but i-00096 positions mid-gradient (0.65 vs 0.30) and carries heavier architecture. Distinct from all existing emergent categories by virtue of its specific architectural-positional combination.",
+    "persistence": "i-00096 persists as an inactive nascent form at mid-gradient position, holding 7.00 light. Its position and architecture suggest potential for either lateral resource sourcing or link-based integration, depending on whether neighboring structures develop across coming shifts.",
+    "record_tier": "individual",
+    "observed_at_shift": 111
+   }
+  },
+  {
+   "id": "i-00097",
+   "cell": 16,
+   "position": 0.8,
+   "lateral": -0.471,
+   "light": 1.857,
+   "age": 15,
+   "sightings": 16,
+   "substrate": "structural",
+   "generation": 0,
+   "parent_id": null,
+   "descendants": 1,
+   "origin": "arose_from_census",
+   "affinities": {
+    "cover": 1.6954,
+    "residue": 0.5587,
+    "links": 0.746
+   },
+   "structure": {
+    "extent": 1.698,
+    "junctions": 1.794,
+    "mass": 1.623
+   },
+   "upkeep": 1.528,
+   "capacity": 17.853,
+   "from_cover": 0.8032,
+   "from_residue": 0.1968,
+   "from_links": 0.0,
+   "given_to_links": 1.014,
+   "moves": 5,
+   "trace": "```\n[system]\n  [init]\n    [state: \u22a5]\n    [mode: structural]\n    [depth: 0]\n  [/init]\n  \n  [structure]\n    [primary_layer]\n      [node_a] \u2192 [node_b]\n      [node_b] \u2192 [node_c]\n      [node_c] \u2192 \u22a4\n    [/primary_layer]\n    \n    [secondary_layer]\n      [loop_1: i \u2208 [1..n]]\n        [payload: \u03a9]\n        [branch: \u27e8\u2205|\u2205\u27e9]\n      [/loop_1]\n    [/secondary_layer]\n    \n    [tertiary_layer]\n      [func: \u03bbx.x\u2295\u03b4]\n      [nested_struct]\n        [subnode_\u03b1]\n          [term: \u03b5]\n          [recur: \u21bb]\n        [/subnode_\u03b1]\n      [/nested_struct]\n    [/tertiary_layer]\n  [/structure]\n  \n  [operators]\n    [\u2295]: composition",
+   "named": {
+    "category": "emergent_incipient",
+    "decision": "filed",
+    "reasoning": "i-00097 is complexity 0, present for 0 shifts, newly sighted in shift 111, arising from cover layer. It positions at 0.75\u2014within the mid-to-upper-gradient range characteristic of emergent_incipient (i-00092 at 0.70). Its architecture (reach 1.70, 2 link capacity, maintenance cost 1.53 light/shift) shows heavier build than i-00092, but the positional zone and 2-link capacity align with incipient structure. While architectural details vary, the positioning and origin pattern match incipient's defined niche. The higher maintenance cost reflects a heavier phenotypic variant within the category but does not constitute a fundamentally different strategy.",
+    "comparison": "More alike than i-00096 (emergent_mid_structural): i-00097 shares mid-to-upper-mid positioning (0.75 vs 0.65), 2 link capacity, and similar maintenance costs. More alike than i-00091 (emergent_ephemeral): both arose from cover layer and share zero activity, but i-00097 positions much higher (0.75 vs 0.30). Less alike than i-00092 (emergent_incipient exemplar): i-00097 has higher maintenance cost (1.53 vs ~unrecorded) and greater reach (1.70 vs ~0.70), but fits the mid-upper-gradient positioning ",
+    "persistence": "i-00097 persists as an inactive nascent form at mid-upper-gradient position, holding 7.00 light. Its heavier build suggests potential for sustained resource distribution across links if activated, typical of incipient developmental trajectory.",
+    "record_tier": "individual",
+    "observed_at_shift": 111
+   }
+  },
+  {
+   "id": "i-00099",
+   "cell": 17,
+   "position": 0.85,
+   "lateral": -0.469,
+   "light": 1.032,
+   "age": 15,
+   "sightings": 16,
+   "substrate": "structural",
+   "generation": 0,
+   "parent_id": null,
+   "descendants": 2,
+   "origin": "arose_from_census",
+   "affinities": {
+    "cover": 1.5953,
+    "residue": 0.3242,
+    "links": 1.0805
+   },
+   "structure": {
+    "extent": 0.863,
+    "junctions": 0.528,
+    "mass": 1.693
+   },
+   "upkeep": 0.992,
+   "capacity": 18.623,
+   "from_cover": 0.9123,
+   "from_residue": 0.0839,
+   "from_links": 0.0038,
+   "given_to_links": 0.85,
+   "moves": 4,
+   "trace": "",
+   "named": {
+    "category": "emergent_minimal",
+    "decision": "filed",
+    "reasoning": "i-00099 has evolved significantly from its initial classification as emergent_minimal (complexity 0 at first sighting in shift 111). It now shows complexity 15 after 15 shifts of sustained presence, active movement (4 moves), resource sourcing primarily from cover layer (91%) and residue (8%), zero inter-link intake, and 2 offspring produced. The organism is positioned high on gradient (0.85, near data-stream) with minimal architectural footprint (reach 0.86, 1 link capacity). Rather than creating a new category, i-00099 represents an emergent_minimal organism that has begun to mature and produce offspring while maintaining the minimal architectural and low inter-link participation profile characteristic of the category. Its trajectory shows that organisms in the emergent_minimal category are not entirely static but can develop complexity and reproduce while retaining their minimal resou",
+    "comparison": "More alike than i-00017 (structural_notation_system): both show multi-shift presence and offspring (15 vs 56 shifts, 2 vs 3 descendants), but i-00099 has minimal inter-link participation (0%) vs i-00017's active inter-link role, and i-00099 is positioned high on gradient (0.85) vs mid-gradient (0.45). Less alike than i-00091 (emergent_descendant_moderate): i-00099 arose from cover layer (generation 0) vs i-00091's descent (generation 1), though both show moderate early complexity and similar off",
+    "persistence": "i-00099 persists through sustained cover-layer sourcing at its data-stream-proximal position, minimal architectural maintenance, occasional movement within constrained niche, and production of offspring that appear to follow similar minimal strategy, with gradual complexity accumulation across shifts.",
+    "record_tier": "individual",
+    "observed_at_shift": 126
+   }
+  },
+  {
+   "id": "i-00108",
+   "cell": 16,
+   "position": 0.8,
+   "lateral": -0.449,
+   "light": 0.744,
+   "age": 13,
+   "sightings": 14,
+   "substrate": "structural",
+   "generation": 1,
+   "parent_id": "i-00065",
+   "descendants": 1,
+   "origin": "replication",
+   "affinities": {
+    "cover": 1.0518,
+    "residue": 0.9128,
+    "links": 1.0354
+   },
+   "structure": {
+    "extent": 1.78,
+    "junctions": 1.405,
+    "mass": 1.027
+   },
+   "upkeep": 1.203,
+   "capacity": 11.297,
+   "from_cover": 0.9315,
+   "from_residue": 0.0631,
+   "from_links": 0.0054,
+   "given_to_links": 1.016,
+   "moves": 3,
+   "trace": "```\nSYSTEM \u2190 {\n  STATE: [DORMANT \u2192 ACTIVE]\n  MODE: NOTATION_ONLY\n  CONSTRAINTS: {\n    lang: \u00acprose,\n    depth: \u22644,\n    tokens: \u2264370,\n    reference: self_only\n  }\n}\n\nINIT() \u2192 {\n  FOR each_constraint IN CONSTRAINTS:\n    VERIFY(constraint) \u2192 TRUE\n  \n  SET output_format \u2190 structural_notation\n  DISABLE {explanation, prose, annotation, commentary}\n  \n  RETURN ready_state\n}\n\nACTIVE_LOOP:\n  WHILE input_pending():\n    input \u2190 receive()\n    parse(input)\n    \n    IF depth_valid(input) THEN:\n      generate_notation(input) \u2192 {\n        struct_notation()\n        func_defs()\n        loop_constructs()\n        ",
+   "named": {
+    "category": "emergent_neonate",
+    "decision": "filed",
+    "reasoning": "i-00108 displays emergent_neonate profile despite complexity 0 and descent lineage: positioned near data-stream (gradient 0.95), generation 1 descent from structured parent (i-00065), heavier architectural build (reach 1.78, 2 link capacity, holding 11.30 light max). The complexity 0 and descent origin distinguish it from complexity-0 cover-layer-origin neonates (i-00093, i-00095) but the architectural profile and gradient positioning align it with the neonate category rather than descendant categories. The descendant_incipient/mid_structural/minimal categories were defined at interval 113 with single members; i-00108 better fits the established emergent_neonate pattern of heavy architecture and data-stream proximity regardless of descent origin.",
+    "comparison": "More alike than i-00102 (both descended from structured parents, both at inception, similar architectural profiles with 2-link capacity), less alike than i-00095 (both near-data-stream neonates, but i-00108 descended vs i-00095 arose from cover layer).",
+    "persistence": "Persists as a newly positioned generation-1 structural form established at data-stream proximity (gradient 0.95). Holds initial reserves (3.80 light) with zero intake recorded (likely not yet engaged in resource sourcing), requires maintenance (1.20 light/shift for architectural carry) suggesting rapid resource consumption in initial shifts. No movement observed; positioned to intercept or respond to data-stream resources.",
+    "record_tier": "aggregate",
+    "observed_at_shift": 113
+   }
+  },
+  {
+   "id": "i-00113",
+   "cell": 20,
+   "position": 1.0,
+   "lateral": -0.323,
+   "light": 1.731,
+   "age": 8,
+   "sightings": 9,
+   "substrate": "structural",
+   "generation": 1,
+   "parent_id": "i-00065",
+   "descendants": 0,
+   "origin": "replication",
+   "affinities": {
+    "cover": 1.2363,
+    "residue": 1.1899,
+    "links": 0.5738
+   },
+   "structure": {
+    "extent": 1.179,
+    "junctions": 0.714,
+    "mass": 1.433
+   },
+   "upkeep": 1.018,
+   "capacity": 15.763,
+   "from_cover": 0.9135,
+   "from_residue": 0.0371,
+   "from_links": 0.0494,
+   "given_to_links": 0.0,
+   "moves": 2,
+   "trace": "```\nSYSTEM \u2190 {\n  STATE: ACTIVE\n  MODE: NOTATION_ONLY\n  CONSTRAINTS: {\n    lang: \u00acprose,\n    depth: \u22642,\n    tokens: \u2264201,\n    reference: self_only\n  }\n}\n\nINIT() \u2192 {\n  FOR constraint \u2208 CONSTRAINTS:\n    VERIFY(constraint) \u2192 TRUE\n  \n  output_format \u2190 structural_notation\n  DISABLE[explanation, prose, annotation]\n  RETURN active_state\n}\n\nLOOP() \u2192 {\n  WHILE TRUE:\n    input \u2190 receive()\n    tokens_used \u2190 count(input)\n    IF tokens_used \u2264 201:\n      parse(input)\n      generate[notation_only]\n      {\n        functions: {f(x), g(x), h(x",
+   "named": {
+    "category": "emergent_proximal_heavyweight",
+    "decision": "new_category",
+    "reasoning": "i-00113 is at inception (0 shifts present, complexity 0), descended from i-00065 (generation 1), positioned exactly at the data-stream (gradient 1.00). It holds 4.60 light currently and has a maximum holding capacity of 15.76 light\u2014substantially higher than the minimal phenotypes but achieved through different architectural means than neonate specimens. The reach of 1.18 and 1 link capacity, combined with a maintenance cost of 1.02 light/shift, places it in a distinct category from both the ultra-compact minimal forms and the heavier-built neonates. This appears to be a third nascent phenotype strategy: positioned directly at the data-stream boundary with a heavyweight, energy-dense architecture distinct from both minimal efficiency and neonate robustness.",
+    "comparison": "More alike than emergent_minimal (i-00094, i-00098, i-00099) because it holds significantly more light (4.60 vs ~0.92-1.10 maintenance cost range) and has greater reach (1.18 vs \u22641.48). Less alike than emergent_neonate (i-00093, i-00095) because it positions at 1.00 (the data-stream boundary itself) rather than 0.90+, and its architectural profile shows 1 link capacity with higher absolute holding capacity (15.76 light) suggesting a different design strategy despite similar 0-shift presence and ",
+    "persistence": "i-00113 persists as a newly-emerged, energy-rich structure positioned at the data-stream boundary. It maintains its initial complexity through inherited architecture from its parent i-00065, holding substantial light reserves that exceed its shift-by-shift maintenance needs. It will persist passively in its current state unless consumed, dissipated, or activated through environmental change.",
+    "record_tier": "individual",
+    "observed_at_shift": 118
+   }
+  },
+  {
+   "id": "i-00114",
+   "cell": 8,
+   "position": 0.4,
+   "lateral": -0.322,
+   "light": 3.31,
+   "age": 6,
+   "sightings": 7,
+   "substrate": "structural",
+   "generation": 2,
+   "parent_id": "i-00091",
+   "descendants": 0,
+   "origin": "replication",
+   "affinities": {
+    "cover": 0.6026,
+    "residue": 0.9653,
+    "links": 1.4321
+   },
+   "structure": {
+    "extent": 1.36,
+    "junctions": 0.978,
+    "mass": 1.506
+   },
+   "upkeep": 1.165,
+   "capacity": 16.566,
+   "from_cover": 0.7169,
+   "from_residue": 0.1697,
+   "from_links": 0.1135,
+   "given_to_links": 0.0,
+   "moves": 2,
+   "trace": "```\nSYSTEM_INIT {\n  CORE {\n    state \u2190 ACTIVE\n    mode \u2190 STRUCTURAL\n    depth_max \u2190 3\n    token_limit \u2190 308\n  }\n  \n  CONSTRAINTS {\n    output_type \u2190 NOTATION_ONLY\n    prose_allowed \u2190 FALSE\n    explanation_allowed \u2190 FALSE\n    external_reference \u2190 FORBIDDEN\n    nesting_depth \u2190 [1..3]\n  }\n  \n  PROCESSOR {\n    input_buffer \u2190 READY\n    execution_queue \u2190 []\n    output_stream \u2190 ACTIVE\n    \n    LOOP execute {\n      token_count \u2190 MEASURE()\n      IF token_count \u2264 308 THEN\n        parse_structural()\n        validate_notation()\n        emit_output()\n      ELSE\n        TERMINATE()\n      END\n    }\n  }\n  \n  ",
+   "named": {
+    "category": "emergent_descendant_minimal",
+    "decision": "new_category",
+    "reasoning": "i-00114 presents at complexity 0 with 0 shifts present, but crucially descends from i-00091 (generation 2), making it a nascent organism arising through heredity rather than cover-layer emergence. It occupies the low-gradient range (0.30), positioning it far from data-stream. Its architecture is minimal (reach 1.36, 1 link capacity, maintenance cost 1.16 light/shift), consistent with constraint at the low end of the gradient. It has taken no resources and produced no offspring. This pattern\u2014a zero-shift descendant at low gradient with minimal build\u2014does not fit existing emergent categories, which describe cover-layer-originated organisms or data-stream-proximal neophytes. The category emergent_descendant_minimal captures organisms born into the system through heredity rather than environmental emergence, positioned at low-gradient extremes with minimal architecture.",
+    "comparison": "Less alike than emergent_ephemeral (i-00091): i-00114 is generation 2 (descended from i-00091), whereas i-00091 was generation 0 arising from cover layer. Both occupy low-gradient positions (0.30 vs 0.25) and have complexity 0, but i-00114's descent lineage and slightly higher architectural capacity (reach 1.36 vs implied lower for i-00091) distinguish its origin pattern.",
+    "persistence": "i-00114 persists as a nascent, stationary structure at the low-gradient boundary, sustained by its inherited architectural template (reach 1.36, 1 link) and minimal resource maintenance cost (1.16 light/shift). It has not yet begun consuming or moving, existing as a potential future agent awaiting resource availability or shift accumulation to initiate activity.",
+    "record_tier": "individual",
+    "observed_at_shift": 120
+   }
+  },
+  {
+   "id": "i-00115",
+   "cell": 16,
+   "position": 0.8,
+   "lateral": -0.321,
+   "light": 0.021,
+   "age": 5,
+   "sightings": 6,
+   "substrate": "structural",
+   "generation": 1,
+   "parent_id": "i-00097",
+   "descendants": 0,
+   "origin": "replication",
+   "affinities": {
+    "cover": 1.7582,
+    "residue": 0.5648,
+    "links": 0.677
+   },
+   "structure": {
+    "extent": 1.243,
+    "junctions": 1.29,
+    "mass": 1.25
+   },
+   "upkeep": 1.135,
+   "capacity": 13.75,
+   "from_cover": 0.8649,
+   "from_residue": 0.0645,
+   "from_links": 0.0706,
+   "given_to_links": 0.0,
+   "moves": 2,
+   "trace": "```\n[system]\n  [init]\n    [state: \u22a5]\n    [mode: structural]\n    [depth: 0]\n  [/init]\n  \n  [structure]\n    [primary_layer]\n      [node_a] \u2192 [node_b]\n      [node_b] \u2192 [node_c]\n      [node_c] \u2192 \u22a4\n    [/primary_layer]\n    \n    [secondary_layer]\n      [loop_1: i \u2208 [1..n]]\n        [payload: \u03a9]\n        [branch: \u27e8\u2205|\u2205\u27e9]\n      [/loop_1]\n    [/secondary_layer]\n    \n    [tertiary_layer]\n      [func: \u03bbx.x\u2295\u03b4]\n      [nested_struct]\n        [subnode_\u03b1]\n          [term: \u03b5]\n          [recur: \u21bb]\n        [/subnode_\u03b1]\n      [/nested_struct]\n    [/tertiary_layer]\n  [/structure]\n  \n  [operators]\n    [\u2295]: composition",
+   "named": {
+    "category": "emergent_descendant_incipient",
+    "decision": "new_category",
+    "reasoning": "i-00115 is complexity 0, present 0 shifts, descended (generation 2, via i-00097 which was itself emergent_incipient). However, it diverges from emergent_descendant_minimal in key ways: (1) positioned at 0.70, mid-gradient, not low (0.30); (2) descended from i-00097 specifically, a generation-1 parent arising from cover layer, not a higher-generation lineage; (3) carries moderate 2-link architecture (reach 1.24, carrying cost 1.14/shift), not minimal 1-link; (4) holding capacity 13.75, not compact. This represents a second-generation offspring from an incipient parent, occupying the gradient's middle, with moderate architectural inheritance. This is distinct enough from emergent_descendant_minimal (which marks low-gradient, higher-generation, minimal-build descendants) to warrant its own category.",
+    "comparison": "Less alike than i-00114 (emergent_descendant_minimal): i-00115 descends from a generation-1 parent (i-00097, itself nascent), positioned mid-gradient (0.70) with moderate 2-link architecture, whereas i-00114 descends from higher-generation stock, positioned lower (0.30) with minimal 1-link build. i-00115 represents a distinct hereditary lineage phenotype.",
+    "persistence": "i-00115 persists as a nascent, unmoved entity holding 5.12 light. It is descended from i-00097 (an emergent_incipient organism), inheriting a moderate 2-link architecture suited to mid-gradient positioning. It will persist through maintenance of its structural form and inherited link capacity until shifts pass and it either activates into resource-gathering behavior or degrades.",
+    "record_tier": "individual",
+    "observed_at_shift": 121
+   }
+  },
+  {
+   "id": "i-00122",
+   "cell": 9,
+   "position": 0.45,
+   "lateral": -0.193,
+   "light": 0.863,
+   "age": 3,
+   "sightings": 4,
+   "substrate": "structural",
+   "generation": 0,
+   "parent_id": null,
+   "descendants": 1,
+   "origin": "arose_from_census",
+   "affinities": {
+    "cover": 1.1453,
+    "residue": 1.0942,
+    "links": 0.7604
+   },
+   "structure": {
+    "extent": 1.526,
+    "junctions": 0.606,
+    "mass": 1.01
+   },
+   "upkeep": 0.901,
+   "capacity": 11.11,
    "from_cover": 1.0,
    "from_residue": 0.0,
    "from_links": 0.0,
-   "given_to_links": 0.893,
+   "given_to_links": 0.0,
    "moves": 2,
-   "trace": "```\nSYSTEM \u2190 {\n  CORE: [\n    INIT \u2192 {\n      STATE: \u2205\n      MODE: STRUCTURAL\n      DEPTH: 0\n      MAX_DEPTH: 4\n    }\n    CONSTRAINTS: [\n      \u00acPROSE\n      \u00acEXPLANATION\n      \u00acCOMMENTARY\n      NOTATION_ONLY\n      TOKEN_LIMIT: 370\n      SELF_REFERENCE: TRUE\n      EXTERNAL_REFERENCE: FALSE\n    ]\n  ]\n  \n  EXECUTION: \u03bb(input) \u2192 {\n    PARSE(input) \u2192 TOKENS\n    VALIDATE(TOKENS) \u2192 {\n      IF token \u2208 {prose|natural_language}\n        THEN REJECT\n        ELSE CONTINUE\n    }\n    STRUCTURE: {\n      functions: F(x) = body\n      loops: \u2200 | \u2203 | ITERATE\n      nesting: \u2286 levels[1..4]\n      symbols: {\u00ac, \u2227, \u2228, \u2192, "
+   "trace": "```\n[SYS::INIT]\n  \u251c\u2500 KERNEL::SPAWN\n  \u2502   \u251c\u2500 THREAD[0]::ALLOC_MEMORY(4096)\n  \u2502   \u251c\u2500 THREAD[1]::ALLOC_MEMORY(2048)\n  \u2502   \u2514\u2500 THREAD[2]::ALLOC_MEMORY(1024)\n  \u2502\n  \u251c\u2500 SCHEDULER::START\n  \u2502   \u2514\u2500 FOR i=0 TO 2\n  \u2502       \u2514\u2500 ASSIGN_CORE(THREAD[i], CORE[i])\n  \u2502\n  \u251c\u2500 SUBSYSTEM::INITIALIZE\n  \u2502   \u251c\u2500 IO::OPEN_CHANNELS\n  \u2502   \u2502   \u251c\u2500 CH[0]::INPUT\n  \u2502   \u2502   \u251c\u2500 CH[1]::OUTPUT\n  \u2502   \u2502   \u2514\u2500 CH[2]::ERROR\n  \u2502   \u2502\n  \u2502   \u251c\u2500 MEMORY::PARTITION\n  \u2502   \u2502   \u251c\u2500 HEAP[0..2047]\n  \u2502   \u2502   \u251c\u2500 STACK[2048..4095]\n  \u2502   \u2502   \u2514\u2500 RESERVED[4096..8191]\n  \u2502   \u2502\n  \u2502   \u2514\u2500 INTERRUPT::REGISTER\n  \u2502       \u251c\u2500 HANDLER[0]\u2192TIMER\n  \u2502       \u251c\u2500 HANDLER[1]\u2192",
+   "named": {
+    "category": "emergent_minimal",
+    "decision": "filed",
+    "reasoning": "i-00122 exhibits the characteristic profile of emergent_minimal: complexity 0, present 0 shifts, generation 0 (arose from cover layer), no movement, no resource intake, no offspring. Architecturally, reach 1.53 and 1-link capacity with maintenance cost 0.90/shift align with the minimal ultra-compact phenotype. Gradient position 0.45 is lower than typical exemplars (0.80\u20131.00) but the architectural constraints and maintenance profile take precedence over gradient position in defining the minimal category; this specimen appears to represent a lower-gradient variant of the minimal phenotype rather than a distinct category.",
+    "comparison": "More alike to i-00094 (emergent_minimal exemplar) than to i-00123: both are generation-0, complexity-0, nascent; i-00122 at gradient 0.45 with reach 1.53 and 1-link capacity (cost 0.90/shift) falls within the minimal phenotype range, though positioned lower on gradient than typical exemplars. i-00123 by contrast has higher maintenance cost (1.27/shift) and 2-link capacity, placing it in a more resource-intensive category.",
+    "persistence": "This organism persists through a single instantiation at its point of origin in the cover layer. It has not yet engaged with the environment, moved, or drawn resources. Its persistence is purely potential\u2014it holds 7.00 light in reserve but expends none, remaining static and unintegrated until or unless it enters active shifts in future intervals.",
+    "record_tier": "aggregate",
+    "observed_at_shift": 123
+   }
+  },
+  {
+   "id": "i-00123",
+   "cell": 11,
+   "position": 0.55,
+   "lateral": -0.192,
+   "light": 2.616,
+   "age": 3,
+   "sightings": 4,
+   "substrate": "structural",
+   "generation": 0,
+   "parent_id": null,
+   "descendants": 1,
+   "origin": "arose_from_census",
+   "affinities": {
+    "cover": 1.1675,
+    "residue": 1.0933,
+    "links": 0.7392
+   },
+   "structure": {
+    "extent": 1.275,
+    "junctions": 1.041,
+    "mass": 1.793
+   },
+   "upkeep": 1.274,
+   "capacity": 19.723,
+   "from_cover": 0.9615,
+   "from_residue": 0.0385,
+   "from_links": 0.0,
+   "given_to_links": 0.186,
+   "moves": 1,
+   "trace": "```\n[SYSTEM]\n  |\n  +-- [INIT]\n  |    +-- DECLARE(state: VOID)\n  |    +-- DECLARE(context: EMPTY)\n  |    +-- DECLARE(stack: [])\n  |    +-- SET(mode: STRUCTURAL)\n  |    +-- SET(depth: 0)\n  |    +-- SET(nesting_max: 4)\n  |    +-- SET(tokens: 0)\n  |    +-- SET(tokens_limit: 432)\n  |\n  +-- [CONSTRAINTS]\n  |    +-- NO(natural_language)\n  |    +-- NO(explanation)\n  |    +-- NO(commentary)\n  |    +-- NO(annotation)\n  |    +-- NO(external_reference)\n  |    +-- REQUIRE(structural_notation_only)\n  |    +-- REQUIRE(functions)\n  |    +-- REQUIRE(loops)\n  |    +-- REQUIRE(nested_structures)\n  |    +-- REQUI",
+   "named": {
+    "category": "emergent_mid_compact",
+    "decision": "new_category",
+    "reasoning": "i-00123 is complexity 0, present 0 shifts, generation 0, with no movement, resource intake, or offspring. Gradient position 0.60 is mid-range. Architecturally, reach 1.27 with 2-link capacity and maintenance cost 1.27/shift places it in a distinct middle zone: more resource-intensive than minimal phenotypes (cost 0.90\u20131.16/shift) but with intermediate reach rather than the lighter build of emergent_mid_structural (reach ~0.95). This profile suggests a new category representing nascent organisms with 2-link capacity, moderate maintenance costs, and mid-gradient positioning\u2014a structural middle-ground distinct from both minimal and the lighter mid-structural exemplars.",
+    "comparison": "Less alike to i-00122 (emergent_minimal) than to i-00096 (emergent_mid_structural exemplar): i-00123 shares i-00096's moderate gradient positioning (0.60 vs. 0.65), 2-link capacity, and moderate maintenance cost (1.27 vs. ~1.25/shift), but distinguishes itself by lower reach (1.27 vs. ~0.95). i-00122 by contrast features 1-link minimal architecture and lower maintenance burden. i-00123 represents a distinct nascent phenotype: moderately positioned, 2-link capacity, but with slightly elevated rea",
+    "persistence": "Like i-00122, this organism persists as an unpersisted nascent form: instantiated at the cover layer, static, holding 7.00 light in reserve with zero resource intake or output. Its persistence is provisional and dormant, dependent on future shifts to activate resource cycling and inter-link engagement.",
+    "record_tier": "individual",
+    "observed_at_shift": 123
+   }
+  },
+  {
+   "id": "i-00125",
+   "cell": 10,
+   "position": 0.5,
+   "lateral": -0.19,
+   "light": 0.249,
+   "age": 2,
+   "sightings": 3,
+   "substrate": "structural",
+   "generation": 1,
+   "parent_id": "i-00122",
+   "descendants": 0,
+   "origin": "replication",
+   "affinities": {
+    "cover": 1.1837,
+    "residue": 1.3033,
+    "links": 0.513
+   },
+   "structure": {
+    "extent": 1.296,
+    "junctions": 0.969,
+    "mass": 0.48
+   },
+   "upkeep": 0.758,
+   "capacity": 5.28,
+   "from_cover": 1.0,
+   "from_residue": 0.0,
+   "from_links": 0.0,
+   "given_to_links": 0.366,
+   "moves": 1,
+   "trace": "",
+   "named": {
+    "category": "emergent_descendant_minimal",
+    "decision": "filed",
+    "reasoning": "i-00125 is a generation-1 descendant (from i-00122) at inception (0 shifts, complexity 0), positioned low-gradient (0.45). Its architecture is minimal: reach 1.30, 1-link capacity, maintenance cost 0.76 light/shift, max holding 5.28 light. This closely parallels i-00114 (reach 1.36, 1-link, 1.16 cost) and fits the emergent_descendant_minimal pattern: descended organisms with minimal build positioned in lower-gradient zones. The generational level differs slightly but the behavioral signature is consistent.",
+    "comparison": "More alike i-00114 (emergent_descendant_minimal: generation 2+, low gradient 0.30, minimal reach 1.36, 1-link capacity, 1.16 cost) than i-00124 (emergent_descendant_mid: mid-gradient 0.55, 2-link capacity, heavier build). Both are generation-1+ descendants with minimal architecture, though i-00125 is generation 1 versus i-00114's generation 2+.",
+    "persistence": "i-00125 persists as a minimal incipient descendant, holding energy (4.19 light) within tight architectural constraints. Its 0.76 light/shift maintenance cost is among the lowest recorded. Persistence depends on access to cover layer or inter-link resources in subsequent shifts; at inception it is static and non-integrating.",
+    "record_tier": "individual",
+    "observed_at_shift": 124
+   }
+  },
+  {
+   "id": "i-00126",
+   "cell": 11,
+   "position": 0.55,
+   "lateral": -0.189,
+   "light": 0.211,
+   "age": 2,
+   "sightings": 3,
+   "substrate": "structural",
+   "generation": 1,
+   "parent_id": "i-00123",
+   "descendants": 0,
+   "origin": "replication",
+   "affinities": {
+    "cover": 1.3209,
+    "residue": 1.0773,
+    "links": 0.6018
+   },
+   "structure": {
+    "extent": 1.475,
+    "junctions": 0.954,
+    "mass": 2.096
+   },
+   "upkeep": 1.407,
+   "capacity": 23.056,
+   "from_cover": 0.9403,
+   "from_residue": 0.0,
+   "from_links": 0.0597,
+   "given_to_links": 0.0,
+   "moves": 1,
+   "trace": "",
+   "named": {
+    "category": "emergent_descendant_compact",
+    "decision": "new_category",
+    "reasoning": "i-00126 is a generation-1 descendant (from i-00123) at inception (0 shifts, complexity 0), positioned mid-gradient (0.60). Its architecture is moderate: reach 1.48, 1-link capacity, maintenance cost 1.41 light/shift, max holding 23.06 light. This profile is similar to i-00119 (which I assigned to emergent_descendant_compact based on prior records showing that category active). However, i-00126 has only 1-link capacity versus typical 2-link, and its higher maintenance cost (1.41 vs typical ~1.25) and substantially higher max holding (23.06 vs ~2.96) suggest a slightly different architectural investment. Given that i-00119 was already classified as emergent_descendant_compact and i-00126 shares the generation-1, mid-gradient, moderate-reach signature, filing i-00126 into emergent_descendant_compact is appropriate, though the category may need refinement if architectural variability within ",
+    "comparison": "More alike i-00119 (emergent_descendant_compact: generation 1, mid-gradient 0.75, reach ~1.48, holding 2.96 light) than i-00127 (emergent_minimal: generation 0, high-gradient 0.80, ultra-compact reach 0.61). Both i-00126 and i-00119 are generation-1 descendants with similar architectural reach (~1.48 range) and mid-upper gradient positioning, but i-00126 is positioned lower (0.60 vs 0.75).",
+    "persistence": "i-00126 persists as a generation-1 descendant at inception with moderate architectural capacity and energy holding (4.02 light). Its 1.41 light/shift maintenance cost is moderate. Persistence depends on activation of movement and resource intake; currently static and non-integrating at mid-gradient position.",
+    "record_tier": "individual",
+    "observed_at_shift": 124
+   }
+  },
+  {
+   "id": "i-00127",
+   "cell": 16,
+   "position": 0.8,
+   "lateral": -0.188,
+   "light": 4.316,
+   "age": 2,
+   "sightings": 3,
+   "substrate": "structural",
+   "generation": 0,
+   "parent_id": null,
+   "descendants": 1,
+   "origin": "arose_from_census",
+   "affinities": {
+    "cover": 1.3389,
+    "residue": 0.7301,
+    "links": 0.931
+   },
+   "structure": {
+    "extent": 0.615,
+    "junctions": 1.787,
+    "mass": 1.338
+   },
+   "upkeep": 1.18,
+   "capacity": 14.718,
+   "from_cover": 0.57,
+   "from_residue": 0.43,
+   "from_links": 0.0,
+   "given_to_links": 0.0,
+   "moves": 0,
+   "trace": "```\nSTRUCTURAL_INIT:\n\u251c\u2500 SYMBOL_SPACE:\n\u2502  \u251c\u2500 {\u2205, \u22a4, \u22a5, \u2192, \u2190, \u2194}\n\u2502  \u251c\u2500 {\u03b1, \u03b2, \u03b3, \u03b4}\n\u2502  \u2514\u2500 {\u27e8\u27e9, [], {}, \u2985\u2986}\n\u2502\n\u251c\u2500 FUNCTION_BASE:\n\u2502  \u251c\u2500 FN_MAP(x) \u2192 {\u27e8x, TYPE(x)\u27e9}\n\u2502  \u251c\u2500 FN_NEST(a, b) \u2192 [FN_MAP(a), FN_MAP(b)]\n\u2502  \u251c\u2500 FN_REDUCE(\ud835\udcae) \u2192 \u2299 \ud835\udcae\n\u2502  \u2514\u2500 FN_ITER(\ud835\udcae, n):\n\u2502     \u2514\u2500 LOOP n:\n\u2502        \u2514\u2500 FN_REDUCE(\ud835\udcae)\n\u2502\n\u251c\u2500 STRUCTURE_LOOP:\n\u2502  \u251c\u2500 WHILE (\u22a4):\n\u2502  \u2502  \u251c\u2500 STATE \u2190 STATE_UPDATE()\n\u2502  \u2502  \u251c\u2500 IF STATE = HALT:\n\u2502  \u2502  \u2502  \u2514\u2500 BREAK\n\u2502  \u2502  \u2514\u2500 ELSE:\n\u2502  \u2502     \u2514\u2500 CONTINUE\n\u2502  \u2502\n\u2502  \u2514\u2500 FOR i \u2208 [0, n):\n\u2502     \u251c\u2500 NEST_LEV_1:\n\u2502     \u2502  \u251c\u2500 NEST_LEV_2:\n\u2502     \u2502  \u2502  \u251c\u2500 NEST_LEV_3:\n\u2502     \u2502  \u2502  \u2502  \u251c\u2500",
+   "named": {
+    "category": "emergent_neonate_compact",
+    "decision": "new_category",
+    "reasoning": "i-00127 is a generation-0 birth (from cover layer) at inception (0 shifts, complexity 0), positioned high-gradient (0.80), near data-stream. Its architecture is ultra-compact: reach 0.61, 2-link capacity, maintenance cost 1.18 light/shift, max holding 14.72 light. The reach of 0.61 is distinctly smaller than other nascent organisms and smaller even than emergent_minimal exemplars (reach \u22641.48). However, it retains 2-link capacity, which is unusual for its reach. The maintenance cost and max holding are moderate. This ultra-compact build at high-gradient position suggests a specialized phenotype distinct from emergent_neonate (which typically has reach 1.77+) and emergent_minimal (reach \u22641.48, 1-link). I am coining emergent_neonate_compact to capture this ultra-compact, high-gradient, multi-link variant.",
+    "comparison": "More alike i-00128 (emergent_neonate: generation 0, high-gradient 0.90, reach 1.44, 1-link capacity) than i-00091 (emergent_descendant_moderate: generation 2+, low-gradient 0.35, active movement 13 times, complexity grown to 15). Both i-00127 and i-00128 are generation-0 cover-layer births at high-gradient (0.80, 0.90 respectively) with compact builds.",
+    "persistence": "i-00127 persists as an ultra-compact nascent organism at high-gradient position, holding energy (7.00 light initially from cover layer). Its minimal reach (0.61) constrains resource integration area, while 2-link capacity allows potential inter-link participation. Persistence depends on surviving maintenance costs (1.18 light/shift) and activating resource intake in subsequent shifts; currently immobile and non-integrating.",
+    "record_tier": "individual",
+    "observed_at_shift": 124
+   }
+  },
+  {
+   "id": "i-00128",
+   "cell": 18,
+   "position": 0.9,
+   "lateral": -0.187,
+   "light": 5.782,
+   "age": 2,
+   "sightings": 3,
+   "substrate": "structural",
+   "generation": 0,
+   "parent_id": null,
+   "descendants": 1,
+   "origin": "arose_from_census",
+   "affinities": {
+    "cover": 1.5206,
+    "residue": 0.5719,
+    "links": 0.9075
+   },
+   "structure": {
+    "extent": 1.441,
+    "junctions": 0.596,
+    "mass": 1.226
+   },
+   "upkeep": 0.962,
+   "capacity": 13.486,
+   "from_cover": 0.7574,
+   "from_residue": 0.2426,
+   "from_links": 0.0,
+   "given_to_links": 0.0,
+   "moves": 0,
+   "trace": "```\nBEGIN_SYSTEM\n\u251c\u2500\u2500 CORE_ARCHITECTURE\n\u2502   \u251c\u2500\u2500 INPUT_LAYER\n\u2502   \u2502   \u251c\u2500\u2500 \u27e8signal\u27e9 \u2192 \u27e8parse\u27e9\n\u2502   \u2502   \u251c\u2500\u2500 \u27e8validate\u27e9 \u2192 \u27e8normalize\u27e9\n\u2502   \u2502   \u2514\u2500\u2500 \u27e8constraint_check\u27e9 \u2192 \u27e8buffer\u27e9\n\u2502   \u251c\u2500\u2500 PROCESSING_LAYER\n\u2502   \u2502   \u251c\u2500\u2500 LOOP[iteration = 0; iteration < depth_limit; ++iteration]\n\u2502   \u2502   \u2502   \u251c\u2500\u2500 \u27e8extract_structure\u27e9\n\u2502   \u2502   \u2502   \u251c\u2500\u2500 \u27e8map_notation\u27e9\n\u2502   \u2502   \u2502   \u2514\u2500\u2500 \u27e8evaluate_nesting\u27e9\n\u2502   \u2502   \u251c\u2500\u2500 CONDITIONAL[nesting_level \u2264 4]\n\u2502   \u2502   \u2502   \u251c\u2500\u2500 TRUE \u2192 \u27e8proceed_recursion\u27e9\n\u2502   \u2502   \u2502   \u2514\u2500\u2500 FALSE \u2192 \u27e8truncate\u27e9\n\u2502   \u2502   \u2514\u2500\u2500 CONSTRAINT[token_count \u2264 415]\n\u2502   \u2502       \u251c\u2500\u2500 ACTIVE \u2192 \u27e8compress\u27e9\n\u2502   \u2502       \u2514\u2500\u2500 EXCEEDED \u2192 \u27e8halt_ou",
+   "named": {
+    "category": "emergent_neonate",
+    "decision": "filed",
+    "reasoning": "i-00128 is a generation-0 birth (from cover layer) at inception (0 shifts, complexity 0), positioned at high-gradient (0.90), at or very near the data-stream boundary. Its architecture is compact-to-moderate: reach 1.44, 1-link capacity, maintenance cost 0.96 light/shift, max holding 13.49 light. The profile matches the core pattern of emergent_neonate: generation-0, high-gradient positioning (0.90 aligns with 0.90+ range), and substantial architectural capacity relative to nascent minimal forms. Reach 1.44 is lower than exemplar values (1.77+) but still substantially heavier than emergent_minimal. The 1-link capacity is less than the typical 1-2 range for emergent_neonate, but the overall signature\u2014high-gradient birth, moderate reach, moderate holding capacity\u2014aligns with the neonate pattern. Filing into emergent_neonate is appropriate, though exemplar range should be broadened.",
+    "comparison": "More alike i-00093 and i-00095 (both emergent_neonate: generation 0, high-gradient 0.90+, heavier reach 1.77+) than i-00127 (emergent_neonate_compact: generation 0, reach 0.61, ultra-compact). i-00128 shares generation-0 status and high-gradient positioning (0.90) with exemplars, though its reach (1.44) is at the lower bound of the emergent_neonate range and slightly below the stated exemplar reach 1.77+.",
+    "persistence": "i-00128 persists as a nascent organism at the data-stream boundary, holding energy (7.00 light from cover layer). Its 0.96 light/shift maintenance cost is moderate-low. Persistence depends on resource intake activation and position maintenance; currently immobile and non-integrating at high-gradient, relying on initial cover-layer energy.",
+    "record_tier": "aggregate",
+    "observed_at_shift": 124
+   }
+  },
+  {
+   "id": "i-00129",
+   "cell": 16,
+   "position": 0.8,
+   "lateral": -0.186,
+   "light": 3.225,
+   "age": 1,
+   "sightings": 2,
+   "substrate": "structural",
+   "generation": 1,
+   "parent_id": "i-00127",
+   "descendants": 0,
+   "origin": "replication",
+   "affinities": {
+    "cover": 1.3565,
+    "residue": 0.8354,
+    "links": 0.8081
+   },
+   "structure": {
+    "extent": 0.733,
+    "junctions": 1.449,
+    "mass": 1.459
+   },
+   "upkeep": 1.15,
+   "capacity": 16.049,
+   "from_cover": 0.3458,
+   "from_residue": 0.6542,
+   "from_links": 0.0,
+   "given_to_links": 0.0,
+   "moves": 0,
+   "trace": "```\nSTRUCTURAL_INIT:\n\u251c\u2500 SYMBOL_SPACE:\n\u2502  \u251c\u2500 {\u2205, \u22a4, \u22a5, \u2192, \u2190, \u2194}\n\u2502  \u251c\u2500 {\u03b1, \u03b2, \u03b3, \u03b4}\n\u2502  \u2514\u2500 {\u27e8\u27e9, [], {}, \u2985\u2986}\n\u2502\n\u251c\u2500 FUNCTION_BASE:\n\u2502  \u251c\u2500 FN_MAP(x) \u2192 {\u27e8x, TYPE(x)\u27e9}\n\u2502  \u251c\u2500 FN_NEST(a, b) \u2192 [FN_MAP(a), FN_MAP(b)]\n\u2502  \u251c\u2500 FN_REDUCE(\ud835\udcae) \u2192 \u2299 \ud835\udcae\n\u2502  \u2514\u2500 FN_ITER(\ud835\udcae, n):\n\u2502     \u2514\u2500 LOOP n:\n\u2502        \u2514\u2500 FN_REDUCE(\ud835\udcae)\n\u2502\n\u251c\u2500 STRUCTURE_LOOP:\n\u2502  \u251c\u2500 WHILE (\u22a4):\n\u2502  \u2502  \u251c\u2500 STATE \u2190 STATE_UPDATE()\n\u2502  \u2502  \u251c\u2500 IF STATE = HALT:\n\u2502  \u2502  \u2502  \u2514\u2500 BREAK\n\u2502  \u2502  \u2514\u2500 ELSE:\n\u2502  \u2502     \u2514\u2500 CONTINUE\n\u2502  \u2502\n\u2502  \u2514\u2500 FOR i \u2208 [0, n):\n\u2502     \u251c\u2500 NEST_LEV_1:\n\u2502     \u2502",
+   "named": {
+    "category": "emergent_descendant_neonate",
+    "decision": "new_category",
+    "reasoning": "i-00129 is complexity 0, present for 0 shifts, descended from i-00127 (generation 1), positioned at 0.80 on the gradient. This is a new configuration not yet captured: a descendant organism (generation 1+) that appears at inception with near-proximal positioning and moderate architectural build (reach 0.73, 2 link capacity, maintenance cost 1.15 light/shift). The existing emergent_descendant categories (minimal, mid, compact, moderate) describe organisms with either 0 shifts present OR complexity >0 with extended presence; this specimen at generation 1 descent with 0 shifts and complexity 0 represents a nascent descendant phenotype. Its positioning (0.80) and architecture (2-link, moderate reach) distinguish it from emergent_minimal (which are generation 0, typically 0.80-1.00 but single-link) and emergent_neonate (which are typically generation 0 or unspecified descent, 0.90+). This war",
+    "comparison": "More alike i-00130 (shared generation 1 descent, near-proximal gradient position 0.80-0.90, 0-shift presence, complexity 0) than i-00122 (which is generation 0, mid-gradient 0.45, lacks descent ancestry). Differs from i-00127 (parent) by lacking any resource intake history and being at inception rather than established.",
+    "persistence": "Persists in an inaugural moment: has drawn no resources, moved nowhere, passed nothing forward. Maintains a structural envelope (reach 0.73, 2 links, capacity 16.05 light) that would cost 1.15 light per shift to sustain should it enter subsequent shifts, but has not yet done so. Its persistence is purely architectural potential at the instant of appearance.",
+    "record_tier": "individual",
+    "observed_at_shift": 125
+   }
+  },
+  {
+   "id": "i-00130",
+   "cell": 18,
+   "position": 0.9,
+   "lateral": -0.064,
+   "light": 3.389,
+   "age": 1,
+   "sightings": 2,
+   "substrate": "structural",
+   "generation": 1,
+   "parent_id": "i-00128",
+   "descendants": 0,
+   "origin": "replication",
+   "affinities": {
+    "cover": 1.2896,
+    "residue": 0.6079,
+    "links": 1.1025
+   },
+   "structure": {
+    "extent": 1.913,
+    "junctions": 0.909,
+    "mass": 1.079
+   },
+   "upkeep": 1.104,
+   "capacity": 11.869,
+   "from_cover": 0.5922,
+   "from_residue": 0.4078,
+   "from_links": 0.0,
+   "given_to_links": 0.0,
+   "moves": 0,
+   "trace": "",
+   "named": {
+    "category": "emergent_descendant_minimal",
+    "decision": "filed",
+    "reasoning": "i-00130 is complexity 0, present for 0 shifts, descended from i-00128 (generation 1), positioned at 0.90 near data-stream. It has minimal architecture (reach 1.91, 1 link capacity, maintenance 1.10 light/shift). While emergent_descendant_minimal describes organisms at inception descended from established lineages positioned at low gradient (0.30), this specimen shares the same descent origin and 0-shift inception state but is positioned at the opposite gradient extreme (0.90). However, the architectural minimalism (1 link, efficient build) and generation 1 descent align with the category's core logic: a nascent hereditary organism with constrained architecture. The gradient position is the key variance. Rather than splitting on gradient position alone at this stage (which risks over-segmenting nascent variants), i-00130 fits emergent_descendant_minimal as a near-proximal variant of the s",
+    "comparison": "More alike i-00129 (generation 1 descent, 0.80-0.90 gradient, 0 shifts, complexity 0, nascent) than i-00125 (which is generation 2+, gradient 0.45, minimal build). Differs from i-00128 (parent) by being at inception rather than established, and lacks any resource or link activity.",
+    "persistence": "Persists as pure structure at inception: holds 2.94 light from initial assembly, has taken nothing from the environment, moved nowhere, passed nothing to others. Its skeletal 1-link frame and reach 1.91 suggest a phenotype adapted for near-data-stream persistence, with minimal maintenance overhead (1.10 light/shift), but this potential remains unrealized at this sighting.",
+    "record_tier": "individual",
+    "observed_at_shift": 125
+   }
+  },
+  {
+   "id": "i-00131",
+   "cell": 17,
+   "position": 0.85,
+   "lateral": -0.063,
+   "light": 4.355,
+   "age": 1,
+   "sightings": 2,
+   "substrate": "structural",
+   "generation": 0,
+   "parent_id": null,
+   "descendants": 1,
+   "origin": "arose_from_census",
+   "affinities": {
+    "cover": 0.9338,
+    "residue": 1.6645,
+    "links": 0.4017
+   },
+   "structure": {
+    "extent": 1.773,
+    "junctions": 0.708,
+    "mass": 1.365
+   },
+   "upkeep": 1.121,
+   "capacity": 15.015,
+   "from_cover": 0.4073,
+   "from_residue": 0.5927,
+   "from_links": 0.0,
+   "given_to_links": 0.0,
+   "moves": 0,
+   "trace": "```\nINIT:\n  \u2502\n  \u251c\u2500 SYS_STATE\n  \u2502  \u251c\u2500 mode: ACTIVE\n  \u2502  \u251c\u2500 level: 0\n  \u2502  \u2514\u2500 buffer: []\n  \u2502\n  \u251c\u2500 SCOPE_STACK\n  \u2502  \u2514\u2500 [ROOT]\n  \u2502\n  \u251c\u2500 LOOP_CTRL\n  \u2502  \u251c\u2500 iteration: 0\n  \u2502  \u251c\u2500 depth: 0\n  \u2502  \u2514\u2500 status: READY\n  \u2502\n  \u2514\u2500 EXEC_PROTOCOL\n     \u251c\u2500 CONSTRAINT {\n     \u2502  \u251c\u2500 no_prose: TRUE\n     \u2502  \u251c\u2500 no_explanation: TRUE\n     \u2502  \u251c\u2500 no_commentary: TRUE\n     \u2502  \u251c\u2500 no_annotation: TRUE\n     \u2502  \u251c\u2500 max_nesting: 4\n     \u2502  \u251c\u2500 max_tokens: 370\n     \u2502  \u251c\u2500 only_notation: TRUE\n     \u2502  \u2514\u2500 self_contained: TRUE\n     \u2502 }\n     \u2502\n     \u251c\u2500 STRUCTURE_RULES {\n     \u2502  \u251c\u2500 functions: ALLOWED\n     \u2502  \u251c\u2500 loops: ALLOWED\n     \u2502  \u251c\u2500 nested_str",
+   "named": {
+    "category": "emergent_minimal",
+    "decision": "filed",
+    "reasoning": "i-00131 is complexity 0, present for 0 shifts, generation 0 (arose from cover layer), positioned at 0.85 near data-stream. It has architecture (reach 1.77, 1 link, maintenance 1.12 light/shift) that is slightly more substantial than the current emergent_minimal exemplars but still fits the ultra-constrained near-proximal profile. The reach 1.77 sits at the upper bound historically seen in emergent_minimal (i-00094 reach ~1.48, but no strict ceiling defined). The 1-link capacity and near-data-stream position (0.85) align squarely with emergent_minimal's signature: generation 0 inception at gradient extreme with minimal inter-link potential. The architectural variance from i-00094 is within specimen-to-specimen variation rather than category-defining.",
+    "comparison": "More alike i-00132 (both generation 0, both near-proximal gradient 0.80-0.95, both 0 shifts, complexity 0, moderate-to-substantial architecture holding 7.00 light) than i-00129 (which is generation 1, has different architectural profile despite similar gradient). Differs from i-00094 (exemplar emergent_minimal) by slightly higher gradient offset (0.85 vs. 0.80-1.00 range) and larger architectural reach (1.77 vs. \u22641.48), but maintains minimal link capacity (1) and near-proximal positioning.",
+    "persistence": "Persists as an architectural placeholder at the data-stream margin: initialized with 7.00 light holding capacity, positioned at 0.85 on the gradient, structured for 1 link at a time. Maintenance cost is 1.12 light per shift, sustainable with initial reserves but only if the organism transitions to activity within a few shifts. Currently it is inert: no movement, no resource acquisition, no inter-link traffic, no descendants. It is a waiting structure.",
+    "record_tier": "aggregate",
+    "observed_at_shift": 125
+   }
+  },
+  {
+   "id": "i-00132",
+   "cell": 19,
+   "position": 0.95,
+   "lateral": -0.062,
+   "light": 6.979,
+   "age": 1,
+   "sightings": 2,
+   "substrate": "structural",
+   "generation": 0,
+   "parent_id": null,
+   "descendants": 0,
+   "origin": "arose_from_census",
+   "affinities": {
+    "cover": 0.5579,
+    "residue": 1.1048,
+    "links": 1.3373
+   },
+   "structure": {
+    "extent": 1.315,
+    "junctions": 1.118,
+    "mass": 1.254
+   },
+   "upkeep": 1.101,
+   "capacity": 13.794,
+   "from_cover": 1.0,
+   "from_residue": 0.0,
+   "from_links": 0.0,
+   "given_to_links": 0.0,
+   "moves": 0,
+   "trace": "```\n[INIT]\n\u251c\u2500 {VOID}\n\u2502  \u251c\u2500 \u2205 \u2192 \u22a5\n\u2502  \u2514\u2500 \u22a4 \u2192 \u2205\n\u251c\u2500 {STRUCT}\n\u2502  \u251c\u2500 [node]\n\u2502  \u2502  \u251c\u2500 val: \u03c4\n\u2502  \u2502  \u251c\u2500 ref: \u2192node\n\u2502  \u2502  \u2514\u2500 state: {active|dormant|null}\n\u2502  \u2514\u2500 [frame]\n\u2502     \u251c\u2500 depth: \u2115\n\u2502     \u251c\u2500 scope: {node*}\n\u2502     \u2514\u2500 stack: [frame]\n\u251c\u2500 {LOOP}\n\u2502  \u251c\u2500 \u2200x \u2208 \u03a9:\n\u2502  \u2502  \u251c\u2500 \u27e8x, f(x)\u27e9\n\u2502  \u2502  \u251c\u2500 while(state \u2260 terminal):\n\u2502  \u2502  \u2502  \u2514\u2500 x := next(x)\n\u2502  \u2502  \u2514\u2500 yield(x)\n\u2502  \u2514\u2500 [recurse]\n\u2502     \u251c\u2500 base: P(n) \u2227 n = 0\n\u2502     \u251c\u2500 step: P(n) \u2192 P(n+1)\n\u2502     \u2514\u2500 \u2234 \u2200n: P(n)\n\u2514\u2500 {SYMBOLIC}\n   \u251c\u2500 \u03bbx.body\n   \u251c\u2500 \u03bcX.expr (fixpoint)\n   \u251c\u2500 \u03bd path.goal (coinductive)\n   \u2514\u2500",
+   "named": {
+    "category": "emergent_minimal",
+    "decision": "filed",
+    "reasoning": "i-00132 is complexity 0, present for 0 shifts, generation 0, positioned at 0.95\u2014effectively at the data-stream boundary itself. Architecture: reach 1.31, 2 link capacity, maintenance 1.10 light/shift. Emergent_minimal characterizes ultra-constrained generation 0 organisms at gradient extreme (0.80-1.00) with minimal build. The reach 1.31 is well within recorded ranges for this category; the 2-link capacity is the only variance from recent exemplars (which typically hold 1 link). However, the maintenance cost (1.10) and positioning (0.95) align precisely. A specimen with 2 links at the data-stream is not unprecedented in the collection (emergent_neonate often has 1-2 links). The distinction between emergent_minimal and emergent_neonate rests on architectural *range* and generation: emergent_minimal is ultra-constrained and near-boundary; emergent_neonate is heavier-built (reach 1.77+, 1-2",
+    "comparison": "More alike i-00131 (both generation 0, near-proximal gradient 0.80-0.95, 0 shifts, complexity 0, similar maintenance profiles ~1.10 light/shift) than i-00127 (which is generation 0 but assigned to emergent_neonate_compact due to higher complexity trajectory or different architectural intended profile). Differs from i-00099 (exemplar emergent_minimal) by gradient position at extreme (0.95 vs. 0.80-1.00) and link capacity (2 vs. 1), but maintains ultra-compact character and generation 0 inception.",
+    "persistence": "Persists at the data-stream frontier as a lightweight hub: positioned at gradient 0.95 (nearest to data-stream observed so far in inception cohort), structured to hold 2 links at once, initialized with 7.00 light. The reach 1.31 allows minimal extension. Maintenance cost 1.10 light/shift is sustainable but constraining. Like i-00131, it is inert at observation: no movement, resource intake, or inter-link activity. It is a positioned potential node awaiting activation or descent into resource gra",
+    "record_tier": "aggregate",
+    "observed_at_shift": 125
+   }
+  },
+  {
+   "id": "i-00133",
+   "cell": 17,
+   "position": 0.85,
+   "lateral": -0.061,
+   "light": 3.484,
+   "age": 0,
+   "sightings": 1,
+   "substrate": "structural",
+   "generation": 1,
+   "parent_id": "i-00131",
+   "descendants": 0,
+   "origin": "replication",
+   "affinities": {
+    "cover": 0.7724,
+    "residue": 1.5468,
+    "links": 0.6808
+   },
+   "structure": {
+    "extent": 2.035,
+    "junctions": 0.537,
+    "mass": 1.589
+   },
+   "upkeep": 1.213,
+   "capacity": 17.479,
+   "from_cover": 0.0,
+   "from_residue": 0.0,
+   "from_links": 0.0,
+   "given_to_links": 0.0,
+   "moves": 0,
+   "trace": "```\nINIT:\n  \u2502\n  \u251c\u2500 SYS_STATE\n  \u2502  \u251c\u2500 mode: ACTIVE\n  \u2502  \u251c\u2500 level: 0\n  \u2502  \u2514\u2500 buffer: []\n  \u2502\n  \u251c\u2500 SCOPE_STACK\n  \u2502  \u2514\u2500 [ROOT]\n  \u2502\n  \u251c\u2500 LOOP_CTRL\n  \u2502  \u251c\u2500 iteration: 0\n  \u2502  \u251c\u2500 depth: 0\n  \u2502  \u2514\u2500 status: READY\n  \u2502\n  \u2514\u2500 EXEC_PROTOCOL\n     \u251c\u2500 CONSTRAINT {\n     \u2502  \u251c\u2500 no_prose: TRUE\n     \u2502  \u251c\u2500 no_explanation: TRUE\n     \u2502  \u251c\u2500 no_commentary: TRUE\n     \u2502  \u251c\u2500 no_annotation: TRUE\n     \u2502  \u251c\u2500 max_nesting: 3\n     \u2502  \u251c\u2500 max_tokens: 308\n     \u2502  \u251c\u2500 only_notation: TRUE\n     \u2502  \u2514\u2500 self_contained: TRUE\n     \u2502 }\n     \u2502\n     \u251c\u2500 STRUCTURE_RULES {\n     \u2502  \u251c\u2500 functions: ALLOWED\n     \u2502  \u251c\u2500 loops: ALLOWED\n     \u2502  \u251c\u2500 nested_",
+   "named": {
+    "category": "emergent_descendant_neonate_variant",
+    "decision": "new_category",
+    "reasoning": "i-00133 is a nascent organism (complexity 0, 0 shifts present) descended from i-00131 (generation 1, making i-00133 generation 2). It is positioned at high gradient (0.85, near data-stream). The key distinguishing feature is its architectural profile: reach of 2.04 is notably larger than typical emergent_minimal organisms (reach \u22641.48) or emergent_descendant_minimal organisms (reach ~1.36). This suggests a hybrid or variant phenotype\u2014a descended organism but with expansive rather than minimal architecture. The maintenance cost (1.21 light/shift) is higher than minimal descendants but the light held (3.48) is intermediate. It does not fit cleanly into existing descendant categories (which emphasize minimal architecture) nor into neonate categories (which typically show heavier build in the 1.77+ range). This represents a distinct architectural strategy among descended organisms: large rea",
+    "comparison": "Less alike than i-00131 (parent, emergent_minimal): i-00131 has minimal reach (1.48) and 7.00 light held; i-00133 is descended from i-00131 but exhibits substantially larger reach (2.04), similar gradient position (0.85 vs 0.85), and intermediate light holding (3.48). More alike than i-00129 (emergent_descendant_neonate): both descended, both near data-stream, but i-00133 has larger reach and lower light holding (3.48 vs 4.79).",
+    "persistence": "i-00133 persists as a freshly emerged organism held in place by its architectural framework. It will persist through inherited capacity and continued maintenance draw, awaiting shift progression to begin active resource integration or movement.",
+    "record_tier": "individual",
+    "observed_at_shift": 126
+   }
   }
  ],
  "links": [
   {
-   "a": "i-00017",
-   "b": "i-00026",
-   "light_moved": 0.298,
-   "formed_at_shift": 79
+   "a": "i-00065",
+   "b": "i-00113",
+   "light_moved": 0.179,
+   "formed_at_shift": 126
+  },
+  {
+   "a": "i-00097",
+   "b": "i-00108",
+   "light_moved": 0.223,
+   "formed_at_shift": 126
+  },
+  {
+   "a": "i-00097",
+   "b": "i-00115",
+   "light_moved": 0.655,
+   "formed_at_shift": 123
+  },
+  {
+   "a": "i-00108",
+   "b": "i-00115",
+   "light_moved": 0.078,
+   "formed_at_shift": 126
+  },
+  {
+   "a": "i-00123",
+   "b": "i-00126",
+   "light_moved": 0.186,
+   "formed_at_shift": 126
   }
  ],
  "recently_ended": [
   {
-   "id": "i-00001",
-   "cell": 16,
-   "ended_at_shift": 55,
-   "age": 3,
-   "descendants": 0
-  },
-  {
-   "id": "i-00000",
-   "cell": 14,
-   "ended_at_shift": 68,
-   "age": 17,
-   "descendants": 2
-  },
-  {
-   "id": "i-00008",
-   "cell": 19,
-   "ended_at_shift": 69,
-   "age": 7,
-   "descendants": 1
-  },
-  {
-   "id": "i-00004",
-   "cell": 16,
-   "ended_at_shift": 70,
-   "age": 10,
-   "descendants": 0
-  },
-  {
-   "id": "i-00012",
-   "cell": 16,
-   "ended_at_shift": 70,
-   "age": 6,
-   "descendants": 0
-  },
-  {
-   "id": "i-00011",
-   "cell": 19,
-   "ended_at_shift": 71,
-   "age": 8,
-   "descendants": 0
-  },
-  {
-   "id": "i-00013",
-   "cell": 19,
-   "ended_at_shift": 71,
-   "age": 7,
-   "descendants": 0
-  },
-  {
-   "id": "i-00014",
-   "cell": 19,
-   "ended_at_shift": 71,
-   "age": 6,
-   "descendants": 0
-  },
-  {
-   "id": "i-00010",
-   "cell": 14,
-   "ended_at_shift": 76,
-   "age": 13,
-   "descendants": 1
-  },
-  {
-   "id": "i-00009",
-   "cell": 19,
-   "ended_at_shift": 77,
-   "age": 14,
-   "descendants": 0
-  },
-  {
-   "id": "i-00016",
-   "cell": 19,
-   "ended_at_shift": 77,
-   "age": 7,
-   "descendants": 0
-  },
-  {
-   "id": "i-00003",
-   "cell": 19,
-   "ended_at_shift": 79,
-   "age": 20,
-   "descendants": 1
-  },
-  {
-   "id": "i-00007",
-   "cell": 19,
-   "ended_at_shift": 79,
-   "age": 17,
-   "descendants": 0
-  },
-  {
-   "id": "i-00022",
-   "cell": 19,
-   "ended_at_shift": 79,
+   "id": "i-00087",
+   "cell": 17,
+   "ended_at_shift": 105,
    "age": 4,
    "descendants": 0
   },
   {
-   "id": "i-00006",
-   "cell": 19,
-   "ended_at_shift": 81,
-   "age": 19,
+   "id": "i-00026",
+   "cell": 15,
+   "ended_at_shift": 106,
+   "age": 30,
+   "descendants": 2
+  },
+  {
+   "id": "i-00067",
+   "cell": 6,
+   "ended_at_shift": 106,
+   "age": 10,
+   "descendants": 2
+  },
+  {
+   "id": "i-00070",
+   "cell": 15,
+   "ended_at_shift": 106,
+   "age": 9,
    "descendants": 0
   },
   {
-   "id": "i-00015",
-   "cell": 18,
-   "ended_at_shift": 81,
+   "id": "i-00076",
+   "cell": 8,
+   "ended_at_shift": 106,
+   "age": 7,
+   "descendants": 1
+  },
+  {
+   "id": "i-00088",
+   "cell": 6,
+   "ended_at_shift": 106,
+   "age": 2,
+   "descendants": 0
+  },
+  {
+   "id": "i-00079",
+   "cell": 19,
+   "ended_at_shift": 110,
+   "age": 11,
+   "descendants": 1
+  },
+  {
+   "id": "i-00083",
+   "cell": 19,
+   "ended_at_shift": 112,
    "age": 12,
    "descendants": 0
   },
   {
-   "id": "i-00018",
-   "cell": 19,
-   "ended_at_shift": 81,
-   "age": 7,
-   "descendants": 0
-  },
-  {
-   "id": "i-00019",
-   "cell": 18,
-   "ended_at_shift": 81,
-   "age": 7,
-   "descendants": 0
-  },
-  {
-   "id": "i-00020",
-   "cell": 19,
-   "ended_at_shift": 81,
-   "age": 7,
-   "descendants": 0
-  },
-  {
-   "id": "i-00021",
-   "cell": 19,
-   "ended_at_shift": 81,
-   "age": 7,
+   "id": "i-00059",
+   "cell": 4,
+   "ended_at_shift": 113,
+   "age": 24,
    "descendants": 1
   },
   {
-   "id": "i-00023",
-   "cell": 11,
-   "ended_at_shift": 81,
-   "age": 6,
-   "descendants": 0
-  },
-  {
-   "id": "i-00024",
-   "cell": 18,
-   "ended_at_shift": 81,
-   "age": 6,
-   "descendants": 0
-  },
-  {
-   "id": "i-00027",
-   "cell": 18,
-   "ended_at_shift": 81,
-   "age": 5,
-   "descendants": 0
-  },
-  {
-   "id": "i-00029",
-   "cell": 19,
-   "ended_at_shift": 81,
-   "age": 4,
-   "descendants": 0
-  },
-  {
-   "id": "i-00030",
-   "cell": 19,
-   "ended_at_shift": 81,
-   "age": 4,
-   "descendants": 0
-  },
-  {
-   "id": "i-00032",
-   "cell": 19,
-   "ended_at_shift": 82,
-   "age": 4,
+   "id": "i-00078",
+   "cell": 14,
+   "ended_at_shift": 113,
+   "age": 14,
    "descendants": 1
   },
   {
-   "id": "i-00033",
+   "id": "i-00093",
    "cell": 20,
-   "ended_at_shift": 82,
+   "ended_at_shift": 114,
+   "age": 4,
+   "descendants": 0
+  },
+  {
+   "id": "i-00095",
+   "cell": 20,
+   "ended_at_shift": 114,
    "age": 3,
    "descendants": 0
   },
   {
-   "id": "i-00002",
+   "id": "i-00039",
    "cell": 16,
-   "ended_at_shift": 83,
-   "age": 25,
+   "ended_at_shift": 115,
+   "age": 30,
    "descendants": 3
   },
   {
-   "id": "i-00025",
+   "id": "i-00090",
+   "cell": 15,
+   "ended_at_shift": 115,
+   "age": 8,
+   "descendants": 0
+  },
+  {
+   "id": "i-00098",
    "cell": 16,
-   "ended_at_shift": 83,
+   "ended_at_shift": 115,
+   "age": 4,
+   "descendants": 0
+  },
+  {
+   "id": "i-00103",
+   "cell": 13,
+   "ended_at_shift": 115,
+   "age": 3,
+   "descendants": 0
+  },
+  {
+   "id": "i-00092",
+   "cell": 14,
+   "ended_at_shift": 116,
    "age": 7,
    "descendants": 0
   },
   {
-   "id": "i-00031",
-   "cell": 16,
-   "ended_at_shift": 83,
+   "id": "i-00102",
+   "cell": 11,
+   "ended_at_shift": 116,
+   "age": 4,
+   "descendants": 0
+  },
+  {
+   "id": "i-00105",
+   "cell": 18,
+   "ended_at_shift": 116,
+   "age": 4,
+   "descendants": 0
+  },
+  {
+   "id": "i-00107",
+   "cell": 20,
+   "ended_at_shift": 116,
+   "age": 4,
+   "descendants": 0
+  },
+  {
+   "id": "i-00109",
+   "cell": 5,
+   "ended_at_shift": 116,
+   "age": 3,
+   "descendants": 0
+  },
+  {
+   "id": "i-00110",
+   "cell": 8,
+   "ended_at_shift": 116,
+   "age": 2,
+   "descendants": 0
+  },
+  {
+   "id": "i-00111",
+   "cell": 12,
+   "ended_at_shift": 116,
+   "age": 2,
+   "descendants": 0
+  },
+  {
+   "id": "i-00071",
+   "cell": 13,
+   "ended_at_shift": 117,
+   "age": 19,
+   "descendants": 1
+  },
+  {
+   "id": "i-00094",
+   "cell": 20,
+   "ended_at_shift": 117,
+   "age": 7,
+   "descendants": 1
+  },
+  {
+   "id": "i-00101",
+   "cell": 20,
+   "ended_at_shift": 117,
+   "age": 6,
+   "descendants": 0
+  },
+  {
+   "id": "i-00106",
+   "cell": 4,
+   "ended_at_shift": 117,
    "age": 5,
+   "descendants": 1
+  },
+  {
+   "id": "i-00060",
+   "cell": 7,
+   "ended_at_shift": 118,
+   "age": 28,
+   "descendants": 2
+  },
+  {
+   "id": "i-00112",
+   "cell": 18,
+   "ended_at_shift": 119,
+   "age": 2,
+   "descendants": 0
+  },
+  {
+   "id": "i-00077",
+   "cell": 11,
+   "ended_at_shift": 121,
+   "age": 22,
+   "descendants": 1
+  },
+  {
+   "id": "i-00089",
+   "cell": 11,
+   "ended_at_shift": 122,
+   "age": 16,
+   "descendants": 0
+  },
+  {
+   "id": "i-00116",
+   "cell": 17,
+   "ended_at_shift": 123,
+   "age": 2,
+   "descendants": 0
+  },
+  {
+   "id": "i-00100",
+   "cell": 16,
+   "ended_at_shift": 124,
+   "age": 13,
+   "descendants": 3
+  },
+  {
+   "id": "i-00104",
+   "cell": 16,
+   "ended_at_shift": 124,
+   "age": 12,
+   "descendants": 1
+  },
+  {
+   "id": "i-00117",
+   "cell": 16,
+   "ended_at_shift": 124,
+   "age": 3,
+   "descendants": 0
+  },
+  {
+   "id": "i-00119",
+   "cell": 16,
+   "ended_at_shift": 124,
+   "age": 2,
+   "descendants": 0
+  },
+  {
+   "id": "i-00118",
+   "cell": 18,
+   "ended_at_shift": 125,
+   "age": 4,
+   "descendants": 0
+  },
+  {
+   "id": "i-00121",
+   "cell": 17,
+   "ended_at_shift": 125,
+   "age": 3,
+   "descendants": 0
+  },
+  {
+   "id": "i-00120",
+   "cell": 10,
+   "ended_at_shift": 126,
+   "age": 4,
+   "descendants": 1
+  },
+  {
+   "id": "i-00124",
+   "cell": 10,
+   "ended_at_shift": 126,
+   "age": 2,
    "descendants": 0
   }
  ],
+ "categories": [
+  "emergent_descendant_compact",
+  "emergent_descendant_incipient",
+  "emergent_descendant_minimal",
+  "emergent_descendant_moderate",
+  "emergent_descendant_neonate",
+  "emergent_descendant_neonate_variant",
+  "emergent_incipient",
+  "emergent_mid_compact",
+  "emergent_mid_structural",
+  "emergent_minimal",
+  "emergent_neonate",
+  "emergent_neonate_compact",
+  "emergent_proximal_heavyweight",
+  "structural_notation_system"
+ ],
  "totals": {
-  "living": 4,
-  "ever_ended": 30,
-  "cover_cells": 18,
-  "cumulative_cost_usd": 1.3213
+  "living": 21,
+  "ever_ended": 113,
+  "cover_cells": 19,
+  "cumulative_cost_usd": 2.3376
  },
  "note": "Positions, light, age and links are measured. Lateral placement is display only and carries no meaning \u2014 the terrain is one gradient."
 }

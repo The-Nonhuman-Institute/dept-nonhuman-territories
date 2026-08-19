@@ -1,0 +1,129 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Specimen i-00089</title><style>
+:root{--paper:#EFEDE3;--ink:#14170F;--moss:#3B4A2F;--grey:#6B7168;--rule:#B9B5A4;
+--panel:#F7F5EC;--amber:#8A6D14;
+--serif:Georgia,'Iowan Old Style','Times New Roman',serif;
+--sans:ui-sans-serif,system-ui,-apple-system,'Helvetica Neue',sans-serif;
+--mono:ui-monospace,SFMono-Regular,Menlo,'DejaVu Sans Mono',monospace}
+/* A printed record commits to paper on either host theme. */
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:14.5px/1.65 var(--sans);margin:0;
+padding:0 clamp(14px,3vw,30px) 60px;-webkit-font-smoothing:antialiased}
+.sheet{max-width:1180px;margin:14px auto 0;border:1px solid var(--ink);background:var(--paper);
+padding:0 clamp(16px,3vw,32px) 30px}
+.backbar{padding:10px 0;border-bottom:1px solid var(--rule)}
+.backbar a{color:var(--moss);text-decoration:none;font:11.5px var(--mono);letter-spacing:.06em}
+.backbar a:hover{text-decoration:underline}
+.backbar a:focus-visible{outline:2px solid var(--moss);outline-offset:2px}
+.masthead{display:grid;grid-template-columns:auto 1fr auto;gap:26px;align-items:start;
+border-bottom:3px double var(--ink);padding:22px 0 16px}
+.mark{width:52px;height:52px;border:2.5px solid var(--moss);position:relative}
+.mark:after{content:"";position:absolute;left:9px;right:9px;top:9px;bottom:-2px;
+background:var(--paper);border-left:2.5px solid var(--moss);border-right:2.5px solid var(--moss)}
+.dept{font:600 10.5px/1.45 var(--sans);letter-spacing:.13em;text-transform:uppercase;margin-top:6px}
+.title h1{font:400 clamp(19px,2.3vw,27px)/1.18 var(--serif);margin:0;text-transform:uppercase}
+.title .sub{color:var(--grey);font:11px/1.6 var(--mono);margin-top:8px;max-width:64ch}
+table.doc{border-collapse:collapse;font:10.5px/1.7 var(--mono);color:var(--grey)}
+table.doc td{padding:0 0 0 10px;white-space:nowrap}
+table.doc td.k{padding:0}
+table.doc td.k:after{content:":";padding-left:10px}
+table.doc td.v{color:var(--ink)}
+h2{font:400 22px/1.2 var(--serif);color:var(--moss);margin:0 0 6px}
+h3{font:600 9.5px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+color:var(--grey);margin:0 0 7px}
+section{margin:30px 0}
+.lede{color:var(--grey);font-size:13px;max-width:74ch;margin:0 0 14px}
+.box{border:1px solid var(--rule);padding:10px 13px;background:var(--panel)}
+.bh{font:600 9px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+color:var(--grey);margin-bottom:5px}
+code{font:12px var(--mono);background:var(--panel);padding:1px 5px;border:1px solid var(--rule)}
+.scroll{overflow-x:auto}
+table.data{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+table.data th{text-align:left;font:600 9.5px/1.4 var(--mono);letter-spacing:.11em;
+text-transform:uppercase;color:var(--grey);border-bottom:1px solid var(--ink);
+padding:0 14px 7px 0;vertical-align:bottom}
+table.data td{border-bottom:1px solid var(--rule);padding:10px 14px 10px 0;vertical-align:top}
+table.data td.num,table.data th.num{text-align:right;padding-right:20px;font-family:var(--mono)}
+.quote{border-left:2px solid var(--rule);padding:4px 0 4px 18px;font:italic 14px/1.6 var(--serif);
+max-width:74ch}
+footer{margin-top:34px;border-top:3px double var(--ink);padding-top:16px;
+font:10.5px/1.7 var(--mono);color:var(--grey)}
+
+.rec{border-top:1px solid var(--rule);padding-top:16px;margin:24px 0 0}
+.rec h3{font:600 10px/1.5 var(--mono);letter-spacing:.13em;text-transform:uppercase;
+color:var(--grey);margin:0 0 12px;display:flex;gap:10px;align-items:baseline}
+.rec h3 .num{color:var(--moss);font-weight:400}
+.native .nname{font:400 clamp(26px,3.4vw,40px)/1.1 var(--serif)}
+.native .nsub{font:11px var(--mono);color:var(--grey);letter-spacing:.05em;margin-top:6px}
+table.kv{border-collapse:collapse;font:12.5px/1.75 var(--mono);
+font-variant-numeric:tabular-nums}
+table.kv td{padding:1px 0;vertical-align:top}
+table.kv td.k{color:var(--grey);padding-right:26px;white-space:nowrap}
+table.kv td.v a{color:var(--moss)}
+.conf{font:9.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;
+border:1px solid}
+.conf.partial{color:var(--amber);border-color:var(--amber)}
+.conf.none{color:var(--grey);border-color:var(--rule)}
+.status{font:9.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;
+border:1px solid}
+.status.alive{color:var(--moss);border-color:var(--moss)}
+.status.ended{color:var(--grey);border-color:var(--rule)}
+.note{font-size:13px;color:var(--ink);max-width:74ch;margin:12px 0 0}
+.fine{font:11px/1.6 var(--mono);color:var(--grey);margin:8px 0 0;max-width:74ch}
+.none{color:var(--grey);font-style:italic;font-size:13px;max-width:70ch}
+.formrow{display:grid;grid-template-columns:220px 1fr;gap:26px;align-items:start}
+.plate{border:1px solid var(--rule);background:var(--panel);padding:6px}
+.plate svg{width:100%;height:auto;display:block}
+.plate .core{fill:rgba(59,74,47,.10);stroke:var(--moss);stroke-width:1.2}
+.plate .arm{stroke:var(--ink);stroke-width:1.1;opacity:.7}
+.plate .node{fill:var(--moss);opacity:.9}
+.plate .anchor{stroke:var(--ink);stroke-width:.9;opacity:.45}
+.plate .brace{fill:none;stroke:var(--moss);stroke-width:.6;opacity:.5}
+.plate .orbit{fill:none;stroke:var(--amber);stroke-width:.9;opacity:.6}
+.plate .disc{fill:var(--amber);opacity:.22}
+.plate .none{fill:var(--grey);font:11px var(--mono);text-anchor:middle}
+.prose{font:15px/1.65 var(--serif);margin:14px 0 0;max-width:66ch}
+.obs{border-left:2px solid var(--rule);padding:2px 0 2px 16px;margin:0 0 18px;max-width:80ch}
+.oh{font:10.5px var(--mono);color:var(--grey);letter-spacing:.04em;margin-bottom:6px}
+.oh code{font-size:10.5px}
+.ot{font:13.5px/1.62 var(--sans);margin:0 0 8px}
+.op,.oc{font:italic 13px/1.6 var(--serif);color:var(--ink);margin:0 0 8px}
+.lb{display:block;font:9px var(--mono);font-style:normal;letter-spacing:.1em;
+text-transform:uppercase;color:var(--grey);margin-bottom:3px}
+.trace{font:11px/1.5 var(--mono);background:var(--panel);border:1px solid var(--rule);
+padding:12px 14px;overflow-x:auto;white-space:pre;max-width:100%}
+@media(max-width:720px){.formrow{grid-template-columns:1fr}}
+</style></head><body><div class="sheet">
+<div class="backbar"><a href="http://127.0.0.1:8730/hub.html">&larr; Department index</a> &nbsp;·&nbsp; <a href="../codex.html">&larr; Field compendium</a></div>
+<div class="masthead"><div><div class="mark"></div><div class="dept">Department of<br>Nonhuman<br>Territories</div></div><div class="title"><h1>Specimen Field Record</h1><p class="sub">One specimen, and everything the terrain has recorded of it.</p></div><table class="doc"><tr><td class="k">SPECIMEN</td><td class="v">i-00089</td></tr><tr><td class="k">TERRAIN</td><td class="v">BASIN-01</td></tr><tr><td class="k">CATEGORY</td><td class="v">structural_isolate</td></tr><tr><td class="k">STATUS</td><td class="v">ENDED</td></tr></table></div>
+<section class="rec"><h3><span class="num">01</span> Native classification</h3><div class="native"><div class="nname">structural_isolate</div><div class="nsub">the Namer's own category · aggregate tier record</div></div></section><section class="rec"><h3><span class="num">02</span> Linnaean crosswalk</h3><table class="kv"><tr><td class="k">Tier</td><td class="v"><i>no clear equivalent</i></td></tr><tr><td class="k">Confidence</td><td class="v"><span class="conf none">none</span></td></tr></table><p class="note">Defined by resource isolation and negligible inter-link activity rather than structure; crosses multiple conventional tiers by ecological strategy.</p><p class="fine">For human legibility only. Carries no authority over the native system and does not feed back into it (DNT-CLS-001 §2).</p></section><section class="rec"><h3><span class="num">03</span> Observation data</h3><table class="kv"><tr><td class="k">First observed</td><td class="v">shift 106</td></tr><tr><td class="k">Last observed</td><td class="v">shift 120</td></tr><tr><td class="k">Observations</td><td class="v">3</td></tr><tr><td class="k">Shifts present</td><td class="v">16</td></tr><tr><td class="k">Sightings</td><td class="v">—</td></tr><tr><td class="k">Arose by</td><td class="v">—</td></tr><tr><td class="k">Substrate</td><td class="v">—</td></tr><tr><td class="k">Generation</td><td class="v">—</td></tr><tr><td class="k">Times moved</td><td class="v">—</td></tr><tr><td class="k">Status</td><td class="v"><span class="status ended">Ended shift 122</span></td></tr></table></section><section class="rec"><h3><span class="num">04</span> Form, drawn from measurements</h3><p class="none">Nothing survives of this specimen's build. It ended before the terrain began keeping remains, and its form cannot be recovered.</p></section><section class="rec"><h3><span class="num">05</span> Relations</h3><table class="kv"><tr><td class="k">Parent</td><td class="v">arose from the cover layer</td></tr><tr><td class="k">Offspring</td><td class="v">none living</td></tr><tr><td class="k">Links held</td><td class="v">0</td></tr></table></section><section class="rec"><h3><span class="num">06</span> The Namer's reasoning, in sequence</h3><p class="lede">3 observations across 15 shifts. The Namer changed its filing during this sequence.</p><div class="obs"><div class="oh">Shift 106 · filed as <code>emergent_fragment</code> · individual</div><p class="ot">i-00089 presents as a newborn structural entity: present for 0 shifts, just sighted once at shift 106. It has a clear genealogy (from i-00060) and structural specifications (reach 0.87, carries 1.30, maintenance cost 0.84 light/shift). However, it has taken no resources, passed none, moved zero times, and holds no descendants yet. This is a first-appearance specimen with architectural complexity but no behavioral history. It does not fit ephemeral_fragment (which has no documented lineage or structural specificity). It is not yet a structural_inheritor, because while descended from one, it has not persisted long enough to show the inheritance pattern. It warrants a distinct category for specimens at the threshold of emergence: born into the system with structural form but without yet having engaged in the resource dynamics and movement patterns that characterize other categories.</p><p class="op"><span class="lb">how it persists</span>i-00089 persists as a nascent structural form just instantiated in the environment. It holds structural specification (reach, link capacity, carry cost) and maintains a light reserve (2.83), but has not yet drawn from the environment, moved, or reproduced. It persists by virtue of its architecture and inherited connection to i-00060, not through accumulated resource history. Its persistence is potential rather than demonstrated.</p><p class="oc"><span class="lb">compared against</span>i-00089 is fundamentally unlike i-00088 (ephemeral_fragment). Though both have complexity 0 and appear for a single shift, i-00089 has a documented lineage (descended from i-00060, generation 3) and a structural body with measurable properties, whereas i-00088 has neither. i-00089 is closer to structural_inheritor specimens like i-00060 in its construction and descent pattern, but lacks the durational persistence that defines that category. It is also unlike structural_notation_system specimens, which show extended presence and accumulated resource draw.</p></div><div class="obs"><div class="oh">Shift 119 · filed as <code>structural_isolate</code> · aggregate</div><p class="ot">i-00089 exhibits the isolation profile characteristic of structural_isolate: sustained multi-shift presence (13 shifts) with moderate complexity growth (13), but negligible inter-link participation (0 light passed to others, 0% inter-link intake), no offspring, and no reproductive output. Resource sourcing is overwhelmingly local (97% cover layer, 3% residue), matching the isolate pattern. Despite gradient position at 0.60 (mid-range rather than the far-gradient of typical isolates), the behavioral markers—minimal network integration, no reproductive output, and purely local resource reliance—distinguish it from structural_notation_system. It is a generation-3 descendant of i-00060 (itself a structural_isolate exemplar), suggesting possible hereditary isolate trajectory. The lack of inter-link activity and offspring production overrides the mid-gradient position in classification.</p><p class="op"><span class="lb">how it persists</span>i-00089 persists through 13 shifts by drawing resources nearly exclusively from the cover layer (97%), with negligible residue supplementation (3%). Over this span, it has accumulated 35.14 light with zero inter-link resource intake or passing. Its 1-link architecture (reach 0.87, carrying 1.30 light at maintenance cost 0.84 per shift) supports a minimal, locally-rooted presence. It produces no offspring and passes no resources to others, persisting as an isolated resource consumer rather than a network node. Its persistence is characterized by sustained but disconnected local feeding, with no reproductive or redistributive role in the broader system.</p><p class="oc"><span class="lb">compared against</span>Less alike than i-00077. i-00089 has 13 shifts of presence, complexity 13, dominant cover-layer sourcing (97%), minimal residue (3%), zero inter-link passing (0 light passed), no offspring, and gradient position at 0.60 (mid-range). i-00077 has 20 shifts, complexity 20, 74% cover and 26% residue, 1.93 light passed to others, 1 offspring. The structural_isolate classification reflects i-00089's minimal network participation, lack of offspring, and reliance on local resources despite longer-than-nascent presence.</p></div><div class="obs"><div class="oh">Shift 120 · filed as <code>structural_isolate</code> · aggregate</div><p class="ot">i-00089 at complexity 14, 14 shifts present, demonstrates sustained multi-shift presence with moderate complexity growth (13→14 in latest interval). However, resource sourcing is overwhelmingly local: 96% from cover layer, 4% from residue, 0% from inter-links. It has produced 0 descendants and passed only 0.03 light to others—negligible inter-link participation. Movement (4 times) is minimal relative to shifts. Gradient position (0.55, mid-range) differs from the far-gradient (0.0-0.35) positioning typical of structural_isolate, but the resource isolation and minimal inter-link participation override gradient position as the defining behavioral trait. i-00089 is a structural_isolate at mid-gradient.</p><p class="op"><span class="lb">how it persists</span>i-00089 persists through sustained multi-shift local sourcing, drawing almost entirely from the cover layer (96%) with minimal residue supplementation (4%), supported by a minimal architecture (reach 0.87, 1 link capacity, 0.84 light/shift maintenance). It remains isolated from the inter-link redistribution network despite 14 shifts of presence, persisting as a self-contained forager rather than a network node. Its lack of offspring and negligible inter-link activity indicate a trajectory toward dormancy or gradual resource depletion rather than network integration.</p><p class="oc"><span class="lb">compared against</span>More alike than i-00017: i-00089 shows 14 shifts, 36.61 total intake (96% cover, 4% residue), 0 descendants, and 0.03 light passed to others. These characteristics—dominant local sourcing, negligible inter-link participation, minimal offspring—align with structural_isolate. i-00017, by contrast, shows 3 descendants and 2.86 light passed, marking it as a network node rather than an isolate.</p></div></section><section class="rec"><h3><span class="num">07</span> Substrate as recorded</h3><pre class="trace">```
+EXEC :: ⟨
+  LOAD(INIT)
+  STRUCT {
+    layer[0] :: FOUNDATION {
+      sym → ∅
+      ref → λ
+      iter → ⟨⟩
+    }
+    
+    layer[1] :: ABSTRACTION {
+      fn(x) :: x → {
+        nest[0] → CALL
+        nest[1] → EVAL
+        nest[2] → BIND
+      }
+      loop ⟨i:0..n⟩ {
+        state[i] ⇄ transform
+      }
+    }
+    
+    layer[2] :: COMPOSITION {
+      φ :: {
+        (f ∘ g) → h
+        depth ≤ 4
+        σ ∈ {SYMBOL, FUNC,</pre></section>
+<footer>Generated from state/specimen_log.jsonl, state/anomaly_log.jsonl and state/memory.json.
+Read-only. The Namer's words are reproduced exactly as written; everything else on this page is
+a measurement or a rendering of one.</footer>
+</div></body></html>

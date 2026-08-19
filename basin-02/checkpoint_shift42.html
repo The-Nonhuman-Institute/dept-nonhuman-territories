@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BASIN-02 Checkpoint</title>
+<style>
+  :root {
+    --paper:#E9E3D6; --ground:#F2EDE2; --ink:#0A0A0A; --moss:#3B4A2F;
+    --grey:#7A8086; --amber:#8A6D14; --rule:#CFC7B4; --panel:#F7F3EA;
+    --hold:#8A6D14; --fail:#3B4A2F;
+    --serif:Georgia,'Iowan Old Style','Times New Roman',serif;
+    --sans:ui-sans-serif,system-ui,-apple-system,'Helvetica Neue',sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,'DejaVu Sans Mono',monospace;
+  }
+  @media (prefers-color-scheme:dark) {
+    :root:not([data-theme="light"]) {
+      --paper:#101210; --ground:#0A0B0A; --ink:#F6F6F4; --moss:#9CB584;
+      --grey:#8C9298; --amber:#C9A227; --rule:#262A24; --panel:#171A16;
+      --hold:#C9A227; --fail:#9CB584;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper:#101210; --ground:#0A0B0A; --ink:#F6F6F4; --moss:#9CB584;
+    --grey:#8C9298; --amber:#C9A227; --rule:#262A24; --panel:#171A16;
+    --hold:#C9A227; --fail:#9CB584;
+  }
+
+  * { box-sizing:border-box; }
+  body {
+    background:var(--ground); color:var(--ink);
+    font:16px/1.65 var(--sans); margin:0;
+    padding:clamp(28px,5vw,72px) clamp(18px,5vw,40px) 96px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap { max-width:1020px; margin:0 auto; display:flex; flex-direction:column; gap:44px; }
+  .col { max-width:68ch; }
+
+  .eyebrow {
+    font:500 11px/1.5 var(--mono); letter-spacing:.16em; text-transform:uppercase;
+    color:var(--grey); margin:0;
+  }
+  h1 {
+    font:400 clamp(30px,4.4vw,46px)/1.12 var(--serif); margin:10px 0 0;
+    text-wrap:balance; letter-spacing:-.01em;
+  }
+  h2 { font:400 clamp(20px,2.6vw,26px)/1.25 var(--serif); margin:0 0 4px; text-wrap:balance; }
+  h3 { font:600 13px/1.4 var(--sans); letter-spacing:.02em; margin:0 0 6px; }
+  p { margin:0 0 14px; } p:last-child { margin-bottom:0; }
+  em { color:var(--grey); font-style:italic; }
+  strong { font-weight:650; }
+
+  header { border-bottom:2px solid var(--ink); padding-bottom:22px; }
+  .meta {
+    display:flex; flex-wrap:wrap; gap:6px 28px; margin-top:16px;
+    font:12px/1.5 var(--mono); color:var(--grey);
+  }
+  .meta b { color:var(--ink); font-weight:400; font-variant-numeric:tabular-nums; }
+
+  .verdict {
+    background:var(--panel); border:1px solid var(--rule); border-left:5px solid var(--moss);
+    padding:clamp(22px,3vw,34px); display:flex; flex-direction:column; gap:10px;
+  }
+  .verdict .call {
+    font:400 clamp(24px,3.4vw,36px)/1.12 var(--serif); color:var(--moss); letter-spacing:-.01em;
+  }
+  .verdict p { max-width:62ch; }
+
+  section { display:flex; flex-direction:column; gap:16px; }
+  .quote {
+    border-left:2px solid var(--rule); padding:2px 0 2px 20px;
+    font:italic 15px/1.62 var(--serif); max-width:64ch;
+  }
+
+  .scroll { overflow-x:auto; }
+  table {
+    border-collapse:collapse; width:100%; min-width:620px;
+    font:13.5px/1.5 var(--sans); font-variant-numeric:tabular-nums;
+  }
+  caption {
+    text-align:left; font:12px/1.5 var(--mono); color:var(--grey);
+    letter-spacing:.04em; padding-bottom:9px;
+  }
+  th {
+    text-align:left; font:600 11px/1.4 var(--mono); letter-spacing:.1em;
+    text-transform:uppercase; color:var(--grey);
+    border-bottom:1px solid var(--ink); padding:0 14px 8px 0; vertical-align:bottom;
+  }
+  td { border-bottom:1px solid var(--rule); padding:11px 14px 11px 0; vertical-align:top; }
+  tr:last-child td { border-bottom:none; }
+  td.num, th.num { text-align:right; padding-right:22px; font-family:var(--mono); }
+  .fell { color:var(--amber); font-weight:650; }
+  .held { color:var(--moss); font-weight:650; }
+  .ev { font:12.5px/1.5 var(--mono); color:var(--grey); }
+
+  .cards { display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); }
+  .card {
+    border:1px solid var(--rule); background:var(--panel); padding:17px 18px;
+    display:flex; flex-direction:column; gap:5px;
+  }
+  .card .k { font:11px/1.4 var(--mono); letter-spacing:.09em; text-transform:uppercase; color:var(--grey); }
+  .card .v { font:400 25px/1.1 var(--serif); font-variant-numeric:tabular-nums; }
+  .card .n { font:12.5px/1.5 var(--sans); color:var(--grey); }
+
+  .flagged {
+    border:1px solid var(--moss); padding:clamp(20px,2.6vw,28px);
+    display:flex; flex-direction:column; gap:14px;
+  }
+  .flagged .eyebrow { color:var(--moss); }
+
+  .caveat {
+    background:var(--panel); border-left:3px solid var(--grey);
+    padding:15px 18px; font-size:14.5px; max-width:66ch;
+  }
+  .caveat h3 {
+    color:var(--grey); font:600 11px/1.4 var(--mono);
+    letter-spacing:.1em; text-transform:uppercase;
+  }
+  .correction { border-left-color:var(--amber); }
+  .correction h3 { color:var(--amber); }
+
+  /* column histogram — the first spatial measurement worth showing */
+  .hist { display:flex; flex-direction:column; gap:7px; }
+  .bars { display:flex; gap:3px; align-items:flex-end; height:96px; }
+  .bars i { flex:1; background:var(--moss); display:block; border-radius:1px 1px 0 0; }
+  .bars i.even { background:var(--rule); }
+  .axis { display:flex; justify-content:space-between; font:11px/1.4 var(--mono); color:var(--grey); }
+
+  ul { margin:0; padding-left:20px; }
+  li { margin-bottom:7px; } li:last-child { margin-bottom:0; }
+  code { font:12.5px var(--mono); background:var(--panel); padding:1px 5px; border:1px solid var(--rule); }
+
+  footer {
+    border-top:1px solid var(--rule); padding-top:20px;
+    font:12px/1.6 var(--mono); color:var(--grey);
+  }
+  @media (prefers-reduced-motion:reduce) { * { transition:none !important; animation:none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">Department of Nonhuman Territories · DNT-T02 · second checkpoint</p>
+    <h1>The reasoning register, tested at full sample</h1>
+    <div class="meta">
+      <span>evaluated <b>2026-08-17</b></span>
+      <span>terrain shift <b>42</b></span>
+      <span>register <b>183</b> entries</span>
+      <span>living <b>241</b></span>
+      <span>spend <b>$1.0992</b> of <b>$6.00</b></span>
+      <span>integrity <b>clean</b></span>
+    </div>
+  </header>
+
+  <div class="verdict">
+    <p class="eyebrow">Result</p>
+    <div class="call">The prediction held. Part of the finding is dismantled.</div>
+    <p>Own-history reasoning fell from <strong>56% to 16%</strong> as the population grew
+    fourteenfold. That component was substantially an artifact of a small population
+    recirculating through the Namer's 12-record window — exactly as predicted before the
+    shifts were run. What survived the same growth is narrower, and stronger for it.</p>
+  </div>
+
+  <section class="col">
+    <h2>The prediction, made in advance</h2>
+    <p class="quote">The Namer sees a rolling window of the 12 most recent specimen records.
+    Right now the population is small enough that the same specimens keep recurring in that
+    window — which naturally invites continuity language. If the effect is an artifact of the
+    small population, own-history reasoning should fall as the population grows.</p>
+    <p>The threshold was set at <strong>180 entries</strong> — BASIN-01's early-era sample
+    size exactly, so the comparison would be like-for-like on n. The terrain reached 183
+    entries at shift 42, with the population up from 18 to 241.</p>
+  </section>
+
+  <section>
+    <div class="scroll">
+      <table>
+        <caption>BASIN-02 reasoning register, banded by shift, against population</caption>
+        <thead>
+          <tr>
+            <th>Shifts</th><th class="num">Entries</th><th class="num">Living</th>
+            <th class="num">Purely categorical</th><th class="num">Own history</th>
+            <th class="num">Lineage</th><th class="num">Names others</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>0–14</td><td class="num">48</td><td class="num">18</td>
+            <td class="num">0%</td><td class="num fell">56%</td><td class="num">71%</td><td class="num">98%</td></tr>
+          <tr><td>15–24</td><td class="num">50</td><td class="num">58</td>
+            <td class="num">0%</td><td class="num fell">36%</td><td class="num">84%</td><td class="num">100%</td></tr>
+          <tr><td>25–32</td><td class="num">40</td><td class="num">99</td>
+            <td class="num">0%</td><td class="num fell">22%</td><td class="num">85%</td><td class="num">100%</td></tr>
+          <tr><td>33–41</td><td class="num">45</td><td class="num">248</td>
+            <td class="num held">0%</td><td class="num fell">16%</td><td class="num held">84%</td><td class="num held">100%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="col">
+    <h2>What was dismantled, and what was not</h2>
+    <p><strong>Dismantled:</strong> reasoning about a specimen's own history. It tracked
+    population size almost perfectly downward. When the Namer's window was full of familiar
+    specimens it wrote about their trajectories; when the window filled with strangers, it
+    largely stopped. That is a property of the window, not of the Namer.</p>
+    <p><strong>Survived, at fourteen times the population:</strong></p>
+    <ul>
+      <li><strong>Not one entry in 183 was purely classificatory.</strong> Zero percent
+      across every band. In BASIN-01's non-living era, 75% were.</li>
+      <li><strong>Ancestry is used to argue alikeness</strong>, not merely repeated from the
+      observation. It appears inside the comparison clause — where the case for more-alike or
+      less-alike is actually made — in <strong>88%</strong> of BASIN-02 entries and 80% of
+      BASIN-01's living-era entries.</li>
+      <li><strong>Every entry reasons against other named specimens.</strong> 100% across the
+      last three bands, always inside a comparison rather than as a bare exemplar list.</li>
+    </ul>
+  </section>
+
+  <div class="caveat correction col">
+    <h3>Correction to this analysis</h3>
+    <p>The first pass at the ancestry test reported 0% — that was a broken pattern, not a
+    result. It truncated each comparison clause at the first period, and the comparisons are
+    full of decimal measurements, so almost every clause was cut off after a few words. The
+    corrected test gives 88%. The wrong number was never carried into a conclusion, but it
+    is recorded here because a register that only publishes its successful passes is not a
+    register.</p>
+  </div>
+
+  <section class="flagged">
+    <p class="eyebrow">The finding, as it now stands</p>
+    <h2>Persistence is the variable — not field versus line</h2>
+    <p>The primary evidence is <em>within</em> BASIN-01, not across the two terrains: same
+    terrain, same Namer, same prompt, same model, with only the definition of a specimen
+    changing at shift 49.</p>
+    <div class="scroll">
+      <table>
+        <caption>BASIN-01, before and after specimens became persistent</caption>
+        <thead>
+          <tr><th>Era</th><th class="num">Entries</th><th class="num">Purely categorical</th><th class="num">Lineage</th><th class="num">Names others</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Shifts 0–48 — fragments of text</td><td class="num">180</td>
+            <td class="num">75%</td><td class="num">1%</td><td class="num">0%</td></tr>
+          <tr><td>Shifts 49–95 — persistent specimens</td><td class="num">134</td>
+            <td class="num">0%</td><td class="num">92%</td><td class="num">96%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>BASIN-02's role is <strong>corroboration with one explanation removed</strong>. It
+    inherited BASIN-01's code but none of its history, and its Namer reasons relationally
+    from the first specimen onward. That rules out <em>"the Namer needed 48 shifts to
+    adapt"</em> — there was nothing to adapt from. It is not a second, independent discovery
+    of the same thing, and describing it as one would overstate what two terrains can show.</p>
+  </section>
+
+  <section>
+    <h2 class="col">First spatial result — and it is a mundane one</h2>
+    <p class="col">At 241 living the population is finally large enough to measure. It is
+    <strong>not evenly spread across the field</strong>, and the unevenness is far beyond
+    chance.</p>
+    <div class="hist">
+      <div class="bars" role="img" aria-label="Specimens per lateral column, ranging from 4 to 36 against an even expectation of 16.1">
+        <i style="height:44%"></i><i style="height:17%"></i><i style="height:81%"></i>
+        <i style="height:11%"></i><i style="height:42%"></i><i style="height:31%"></i>
+        <i style="height:69%"></i><i style="height:42%"></i><i style="height:100%"></i>
+        <i style="height:25%"></i><i style="height:50%"></i><i style="height:28%"></i>
+        <i style="height:58%"></i><i style="height:39%"></i><i style="height:33%"></i>
+      </div>
+      <div class="axis"><span>column 0</span><span>specimens per column — even scatter would be 16.1 each</span><span>column 14</span></div>
+    </div>
+    <div class="cards">
+      <div class="card"><span class="k">Chi-square</span><span class="v">65.7</span>
+        <span class="n">on 14 df; p = 0.001 needs only 42.3</span></div>
+      <div class="card"><span class="k">Variance : mean</span><span class="v">4.38</span>
+        <span class="n">1.0 would be random scatter; above 1 is clumped</span></div>
+      <div class="card"><span class="k">Lateral spread</span><span class="v">4.08</span>
+        <span class="n">stdev, columns 0–14 — was 0.99 across 5 columns at shift 14</span></div>
+      <div class="card"><span class="k">Mean spacing</span><span class="v">0.21</span>
+        <span class="n">steps to nearest neighbour — was 0.67. Closer, not further apart.</span></div>
+    </div>
+    <div class="caveat">
+      <h3>Why this is not territorial behaviour</h3>
+      <p>Lateral position carries no light, so a clump cannot be explained by the gradient —
+      which makes it genuinely spatial. But the likely cause is mechanical rather than
+      behavioural: <strong>descendants arise in their parent's own cell</strong>, and nothing
+      in the physics pushes anything sideways. Lineages simply stay where they were born.</p>
+      <p>The spacing measurement settles it. If specimens were dispersing to avoid crowding,
+      mean nearest-neighbour distance would grow. It <strong>fell</strong>, from 0.67 steps to
+      0.21. They are getting more crowded, not holding ground. On the question the field was
+      built to ask, this is a clean negative so far.</p>
+    </div>
+  </section>
+
+  <section class="col">
+    <h2>Standing</h2>
+    <ul>
+      <li>Both terrains continue unchanged. No reconfiguration is warranted or taken.</li>
+      <li>The register keeps running passively on both, unmodified.</li>
+      <li><strong>Open:</strong> whether the lateral clump is only birth-in-place. Testable by
+      comparing where descendants end up against where they were born.</li>
+      <li><strong>Open:</strong> whether ancestry-as-discriminator survives a much larger
+      taxonomy, where categories rather than parentage may carry the comparison.</li>
+    </ul>
+  </section>
+
+  <footer>
+    BASIN-01 remains ACTIVE and unamended at shift 126, physics frozen at v1.4, as the
+    control; its early era is closed and that sample cannot grow. Combined spend across both
+    terrains: $3.4368. Every figure was computed from <code>state/</code> and
+    <code>shifts/</code> at evaluation time; the field rollup is recomputable from
+    <code>state/field_log.jsonl</code>.
+  </footer>
+
+</div>
+
+</body>
+</html>

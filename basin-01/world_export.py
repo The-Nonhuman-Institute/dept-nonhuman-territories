@@ -18,7 +18,15 @@ WHAT THIS EXPORTS, AND WHY THAT MATTERS
 
   Only measurements. Cell position, cover density, residue, and for each living
   thing: where it is, how much light it holds, how long it has been present,
-  what it draws on, what it is linked to.
+  what it draws on, what it is linked to, and how it is built — reach, link
+  capacity, and how much it carries.
+
+  The build is the one thing here that is inherited and paid for. It is not a
+  description of a shape; it is three numbers that cost light every shift and
+  buy specific advantages. The viewer draws those numbers. That is the only
+  reason anything on screen has a form at all, and it is why the forms differ
+  between the margin and the stream — the terrain could afford different things
+  in different places.
 
   Nothing here decides what anything looks like. There is no shape, no model,
   no species, no form. The viewer draws position, brightness, scale and
@@ -64,6 +72,34 @@ import life
 
 VIEWER_DIR = os.path.join(config.TERRAIN_ROOT, "viewer")
 OUTPUT = os.path.join(VIEWER_DIR, "world.json")
+HISTORY_OUTPUT = os.path.join(VIEWER_DIR, "history.json")
+
+
+def build_history(memory: Dict[str, Any]) -> Dict[str, Any]:
+    """The shifts the terrain still remembers, as frames.
+
+    Position and light per specimen per shift. The viewer moves between
+    consecutive frames so movement can be watched instead of inferred from two
+    snapshots. Nothing here is smoothed or invented — the in-between positions
+    are drawn between two recorded ones and are marked as such on screen.
+    """
+    world = memory.get("world") or {}
+    frames = world.get("history") or []
+    return {
+        "frames": [
+            {"shift": f["shift"],
+             "beings": {b[0]: ({"cell": b[1], "light": b[2]} if len(b) < 9 else
+                               {"cell": b[1], "light": b[2],
+                                "extent": b[3], "junctions": b[4], "mass": b[5],
+                                "generation": b[6], "descendants": b[7], "age": b[8]})
+                        for b in f.get("beings", [])},
+             "cover": f.get("cover", []),
+             "residue": f.get("residue", [])}
+            for f in frames
+        ],
+        "first_shift": frames[0]["shift"] if frames else None,
+        "last_shift": frames[-1]["shift"] if frames else None,
+    }
 
 
 def _lateral(identifier: str) -> float:
@@ -74,8 +110,43 @@ def _lateral(identifier: str) -> float:
     return round((total % 2001) / 1000.0 - 1.0, 4)   # -1.0 .. 1.0
 
 
+def latest_classifications() -> Dict[str, Dict[str, Any]]:
+    """The Namer's most recent word on each specimen.
+
+    The terrain knows what it has named things; the viewer was not being told.
+    This reads the specimen log and keeps the newest entry per identifier, so
+    what appears on screen is the Namer's own account rather than a number.
+    """
+    latest: Dict[str, Dict[str, Any]] = {}
+    if not os.path.exists(config.SPECIMEN_LOG):
+        return latest
+    with open(config.SPECIMEN_LOG, "r", encoding="utf-8") as stream:
+        for line in stream:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                record = json.loads(line)
+            except ValueError:
+                continue
+            identifier = record.get("specimen_id")
+            classification = record.get("classification") or {}
+            if identifier and classification.get("category"):
+                latest[identifier] = {
+                    "category": classification.get("category"),
+                    "decision": classification.get("decision"),
+                    "reasoning": (classification.get("reasoning") or "")[:900],
+                    "comparison": (classification.get("comparison") or "")[:500],
+                    "persistence": (classification.get("persistence_native") or "")[:500],
+                    "record_tier": record.get("record_tier"),
+                    "observed_at_shift": record.get("shift"),
+                }
+    return latest
+
+
 def build(memory: Dict[str, Any]) -> Dict[str, Any]:
     world = memory.get("world") or {}
+    named = latest_classifications()
     cells = world.get("cells") or []
     individuals = world.get("individuals") or {}
     links = world.get("links") or {}
@@ -117,12 +188,16 @@ def build(memory: Dict[str, Any]) -> Dict[str, Any]:
             "descendants": int(being.get("descendants", 0)),
             "origin": being.get("origin"),
             "affinities": being.get("traits", {}),
+            "structure": being.get("structure", {}),
+            "upkeep": round(life.structural_upkeep(being.get("structure", {})), 3),
+            "capacity": round(life.light_capacity(being.get("structure", {})), 3),
             "from_cover": share(being.get("drawn_from_census", 0.0)),
             "from_residue": share(being.get("drawn_from_residue", 0.0)),
             "from_links": share(being.get("drawn_from_links", 0.0)),
             "given_to_links": round(float(being.get("given_to_links", 0.0)), 3),
             "moves": int(being.get("moves", 0)),
             "trace": (traces.get(identifier) or "")[:600],
+            "named": named.get(identifier),
         })
 
     exported_links: List[Dict[str, Any]] = []
@@ -153,6 +228,8 @@ def build(memory: Dict[str, Any]) -> Dict[str, Any]:
         "beings": exported_beings,
         "links": exported_links,
         "recently_ended": ended,
+        "categories": sorted({(named.get(b) or {}).get("category")
+                              for b in individuals if named.get(b)} - {None}),
         "totals": {
             "living": len(exported_beings),
             "ever_ended": len(world.get("ended") or []),
@@ -179,6 +256,11 @@ def main(argv: List[str]) -> int:
     payload = build(memory)
     with open(OUTPUT, "w", encoding="utf-8") as stream:
         json.dump(payload, stream, indent=1)
+
+    history = build_history(memory)
+    with open(HISTORY_OUTPUT, "w", encoding="utf-8") as stream:
+        json.dump(history, stream, separators=(",", ":"))
+    print("%d shift(s) of movement recorded" % len(history["frames"]))
 
     print("shift %s — %d living, cover in %d of %d cells, %d link(s)"
           % (payload["shift"], payload["totals"]["living"],

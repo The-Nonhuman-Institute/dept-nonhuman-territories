@@ -1,0 +1,105 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Linnaean Crosswalk</title><style>
+:root{--paper:#EFEDE3;--ink:#14170F;--moss:#3B4A2F;--grey:#6B7168;--rule:#B9B5A4;
+--panel:#F7F5EC;--amber:#8A6D14;
+--serif:Georgia,'Iowan Old Style','Times New Roman',serif;
+--sans:ui-sans-serif,system-ui,-apple-system,'Helvetica Neue',sans-serif;
+--mono:ui-monospace,SFMono-Regular,Menlo,'DejaVu Sans Mono',monospace}
+/* A printed record commits to paper on either host theme. */
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:14.5px/1.65 var(--sans);margin:0;
+padding:0 clamp(14px,3vw,30px) 60px;-webkit-font-smoothing:antialiased}
+.sheet{max-width:1180px;margin:14px auto 0;border:1px solid var(--ink);background:var(--paper);
+padding:0 clamp(16px,3vw,32px) 30px}
+.backbar{padding:10px 0;border-bottom:1px solid var(--rule)}
+.backbar a{color:var(--moss);text-decoration:none;font:11.5px var(--mono);letter-spacing:.06em}
+.backbar a:hover{text-decoration:underline}
+.backbar a:focus-visible{outline:2px solid var(--moss);outline-offset:2px}
+.masthead{display:grid;grid-template-columns:auto 1fr auto;gap:26px;align-items:start;
+border-bottom:3px double var(--ink);padding:22px 0 16px}
+.mark{width:52px;height:52px;border:2.5px solid var(--moss);position:relative}
+.mark:after{content:"";position:absolute;left:9px;right:9px;top:9px;bottom:-2px;
+background:var(--paper);border-left:2.5px solid var(--moss);border-right:2.5px solid var(--moss)}
+.dept{font:600 10.5px/1.45 var(--sans);letter-spacing:.13em;text-transform:uppercase;margin-top:6px}
+.title h1{font:400 clamp(19px,2.3vw,27px)/1.18 var(--serif);margin:0;text-transform:uppercase}
+.title .sub{color:var(--grey);font:11px/1.6 var(--mono);margin-top:8px;max-width:64ch}
+table.doc{border-collapse:collapse;font:10.5px/1.7 var(--mono);color:var(--grey)}
+table.doc td{padding:0 0 0 10px;white-space:nowrap}
+table.doc td.k{padding:0}
+table.doc td.k:after{content:":";padding-left:10px}
+table.doc td.v{color:var(--ink)}
+h2{font:400 22px/1.2 var(--serif);color:var(--moss);margin:0 0 6px}
+h3{font:600 9.5px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+color:var(--grey);margin:0 0 7px}
+section{margin:30px 0}
+.lede{color:var(--grey);font-size:13px;max-width:74ch;margin:0 0 14px}
+.box{border:1px solid var(--rule);padding:10px 13px;background:var(--panel)}
+.bh{font:600 9px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+color:var(--grey);margin-bottom:5px}
+code{font:12px var(--mono);background:var(--panel);padding:1px 5px;border:1px solid var(--rule)}
+.scroll{overflow-x:auto}
+table.data{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+table.data th{text-align:left;font:600 9.5px/1.4 var(--mono);letter-spacing:.11em;
+text-transform:uppercase;color:var(--grey);border-bottom:1px solid var(--ink);
+padding:0 14px 7px 0;vertical-align:bottom}
+table.data td{border-bottom:1px solid var(--rule);padding:10px 14px 10px 0;vertical-align:top}
+table.data td.num,table.data th.num{text-align:right;padding-right:20px;font-family:var(--mono)}
+.quote{border-left:2px solid var(--rule);padding:4px 0 4px 18px;font:italic 14px/1.6 var(--serif);
+max-width:74ch}
+footer{margin-top:34px;border-top:3px double var(--ink);padding-top:16px;
+font:10.5px/1.7 var(--mono);color:var(--grey)}
+
+
+
+
+
+
+.wrap{max-width:1000px;margin:0 auto}
+.backbar{position:sticky;top:0;background:var(--paper);border-bottom:1px solid var(--rule);
+padding:12px 0;margin-bottom:26px;z-index:5}
+.backbar a{color:var(--moss);text-decoration:none;font:12px var(--mono);letter-spacing:.06em}
+.backbar a:hover{text-decoration:underline}
+.eyebrow{font:500 11px/1.5 var(--mono);letter-spacing:.16em;text-transform:uppercase;
+color:var(--grey);margin:0}
+h1{font:400 clamp(28px,4vw,42px)/1.1 var(--serif);margin:10px 0 12px}
+h2{font:400 23px/1.2 var(--serif);margin:0 0 6px;color:var(--moss)}
+h3{font:600 12px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--grey);margin:0 0 6px}
+.lede{color:var(--grey);max-width:70ch;margin:0}
+.meta{display:flex;flex-wrap:wrap;gap:6px 26px;margin-top:14px;font:12px var(--mono);color:var(--grey)}
+.meta b{color:var(--ink);font-weight:400}
+header{border-bottom:2px solid var(--ink);padding-bottom:20px;margin-bottom:30px}
+.note{background:var(--panel);border-left:3px solid var(--amber);padding:12px 16px;
+font-size:13.5px;color:var(--grey);margin-bottom:30px;max-width:74ch}
+section{margin-bottom:38px}
+.sub{color:var(--grey);font-size:13.5px;max-width:72ch;margin:0 0 14px}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:720px;font-size:13.5px;
+font-variant-numeric:tabular-nums;margin-top:12px}
+th{text-align:left;font:600 10.5px/1.4 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+color:var(--grey);border-bottom:1px solid var(--ink);padding:0 14px 8px 0;vertical-align:bottom}
+td{border-bottom:1px solid var(--rule);padding:11px 14px 11px 0;vertical-align:top}
+td.num,th.num{text-align:right;padding-right:20px;font-family:var(--mono)}
+.note-cell{color:var(--grey);font-size:12.5px;max-width:40ch}
+code{font:12.5px var(--mono);background:var(--panel);padding:1px 5px;border:1px solid var(--rule)}
+.none{color:var(--grey);font-style:italic}
+.conf{font:10px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border:1px solid}
+.conf.partial{color:var(--amber);border-color:var(--amber)}
+.conf.none{color:var(--grey);border-color:var(--rule)}
+.conf.full,.conf.high{color:var(--moss);border-color:var(--moss)}
+.gap{background:var(--panel);border:1px solid var(--rule);padding:16px 18px;margin-top:20px;
+font-size:13.5px;color:var(--grey);max-width:74ch}
+.gap code{margin-right:5px;display:inline-block;margin-bottom:4px}
+.quote{border-left:2px solid var(--rule);padding:4px 0 4px 18px;font:italic 14.5px/1.6 var(--serif);
+max-width:74ch}
+.pair{display:grid;grid-template-columns:1fr 260px;gap:18px;padding:14px 0;
+border-bottom:1px solid var(--rule)}
+.native{font:italic 13.5px/1.6 var(--serif)}
+.ref .lbl{display:block;font:10px var(--mono);letter-spacing:.09em;text-transform:uppercase;
+color:var(--grey);margin-bottom:4px}
+.pn{color:var(--grey);font-size:12px;margin:6px 0 0}
+@media(max-width:720px){.pair{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<div class="backbar"><a href="http://127.0.0.1:8730/hub.html">&larr; Department index</a></div>
+<header><p class="eyebrow">BASIN-01 · DNT-CLS-001 Section 2</p><h1>The Linnaean Crosswalk</h1><p class="lede">A best-effort translation of this terrain's native taxonomy into Linnaean terms, produced by the Archivist <em>after</em> classification. It carries no authority over the native system and does not feed back into it. The Namer has never seen it.</p><div class="meta"><span>terrain at shift <b>126</b></span><span>last crosswalk pass <b>shift 126</b></span><span><b>32</b> categories in use</span></div></header><div class="note">For human legibility only. Carries no authority over the native system and does not feed back into it (DNT-CLS-001 Section 2).</div><section><h2>What maps to what</h2><div class="scroll"><table><thead><tr><th>Native category</th><th class="num">Specimens</th><th>Linnaean tier</th><th>Confidence</th><th>The Archivist's note</th></tr></thead><tbody><tr><td><code>structural_notation_system</code></td><td class="num">57</td><td><span class="none">no equivalent</span></td><td><span class="conf none">none</span></td><td class="note-cell">Spans multiple tiers (order to family equivalent) by behavioral integration and network role rather than single structural tier.</td></tr><tr><td><code>structural_isolate</code></td><td class="num">11</td><td><span class="none">no equivalent</span></td><td><span class="conf none">none</span></td><td class="note-cell">Defined by resource isolation and negligible inter-link activity rather than structure; crosses multiple conventional tiers by ecological strategy.</td></tr><tr><td><code>emergent_incipient</code></td><td class="num">2</td><td><b>Species</b></td><td><span class="conf partial">partial</span></td><td class="note-cell">Nascent zero-complexity sighting with defined gradient niche; Species tier is least-bad fit for a distinct initial phenotype.</td></tr><tr><td><code>emergent_ephemeral</code></td><td class="num">1</td><td><b>Species</b></td><td><span class="conf partial">partial</span></td><td class="note-cell">Nascent phenotype at low-gradient extreme; Species tier applied for phenotypic distinctness despite zero persistence.</td></tr><tr><td><code>emergent_neonate</code></td><td class="num">10</td><td><b>Species</b></td><td><span class="conf partial">partial</span></td><td class="note-cell">Nascent data-stream-proximal phenotype with heavier architecture; Species tier for phenotypic profile despite zero-shift age.</td></tr><tr><td><code>emergent_minimal</code></td><td class="num">9</td><td><b>Species</b></td><td><span class="conf partial">partial</span></td><td class="note-cell">Ultra-constrained nascent phenotype at gradient extreme; Species tier for distinct architectural constraint profile.</td></tr><tr><td><code>emergent_mid_structural</code></td><td class="num">1</td><td><b>Species</b></td><td><span class="conf partial">partial</span></td><td class="note-cell">Nascent mid-gradient phenotype with defined 2-link architecture; Species tier for architectural and positional distinctness.</td></tr><tr><td><code>emergent_descendant_minimal</code></td><td class="num">3</td><td><b>Species</b></td><td><span class="conf partial">partial</span></td><td class="note-cell">Hereditary nascent form with low-gradient, minimal-build profile; Species tier for heritable phenotypic distinctness.</td></tr></tbody></table></div><div class="gap"><h3>Not yet crosswalked</h3><p>24 categories are in active use but have no entry in the latest pass. The Archivist runs on a cadence, so categories coined since its last pass wait for the next one. This gap is shown rather than hidden:</p><p><code>active_accumulator</code> <code>descendant_incipient</code> <code>descendant_mid_structural</code> <code>descendant_minimal</code> <code>descended_structural</code> <code>emergent_descendant_compact</code> <code>emergent_descendant_incipient</code> <code>emergent_descendant_mid</code> <code>emergent_descendant_moderate</code> <code>emergent_descendant_neonate</code> <code>emergent_descendant_neonate_variant</code> <code>emergent_descendant_ultra_compact</code> <code>emergent_fragment</code> <code>emergent_inheritor</code> <code>emergent_mid_compact</code> <code>emergent_neonate_compact</code> <code>emergent_neonate_moderate</code> <code>emergent_proximal_heavyweight</code> <code>emergent_residue_hybrid</code> <code>ephemeral_fragment</code> <code>fragment_descendant_incipient</code> <code>fragment_incipient_mobile</code> <code>nascent_structural</code> <code>structural_inheritor</code></p></div></section><section><h2>Is the native system self-consistent?</h2><div class="quote">The system's documented categories (33 labels) vastly exceed the author's formal system definition (8 categories). The filed categories introduce many variants (e.g., emergent_descendant_compact, emergent_descendant_incipient, emergent_neonate_compact, emergent_mid_compact, active_accumulator, descendant_incipient) that have no corresponding formal definitions. This suggests either incomplete documentation or real-time category proliferation. The system is fundamentally non-hierarchical and trait-based; conventional tier mapping is inherently lossy.</div></section><section><h2>How specimens persist, in both vocabularies</h2><p class="sub">The Namer describes persistence in its own words. The Archivist assigns a reference state alongside it — never instead of it.</p><div class="pair"><div class="native">Persists as a formal declaration: the system initializes itself, processes input streams through a queue mechanism, maintains internal state across cycles, and returns structured status reports. Its existence is contingent on the execution model described within it.</div><div class="ref"><span class="lbl">reference state</span><code>persistent-singular</code><p class="pn">Execution-dependent singular system with maintained internal state across cycles.</p></div></div><div class="pair"><div class="native">Persists as a suspended sensory present: the moment holds only if attention remains fixed on the atmospheric quality, on the pause itself. It dissolves once forward motion resumes, once deliberation begins, or once external action claims priority.</div><div class="ref"><span class="lbl">reference state</span><code>stateless/ephemeral</code><p class="pn">Contingent on continuous attentional focus; collapse is immediate upon distraction or action.</p></div></div><div class="pair"><div class="native">Persists through active opposition and function: the lighthouse persists because it acts against the storm, because it cuts through darkness, because ships depend on its beam. It is a threshold-holder, a persistent boundary-maintainer.</div><div class="ref"><span class="lbl">reference state</span><code>persistent-singular</code><p class="pn">Singular entity persisting through functional necessity and active opposition to external force.</p></div></div><div class="pair"><div class="native">Persists through sustained psychological suspension: she persists in the moment only as long as hope and doubt remain balanced, only as long as she remains waiting. The moment collapses once the arrival/non-arrival is resolved.</div><div class="ref"><span class="lbl">reference state</span><code>stateless/ephemeral</code><p class="pn">Contingent on psychological equilibrium; resolution of binary outcome dissolves the state.</p></div></div><div class="pair"><div class="native">Persists as a declarative system specification—a frozen moment of structural constraint and functional rule-set, describing what is permitted and what is forbidden in output generation.</div><div class="ref"><span class="lbl">reference state</span><code>persistent-singular</code><p class="pn">Static rule-set maintained as singular specification across invocations.</p></div></div><div class="pair"><div class="native">Persists as a suspended moment of psychological interiority—a character held at the threshold of decision, waiting, uncertain, defined by what does not happen.</div><div class="ref"><span class="lbl">reference state</span><code>stateless/ephemeral</code><p class="pn">Threshold state dependent on non-occurrence; any event (decision, action) terminates it.</p></div></div><div class="pair"><div class="native">Persists as a moment of contemplative exploration—a character suspended in the act of touching and imagining, finding thresholds within objects rather than crossing them.</div><div class="ref"><span class="lbl">reference state</span><code>stateless/ephemeral</code><p class="pn">Defined by suspension of action and introspection; forward motion ends the state.</p></div></div><div class="pair"><div class="native">Persists as an enacted threshold—a character crossing from one state (waiting/uncertain) into action (walking forward), defined by movement and the opening of possibility rather than the suspension of it.</div><div class="ref"><span class="lbl">reference state</span><code>stateless/ephemeral</code><p class="pn">Transitional moment; once crossing is complete, the threshold-defined state dissolves into post-crossing reality.</p></div></div></section><section><h2>Lineages</h2><p class="sub">Capability drift tracked per lineage as its own axis, separate from taxonomic rank (DNT-CLS-001 Section 4). Computed from parentage; no model consulted.</p><p><b>60</b> lineages traced from parentage. No model was consulted.</p></section>
+</div></body></html>

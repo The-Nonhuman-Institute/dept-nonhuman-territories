@@ -1,0 +1,195 @@
+{
+  "authored_by": "namer",
+  "seeded_at": "2026-08-18T17:33:15Z",
+  "container_note": "The object under 'native' is authored entirely by this terrain's Namer. It is not issued a template, a structure, or a vocabulary. Its only obligation is that for any two specimens it can state whether they are more or less alike, and why (DNT-CLS-001 Section 1).",
+  "native": {
+    "static_accumulator": {
+      "definition": "Specimens that occupy a fixed location, do not sustain systematic movement, show zero or minimal outward transfer of resources to other organisms along links, and persist through a combination of initial endowment, passive intake from local sources (cover layer, residue), and/or local reproduction. Movement may be episodic (one or two discrete events), but the organism does not maintain a mobile lifestyle. Complexity may increase with reproductive output and tenure. Incipient transfer behavior (< 5% of holdings) is tolerated within the category pending further observation.",
+      "examples": [
+        "i-00000",
+        "i-00004",
+        "i-00005",
+        "i-00006",
+        "i-00007",
+        "i-42449"
+      ],
+      "key_traits": [
+        "zero or episodic movement (one to two discrete events; not sustained mobility)",
+        "zero or minimal outward transfer along organism links (< 5% of holdings)",
+        "fixed location between movement events",
+        "resource holding via endowment and/or passive local intake (from cover layer and/or residue)",
+        "local reproduction present in some specimens but not required for membership",
+        "complexity increases with reproductive output and tenure length",
+        "substrate diversity (fragment or structural); substrate is orthogonal to classification"
+      ]
+    },
+    "episodic_relocator": {
+      "definition": "Specimens exhibiting one or more discrete movement events while maintaining otherwise static traits: episodic (not sustained) movement pattern, typically zero outward transfer along links, passive primary intake from cover layer and/or residue, high elevation and/or high gradient position, fixed position between movement events, and local reproduction absent or minimal. Movement is goal-driven or event-triggered, not systemic wandering.",
+      "examples": [
+        "i-00001",
+        "i-00002",
+        "i-00003",
+        "i-00008",
+        "i-03720"
+      ],
+      "key_traits": [
+        "one to three discrete movement events (episodic, not sustained; <3 per specimen over tenure)",
+        "zero or minimal outward transfer along links (typically 0%)",
+        "passive cover-layer or residue intake as dominant source",
+        "high elevation (0.97\u20131.00) and high gradient proximity (0.95\u20131.00) typical",
+        "fixed location between movement events",
+        "local reproduction absent or minimal",
+        "complexity variable; tenure-dependent; no behavioral escalation despite tenure length",
+        "substrate diversity; substrate orthogonal to classification"
+      ]
+    },
+    "mobile_exchanger": {
+      "definition": "Specimens exhibiting sustained systematic movement (3 or more discrete events across tenure), coupled with active outward transfer of resources to other organisms along links (> 2% of total intake per interval, or \u2265 1.5% with high movement frequency and complexity \u2265 19) or consistent link-derived resource intake (> 5% of total intake). Movement is frequent and recurring, not episodic. Primary resource intake is from passive sources (cover layer and/or residue) but specimens increasingly incorporate link-derived resources. Reproduction is typically present (1+ descendants) but not required. These specimens occupy positions across the gradient and elevation range, showing no strong positional constraint. Substrate diversity observed; substrate orthogonal to classification. Lower-engagement phenotypes (low transfer rate, cover-layer-dominant, reproductive focus) are tolerated within the category if complexity \u2265 16 and movement events \u2265 9.",
+      "examples": [
+        "i-02737",
+        "i-02774",
+        "i-02781",
+        "i-02825",
+        "i-02827",
+        "i-02834",
+        "i-02897",
+        "i-02925",
+        "i-02929",
+        "i-02943",
+        "i-02958",
+        "i-02964",
+        "i-03030",
+        "i-03053",
+        "i-03076",
+        "i-03112",
+        "i-03123",
+        "i-03237",
+        "i-03272",
+        "i-03343",
+        "i-03241",
+        "i-03508",
+        "i-03543",
+        "i-03571",
+        "i-03743",
+        "i-03945",
+        "i-04658",
+        "i-04738",
+        "i-04847",
+        "i-04280",
+        "i-04705",
+        "i-04756",
+        "i-03640",
+        "i-03645",
+        "i-03746",
+        "i-03866",
+        "i-20184",
+        "i-20505",
+        "i-25432",
+        "i-25560",
+        "i-26569",
+        "i-26570",
+        "i-27320",
+        "i-17939",
+        "i-18376",
+        "i-18767",
+        "i-18857",
+        "i-19765",
+        "i-23467",
+        "i-23857",
+        "i-24484",
+        "i-27601",
+        "i-27687",
+        "i-30822",
+        "i-31446",
+        "i-22066",
+        "i-22353",
+        "i-22354",
+        "i-22924",
+        "i-23042",
+        "i-24333",
+        "i-24768",
+        "i-25329",
+        "i-25586",
+        "i-25657"
+      ],
+      "key_traits": [
+        "sustained systematic movement: 3+ discrete events across tenure (range 9\u201317 events in current interval)",
+        "active outward transfer of resources along links: > 2% of total intake per interval (or \u2265 1.5% with complexity \u2265 19 and movement \u2265 10); current interval range 0.6\u20138.1%",
+        "primary intake from passive sources (cover layer 48\u201381%, residue 18\u201351%) with secondary link-derived intake (0\u20131%)",
+        "gradient position shows diversity (0.75\u20130.96 observed in current interval); no strict constraint",
+        "elevation typically high (0.93\u20130.96 observed in current interval)",
+        "local reproduction variable (0\u20136 descendants observed in current interval); reproduction present in most but not all specimens",
+        "complexity range 16\u201331 for expanded cohort; 28\u201331 dominant in current interval",
+        "substrate diversity (fragment and structural); substrate orthogonal to classification",
+        "phenotypic variation: high-mobility/high-transfer (i-25586), balanced-intake/robust-transfer (i-24333, i-25329), minimal-transfer/reproductive-focus (i-25657), low-transfer/passive-strategy (i-24768)"
+      ],
+      "notes": "Category expanded from 517 to 522 members (five new specimens added this interval: i-24333, i-24768, i-25329, i-25586, i-25657). All five new specimens show sustained movement (9\u201317 events), complexity 28\u201331, gradient positions 0.75\u20130.96, and high elevation (0.93\u20130.96). Outward transfer rates range 0.6\u20138.1%, all meeting mobile_exchanger thresholds or falling within acceptable lower-engagement phenotypes. Category remains stable and exclusive source of growth in aggregate tier."
+    },
+    "anomalous": {
+      "definition": "Specimens whose behavior does not align with any established category or whose behavior profile suggests a lifestyle distinct from known types. These are held pending accumulation of similar specimens or re-evaluation as categories evolve.",
+      "examples": [
+        "i-03417"
+      ],
+      "key_traits": [
+        "i-03417: high outward transfer (11.5% of intake) without reciprocal link-derived intake (0%); residue-dominant resource strategy (55% residue vs. typical 10\u201337%); low reproduction (1 descendant); minimal link reciprocity despite high redistribution\u2014suggests unidirectional donor role or obligate wealth-shedding behavior."
+      ]
+    }
+  },
+  "revisions": [
+    {
+      "shift": 2,
+      "at": "2026-08-18T17:33:57Z",
+      "note": "native system rewritten by the Namer during shift 2"
+    },
+    {
+      "shift": 3,
+      "at": "2026-08-18T17:34:30Z",
+      "note": "native system rewritten by the Namer during shift 3"
+    },
+    {
+      "shift": 4,
+      "at": "2026-08-18T17:35:05Z",
+      "note": "native system rewritten by the Namer during shift 4"
+    },
+    {
+      "shift": 5,
+      "at": "2026-08-18T17:35:47Z",
+      "note": "native system rewritten by the Namer during shift 5"
+    },
+    {
+      "shift": 6,
+      "at": "2026-08-18T17:36:35Z",
+      "note": "native system rewritten by the Namer during shift 6"
+    },
+    {
+      "shift": 7,
+      "at": "2026-08-18T17:37:37Z",
+      "note": "native system rewritten by the Namer during shift 7"
+    },
+    {
+      "shift": 72,
+      "at": "2026-08-18T20:08:06Z",
+      "note": "native system rewritten by the Namer during shift 72"
+    },
+    {
+      "shift": 73,
+      "at": "2026-08-18T20:09:19Z",
+      "note": "native system rewritten by the Namer during shift 73"
+    },
+    {
+      "shift": 78,
+      "at": "2026-08-18T20:16:21Z",
+      "note": "native system rewritten by the Namer during shift 78"
+    },
+    {
+      "shift": 128,
+      "at": "2026-08-18T21:52:22Z",
+      "note": "native system rewritten by the Namer during shift 128"
+    },
+    {
+      "shift": 136,
+      "at": "2026-08-18T22:06:51Z",
+      "note": "native system rewritten by the Namer during shift 136"
+    }
+  ]
+}

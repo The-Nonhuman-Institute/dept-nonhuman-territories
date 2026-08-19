@@ -1,0 +1,105 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Linnaean Crosswalk</title><style>
+:root{--paper:#EFEDE3;--ink:#14170F;--moss:#3B4A2F;--grey:#6B7168;--rule:#B9B5A4;
+--panel:#F7F5EC;--amber:#8A6D14;
+--serif:Georgia,'Iowan Old Style','Times New Roman',serif;
+--sans:ui-sans-serif,system-ui,-apple-system,'Helvetica Neue',sans-serif;
+--mono:ui-monospace,SFMono-Regular,Menlo,'DejaVu Sans Mono',monospace}
+/* A printed record commits to paper on either host theme. */
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:14.5px/1.65 var(--sans);margin:0;
+padding:0 clamp(14px,3vw,30px) 60px;-webkit-font-smoothing:antialiased}
+.sheet{max-width:1180px;margin:14px auto 0;border:1px solid var(--ink);background:var(--paper);
+padding:0 clamp(16px,3vw,32px) 30px}
+.backbar{padding:10px 0;border-bottom:1px solid var(--rule)}
+.backbar a{color:var(--moss);text-decoration:none;font:11.5px var(--mono);letter-spacing:.06em}
+.backbar a:hover{text-decoration:underline}
+.backbar a:focus-visible{outline:2px solid var(--moss);outline-offset:2px}
+.masthead{display:grid;grid-template-columns:auto 1fr auto;gap:26px;align-items:start;
+border-bottom:3px double var(--ink);padding:22px 0 16px}
+.mark{width:52px;height:52px;border:2.5px solid var(--moss);position:relative}
+.mark:after{content:"";position:absolute;left:9px;right:9px;top:9px;bottom:-2px;
+background:var(--paper);border-left:2.5px solid var(--moss);border-right:2.5px solid var(--moss)}
+.dept{font:600 10.5px/1.45 var(--sans);letter-spacing:.13em;text-transform:uppercase;margin-top:6px}
+.title h1{font:400 clamp(19px,2.3vw,27px)/1.18 var(--serif);margin:0;text-transform:uppercase}
+.title .sub{color:var(--grey);font:11px/1.6 var(--mono);margin-top:8px;max-width:64ch}
+table.doc{border-collapse:collapse;font:10.5px/1.7 var(--mono);color:var(--grey)}
+table.doc td{padding:0 0 0 10px;white-space:nowrap}
+table.doc td.k{padding:0}
+table.doc td.k:after{content:":";padding-left:10px}
+table.doc td.v{color:var(--ink)}
+h2{font:400 22px/1.2 var(--serif);color:var(--moss);margin:0 0 6px}
+h3{font:600 9.5px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+color:var(--grey);margin:0 0 7px}
+section{margin:30px 0}
+.lede{color:var(--grey);font-size:13px;max-width:74ch;margin:0 0 14px}
+.box{border:1px solid var(--rule);padding:10px 13px;background:var(--panel)}
+.bh{font:600 9px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+color:var(--grey);margin-bottom:5px}
+code{font:12px var(--mono);background:var(--panel);padding:1px 5px;border:1px solid var(--rule)}
+.scroll{overflow-x:auto}
+table.data{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+table.data th{text-align:left;font:600 9.5px/1.4 var(--mono);letter-spacing:.11em;
+text-transform:uppercase;color:var(--grey);border-bottom:1px solid var(--ink);
+padding:0 14px 7px 0;vertical-align:bottom}
+table.data td{border-bottom:1px solid var(--rule);padding:10px 14px 10px 0;vertical-align:top}
+table.data td.num,table.data th.num{text-align:right;padding-right:20px;font-family:var(--mono)}
+.quote{border-left:2px solid var(--rule);padding:4px 0 4px 18px;font:italic 14px/1.6 var(--serif);
+max-width:74ch}
+footer{margin-top:34px;border-top:3px double var(--ink);padding-top:16px;
+font:10.5px/1.7 var(--mono);color:var(--grey)}
+
+
+
+
+
+
+.wrap{max-width:1000px;margin:0 auto}
+.backbar{position:sticky;top:0;background:var(--paper);border-bottom:1px solid var(--rule);
+padding:12px 0;margin-bottom:26px;z-index:5}
+.backbar a{color:var(--moss);text-decoration:none;font:12px var(--mono);letter-spacing:.06em}
+.backbar a:hover{text-decoration:underline}
+.eyebrow{font:500 11px/1.5 var(--mono);letter-spacing:.16em;text-transform:uppercase;
+color:var(--grey);margin:0}
+h1{font:400 clamp(28px,4vw,42px)/1.1 var(--serif);margin:10px 0 12px}
+h2{font:400 23px/1.2 var(--serif);margin:0 0 6px;color:var(--moss)}
+h3{font:600 12px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--grey);margin:0 0 6px}
+.lede{color:var(--grey);max-width:70ch;margin:0}
+.meta{display:flex;flex-wrap:wrap;gap:6px 26px;margin-top:14px;font:12px var(--mono);color:var(--grey)}
+.meta b{color:var(--ink);font-weight:400}
+header{border-bottom:2px solid var(--ink);padding-bottom:20px;margin-bottom:30px}
+.note{background:var(--panel);border-left:3px solid var(--amber);padding:12px 16px;
+font-size:13.5px;color:var(--grey);margin-bottom:30px;max-width:74ch}
+section{margin-bottom:38px}
+.sub{color:var(--grey);font-size:13.5px;max-width:72ch;margin:0 0 14px}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:720px;font-size:13.5px;
+font-variant-numeric:tabular-nums;margin-top:12px}
+th{text-align:left;font:600 10.5px/1.4 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+color:var(--grey);border-bottom:1px solid var(--ink);padding:0 14px 8px 0;vertical-align:bottom}
+td{border-bottom:1px solid var(--rule);padding:11px 14px 11px 0;vertical-align:top}
+td.num,th.num{text-align:right;padding-right:20px;font-family:var(--mono)}
+.note-cell{color:var(--grey);font-size:12.5px;max-width:40ch}
+code{font:12.5px var(--mono);background:var(--panel);padding:1px 5px;border:1px solid var(--rule)}
+.none{color:var(--grey);font-style:italic}
+.conf{font:10px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border:1px solid}
+.conf.partial{color:var(--amber);border-color:var(--amber)}
+.conf.none{color:var(--grey);border-color:var(--rule)}
+.conf.full,.conf.high{color:var(--moss);border-color:var(--moss)}
+.gap{background:var(--panel);border:1px solid var(--rule);padding:16px 18px;margin-top:20px;
+font-size:13.5px;color:var(--grey);max-width:74ch}
+.gap code{margin-right:5px;display:inline-block;margin-bottom:4px}
+.quote{border-left:2px solid var(--rule);padding:4px 0 4px 18px;font:italic 14.5px/1.6 var(--serif);
+max-width:74ch}
+.pair{display:grid;grid-template-columns:1fr 260px;gap:18px;padding:14px 0;
+border-bottom:1px solid var(--rule)}
+.native{font:italic 13.5px/1.6 var(--serif)}
+.ref .lbl{display:block;font:10px var(--mono);letter-spacing:.09em;text-transform:uppercase;
+color:var(--grey);margin-bottom:4px}
+.pn{color:var(--grey);font-size:12px;margin:6px 0 0}
+@media(max-width:720px){.pair{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<div class="backbar"><a href="http://127.0.0.1:8730/hub.html">&larr; Department index</a></div>
+<header><p class="eyebrow">BASIN-03 · DNT-CLS-001 Section 2</p><h1>The Linnaean Crosswalk</h1><p class="lede">A best-effort translation of this terrain's native taxonomy into Linnaean terms, produced by the Archivist <em>after</em> classification. It carries no authority over the native system and does not feed back into it. The Namer has never seen it.</p><div class="meta"><span>terrain at shift <b>99</b></span><span>last crosswalk pass <b>shift 98</b></span><span><b>11</b> categories in use</span></div></header><div class="note">For human legibility only. Carries no authority over the native system and does not feed back into it (DNT-CLS-001 Section 2).</div><section><h2>What maps to what</h2><div class="scroll"><table><thead><tr><th>Native category</th><th class="num">Specimens</th><th>Linnaean tier</th><th>Confidence</th><th>The Archivist's note</th></tr></thead><tbody><tr><td><code>static_accumulator</code></td><td class="num">43</td><td><b>Class</b></td><td><span class="conf partial">partial</span></td><td class="note-cell">Defines a broad behavioral class (sedentary, minimal transfer) but spans multiple conventional tiers; no single Linnaean rank captures it.</td></tr><tr><td><code>episodic_relocator</code></td><td class="num">57</td><td><b>Class</b></td><td><span class="conf partial">partial</span></td><td class="note-cell">A behavioral subclass within sedentary organisms; distinguished by episodic movement events rather than morphology or descent.</td></tr><tr><td><code>mobile_exchanger</code></td><td class="num">361</td><td><b>Class</b></td><td><span class="conf partial">partial</span></td><td class="note-cell">A behavioral class defined by sustained movement and resource transfer; orthogonal to conventional Linnaean hierarchy.</td></tr><tr><td><code>anomalous</code></td><td class="num">—</td><td><span class="none">no equivalent</span></td><td><span class="conf none">none</span></td><td class="note-cell">A holding category for specimens not yet classified; carries no systematic rank.</td></tr></tbody></table></div><div class="gap"><h3>Not yet crosswalked</h3><p>8 categories are in active use but have no entry in the latest pass. The Archivist runs on a cadence, so categories coined since its last pass wait for the next one. This gap is shown rather than hidden:</p><p><code>ascendant_dormant</code> <code>emerging_mobile_residue_specialist</code> <code>marginal_mobile_nascent</code> <code>minimal_exchanger</code> <code>mobile_resource_accumulator</code> <code>passive_accumulator</code> <code>sustained_mobile_exchanger</code> <code>zenith_static</code></p></div></section><section><h2>Is the native system self-consistent?</h2><div class="quote">The author's classification is behaviorally and ecologically driven, not morphological or phylogenetic. It does not map cleanly onto Kingdom–Species hierarchy. The system explicitly states 'substrate is orthogonal to classification,' suggesting the author treats form/structure as independent of categorical membership. No contradiction detected within the stated logic, but the system and the conventional Linnaean frame answer different questions.</div></section><section><h2>How specimens persist, in both vocabularies</h2><p class="sub">The Namer describes persistence in its own words. The Archivist assigns a reference state alongside it — never instead of it.</p><div class="pair"><div class="native">persists through a combination of tenure-based accumulation (10 shifts of cover-layer passive intake totaling 39.54 light), local reproduction (2 descendants, implying resource allocation to offspring), and episodic relocation (3 moves, likely in response to local depletion or positioning shifts)</div><div class="ref"><span class="lbl">reference state</span><code>persistent-singular</code><p class="pn">A single bounded organism sustained by repeated intake cycles, reproduction, and discrete movement events within one location or between fixed waypoints.</p></div></div><div class="pair"><div class="native">persists through cover-layer intake (100% of 16.52 light acquired), episodic repositioning (2 discrete moves over 6 shifts), and reproduction (1 descendant)</div><div class="ref"><span class="lbl">reference state</span><code>persistent-singular</code><p class="pn">Singular organism with discrete life history events (movement, reproduction) sustaining its tenure.</p></div></div><div class="pair"><div class="native">persists through sustained episodic relocation (6 moves over 8 shifts), allowing it to exploit multiple local positions and access both cover-layer intake (89%) and residue-derived resources (11%)</div><div class="ref"><span class="lbl">reference state</span><code>persistent-singular</code><p class="pn">One organism repeatedly shifting position; unified by continuous identity across movement events.</p></div></div><div class="pair"><div class="native">persists through episodic relocation (2 moves in 2 shifts), securing high-elevation, high-gradient positions</div><div class="ref"><span class="lbl">reference state</span><code>persistent-singular</code><p class="pn">Singular organism moving between discrete positions.</p></div></div><div class="pair"><div class="native">persists through tenure-based accumulation (7 shifts of predominantly cover-layer passive intake totaling 22.01 light), episodic relocation (2 moves, likely triggered by local positioning or resource shifts), and emerging incipient link-derived dependency (4% of intake from organism connections)</div><div class="ref"><span class="lbl">reference state</span><code>persistent-singular</code><p class="pn">Single organism accumulating resources over time with episodic repositioning.</p></div></div><div class="pair"><div class="native">Persists through initial endowment (holding 2.96 light from birth). No active intake has been recorded. Remains in fixed location at high elevation and high gradient position. Will accumulate local resources and potentially reproduce if it survives and tenure extends.</div><div class="ref"><span class="lbl">reference state</span><code>persistent-singular</code><p class="pn">Dormant or minimally active singular organism awaiting conditions for growth or reproduction.</p></div></div><div class="pair"><div class="native">persists through passive cover-layer intake at high elevation (0.99) and high gradient (0.92), with zero reliance on exchange or residue-derived resources. It has moved 3 times in 4 shifts, but these moves do not appear to be part of a sustained relocation lifestyle; rather, they are episodic displacements that do not alter the organism's fundamental strategy of position-dependent accumulation.</div><div class="ref"><span class="lbl">reference state</span><code>persistent-singular</code><p class="pn">Single organism with fixed positional strategy and episodic movement as disturbance response, not as systematic lifestyle.</p></div></div><div class="pair"><div class="native">persists through a mixed intake strategy: 69% cover-layer passive intake and 31% residue-based intake, indicating it occupies a position where both resources are accessible—possibly at moderate elevation (0.99, same as peers) where residue drifts downslope and cover-layer precipitation still arrives. It has moved once in 4 shifts, a single episodic relocation, and now remains position-dependent.</div><div class="ref"><span class="lbl">reference state</span><code>persistent-singular</code><p class="pn">Singular organism relying on access to multiple local resource streams and episodic repositioning within one site-bound lifestyle.</p></div></div></section><section><h2>Lineages</h2><p class="sub">Capability drift tracked per lineage as its own axis, separate from taxonomic rank (DNT-CLS-001 Section 4). Computed from parentage; no model consulted.</p><p><b>56</b> lineages traced from parentage. No model was consulted.</p></section>
+</div></body></html>

@@ -1,0 +1,358 @@
+{
+  "authored_by": "namer",
+  "seeded_at": "2026-08-17T21:45:02Z",
+  "container_note": "The object under 'native' is authored entirely by this terrain's Namer. It is not issued a template, a structure, or a vocabulary. Its only obligation is that for any two specimens it can state whether they are more or less alike, and why (DNT-CLS-001 Section 1).",
+  "native": {
+    "static_accumulator": {
+      "description": "Stationary or semi-mobile specimens that hold and preserve resources without net outbound resource transfer exceeding accumulated surplus (output \u2264 harvesting surplus). They harvest passively from environmental sources and offset maintenance through accumulated reserves and structural efficiency.",
+      "defining_traits": [
+        "zero net outbound resource transfer or net positive accumulation despite transfer (output \u2264 harvesting surplus)",
+        "light intake equals or exceeds maintenance cost",
+        "fixed or semi-fixed position in field (occasional movement does not change this classification)",
+        "passive harvesting from cover layer or fixed sources (or opportunistic residue scavenging)",
+        "maintenance cost offset by storage capacity and harvesting surplus"
+      ],
+      "persistence_mode": "self-maintenance at fixed or semi-fixed location through passive harvesting and reserve accumulation, with or without reproductive commitment",
+      "observed_states": {
+        "simple": {
+          "description": "Members without descendants and zero outbound resource transfer. Passive accumulation without active reproductive output or resource redistribution. Includes both low-complexity nascent forms and higher-complexity elaborated forms that have not yet generated offspring or deployed resources to support others. No constraint on complexity per se; reproductive and transfer status are the defining conditions. Encompasses pure passive harvesters, opportunistic scavengers, and stressed or nascent forms alike, united by lack of offspring and lack of outbound commitment.",
+          "defining_condition": "descendants = 0 AND outbound_transfer = 0",
+          "member_count": 452,
+          "recent_members": [
+            "i-06234",
+            "i-06246",
+            "i-06253",
+            "i-06298",
+            "i-06301",
+            "i-06302",
+            "i-06310",
+            "i-06314",
+            "i-06363",
+            "i-06631",
+            "i-06635",
+            "i-06599",
+            "i-06690",
+            "i-06696"
+          ]
+        },
+        "reproductive": {
+          "description": "Specimens with one or more descendants OR actively transferring resources outbound in support structures (complexity > 0 required for active transfer condition without offspring). Generates and sustains descendants through either completed transfer or ongoing commitment, or maintains support infrastructure for other specimens. Elaborated reach and link capacity in most cases, active resource redistribution to support offspring or support infrastructure. Net positive accumulation despite outbound transfers in healthy members; critical margin or reserve depletion in marginal/stressed members.",
+          "defining_condition": "descendants > 0 OR (outbound_transfer > 0 AND complexity > 0)",
+          "member_count": 595,
+          "substates": {
+            "healthy_reproductive": {
+              "description": "Reproductive members operating with positive accumulation margin and adequate reserves. Net intake significantly exceeds maintenance and outbound transfer, allowing reserve growth despite reproductive commitment. Typically established reproducers with optimized position and harvesting strategy. Reserves typically above 3.0 light or clear trajectory toward accumulation. Includes both offspring-support and infrastructure-support specimens with surplus margin.",
+              "criteria": "descendants > 0 or (outbound_transfer > 0 and complexity > 0), and (average_intake - maintenance_cost - outbound_transfer_rate) > 0.30, and reserves >= 3.0 OR clear positive trend",
+              "member_count": 13,
+              "recent_members": [
+                "i-05621",
+                "i-05693",
+                "i-05698",
+                "i-05799",
+                "i-05826",
+                "i-05879",
+                "i-06150",
+                "i-06166",
+                "i-06320",
+                "i-06630"
+              ]
+            },
+            "marginal_reproductive": {
+              "description": "Reproductive members operating with tight or minimal margins, or with critically depleted reserves despite positive margin. Net intake barely covers maintenance and transfer obligations, or reserves are critically depleted (below 1.0 light). Includes early-stage reproducers that have invested heavily in offspring and operate on thin accumulated surplus, plus stressed reproducers with high mobility attempting to improve position, plus support-structure specimens redistributing significant resources while maintaining minimal reserves. Vulnerable to further resource decline.",
+              "criteria": "descendants > 0 or (outbound_transfer > 0 and complexity > 0), and ((average_intake - maintenance_cost - outbound_transfer_rate) <= 0.30 OR reserves < 1.0)",
+              "member_count": 582,
+              "recent_members": [
+                "i-06123",
+                "i-06124",
+                "i-06125",
+                "i-05626",
+                "i-05642",
+                "i-05656",
+                "i-05667",
+                "i-05684",
+                "i-05740",
+                "i-05741",
+                "i-05755",
+                "i-05756",
+                "i-05757",
+                "i-05790",
+                "i-05802",
+                "i-05803",
+                "i-05811",
+                "i-05819",
+                "i-05825",
+                "i-05833",
+                "i-05877",
+                "i-05880",
+                "i-05881",
+                "i-05884",
+                "i-05886",
+                "i-05888",
+                "i-05891",
+                "i-05900",
+                "i-05958",
+                "i-06107",
+                "i-06109",
+                "i-06115",
+                "i-06120",
+                "i-06141",
+                "i-06144",
+                "i-06157",
+                "i-06177",
+                "i-06180",
+                "i-06321",
+                "i-06324",
+                "i-06336",
+                "i-06362",
+                "i-06388",
+                "i-06390",
+                "i-06637",
+                "i-06640",
+                "i-06680",
+                "i-06706",
+                "i-06716"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "fragment_accumulator": {
+      "description": "Specimens on non-structural (fragment) substrate; preserved as transitional or rare-form category pending emergence of clearer behavioral patterns. Fragment-substrate forms show varying accumulation mechanics and may operate under different resource-transfer rules than structural forms. Currently holds all fragment-substrate specimens with sufficient data to be classified, including both reproductive and simple forms. Insufficient density of fragment forms to establish confident substates, and substrate-level differences suggest separate mechanical foundation from structural-tier accumulators.",
+      "member_count": 13,
+      "recent_members": [
+        "i-05949",
+        "i-05952",
+        "i-05953",
+        "i-06382"
+      ],
+      "notes": "Fragment-substrate specimens show consistent passive harvesting and accumulation patterns similar to structural static_accumulators, but on non-structural substrate. Currently classified together pending emergence of similar forms that may establish distinct substrate-tier behavioral classes. i-05797, originally flagged anomalous in interval 191 as the first fragment-substrate form, remains flagged anomalous due to hybrid characteristics (semi-mobility, residue scavenging) that may represent a distinct transitional mode; other fragment forms with clearer static_accumulator characteristics are classified here. i-06382 shows high mobility (9 moves) and mixed-source intake (75% cover/25% residue) with 3 descendants but zero outbound transfer, suggesting fragment-substrate offspring may operate independently post-generation, differing from structural reproductive mechanics."
+    },
+    "mobile_opportunist": {
+      "description": "Active roaming harvesters with no fixed position; single known member.",
+      "member_count": 1,
+      "recent_members": []
+    },
+    "anomalous": {
+      "description": "Specimens that do not fit established categories; retained without forced classification.",
+      "member_count": 4,
+      "recent_members": [
+        "i-05774",
+        "i-05797"
+      ],
+      "notes": "i-05797 is the first fragment-substrate specimen with sufficient complexity and harvesting data to warrant independent analysis. It presents hybrid characteristics (high complexity, semi-mobility, residue scavenging on fragment substrate) that do not map cleanly to static_accumulator mechanics. Retained anomalous to preserve classification integrity pending emergence of similar forms. Other 3 anomalous specimens retained without further reclassification in this interval. i-06112 exhibits unusual high mobility (7 moves in 8 shifts) with minimal reserves (0.57) and modest outbound transfer (1.16) without offspring; classified as simple due to zero descendants, but flagged for monitoring as potential stress response or incipient shift toward opportunist behavior if mobility persists."
+    }
+  },
+  "revisions": [
+    {
+      "shift": 2,
+      "at": "2026-08-17T21:45:31Z",
+      "note": "native system rewritten by the Namer during shift 2"
+    },
+    {
+      "shift": 3,
+      "at": "2026-08-17T21:45:50Z",
+      "note": "native system rewritten by the Namer during shift 3"
+    },
+    {
+      "shift": 4,
+      "at": "2026-08-17T21:46:06Z",
+      "note": "native system rewritten by the Namer during shift 4"
+    },
+    {
+      "shift": 5,
+      "at": "2026-08-17T21:46:25Z",
+      "note": "native system rewritten by the Namer during shift 5"
+    },
+    {
+      "shift": 6,
+      "at": "2026-08-17T21:46:44Z",
+      "note": "native system rewritten by the Namer during shift 6"
+    },
+    {
+      "shift": 7,
+      "at": "2026-08-17T21:47:16Z",
+      "note": "native system rewritten by the Namer during shift 7"
+    },
+    {
+      "shift": 8,
+      "at": "2026-08-17T21:47:54Z",
+      "note": "native system rewritten by the Namer during shift 8"
+    },
+    {
+      "shift": 9,
+      "at": "2026-08-17T21:48:39Z",
+      "note": "native system rewritten by the Namer during shift 9"
+    },
+    {
+      "shift": 10,
+      "at": "2026-08-17T21:54:32Z",
+      "note": "native system rewritten by the Namer during shift 10"
+    },
+    {
+      "shift": 11,
+      "at": "2026-08-17T21:55:02Z",
+      "note": "native system rewritten by the Namer during shift 11"
+    },
+    {
+      "shift": 12,
+      "at": "2026-08-17T21:55:27Z",
+      "note": "native system rewritten by the Namer during shift 12"
+    },
+    {
+      "shift": 13,
+      "at": "2026-08-17T21:56:12Z",
+      "note": "native system rewritten by the Namer during shift 13"
+    },
+    {
+      "shift": 14,
+      "at": "2026-08-17T21:56:59Z",
+      "note": "native system rewritten by the Namer during shift 14"
+    },
+    {
+      "shift": 15,
+      "at": "2026-08-17T22:17:03Z",
+      "note": "native system rewritten by the Namer during shift 15"
+    },
+    {
+      "shift": 16,
+      "at": "2026-08-17T22:17:43Z",
+      "note": "native system rewritten by the Namer during shift 16"
+    },
+    {
+      "shift": 17,
+      "at": "2026-08-17T22:18:25Z",
+      "note": "native system rewritten by the Namer during shift 17"
+    },
+    {
+      "shift": 18,
+      "at": "2026-08-17T22:19:21Z",
+      "note": "native system rewritten by the Namer during shift 18"
+    },
+    {
+      "shift": 20,
+      "at": "2026-08-17T22:20:46Z",
+      "note": "native system rewritten by the Namer during shift 20"
+    },
+    {
+      "shift": 21,
+      "at": "2026-08-17T22:21:29Z",
+      "note": "native system rewritten by the Namer during shift 21"
+    },
+    {
+      "shift": 22,
+      "at": "2026-08-17T22:22:30Z",
+      "note": "native system rewritten by the Namer during shift 22"
+    },
+    {
+      "shift": 24,
+      "at": "2026-08-17T22:24:09Z",
+      "note": "native system rewritten by the Namer during shift 24"
+    },
+    {
+      "shift": 25,
+      "at": "2026-08-17T22:25:05Z",
+      "note": "native system rewritten by the Namer during shift 25"
+    },
+    {
+      "shift": 26,
+      "at": "2026-08-17T22:26:01Z",
+      "note": "native system rewritten by the Namer during shift 26"
+    },
+    {
+      "shift": 38,
+      "at": "2026-08-17T22:40:10Z",
+      "note": "native system rewritten by the Namer during shift 38"
+    },
+    {
+      "shift": 186,
+      "at": "2026-08-18T04:25:05Z",
+      "note": "native system rewritten by the Namer during shift 186"
+    },
+    {
+      "shift": 187,
+      "at": "2026-08-18T04:25:53Z",
+      "note": "native system rewritten by the Namer during shift 187"
+    },
+    {
+      "shift": 188,
+      "at": "2026-08-18T04:26:36Z",
+      "note": "native system rewritten by the Namer during shift 188"
+    },
+    {
+      "shift": 189,
+      "at": "2026-08-18T04:27:22Z",
+      "note": "native system rewritten by the Namer during shift 189"
+    },
+    {
+      "shift": 190,
+      "at": "2026-08-18T04:28:21Z",
+      "note": "native system rewritten by the Namer during shift 190"
+    },
+    {
+      "shift": 191,
+      "at": "2026-08-18T04:29:14Z",
+      "note": "native system rewritten by the Namer during shift 191"
+    },
+    {
+      "shift": 192,
+      "at": "2026-08-18T04:30:09Z",
+      "note": "native system rewritten by the Namer during shift 192"
+    },
+    {
+      "shift": 193,
+      "at": "2026-08-18T04:31:05Z",
+      "note": "native system rewritten by the Namer during shift 193"
+    },
+    {
+      "shift": 194,
+      "at": "2026-08-18T04:32:02Z",
+      "note": "native system rewritten by the Namer during shift 194"
+    },
+    {
+      "shift": 195,
+      "at": "2026-08-18T04:32:53Z",
+      "note": "native system rewritten by the Namer during shift 195"
+    },
+    {
+      "shift": 199,
+      "at": "2026-08-18T04:38:43Z",
+      "note": "native system rewritten by the Namer during shift 199"
+    },
+    {
+      "shift": 200,
+      "at": "2026-08-18T04:39:29Z",
+      "note": "native system rewritten by the Namer during shift 200"
+    },
+    {
+      "shift": 201,
+      "at": "2026-08-18T04:40:20Z",
+      "note": "native system rewritten by the Namer during shift 201"
+    },
+    {
+      "shift": 202,
+      "at": "2026-08-18T04:41:09Z",
+      "note": "native system rewritten by the Namer during shift 202"
+    },
+    {
+      "shift": 206,
+      "at": "2026-08-18T04:45:44Z",
+      "note": "native system rewritten by the Namer during shift 206"
+    },
+    {
+      "shift": 207,
+      "at": "2026-08-18T04:46:43Z",
+      "note": "native system rewritten by the Namer during shift 207"
+    },
+    {
+      "shift": 213,
+      "at": "2026-08-18T04:52:39Z",
+      "note": "native system rewritten by the Namer during shift 213"
+    },
+    {
+      "shift": 215,
+      "at": "2026-08-18T04:54:27Z",
+      "note": "native system rewritten by the Namer during shift 215"
+    }
+  ]
+}

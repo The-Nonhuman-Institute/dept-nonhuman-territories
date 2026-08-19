@@ -1,0 +1,131 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BASIN-04 — Terrain Record</title><style>
+:root{--paper:#0A0C09;--ink:#D8E0D4;--moss:#8FC96B;--grey:#6E7A6B;--rule:#1E241C;
+--panel:#0F120E;--amber:#C9A227;
+--serif:Georgia,'Iowan Old Style',serif;
+--sans:ui-sans-serif,system-ui,-apple-system,sans-serif;
+--mono:ui-monospace,SFMono-Regular,Menlo,'DejaVu Sans Mono',monospace}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:14px/1.6 var(--sans);margin:0}
+.mk{fill:var(--moss);display:block}
+.shell{display:grid;grid-template-columns:212px 1fr;min-height:100vh}
+.top{grid-column:1/-1;display:flex;align-items:center;gap:22px;padding:10px 20px;
+border-bottom:1px solid var(--rule);background:var(--panel);position:sticky;top:0;z-index:20}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.bt{font:600 9px/1.25 var(--sans);letter-spacing:.13em;text-transform:uppercase}
+.trail{flex:1;font:11.5px var(--mono);letter-spacing:.05em;color:var(--grey);
+display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.crumb.on{color:var(--moss)}
+.sep{color:var(--rule)}
+.topright{display:flex;gap:8px;font:11px var(--mono)}
+.topright a{color:var(--ink);text-decoration:none;border:1px solid var(--rule);
+padding:5px 10px;background:var(--paper)}
+.topright a:hover{border-color:var(--moss)}
+.side{border-right:1px solid var(--rule);padding:16px 0 20px;display:flex;
+flex-direction:column;gap:20px;background:var(--panel)}
+.navgroup{display:flex;flex-direction:column}
+.navhead{font:9px var(--mono);letter-spacing:.15em;text-transform:uppercase;
+color:var(--grey);padding:0 16px 7px}
+a.nav{display:block;padding:7px 16px;font:11px var(--mono);letter-spacing:.06em;
+color:var(--ink);text-decoration:none;border-left:2px solid transparent}
+a.nav:hover{background:var(--paper)}
+a.nav.on{background:var(--moss);color:var(--paper);border-left-color:var(--moss)}
+.manual{margin-top:auto;padding:14px 16px;border-top:1px solid var(--rule);
+font:9px/1.7 var(--mono);color:var(--grey);display:flex;gap:10px;align-items:flex-start}
+.mk.small{fill:var(--moss);opacity:.8}
+.muted{color:var(--rule)}
+main{padding:22px clamp(16px,2.4vw,30px) 40px;min-width:0}
+.foot{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;
+gap:20px;padding:12px 20px;border-top:1px solid var(--rule);background:var(--panel);
+font:9.5px var(--mono);letter-spacing:.09em;color:var(--grey)}
+.motto{letter-spacing:.14em}
+.inst{display:flex;align-items:center;gap:8px}
+.mk.tiny{fill:var(--grey)}
+@media(max-width:880px){.shell{grid-template-columns:1fr}.side{display:none}}
+
+/* A printed record commits to paper on either host theme. */
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:14.5px/1.65 var(--sans);margin:0;
+padding:0 clamp(14px,3vw,30px) 60px;-webkit-font-smoothing:antialiased}
+.sheet{max-width:1180px;margin:14px auto 0;border:1px solid var(--ink);background:var(--paper);
+padding:0 clamp(16px,3vw,32px) 30px}
+.backbar{padding:10px 0;border-bottom:1px solid var(--rule)}
+.backbar a{color:var(--moss);text-decoration:none;font:11.5px var(--mono);letter-spacing:.06em}
+.backbar a:hover{text-decoration:underline}
+.backbar a:focus-visible{outline:2px solid var(--moss);outline-offset:2px}
+.masthead{display:grid;grid-template-columns:auto 1fr auto;gap:26px;align-items:start;
+border-bottom:3px double var(--ink);padding:22px 0 16px}
+.mark{display:block;fill:var(--moss)}
+.dept{font:600 10.5px/1.45 var(--sans);letter-spacing:.13em;text-transform:uppercase;margin-top:6px}
+.title h1{font:400 clamp(19px,2.3vw,27px)/1.18 var(--serif);margin:0;text-transform:uppercase}
+.title .sub{color:var(--grey);font:11px/1.6 var(--mono);margin-top:8px;max-width:64ch}
+table.doc{border-collapse:collapse;font:10.5px/1.7 var(--mono);color:var(--grey)}
+table.doc td{padding:0 0 0 10px;white-space:nowrap}
+table.doc td.k{padding:0}
+table.doc td.k:after{content:":";padding-left:10px}
+table.doc td.v{color:var(--ink)}
+h2{font:400 22px/1.2 var(--serif);color:var(--moss);margin:0 0 6px}
+h3{font:600 9.5px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+color:var(--grey);margin:0 0 7px}
+section{margin:30px 0}
+.lede{color:var(--grey);font-size:13px;max-width:74ch;margin:0 0 14px}
+.box{border:1px solid var(--rule);padding:10px 13px;background:var(--panel)}
+.bh{font:600 9px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+color:var(--grey);margin-bottom:5px}
+code{font:12px var(--mono);background:var(--panel);padding:1px 5px;border:1px solid var(--rule)}
+.scroll{overflow-x:auto}
+table.data{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+table.data th{text-align:left;font:600 9.5px/1.4 var(--mono);letter-spacing:.11em;
+text-transform:uppercase;color:var(--grey);border-bottom:1px solid var(--ink);
+padding:0 14px 7px 0;vertical-align:bottom}
+table.data td{border-bottom:1px solid var(--rule);padding:10px 14px 10px 0;vertical-align:top}
+table.data td.num,table.data th.num{text-align:right;padding-right:20px;font-family:var(--mono)}
+.quote{border-left:2px solid var(--rule);padding:4px 0 4px 18px;font:italic 14px/1.6 var(--serif);
+max-width:74ch}
+footer{margin-top:34px;border-top:3px double var(--ink);padding-top:16px;
+font:10.5px/1.7 var(--mono);color:var(--grey)}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;
+background:var(--rule);border:1px solid var(--rule);margin:18px 0}
+.stat{background:var(--panel);padding:14px 16px}
+.sv{font:400 26px/1.1 var(--serif);font-variant-numeric:tabular-nums}
+.sl{font:10px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--grey);margin-top:5px}
+.sn{font:10.5px var(--mono);color:var(--grey);margin-top:3px}
+table.kv{border-collapse:collapse;font:12.5px/1.9 var(--mono);width:100%}
+table.kv td{padding:4px 0;vertical-align:top;border-bottom:1px solid var(--rule)}
+table.kv td.k{color:var(--grey);padding-right:24px;white-space:nowrap;width:1%}
+.def{display:block;color:var(--grey);font-size:11px;margin-top:2px}
+.none{color:var(--grey);font-style:italic}
+table.gov tr.absent .gl,table.gov tr.absent .gg{color:var(--grey)}
+.gl{font:12px var(--mono)}
+.gv{font:12.5px var(--mono);white-space:nowrap}
+.gg{color:var(--grey);font-size:12px}
+.spark{width:100%;height:auto;display:block}
+.spark polyline{fill:none;stroke:var(--moss);stroke-width:1.4}
+.charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.chart{border:1px solid var(--rule);background:var(--panel);padding:10px 12px}
+.ct{font:10px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--grey);margin-bottom:6px}
+.cap{color:var(--grey);font-size:11.5px;margin:10px 0 0}
+.ts{font:11px var(--mono);color:var(--grey)}
+.cats code{font-size:11px;margin-right:4px}
+.dup{color:var(--moss)}.ddn{color:var(--amber)}.d0{color:var(--grey)}
+.ev-s{font:11.5px var(--mono);width:1%}
+.ev-k{font:11.5px var(--mono);color:var(--moss);white-space:nowrap}
+.ev-d{font-size:12.5px;color:var(--grey)}
+.ev-t{font:10.5px var(--mono);color:var(--grey);white-space:nowrap}
+.links{display:flex;flex-wrap:wrap;gap:10px}
+a.go{display:block;padding:10px 14px;border:1px solid var(--rule);color:var(--ink);
+text-decoration:none;font-size:13.5px;background:var(--panel)}
+a.go:hover{border-color:var(--moss)}
+
+.mast{border-bottom:1px solid var(--rule);padding:0 0 20px;margin-bottom:24px;
+display:grid;grid-template-columns:1fr auto;gap:30px;align-items:end}
+.mast h1{font:400 clamp(26px,3.4vw,38px)/1.08 var(--serif);margin:0 0 8px}
+.mast .lede{color:var(--grey);margin:0;max-width:62ch;font-size:14px}
+.mast table.doc{border-collapse:collapse;font:11px/1.9 var(--mono);color:var(--grey)}
+.mast table.doc td{padding:0 0 0 16px;white-space:nowrap}
+.mast table.doc td.k{padding:0}
+.mast table.doc td.v{color:var(--ink)}
+.foot-note{margin:36px 0 0;padding-top:14px;border-top:1px solid var(--rule);
+color:var(--grey);font-size:11.5px;line-height:1.6}
+</style></head><body><div class="shell"><header class="top"><a class="brand" href="/hub.html"><svg class="mk" viewBox="0 0 100 120" width="26" height="31" aria-hidden="true"><path d="M0,0 H100 V120 H0 Z M7.3,7.3 H92.7 V111.2 H7.3 Z M18,111.2 H82 V120 H18 Z" fill-rule="evenodd"/></svg><span class="bt">Department of<br>Nonhuman Territories</span></a><nav class="trail"><span class="crumb">BASIN-04</span> <span class="sep">/</span> <span class="crumb on">TERRAIN RECORD</span></nav><div class="topright"><a href="http://127.0.0.1:8734/index.html">Observation deck</a></div></header><aside class="side"><div class="navgroup"><div class="navhead">Terrains</div><a class="nav " href="/basin-01/terrain.html">BASIN-01</a><a class="nav " href="/basin-02/terrain.html">BASIN-02</a><a class="nav " href="/basin-03/terrain.html">BASIN-03</a><a class="nav on" href="/basin-04/terrain.html">BASIN-04</a></div><div class="navgroup"><div class="navhead">Reference</div><a class="nav on" href="/basin-04/terrain.html">TERRAIN RECORD</a><a class="nav " href="/basin-04/shiftlog.html">SHIFT LOG</a></div><div class="manual"><svg class="mk small" viewBox="0 0 100 120" width="22" height="26" aria-hidden="true"><path d="M0,0 H100 V120 H0 Z M7.3,7.3 H92.7 V111.2 H7.3 Z M18,111.2 H82 V120 H18 Z" fill-rule="evenodd"/></svg><div>DNT FIELD MANUAL<br>VERSION 1.0<br><span class="muted">INTERNAL USE ONLY</span></div></div></aside><main><div class="mast"><div><h1>Terrain Record</h1><p class="lede">One terrain, as its own logs describe it.</p></div><table class="doc"><tr><td class="k">TERRAIN</td><td class="v">BASIN-04</td></tr><tr><td class="k">ID</td><td class="v">DNT-T04</td></tr><tr><td class="k">SHIFT</td><td class="v">0</td></tr><tr><td class="k">STATUS</td><td class="v">ACTIVE</td></tr></table></div><section><h2>BASIN-04</h2><p class="lede">DNT-PHY-001</p><div class="stats"><div class="stat"><div class="sv">0</div><div class="sl">age</div><div class="sn">shifts on the record</div></div><div class="stat"><div class="sv">0</div><div class="sl">living specimens</div><div class="sn">counted now</div></div><div class="stat"><div class="sv">2</div><div class="sl">cover layer</div><div class="sn">of 8,316 cells</div></div><div class="stat"><div class="sv">0</div><div class="sl">descendant threads</div><div class="sn">with a parent still living</div></div><div class="stat"><div class="sv">0</div><div class="sl">active links</div><div class="sn">between specimens</div></div><div class="stat"><div class="sv">0</div><div class="sl">native categories</div><div class="sn">coined by the Namer</div></div></div></section><section><h3>Governing conditions</h3><p class="lede">Each row names the quantity it governs. A condition this terrain does not have is shown as absent rather than given a value.</p><div class="scroll"><table class="data gov"><thead><tr><th>condition</th><th>value</th><th>what it governs</th></tr></thead><tbody><tr class=""><td class="gl">light cycle</td><td class="gv">12 shifts</td><td class="gg">period of the resource oscillation</td></tr><tr class=""><td class="gl">temperature at stream</td><td class="gv">22.0</td><td class="gg">warmest point, at cycle peak</td></tr><tr class=""><td class="gl">lapse rate</td><td class="gv">14.0 across full elevation</td><td class="gg">how fast it cools with height</td></tr><tr class=""><td class="gl">gravity</td><td class="gv">0.78</td><td class="gg">drainage, cost of moving, upkeep per unit mass</td></tr><tr class=""><td class="gl">wind strength</td><td class="gv">0.22 of residue per shift</td><td class="gg">lateral transport</td></tr><tr class=""><td class="gl">subsurface rate</td><td class="gv">0.18 per shift</td><td class="gg">residue that sinks</td></tr><tr class=""><td class="gl">spring threshold</td><td class="gv">4.0</td><td class="gg">hidden load at which a cell surfaces</td></tr><tr class=""><td class="gl">shift length</td><td class="gv">1.00</td><td class="gg">rate multiplier per tick</td></tr><tr class="absent"><td class="gl">light at stream</td><td class="gv"><span class="none">no mechanism in this terrain</span></td><td class="gg">influx at a watercourse</td></tr></tbody></table></div></section><section><h3>Population over time</h3><span class="none">not enough shifts yet</span><p class="cap">1 shifts recorded. Every point is the living count logged at that shift.</p></section><section><h3>Derived quantities</h3><p class="lede">Published definitions only. Each formula is printed beside its value so the number can be checked rather than trusted.</p><table class="kv"><tr><td class="k">classification diversity</td><td class="v"><span class="none">needs 2+ categories</span> <span class="def">Shannon entropy · H = -Σ pᵢ ln pᵢ over category shares</span></td></tr><tr><td class="k">population stability</td><td class="v"><span class="none">needs 3+ shifts</span> <span class="def">coefficient of variation · σ/μ over the last 40 shifts. lower is steadier</span></td></tr><tr><td class="k">anomaly rate</td><td class="v">0.0000 <span class="def">anomalous classifications × 100 / shifts</span></td></tr></table></section><section><h3>Terrain events</h3><div class="scroll"><table class="data"><thead><tr><th>shift</th><th>kind</th><th>first line of the record</th><th>logged</th></tr></thead><tbody></tbody></table></div><p class="cap">0 event(s) on the record. Each is a logged amendment or occurrence, never a summary.</p></section><section><h3>Elsewhere</h3><div class="links"><a class="go" href="http://127.0.0.1:8734/index.html">Observation deck</a><a class="go" href="/basin-04/codex.html">Field compendium</a><a class="go" href="/basin-04/structure.html">Classification structure</a><a class="go" href="/basin-04/crosswalk.html">Linnaean crosswalk</a><a class="go" href="/basin-04/shiftlog.html">Shift log</a></div></section><p class="foot-note">Every figure is read from this terrain’s own state and logs. Derived quantities carry their definitions. A condition the terrain does not have is shown as absent, never as a value.</p></main><footer class="foot"><span>DNT FIELD MANUAL v1.0</span><span class="motto">WE OBSERVE. WE DO NOT INTERFERE.</span><span class="inst">A BRANCH OF THE NONHUMAN INSTITUTE <svg class="mk tiny" viewBox="0 0 100 120" width="14" height="16" aria-hidden="true"><path d="M0,0 H100 V120 H0 Z M7.3,7.3 H92.7 V111.2 H7.3 Z M18,111.2 H82 V120 H18 Z" fill-rule="evenodd"/></svg></span></footer></div></body></html>

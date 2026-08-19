@@ -1,0 +1,104 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Specimen i-00941</title><style>
+:root{--paper:#EFEDE3;--ink:#14170F;--moss:#3B4A2F;--grey:#6B7168;--rule:#B9B5A4;
+--panel:#F7F5EC;--amber:#8A6D14;
+--serif:Georgia,'Iowan Old Style','Times New Roman',serif;
+--sans:ui-sans-serif,system-ui,-apple-system,'Helvetica Neue',sans-serif;
+--mono:ui-monospace,SFMono-Regular,Menlo,'DejaVu Sans Mono',monospace}
+/* A printed record commits to paper on either host theme. */
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:14.5px/1.65 var(--sans);margin:0;
+padding:0 clamp(14px,3vw,30px) 60px;-webkit-font-smoothing:antialiased}
+.sheet{max-width:1180px;margin:14px auto 0;border:1px solid var(--ink);background:var(--paper);
+padding:0 clamp(16px,3vw,32px) 30px}
+.backbar{padding:10px 0;border-bottom:1px solid var(--rule)}
+.backbar a{color:var(--moss);text-decoration:none;font:11.5px var(--mono);letter-spacing:.06em}
+.backbar a:hover{text-decoration:underline}
+.backbar a:focus-visible{outline:2px solid var(--moss);outline-offset:2px}
+.masthead{display:grid;grid-template-columns:auto 1fr auto;gap:26px;align-items:start;
+border-bottom:3px double var(--ink);padding:22px 0 16px}
+.mark{width:52px;height:52px;border:2.5px solid var(--moss);position:relative}
+.mark:after{content:"";position:absolute;left:9px;right:9px;top:9px;bottom:-2px;
+background:var(--paper);border-left:2.5px solid var(--moss);border-right:2.5px solid var(--moss)}
+.dept{font:600 10.5px/1.45 var(--sans);letter-spacing:.13em;text-transform:uppercase;margin-top:6px}
+.title h1{font:400 clamp(19px,2.3vw,27px)/1.18 var(--serif);margin:0;text-transform:uppercase}
+.title .sub{color:var(--grey);font:11px/1.6 var(--mono);margin-top:8px;max-width:64ch}
+table.doc{border-collapse:collapse;font:10.5px/1.7 var(--mono);color:var(--grey)}
+table.doc td{padding:0 0 0 10px;white-space:nowrap}
+table.doc td.k{padding:0}
+table.doc td.k:after{content:":";padding-left:10px}
+table.doc td.v{color:var(--ink)}
+h2{font:400 22px/1.2 var(--serif);color:var(--moss);margin:0 0 6px}
+h3{font:600 9.5px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+color:var(--grey);margin:0 0 7px}
+section{margin:30px 0}
+.lede{color:var(--grey);font-size:13px;max-width:74ch;margin:0 0 14px}
+.box{border:1px solid var(--rule);padding:10px 13px;background:var(--panel)}
+.bh{font:600 9px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+color:var(--grey);margin-bottom:5px}
+code{font:12px var(--mono);background:var(--panel);padding:1px 5px;border:1px solid var(--rule)}
+.scroll{overflow-x:auto}
+table.data{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+table.data th{text-align:left;font:600 9.5px/1.4 var(--mono);letter-spacing:.11em;
+text-transform:uppercase;color:var(--grey);border-bottom:1px solid var(--ink);
+padding:0 14px 7px 0;vertical-align:bottom}
+table.data td{border-bottom:1px solid var(--rule);padding:10px 14px 10px 0;vertical-align:top}
+table.data td.num,table.data th.num{text-align:right;padding-right:20px;font-family:var(--mono)}
+.quote{border-left:2px solid var(--rule);padding:4px 0 4px 18px;font:italic 14px/1.6 var(--serif);
+max-width:74ch}
+footer{margin-top:34px;border-top:3px double var(--ink);padding-top:16px;
+font:10.5px/1.7 var(--mono);color:var(--grey)}
+
+.rec{border-top:1px solid var(--rule);padding-top:16px;margin:24px 0 0}
+.rec h3{font:600 10px/1.5 var(--mono);letter-spacing:.13em;text-transform:uppercase;
+color:var(--grey);margin:0 0 12px;display:flex;gap:10px;align-items:baseline}
+.rec h3 .num{color:var(--moss);font-weight:400}
+.native .nname{font:400 clamp(26px,3.4vw,40px)/1.1 var(--serif)}
+.native .nsub{font:11px var(--mono);color:var(--grey);letter-spacing:.05em;margin-top:6px}
+table.kv{border-collapse:collapse;font:12.5px/1.75 var(--mono);
+font-variant-numeric:tabular-nums}
+table.kv td{padding:1px 0;vertical-align:top}
+table.kv td.k{color:var(--grey);padding-right:26px;white-space:nowrap}
+table.kv td.v a{color:var(--moss)}
+.conf{font:9.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;
+border:1px solid}
+.conf.partial{color:var(--amber);border-color:var(--amber)}
+.conf.none{color:var(--grey);border-color:var(--rule)}
+.status{font:9.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;
+border:1px solid}
+.status.alive{color:var(--moss);border-color:var(--moss)}
+.status.ended{color:var(--grey);border-color:var(--rule)}
+.note{font-size:13px;color:var(--ink);max-width:74ch;margin:12px 0 0}
+.fine{font:11px/1.6 var(--mono);color:var(--grey);margin:8px 0 0;max-width:74ch}
+.none{color:var(--grey);font-style:italic;font-size:13px;max-width:70ch}
+.formrow{display:grid;grid-template-columns:220px 1fr;gap:26px;align-items:start}
+.plate{border:1px solid var(--rule);background:var(--panel);padding:6px}
+.plate svg{width:100%;height:auto;display:block}
+.plate .core{fill:rgba(59,74,47,.10);stroke:var(--moss);stroke-width:1.2}
+.plate .arm{stroke:var(--ink);stroke-width:1.1;opacity:.7}
+.plate .node{fill:var(--moss);opacity:.9}
+.plate .anchor{stroke:var(--ink);stroke-width:.9;opacity:.45}
+.plate .brace{fill:none;stroke:var(--moss);stroke-width:.6;opacity:.5}
+.plate .orbit{fill:none;stroke:var(--amber);stroke-width:.9;opacity:.6}
+.plate .disc{fill:var(--amber);opacity:.22}
+.plate .none{fill:var(--grey);font:11px var(--mono);text-anchor:middle}
+.prose{font:15px/1.65 var(--serif);margin:14px 0 0;max-width:66ch}
+.obs{border-left:2px solid var(--rule);padding:2px 0 2px 16px;margin:0 0 18px;max-width:80ch}
+.oh{font:10.5px var(--mono);color:var(--grey);letter-spacing:.04em;margin-bottom:6px}
+.oh code{font-size:10.5px}
+.ot{font:13.5px/1.62 var(--sans);margin:0 0 8px}
+.op,.oc{font:italic 13px/1.6 var(--serif);color:var(--ink);margin:0 0 8px}
+.lb{display:block;font:9px var(--mono);font-style:normal;letter-spacing:.1em;
+text-transform:uppercase;color:var(--grey);margin-bottom:3px}
+.trace{font:11px/1.5 var(--mono);background:var(--panel);border:1px solid var(--rule);
+padding:12px 14px;overflow-x:auto;white-space:pre;max-width:100%}
+@media(max-width:720px){.formrow{grid-template-columns:1fr}}
+</style></head><body><div class="sheet">
+<div class="backbar"><a href="http://127.0.0.1:8730/hub.html">&larr; Department index</a> &nbsp;·&nbsp; <a href="../codex.html">&larr; Field compendium</a></div>
+<div class="masthead"><div><div class="mark"></div><div class="dept">Department of<br>Nonhuman<br>Territories</div></div><div class="title"><h1>Specimen Field Record</h1><p class="sub">One specimen, and everything the terrain has recorded of it.</p></div><table class="doc"><tr><td class="k">SPECIMEN</td><td class="v">i-00941</td></tr><tr><td class="k">TERRAIN</td><td class="v">BASIN-03</td></tr><tr><td class="k">CATEGORY</td><td class="v">mobile_exchanger</td></tr><tr><td class="k">STATUS</td><td class="v">ENDED</td></tr></table></div>
+<section class="rec"><h3><span class="num">01</span> Native classification</h3><div class="native"><div class="nname">mobile_exchanger</div><div class="nsub">the Namer's own category · aggregate tier record</div></div></section><section class="rec"><h3><span class="num">02</span> Linnaean crosswalk</h3><table class="kv"><tr><td class="k">Tier</td><td class="v"><b>Class</b></td></tr><tr><td class="k">Confidence</td><td class="v"><span class="conf partial">partial</span></td></tr></table><p class="note">A behavioral class defined by sustained movement and resource transfer; orthogonal to conventional Linnaean hierarchy.</p><p class="fine">For human legibility only. Carries no authority over the native system and does not feed back into it (DNT-CLS-001 §2).</p></section><section class="rec"><h3><span class="num">03</span> Observation data</h3><table class="kv"><tr><td class="k">First observed</td><td class="v">shift 51</td></tr><tr><td class="k">Last observed</td><td class="v">shift 51</td></tr><tr><td class="k">Observations</td><td class="v">1</td></tr><tr><td class="k">Shifts present</td><td class="v">41</td></tr><tr><td class="k">Sightings</td><td class="v">42</td></tr><tr><td class="k">Arose by</td><td class="v">arose_from_census</td></tr><tr><td class="k">Substrate</td><td class="v">structural</td></tr><tr><td class="k">Generation</td><td class="v">0</td></tr><tr><td class="k">Times moved</td><td class="v">24</td></tr><tr><td class="k">Status</td><td class="v"><span class="status ended">Ended shift 78</span></td></tr></table></section><section class="rec"><h3><span class="num">04</span> Form, drawn from measurements</h3><div class="formrow"><div class="plate"><svg viewBox="0 0 200 200" class="plate" role="img" aria-label="i-00941"><ellipse cx="100.0" cy="136.8" rx="75.9" ry="7.4" class="disc"/><line x1="100.0" y1="107.4" x2="139.6" y2="135.6" class="anchor"/><line x1="100.0" y1="107.4" x2="113.7" y2="135.6" class="anchor"/><line x1="100.0" y1="107.4" x2="79.8" y2="135.6" class="anchor"/><line x1="100.0" y1="107.4" x2="57.8" y2="135.6" class="anchor"/><line x1="100.0" y1="100.0" x2="100.0" y2="40.9" class="arm"/><circle cx="100.0" cy="40.9" r="3.9" class="node"/><line x1="100.0" y1="100.0" x2="100.0" y2="159.1" class="arm"/><circle cx="100.0" cy="159.1" r="3.9" class="node"/><ellipse cx="100.0" cy="100.0" rx="13.5" ry="4.9" class="brace"/><ellipse cx="100.0" cy="100.0" rx="17.4" ry="6.4" class="brace"/><ellipse cx="100.0" cy="100.0" rx="21.4" ry="7.9" class="brace"/><polygon points="100.0,75.4 121.3,87.7 121.3,112.3 100.0,124.6 78.7,112.3 78.7,87.7" class="core"/><polygon points="100.0,67.6 118.1,78.1 118.1,99.0 100.0,109.4 81.9,99.0 81.9,78.1" class="core"/><polygon points="100.0,63.9 114.9,72.5 114.9,89.7 100.0,98.3 85.1,89.7 85.1,72.5" class="core"/><polygon points="100.0,64.2 111.7,71.0 111.7,84.5 100.0,91.2 88.3,84.5 88.3,71.0" class="core"/><polygon points="100.0,68.6 108.5,73.5 108.5,83.3 100.0,88.2 91.5,83.3 91.5,73.5" class="core"/><ellipse cx="100.0" cy="100.0" rx="41.8" ry="12.3" class="orbit"/><ellipse cx="100.0" cy="100.0" rx="52.8" ry="15.7" class="orbit"/><ellipse cx="100.0" cy="100.0" rx="63.9" ry="19.2" class="orbit"/></svg></div><div class="fm"><table class="kv"><tr><td class="k">Reach</td><td class="v">1.71</td></tr><tr><td class="k">Links it can hold</td><td class="v">1</td></tr><tr><td class="k">Carries</td><td class="v">1.27</td></tr><tr><td class="k">Upkeep</td><td class="v">1.02 light per shift</td></tr><tr><td class="k">Can hold</td><td class="v">14.0 light</td></tr><tr><td class="k">Lives on</td><td class="v">ground 1.01 · remains 1.61 · others 0.38</td></tr></table><p class="prose">A solidly built, far-reaching form, single-jointed, visibly stacked from long standing. It lived off what dead specimens left behind, and took a real share from the mat as well. It was ordinary to keep going, spending 1.02 light every shift simply to hold together. It lasted 41 shifts and ended at shift 78, leaving 3 offspring.</p></div></div></section><section class="rec"><h3><span class="num">05</span> Relations</h3><table class="kv"><tr><td class="k">Parent</td><td class="v">arose from the cover layer</td></tr><tr><td class="k">Offspring</td><td class="v">none living</td></tr><tr><td class="k">Links held</td><td class="v">0</td></tr></table></section><section class="rec"><h3><span class="num">06</span> The Namer's reasoning, in sequence</h3><p class="lede">1 observations across 1 shifts. The Namer's filing did not change.</p><div class="obs"><div class="oh">Shift 51 · filed as <code>mobile_exchanger</code> · aggregate</div><p class="ot">i-00941 is structural, 14 complexity, 14 shift tenure, 10 movement events—the highest movement count in this cohort. It has taken 44.81 light total (55% cover, 45% residue, 0% links) and passed 1.27 to others (~2.8% of intake). It has 0 descendants, despite tenure and resources. Gradient 1.00 (at data-stream peak), elevation 0.97 (very high). The 10 movements represent highly sustained, frequent mobility—consistent relocation every 1.4 shifts on average. The 2.8% transfer rate is moderate. Mixed cover/residue intake (55%/45%) indicates balanced exploitation of high-elevation positioning. Zero reproduction despite 14-shift tenure and adequate resources is notable; i-00941 may be channeling resources into movement and distribution rather than reproduction. This is a mobile redistributor: high movement frequency, consistent outward transfer, no local reproduction. Assignment to mobile_exchanger is strong: the specimen exhibits maximal mobility within the cohort and consistent exchange, fitting the category definition despite reproductive absence.</p><p class="op"><span class="lb">how it persists</span>i-00941 persists through highly frequent, sustained movement (10 relocations over 14 shifts, the highest in its cohort), balanced passive intake from cover and residue (55% and 45%), and consistent resource redistribution along network links (1.27 light, ~2.8% of intake). It maintains high holdings (4.84 light) without reproduction, suggesting all acquired resources cycle either into movement maintenance or outward exchange. Its persistence is fundamentally mobile and redistributive: it is a transporter and connector within the network rather than a reproducer.</p><p class="oc"><span class="lb">compared against</span>More alike than i-00900: i-00941 shows 10 movements vs 2, and 1.27 transfer vs zero. More alike than i-00865: both structural, both high-gradient (1.00 vs 1.00), both high-elevation (0.97), both pass ~1.2–1.7 light; i-00941 moves more (10 vs 8) and has higher holdings (4.84 vs 1.67) but no descendants. More alike than i-00939 on mobility (10 vs 5 moves) but less on reproduction (0 vs 3 descendants).</p></div></section><section class="rec"><h3><span class="num">07</span> Substrate as recorded</h3><p class="none">No substrate trace was drawn for this specimen.</p></section>
+<footer>Generated from state/specimen_log.jsonl, state/anomaly_log.jsonl and state/memory.json.
+Read-only. The Namer's words are reproduced exactly as written; everything else on this page is
+a measurement or a rendering of one.</footer>
+</div></body></html>

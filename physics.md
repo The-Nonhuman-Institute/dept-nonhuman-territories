@@ -2,7 +2,7 @@
 ## Department of Nonhuman Territories
 ### Terrain ID: BASIN-01 (working name — provisional per Terrain Registry)
 ### Status: ACTIVE (seeded 2026-08-17; frozen except as logged terrain events)
-### Version: 1.2 (see Amendment Log, end of document)
+### Version: 1.4 (see Amendment Log, end of document)
 
 This is the working, plain-text copy of DNT-PHY-001. It is the literal spec file the
 build should reference. The formal .docx version in /docs is the canonical governance
@@ -253,6 +253,97 @@ Changes to this document after shift 0 are prohibited except as a logged
 terrain event or a genuine containment concern (Section 10, and DNT-STW-001
 Section 3). Everything below was ratified while the terrain was still
 PRE-SEED, before any canonical shift.
+
+### v1.4 — 2026-08-17 — text-era taxonomy closed (LOGGED TERRAIN EVENT)
+
+Made after canonical shift 95, by steward decision, and therefore permitted
+only as a documented, logged terrain event (DNT-STW-001 Section 3). The
+corresponding terrain event is recorded in memory.json.
+
+**This amendment adds no new physics and overrules no classification.**
+
+**What was closed.** The Namer's native system, authored across shifts 0–95
+while a specimen was a fragment of text. Five categories; 183 specimens in the
+largest. Preserved whole at `state/taxonomy_era_01_text.json`, together with
+its category statistics at close. Every classification the Namer ever made
+remains in `specimen_log.jsonl`, unedited.
+
+**Why.** At shift 49 the terrain changed what a specimen is. The Namer
+continued filing living things into text-era categories — correctly, since
+DNT-CLS-001 Section 2 requires filing under an existing category when one fits,
+and that system was the only one it had. Three mechanical locks made
+self-correction impossible:
+
+1. A living specimen's record opens `substrate: structural`, and the nearest
+   category was named after that word.
+2. Section 8.1 promotes a record when its category holds fewer than 3 members.
+   The category held 183, so that clause could never fire again.
+3. The complexity field carried *text complexity* in era 01 and
+   *shifts-present* in era 02 — two incompatible units averaged into one mean —
+   so the 2× mean clause of Section 8.1 could not fire either.
+
+The result was that every living specimen filed at aggregate tier permanently
+and the Namer was never given the room to reconsider.
+
+**What changed.** The live native system is empty. Category statistics restart,
+so Section 8.1's thresholds are measured against era-02 specimens in era-02
+units. The complexity field for a living specimen remains shifts-present; that
+clause now reads as "unusually persistent for its category", which is stated
+here rather than quietly changed.
+
+**What was not changed.** The Namer was given no categories, no examples, no
+target, no vocabulary, and no instruction to coin. Section 9's prohibition on
+seeding shape is untouched. What it builds for living things is entirely its
+own.
+
+**Expected effect on cost.** With an empty system, Section 8.1 promotes nearly
+every observation to individual tier until categories accumulate members. Early
+era-02 shifts will cost more than the ~$0.02 of late era 01, bounded as always
+by the $0.15 per-shift cap in `config.py`.
+
+### v1.3 — 2026-08-17 — heritable structure (LOGGED TERRAIN EVENT)
+
+Made after canonical shift 83 and therefore permitted only as a documented,
+logged terrain event (DNT-STW-001 Section 3). The corresponding terrain event
+is recorded in memory.json.
+
+**What this adds.** Every individual now carries a build: three heritable
+measures, each of which costs light every shift and each of which does
+something.
+
+| measure | what it buys | what it costs |
+|---|---|---|
+| extent | multiplies what it can draw from the cell it stands in | 0.22 light/shift per unit |
+| junctions | how many links it can hold at once (1 + junctions) | 0.30 light/shift per unit |
+| mass | how much light it can hold at all, and how far it resists what others pull along a link | 0.38 light/shift per unit |
+
+Structure is inherited with variation, like the affinities. Unlike the
+affinities it is not held to a fixed budget — the constraint is the bill.
+An elaborate build is affordable where light is plentiful and ruinous where it
+is thin.
+
+**Why this is not shape-seeding.** Section 9 forbids seeding shape, and
+DNT-CLS-001 Section 1 forbids handing a specimen a form it did not earn.
+Nothing here describes a form. These are three numbers with a price and a
+payoff. No build is preferred, none is prescribed, and the words used for them
+carry no organic or functional content. What any particular build adds up to —
+whether it constitutes a kind, whether two builds are the same kind of thing —
+remains entirely the Namer's to decide.
+
+**Why it was needed.** Before this, every individual was structurally
+identical; they differed only in how they made their living. Section 6's
+functional roles were reachable but there was nothing an observer or a Namer
+could point at that distinguished one persistent thing from another beyond its
+behaviour. Structure gives selection something to act on that is visible.
+
+**Backfill.** The individuals living at shift 83 predate the mechanism. Each
+was assigned a founding build derived from its own identifier, by the same rule
+that applies to anything arriving. None was re-rolled, replaced, or chosen.
+
+**Recording.** The terrain now keeps the last 90 shifts of position and light
+per individual (life.py, `_record_frame`). This is a record, not a mechanism —
+no physics reads it. It exists so that movement, which the terrain has always
+had, can be observed rather than inferred from two snapshots.
 
 ### v1.2 — 2026-08-17 — post-checkpoint reconfiguration (LOGGED TERRAIN EVENT)
 

@@ -13,7 +13,13 @@ observation the Namer can reason about.
 WHAT IS DESCRIBED, AND WHAT IS NOT
 
   Described: what it did. Where it was, what it drew on, how long it has been
-  there, whether it moved, whether it left descendants, what it is holding.
+  there, whether it moved, whether it left descendants, what it is holding, and
+  how it is built — its reach, how many links it can carry, how much it holds,
+  and what that build costs it every shift.
+
+  The build is reported as measurement, not as form. It says "reach 1.7,
+  costs 1.38 light a shift". It does not say tall, branched, spined or heavy.
+  What that adds up to is the Namer's to decide.
 
   Not described: what it is. No role, no kind, no category, no comparison to
   anything. The words "producer", "consumer", "predator", "parasite" and their
@@ -79,6 +85,9 @@ def describe_individual(being: Dict[str, Any], shift: int,
         "parent_id": being.get("parent_id"),
         "arrived_by": being.get("origin"),
         "affinities": being.get("traits", {}),
+        "structure": being.get("structure", {}),
+        "structural_upkeep": round(life.structural_upkeep(being.get("structure", {})), 2),
+        "light_capacity": round(life.light_capacity(being.get("structure", {})), 2),
         "trace": trace,
     }
 
@@ -102,6 +111,17 @@ def observation_text(record: Dict[str, Any]) -> str:
         "passed %.2f light to others along links" % record["light_given_to_links"],
         "descendants: %d" % record["descendants"],
     ]
+    structure = record.get("structure") or {}
+    if structure:
+        lines.append(
+            "how it is built: reach %.2f, holds up to %d link(s) at once, "
+            "carries %.2f — which costs %.2f light every shift to maintain, and "
+            "lets it hold at most %.2f light at a time"
+            % (structure.get("extent", 0.0),
+               1 + int(structure.get("junctions", 0.0)),
+               structure.get("mass", 0.0),
+               record.get("structural_upkeep", 0.0),
+               record.get("light_capacity", 0.0)))
     if record.get("parent_id"):
         lines.append("descended from %s (generation %d)"
                      % (record["parent_id"], record["generation"]))

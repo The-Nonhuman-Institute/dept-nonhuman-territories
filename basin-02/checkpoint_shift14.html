@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BASIN-02 Checkpoint</title>
+<style>
+  :root {
+    --paper:#E9E3D6; --ground:#F2EDE2; --ink:#0A0A0A; --moss:#3B4A2F;
+    --grey:#7A8086; --amber:#8A6D14; --rule:#CFC7B4; --panel:#F7F3EA;
+    --hold:#8A6D14; --fail:#3B4A2F;
+    --serif:Georgia,'Iowan Old Style','Times New Roman',serif;
+    --sans:ui-sans-serif,system-ui,-apple-system,'Helvetica Neue',sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,'DejaVu Sans Mono',monospace;
+  }
+  @media (prefers-color-scheme:dark) {
+    :root:not([data-theme="light"]) {
+      --paper:#101210; --ground:#0A0B0A; --ink:#F6F6F4; --moss:#9CB584;
+      --grey:#8C9298; --amber:#C9A227; --rule:#262A24; --panel:#171A16;
+      --hold:#C9A227; --fail:#9CB584;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper:#101210; --ground:#0A0B0A; --ink:#F6F6F4; --moss:#9CB584;
+    --grey:#8C9298; --amber:#C9A227; --rule:#262A24; --panel:#171A16;
+    --hold:#C9A227; --fail:#9CB584;
+  }
+
+  * { box-sizing:border-box; }
+  body {
+    background:var(--ground); color:var(--ink);
+    font:16px/1.65 var(--sans); margin:0;
+    padding:clamp(28px,5vw,72px) clamp(18px,5vw,40px) 96px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap { max-width:1020px; margin:0 auto; display:flex; flex-direction:column; gap:44px; }
+  .col { max-width:68ch; }
+
+  .eyebrow {
+    font:500 11px/1.5 var(--mono); letter-spacing:.16em; text-transform:uppercase;
+    color:var(--grey); margin:0;
+  }
+  h1 {
+    font:400 clamp(30px,4.4vw,46px)/1.12 var(--serif); margin:10px 0 0;
+    text-wrap:balance; letter-spacing:-.01em;
+  }
+  h2 {
+    font:400 clamp(20px,2.6vw,26px)/1.25 var(--serif); margin:0 0 4px;
+    text-wrap:balance;
+  }
+  h3 { font:600 13px/1.4 var(--sans); letter-spacing:.02em; margin:0 0 6px; }
+  p { margin:0 0 14px; }
+  p:last-child { margin-bottom:0; }
+  a { color:var(--moss); }
+  em { color:var(--grey); font-style:italic; }
+  strong { font-weight:650; }
+
+  header { border-bottom:2px solid var(--ink); padding-bottom:22px; }
+  .meta {
+    display:flex; flex-wrap:wrap; gap:6px 28px; margin-top:16px;
+    font:12px/1.5 var(--mono); color:var(--grey);
+  }
+  .meta b { color:var(--ink); font-weight:400; font-variant-numeric:tabular-nums; }
+
+  /* the verdict is the page's thesis — it gets the weight */
+  .verdict {
+    background:var(--panel); border:1px solid var(--rule);
+    border-left:5px solid var(--moss);
+    padding:clamp(22px,3vw,34px);
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .verdict .call {
+    font:400 clamp(26px,3.6vw,38px)/1.1 var(--serif); color:var(--moss);
+    letter-spacing:-.01em;
+  }
+  .verdict p { max-width:62ch; }
+
+  section { display:flex; flex-direction:column; gap:16px; }
+  .quote {
+    border-left:2px solid var(--rule); padding:2px 0 2px 20px;
+    font:italic 15px/1.62 var(--serif); color:var(--ink); max-width:64ch;
+  }
+
+  .scroll { overflow-x:auto; }
+  table {
+    border-collapse:collapse; width:100%; min-width:600px;
+    font:13.5px/1.5 var(--sans); font-variant-numeric:tabular-nums;
+  }
+  caption {
+    text-align:left; font:12px/1.5 var(--mono); color:var(--grey);
+    letter-spacing:.04em; padding-bottom:9px;
+  }
+  th {
+    text-align:left; font:600 11px/1.4 var(--mono); letter-spacing:.1em;
+    text-transform:uppercase; color:var(--grey);
+    border-bottom:1px solid var(--ink); padding:0 14px 8px 0; vertical-align:bottom;
+  }
+  td { border-bottom:1px solid var(--rule); padding:11px 14px 11px 0; vertical-align:top; }
+  tr:last-child td { border-bottom:none; }
+  td.num, th.num { text-align:right; padding-right:22px; font-family:var(--mono); }
+  .ev { font:12.5px/1.5 var(--mono); color:var(--grey); }
+
+  .mark { font:600 12px/1 var(--mono); letter-spacing:.06em; white-space:nowrap; }
+  .mark.holds { color:var(--hold); }
+  .mark.fails { color:var(--fail); }
+
+  .logic {
+    font:12px/1.6 var(--mono); color:var(--grey); margin-top:12px;
+    padding-top:12px; border-top:1px dashed var(--rule); max-width:66ch;
+  }
+
+  /* the gradient: the one thing held identical between the two terrains */
+  .grad { display:flex; flex-direction:column; gap:7px; }
+  .bars { display:flex; gap:2px; align-items:flex-end; height:66px; }
+  .bars i {
+    flex:1; background:var(--amber); opacity:.9; display:block; border-radius:1px 1px 0 0;
+  }
+  .axis {
+    display:flex; justify-content:space-between;
+    font:11px/1.4 var(--mono); color:var(--grey);
+  }
+
+  .cards { display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(228px,1fr)); }
+  .card {
+    border:1px solid var(--rule); background:var(--panel); padding:17px 18px;
+    display:flex; flex-direction:column; gap:5px;
+  }
+  .card .k { font:11px/1.4 var(--mono); letter-spacing:.09em; text-transform:uppercase; color:var(--grey); }
+  .card .v { font:400 25px/1.1 var(--serif); font-variant-numeric:tabular-nums; }
+  .card .n { font:12.5px/1.5 var(--sans); color:var(--grey); }
+
+  .flagged {
+    border:1px solid var(--moss); padding:clamp(20px,2.6vw,28px);
+    display:flex; flex-direction:column; gap:14px;
+  }
+  .flagged .eyebrow { color:var(--moss); }
+
+  .caveat {
+    background:var(--panel); border-left:3px solid var(--grey);
+    padding:15px 18px; font-size:14.5px; max-width:66ch;
+  }
+  .caveat h3 { color:var(--grey); font:600 11px/1.4 var(--mono);
+    letter-spacing:.1em; text-transform:uppercase; }
+
+  ul { margin:0; padding-left:20px; }
+  li { margin-bottom:7px; }
+  li:last-child { margin-bottom:0; }
+  code { font:12.5px var(--mono); background:var(--panel); padding:1px 5px; border:1px solid var(--rule); }
+
+  footer {
+    border-top:1px solid var(--rule); padding-top:20px;
+    font:12px/1.6 var(--mono); color:var(--grey);
+  }
+  @media (prefers-reduced-motion:reduce) { * { transition:none !important; animation:none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">Department of Nonhuman Territories · DNT-T02</p>
+    <h1>BASIN-02 at the falsification checkpoint</h1>
+    <div class="meta">
+      <span>evaluated <b>2026-08-17</b></span>
+      <span>canonical shifts <b>15 / 15</b></span>
+      <span>terrain shift <b>14</b></span>
+      <span>spend <b>$0.2212</b> of <b>$6.00</b></span>
+      <span>integrity <b>clean</b></span>
+    </div>
+  </header>
+
+  <div class="verdict">
+    <p class="eyebrow">Verdict, evaluated from the record</p>
+    <div class="call">Not a null result.</div>
+    <p>Three of the four clauses required for a null result fail outright. The condition
+    is not met, so Section&nbsp;11's sanctioned responses — reconfigure the Generators, or
+    seed a terrain under different physics — are not triggered. BASIN-02 continues.</p>
+  </div>
+
+  <section class="col">
+    <h2>The condition, as written</h2>
+    <p class="quote">If, after 15 real (Claude API, canonical) shifts, the Namer's native
+    taxonomy has not diverged from a flat, unstructured list — no groupings, no relational
+    structure, no anomalies flagged, nothing promoted from aggregate to individual record —
+    this counts as a null result for this terrain's seed configuration.</p>
+    <p>The checkpoint was run at 15 shifts, not before. The early signal was strong by
+    shift 2, which is precisely the circumstance the discipline exists for.</p>
+  </section>
+
+  <section>
+    <div class="scroll">
+      <table>
+        <caption>A null result requires every clause to hold. One holds.</caption>
+        <thead>
+          <tr>
+            <th style="width:38px"></th>
+            <th>Clause</th>
+            <th>Measured from the record</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="mark fails">FAILS</span></td>
+            <td>Taxonomy is a flat, unstructured list</td>
+            <td class="ev">max depth 5 · 67 nodes · nested sub-categories authored</td>
+          </tr>
+          <tr>
+            <td><span class="mark fails">FAILS</span></td>
+            <td>No groupings or relational structure</td>
+            <td class="ev">native system authored, 2,414 bytes, with defining traits and exemplars</td>
+          </tr>
+          <tr>
+            <td><span class="mark holds">HOLDS</span></td>
+            <td>No anomalies flagged</td>
+            <td class="ev">4 anomaly-log records, all end-state; 0 anomalous classifications</td>
+          </tr>
+          <tr>
+            <td><span class="mark fails">FAILS</span></td>
+            <td>Nothing promoted aggregate → individual</td>
+            <td class="ev">22 individual-tier records against 26 aggregate</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="logic">The clause that holds is stated rather than glossed. No specimen has
+    been filed anomalous in 15 shifts — everything the terrain produced fitted somewhere in
+    the system the Namer built for it. That is a real observation about this terrain, and it
+    is worth carrying forward as a thing to watch rather than counted as a pass.</p>
+  </section>
+
+  <section class="col">
+    <h2>What the Namer built, unprompted</h2>
+    <p>Given an empty system and no template, it authored a <strong>hierarchy</strong> — one
+    root category with nested observed states beneath it, each carrying its own defining
+    condition and exemplars:</p>
+  </section>
+
+  <section>
+    <div class="scroll">
+      <table>
+        <caption>DNT-T02 native system at shift 14 — the Namer's own labels and counts</caption>
+        <thead>
+          <tr><th>Category</th><th class="num">Specimens</th><th>Defining condition, as written</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>static_accumulator</code></td><td class="num">13</td>
+            <td class="ev">output ≤ harvesting surplus; fixed position; passive harvesting</td>
+          </tr>
+          <tr>
+            <td><code>static_accumulator/simple</code></td><td class="num">19</td>
+            <td class="ev">descendants = 0 AND outbound_transfer = 0</td>
+          </tr>
+          <tr>
+            <td><code>static_accumulator/reproductive</code></td><td class="num">16</td>
+            <td class="ev">reproductive commitment with accumulated surplus</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="col">This is a structural difference from BASIN-01, whose Namer described its
+    own system as <em>"a flat, non-hierarchical classification system."</em> Same code, same
+    prompt, same model — different shape. Too early to call it a consequence of the field,
+    but it is now on the record as a question.</p>
+  </section>
+
+  <section class="flagged">
+    <p class="eyebrow">Flagged finding — cross-terrain</p>
+    <h2>Individual reasoning appears immediately when specimens are persistent from shift 0</h2>
+    <p>The reasoning register is a passive read-only layer over each terrain's specimen log.
+    It tags whether the Namer's reasoning was purely classificatory or referenced something
+    individual — a specimen's own history, its ancestry, other specimens by name. It stores
+    the phrases that triggered every tag. It reaches the Namer at no point and changes
+    nothing about how it operates.</p>
+    <div class="scroll">
+      <table>
+        <caption>Share of reasoning entries carrying each signal</caption>
+        <thead>
+          <tr>
+            <th>Terrain and era</th><th class="num">Entries</th>
+            <th class="num">Purely categorical</th><th class="num">Own history</th>
+            <th class="num">Lineage</th><th class="num">Names others</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>BASIN-01 · shifts 0–48 <em>(text era)</em></td>
+            <td class="num">180</td><td class="num">75%</td><td class="num">24%</td>
+            <td class="num">1%</td><td class="num">0%</td>
+          </tr>
+          <tr>
+            <td>BASIN-01 · shifts 49–95 <em>(living)</em></td>
+            <td class="num">134</td><td class="num">0%</td><td class="num">37%</td>
+            <td class="num">92%</td><td class="num">96%</td>
+          </tr>
+          <tr>
+            <td>BASIN-01 · shifts 96+ <em>(new taxonomy)</em></td>
+            <td class="num">138</td><td class="num">0%</td><td class="num">48%</td>
+            <td class="num">88%</td><td class="num">98%</td>
+          </tr>
+          <tr>
+            <td><strong>BASIN-02 · shifts 0–14</strong></td>
+            <td class="num">48</td><td class="num"><strong>0%</strong></td>
+            <td class="num"><strong>56%</strong></td><td class="num"><strong>71%</strong></td>
+            <td class="num"><strong>98%</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>BASIN-01 needed 48 shifts to climb out of an era in which specimens were fragments of
+    text rather than things that persist. Three-quarters of its early reasoning was pure
+    classification; ancestry appeared in 1% of entries. BASIN-02 inherited BASIN-01's code
+    but none of its history, and its Namer reasons individually from the first specimen
+    onward — no climb.</p>
+    <div class="caveat">
+      <h3>Held as suggestive</h3>
+      <p>48 entries is a small sample, the population regime differs, and the two eras are
+      not matched on anything except the code. This is not yet a result. It is the most
+      interesting cross-terrain signal so far and it is recorded here so that it can be
+      confirmed or dismantled by more shifts rather than assumed.</p>
+    </div>
+  </section>
+
+  <section class="col">
+    <h2>The control held</h2>
+    <p>BASIN-02 differs from BASIN-01 in exactly one intended way: it is a field 21 cells
+    deep by 15 wide rather than a line of 21. The light gradient — the terrain's entire
+    economy — is computed by BASIN-01's unchanged formula from its unchanged constants.</p>
+  </section>
+
+  <section class="grad">
+    <p class="eyebrow">Light arriving per shift, by depth — identical in both terrains</p>
+    <div class="bars" role="img" aria-label="Light influx rising from 0.51 at depth 2 to 7.20 at depth 20, identical across both terrains">
+      <i style="height:4%"></i><i style="height:5%"></i><i style="height:7%"></i>
+      <i style="height:10%"></i><i style="height:14%"></i><i style="height:20%"></i>
+      <i style="height:26%"></i><i style="height:31%"></i><i style="height:35%"></i>
+      <i style="height:40%"></i><i style="height:45%"></i><i style="height:50%"></i>
+      <i style="height:56%"></i><i style="height:61%"></i><i style="height:66%"></i>
+      <i style="height:72%"></i><i style="height:78%"></i><i style="height:83%"></i>
+      <i style="height:89%"></i><i style="height:94%"></i><i style="height:100%"></i>
+    </div>
+    <div class="axis"><span>depth 0 — far margin · 0.00</span><span>depth 20 — data-stream · 7.20</span></div>
+    <p class="col" style="margin-top:8px">Five files differ between the two terrains:
+    <code>life.py</code>, <code>config.py</code>, <code>clock_in.py</code>,
+    <code>terrain_io.py</code>, <code>agents/observer.py</code>. Every Generator, the Namer,
+    the Keeper, the Archivist and the Cartographer are byte-for-byte copies, and
+    <code>diff -rq</code> is the check.</p>
+  </section>
+
+  <section>
+    <h2 class="col">Spatial state — nothing to report yet</h2>
+    <div class="cards">
+      <div class="card">
+        <span class="k">Living</span><span class="v">18</span>
+        <span class="n">across 15 distinct cells of 315</span>
+      </div>
+      <div class="card">
+        <span class="k">Lateral spread</span><span class="v">0.99</span>
+        <span class="n">standard deviation, columns 5–9. A line cannot produce a non-zero value here at all.</span>
+      </div>
+      <div class="card">
+        <span class="k">Mean spacing</span><span class="v">0.67</span>
+        <span class="n">steps to nearest neighbour — clustered, not spaced</span>
+      </div>
+      <div class="card">
+        <span class="k">Cover patches</span><span class="v">2</span>
+        <span class="n">largest 39 cells, spanning depth 2–20, columns 3–11</span>
+      </div>
+    </div>
+    <div class="caveat">
+      <h3>Stated plainly</h3>
+      <p>There is no clustering, spacing, or territorial finding at 15 shifts. The population
+      occupies five of fifteen columns and has barely dispersed laterally; cover has spread
+      wider than the specimens have. The mechanism that could produce spatial behaviour is
+      in and demonstrably working — movement is two-dimensional and 6 of 18 specimens have
+      moved — but nothing has emerged from it yet, and reporting otherwise would be reading
+      a pattern into four numbers.</p>
+    </div>
+  </section>
+
+  <section class="col">
+    <h2>What happens next</h2>
+    <ul>
+      <li>BASIN-02 continues. The falsification condition is not met and no reconfiguration
+      is sanctioned or warranted.</li>
+      <li>The registry entry flips from Pre-Seed to <strong>Active</strong>, its first
+      canonical shifts now run.</li>
+      <li>The reasoning register keeps running passively on both terrains, unchanged.</li>
+      <li>The spatial question stays open. It needs shifts, not intervention.</li>
+    </ul>
+  </section>
+
+  <footer>
+    BASIN-01 remains ACTIVE and unamended at shift 126, physics frozen at v1.4, as the
+    control. Combined spend across both terrains: $2.5588. Every figure on this page was
+    computed from <code>state/</code> and <code>shifts/</code> at evaluation time; the
+    field rollup is recomputable from <code>state/field_log.jsonl</code>.
+  </footer>
+
+</div>
+
+</body>
+</html>
