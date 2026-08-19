@@ -1,0 +1,3 @@
+id,state,generation,parent_id,arose_at_shift,age,descendants,light,extent,junctions,mass,cover,residue,links,category
+i-06529,living,2,i-06115,200,17,1,0.4159003250061394,0.964,0.563,1.688,1.213,0.7824,1.0046,static_accumulator/simple
+i-06970,living,3,i-06529,211,6,0,0.9473195803733004,0.494,0.841,1.391,1.2096,1.0408,0.7496,

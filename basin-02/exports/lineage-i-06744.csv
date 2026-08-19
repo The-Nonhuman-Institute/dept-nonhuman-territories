@@ -1,0 +1,4 @@
+id,state,generation,parent_id,arose_at_shift,age,descendants,light,extent,junctions,mass,cover,residue,links,category
+i-06744,living,0,None,206,11,2,4.546819224171878,1.606,0.513,1.553,1.4764,0.6915,0.8321,static_accumulator/reproductive/marginal_reproductive
+i-06779,living,1,i-06744,207,10,0,0.6672408903887495,1.818,0.741,1.905,1.2875,0.62,1.0925,
+i-07057,living,1,i-06744,217,0,0,3.6374553793375024,1.85,0.25,1.782,1.5754,0.8047,0.6199,

@@ -155,7 +155,7 @@ def recent_activity(ts: List[Dict[str, Any]], limit: int = 8) -> str:
     return "".join(
         '<li><span class="dot"></span><div><div class="al">%s</div>'
         '<div class="am">%s · %s</div></div><div class="at">%s</div></li>'
-        % (esc(kind), esc(who), esc(detail), esc(when.replace("T", " ").replace("Z", " UTC")))
+        % (esc(kind), esc(who), esc(detail), dnt_chrome.stamp(when))
         for when, who, kind, detail in rows[:limit])
 
 

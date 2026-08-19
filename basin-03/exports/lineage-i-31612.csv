@@ -1,0 +1,3 @@
+id,state,generation,parent_id,arose_at_shift,age,descendants,light,extent,junctions,mass,cover,residue,links,category
+i-31612,living,0,None,113,36,6,6.415844331067415,0.734,0.54,0.759,1.2636,0.8707,0.8658,mobile_exchanger
+i-62711,living,1,i-31612,148,1,0,2.3003852245594683,1.273,0.615,1.234,1.154,0.6504,1.1956,

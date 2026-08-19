@@ -1,0 +1,3 @@
+id,state,generation,parent_id,arose_at_shift,age,descendants,light,extent,junctions,mass,cover,residue,links,category
+i-00096,living,0,None,111,15,1,4.343386489645896,0.955,1.384,1.651,1.3722,0.8288,0.799,emergent_mid_structural
+i-00103,ended,1,i-00096,112,3,0,-0.9424591706042392,0.531,1.654,1.436,1.5102,0.8974,0.5925,descendant_mid_structural

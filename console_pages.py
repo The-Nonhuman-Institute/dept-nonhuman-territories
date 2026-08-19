@@ -31,13 +31,15 @@ Python 3.9 compatible. Reads only; writes HTML.
 
 from __future__ import annotations
 
-import json, math, os, sys
+import json, math, os, re, sys
 from typing import Any, Dict, List, Optional, Tuple
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, ROOT)
 import dnt_console as C
 import dnt_data
+import dnt_charts as charts
+import snapshot
 
 TERRAINS = ["basin-01", "basin-02", "basin-03", "basin-04"]
 
@@ -158,12 +160,53 @@ align-items:center}
 .tree{display:flex;gap:26px;overflow-x:auto;padding-bottom:6px}
 .gen{min-width:150px}
 .genh{font:9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--dim);
-border-bottom:1px solid var(--rule);padding-bottom:6px;margin-bottom:9px}
+border-bottom:1px solid var(--rule);padding-bottom:6px;margin-bottom:9px;
+display:flex;justify-content:space-between;gap:8px}
+.genh span{color:var(--ink);letter-spacing:.04em}
 .node{border:1px solid var(--rule);background:var(--panel2);padding:8px 10px;margin-bottom:8px;
 font:10.5px var(--mono);text-decoration:none;color:var(--ink);display:block}
 .node:hover{border-color:var(--moss2)}
 .node.root{border-color:var(--moss2)}
-.node .c{color:var(--dim);font-size:9.5px;display:block;margin-top:2px}
+.node{position:relative}
+.node .nid{font:11px var(--mono);color:var(--ink);display:block}
+.node .c{color:var(--dim);font-size:9px;display:block;margin-top:2px;line-height:1.4}
+.node.gone{opacity:.55;border-style:dashed}
+.node.more{border-style:dashed;color:var(--dim);text-align:center;font-size:9.5px}
+.ndot{width:6px;height:6px;border-radius:50%;display:inline-block}
+.node .ndot{position:absolute;top:8px;right:8px}
+.ndot.live{background:#7FCB8A}
+.ndot.dead{background:#4E574C}
+.gen{min-width:172px}
+.tl{position:relative;height:34px;background:var(--bg);border:1px solid var(--rule)}
+.tl i{position:absolute;top:4px;width:2px;height:26px;display:block}
+.tlx{display:flex;justify-content:space-between;font:9.5px var(--mono);color:var(--dim);
+margin-top:6px}
+.ann{border-bottom:1px solid var(--rule);padding:9px 0}
+.ann:last-child{border-bottom:none}
+.annh{display:flex;justify-content:space-between;gap:10px;font:11px var(--mono);
+color:var(--ink)}
+.annh span{color:var(--dim);font-size:9.5px;white-space:nowrap}
+.annb{font:9.5px var(--mono);color:var(--dim);margin-top:3px}
+.filters{display:flex;flex-direction:column;gap:4px}
+.filt{display:flex;align-items:center;gap:8px;font:10.5px var(--mono);color:var(--ink);
+cursor:pointer}
+.filt input{accent-color:var(--moss);margin:0}
+.filt .c{margin-left:auto;color:var(--dim);font-variant-numeric:tabular-nums}
+.tcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:14px;margin-bottom:14px}
+.tcard{border:1px solid var(--rule);background:var(--panel)}
+.tch{display:flex;justify-content:space-between;align-items:center;padding:11px 13px;
+border-bottom:1px solid var(--rule)}
+.tch b{font:14px var(--mono);letter-spacing:.05em}
+.tcb{padding:12px 13px}
+.tcg{font:9px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--dim);
+margin:13px 0 7px;border-top:1px solid var(--rule);padding-top:11px}
+.tcb .nav{margin-top:12px}
+ul.find{list-style:none;margin:0;padding:0}
+ul.find li{font:11.5px/1.65 var(--mono);color:var(--dim);padding:8px 0;
+border-bottom:1px solid var(--rule)}
+ul.find li:last-child{border-bottom:none;color:var(--faint)}
+ul.find b{font-weight:400}
 .hist{display:flex;gap:2px;align-items:flex-end;height:44px}
 .hist i{flex:1;background:var(--moss2);display:block;min-height:1px}
 """
@@ -256,7 +299,7 @@ def terrain_record(d: Dict[str, Any]) -> str:
         '<td class="dim">%s</td><td class="dim num">%s</td></tr>'
         % (esc(e.get("shift")), esc(e.get("kind")),
            esc((e.get("detail") or e.get("note") or "")[:150]),
-           esc((e.get("logged_at") or "").replace("T", " ").replace("Z", "")))
+           C.stamp(e.get("logged_at")))
         for e in reversed(events[-14:])) or \
         '<tr><td colspan="4" class="absent">no terrain events on the record</td></tr>'
 
@@ -309,7 +352,7 @@ def terrain_record(d: Dict[str, Any]) -> str:
 
     right = C.panel("Terrain status", C.kv([
         ("current shift", num(d["shift"])),
-        ("last committed", esc((d["committed_at"] or "—").replace("T", " ").replace("Z", ""))),
+        ("last committed", C.stamp(d["committed_at"])),
         ("shifts on record", num(len(rows))),
         ("cumulative spend", "$%.4f" % float(m.get("cumulative_cost_usd", 0.0))),
         ("phase", esc(rows[-1].get("phase") if rows else "—")),
@@ -387,11 +430,90 @@ def slug(name: str) -> str:
 # ===========================================================================
 # shift log
 # ===========================================================================
+IMPACT = [(1, "minimal", "observable but low system effect"),
+          (10, "low", "localised or contained change"),
+          (100, "moderate", "noticeable terrain-scale effect"),
+          (1000, "high", "significant, wide-reaching effect"),
+          (10 ** 9, "critical", "system-altering or rare")]
+
+
+def impact_of(affected: int):
+    """A published band, not a judgement — how many things an event touched."""
+    for ceiling, name, blurb in IMPACT:
+        if affected <= ceiling:
+            return name, blurb
+    return IMPACT[-1][1], IMPACT[-1][2]
+
+
+def events_for_shift(d, shift):
+    """The real event stream for one shift, assembled from the logs.
+
+    Every row below is a record the terrain already wrote. Classifications
+    carry their own UTC timestamp, so those are placed in real time; the rest
+    are known to the shift but not to the second, and say so rather than being
+    given an invented clock time.
+    """
+    out = []
+    for r in d["specimens"]:
+        if r.get("shift") != shift:
+            continue
+        cl = r.get("classification") or {}
+        if not cl.get("category"):
+            continue
+        out.append({
+            "at": r.get("logged_at"), "kind": "classification",
+            "colour": "#A8D45C",
+            "detail": "%s filed as %s%s" % (
+                r.get("specimen_id"), cl.get("category"),
+                (" — %s" % cl.get("decision")) if cl.get("decision") else ""),
+            "target": r.get("specimen_id"), "affected": 1,
+        })
+    row = next((r for r in d["shifts"] if r.get("shift") == shift), None) or {}
+    for cat in (row.get("new_categories") or []):
+        out.append({"at": row.get("end_timestamp"), "kind": "category coined",
+                    "colour": "#4FA3E3",
+                    "detail": "the Namer coined %s" % cat, "target": cat,
+                    "affected": (d["memory"].get("category_stats") or {}
+                                 ).get(cat, {}).get("count", 1)})
+    for key, kind, colour in (("arose_this_shift", "arrivals", "#7FCB8A"),
+                              ("ended_this_shift", "endings", "#D4614A"),
+                              ("replicated_this_shift", "replications", "#B37BD6"),
+                              ("links_formed", "links formed", "#5FA9A0")):
+        n = row.get(key) or 0
+        if n:
+            out.append({"at": row.get("end_timestamp"), "kind": kind, "colour": colour,
+                        "detail": "%s %s recorded in this shift" % (num(n), kind),
+                        "target": "", "affected": n})
+    events = d["memory"].get("terrain_events")
+    events = events if isinstance(events, list) else ([events] if events else [])
+    for e in events:
+        if e.get("shift") == shift:
+            out.append({"at": e.get("logged_at"), "kind": "terrain event",
+                        "colour": "#C9A227",
+                        "detail": (e.get("detail") or e.get("note") or "")[:180],
+                        "target": e.get("kind"), "affected": 0})
+    out.sort(key=lambda x: (x.get("at") or ""), reverse=True)
+    return out
+
+
+def _secs(stamp):
+    """Seconds into the day, from a UTC stamp, or None."""
+    if not stamp or "T" not in stamp:
+        return None
+    try:
+        hh, mm, ss = stamp.split("T")[1].rstrip("Z").split(":")
+        return int(hh) * 3600 + int(mm) * 60 + int(float(ss))
+    except (ValueError, IndexError):
+        return None
+
+
 def shift_log(d: Dict[str, Any]) -> str:
     t, m, rows = d["dir"], d["memory"], d["shifts"]
-    recent = list(reversed(rows))[:120]
+    hue = charts.hue(t)
     last = rows[-1] if rows else {}
     prev = rows[-2] if len(rows) > 1 else {}
+    shift = last.get("shift")
+    evs = events_for_shift(d, shift)
 
     def delta(key):
         a, b = last.get(key), prev.get(key)
@@ -400,47 +522,88 @@ def shift_log(d: Dict[str, Any]) -> str:
         diff = a - b
         if not diff:
             return '<span class="dim">no change</span>'
-        return ('<span class="%s">%+s</span>'
-                % ("up" if diff > 0 else "down", num(diff)))
+        return '<span class="%s">%+s vs previous</span>' % (
+            "up" if diff > 0 else "down", num(diff))
 
-    body = "".join(
-        '<tr><td class="num">%s</td><td class="dim">%s</td><td class="num">%s</td>'
-        '<td class="num">%s</td><td class="num">%s</td><td class="num">%s</td>'
-        '<td class="num">%s</td><td class="num">%s</td><td class="dim">%s</td>'
-        '<td class="dim">%s</td></tr>'
-        % (esc(r.get("shift")),
-           esc((r.get("end_timestamp") or "").replace("T", " ").replace("Z", "")),
-           num(r.get("living")), num(r.get("arose_this_shift")),
-           num(r.get("ended_this_shift")), num(r.get("replicated_this_shift")),
-           num(r.get("links_formed")), num(r.get("classified")),
-           esc(", ".join(r.get("new_categories") or []) or "—"), esc(r.get("phase")))
-        for r in recent)
-
-    # what a shift costs and what it produced, most recent first
     strip = C.stats([
-        (num(len(rows)), "shifts", "on the record"),
+        (num(len(rows)), "shifts", "since %s" % esc((rows[0].get("end_timestamp") or "")[:10])),
         (num(last.get("living")), "living", delta("living")),
         (num(len(m.get("category_stats") or {})), "native categories",
          "+%s this shift" % num(len(last.get("new_categories") or []))),
-        (num(last.get("arose_this_shift")), "arose", "this shift"),
-        (num(last.get("ended_this_shift")), "ended", "this shift"),
-        (num(last.get("classified")), "classified", "this shift"),
+        (num(last.get("arose_this_shift")), "arose", delta("arose_this_shift")),
+        (num(last.get("ended_this_shift")), "ended", delta("ended_this_shift")),
+        (num(last.get("replicated_this_shift")), "replicated", delta("replicated_this_shift")),
+        (num(last.get("links_formed")), "links formed", delta("links_formed")),
     ])
 
-    events = m.get("terrain_events")
-    events = events if isinstance(events, list) else ([events] if events else [])
-    evs = "".join(
-        '<div class="rowlink"><span class="sw" style="background:var(--amber)"></span>'
-        '<span>%s<span class="s">shift %s · %s</span></span><span></span></div>'
-        % (esc(e.get("kind")), esc(e.get("shift")),
-           esc((e.get("logged_at") or "").replace("T", " ").replace("Z", "")))
-        for e in reversed(events[-10:])) or \
-        '<p class="absent">no terrain events</p>'
+    evrows = "".join(
+        '<tr data-kind="%s"><td class="num">%s</td>'
+        '<td class="dim">%s</td>'
+        '<td><span class="sw" style="background:%s"></span> %s</td>'
+        '<td class="dim">%s</td><td class="num"><span class="chip">%s</span></td>'
+        '<td class="num dim">%s</td></tr>'
+        % (esc(e["kind"]), esc(shift), C.stamp(e.get("at"), "shift only"),
+           e["colour"], esc(e["kind"]), esc(e["detail"]),
+           impact_of(e.get("affected") or 0)[0],
+           num(e.get("affected")) if e.get("affected") else "—")
+        for e in evs[:80]) or \
+        '<tr><td colspan="6" class="absent">nothing individually logged for this shift</td></tr>'
 
+    # ---- activity across the real elapsed shift --------------------------
+    t0, t1 = _secs(last.get("start_timestamp")), _secs(last.get("end_timestamp"))
+    ticks = ""
+    if t0 is not None and t1 is not None and t1 > t0:
+        marks = []
+        for e in evs:
+            s = _secs(e.get("at"))
+            if s is None or not (t0 <= s <= t1):
+                continue
+            marks.append('<i style="left:%.2f%%;background:%s" title="%s"></i>'
+                         % (100.0 * (s - t0) / (t1 - t0), e["colour"], esc(e["kind"])))
+        ticks = ('<div class="tl">%s</div>'
+                 '<div class="tlx"><span>%s</span><span>%s elapsed</span><span>%s</span></div>'
+                 % ("".join(marks),
+                    esc((last.get("start_timestamp") or "")[11:19]),
+                    "%.0fs" % float(last.get("duration_seconds") or (t1 - t0)),
+                    esc((last.get("end_timestamp") or "")[11:19])))
+    else:
+        ticks = '<p class="absent">this shift recorded no start and end time</p>'
+
+    # ---- summary comparison, with a trend per row ------------------------
+    COMPARE = [("living specimens", "living"), ("arose", "arose_this_shift"),
+               ("ended", "ended_this_shift"), ("replicated", "replicated_this_shift"),
+               ("classified", "classified"), ("links formed", "links_formed"),
+               ("anomalous", "anomalous"), ("unresolved", "unresolved"),
+               ("resource flow", "resource_flow")]
+    last10 = rows[-10:]
+    crows = "".join(
+        '<tr><td>%s</td><td class="num">%s</td><td class="num">%s</td>'
+        '<td class="num %s">%s</td><td>%s</td></tr>'
+        % (label,
+           num(prev.get(key)) if prev else "—", num(last.get(key)),
+           ("up" if (last.get(key) or 0) - (prev.get(key) or 0) > 0 else
+            ("down" if (last.get(key) or 0) - (prev.get(key) or 0) < 0 else "dim")),
+           ("%+s" % num((last.get(key) or 0) - (prev.get(key) or 0))) if prev else "—",
+           charts.trend([r.get(key) for r in last10], colour=hue))
+        for label, key in COMPARE)
+
+    kinds = sorted({e["kind"] for e in evs})
     left = C.panel("Select terrain", "".join(
-        '<a class="rowlink%s" href="/%s/shiftlog.html"><span></span>'
-        '<span>%s</span><span></span></a>' % (" on" if x == t else "", x, x.upper())
+        '<a class="rowlink%s" href="/%s/shiftlog.html"><span class="sw" '
+        'style="background:%s"></span><span>%s<span class="s">shift %s</span></span>'
+        '<span></span></a>'
+        % (" on" if x == t else "", x, charts.hue(x), x.upper(),
+           esc((dnt_data.load(x) or {}).get("memory", {}).get("last_committed_shift", "—")))
         for x in TERRAINS if os.path.isdir(os.path.join(ROOT, x))), flush=True) + \
+        C.panel("Show", '<div class="filters">%s</div>'
+                '<p class="note">Filters hide rows. They change nothing in the record, and '
+                'the counts above stay what the shift wrote.</p>' % "".join(
+                    '<label class="filt"><input type="checkbox" data-kind="%s" checked>'
+                    '<i class="sw" style="background:%s"></i>%s'
+                    '<span class="c">%d</span></label>'
+                    % (esc(k), next((e["colour"] for e in evs if e["kind"] == k), "#7C8879"),
+                       esc(k), sum(1 for e in evs if e["kind"] == k))
+                    for k in kinds)) + \
         C.panel("Go to", C.nav([
             ("Terrain record", "/%s/terrain.html" % t,
              "governing conditions and current state"),
@@ -450,50 +613,102 @@ def shift_log(d: Dict[str, Any]) -> str:
              ("/%s/checkpoint.html" % t)
              if os.path.exists(os.path.join(ROOT, t, "checkpoint.html")) else None,
              "state compared across a window"),
-        ])) + \
-        C.panel("What a column means",
-                '<p class="note">Every column is a value the shift itself recorded when it '
-                'closed. Nothing on this page is recomputed, averaged, or filled in — a '
-                'blank is a field that shift did not write.</p>')
+        ]))
+
+    ann = m.get("annotations") or {}
+    annrows = "".join(
+        '<div class="ann"><div class="annh">%s<span>%s</span></div>'
+        '<div class="annb">recorded by %s at shift %s</div></div>'
+        % (esc(k.replace("_", " ")), C.stamp(v.get("at")),
+           esc(v.get("by") or "—"), esc(v.get("shift")))
+        for k, v in sorted(ann.items(),
+                           key=lambda kv: kv[1].get("at") or "", reverse=True)
+        if isinstance(v, dict)) or \
+        '<p class="absent">no annotations recorded</p>'
 
     right = C.panel("Shift context", C.kv([
-        ("current shift", num(d["shift"])),
-        ("committed", esc((d["committed_at"] or "—").replace("T", " ").replace("Z", ""))),
-        ("duration", "%.1fs" % float(last.get("duration_seconds") or 0)),
+        ("current shift", num(shift)),
+        ("started", C.stamp(last.get("start_timestamp"))),
+        ("committed", C.stamp(last.get("end_timestamp"))),
+        ("took", "%.1fs" % float(last.get("duration_seconds") or 0)),
         ("phase", esc(last.get("phase"))),
         ("model", esc(last.get("model"))),
         ("model calls", num(last.get("model_calls"))),
         ("cost this shift", "$%.6f" % float(last.get("estimated_cost_usd") or 0)),
         ("cumulative", "$%.4f" % float(last.get("cumulative_cost_usd") or 0)),
-    ])) + C.panel("Terrain events", evs, "%d on record" % len(events), flush=True) + \
-        C.panel("Living, last %d shifts" % min(60, len(rows)),
-                spark([r.get("living") for r in rows[-60:]], 290, 64))
+    ])) + C.panel("Annotations", annrows, "%d on record" % len(ann)) + \
+        C.panel("Event impact key", "".join(
+            '<div class="mini"><span><span class="chip">%s</span></span>'
+            '<span></span><b style="text-align:left;color:var(--dim);font-size:10px">%s</b>'
+            '</div>' % (name, blurb) for _, name, blurb in IMPACT) +
+            '<p class="note">A band, not a judgement: how many things the record says the '
+            'event touched.</p>') + \
+        C.panel("Export", C.nav([
+            ("Shift log (CSV)", "/%s/exports/shiftlog.csv" % t,
+             "every shift, every column the log wrote"),
+            ("Shift log (JSON)", "/%s/shifts/shift_log.jsonl" % t,
+             "the raw append-only record"),
+        ]))
 
-    mid = ('<div class="hdr"><div><p class="eyebrow">%s · shift log</p>'
-           '<h1 class="doc">Shift Log</h1>'
+    mid = ('<div class="hdr" id="top"><div><p class="eyebrow">%s · shift log</p>'
+           '<h1 class="doc">Shift Log <span style="color:%s">%s</span></h1>'
            '<p class="sub">Chronological record of observed changes and system events.</p>'
            '</div><table class="doc">'
            '<tr><td class="k">DOCUMENT</td><td class="v">DNT-SHL</td></tr>'
            '<tr><td class="k">TERRAIN</td><td class="v">%s</td></tr>'
            '<tr><td class="k">SHIFTS</td><td class="v">%s</td></tr>'
            '<tr><td class="k">THROUGH</td><td class="v">%s</td></tr></table></div>'
-           % (esc(d["name"]), esc(d["name"]), num(len(rows)), esc(d["shift"])))
+           % (esc(d["name"]), hue, esc(d["name"]), esc(d["name"]), num(len(rows)), esc(shift)))
     mid += strip
     mid += C.panel(
-        "Shifts, newest first",
+        "Shift events, newest first",
+        '<div class="scroll"><table class="d" id="evt"><thead><tr><th class="num">shift</th>'
+        '<th>time (UTC)</th><th>event</th><th>details</th><th class="num">impact</th>'
+        '<th class="num">affected</th></tr></thead><tbody>%s</tbody></table></div>'
+        '<p class="note">Classifications carry their own timestamp and are placed in real '
+        'time. The others are known to the shift but not to the second, and say so rather '
+        'than being given an invented clock time.</p>' % evrows,
+        "shift %s · %d event(s)" % (num(shift), len(evs)))
+    mid += C.panel("Activity across shift %s" % num(shift), ticks,
+                   "%.0f seconds elapsed" % float(last.get("duration_seconds") or 0))
+    mid += C.panel(
+        "Shift summary comparison",
+        '<div class="scroll"><table class="d"><thead><tr><th>metric</th>'
+        '<th class="num">shift %s</th><th class="num">shift %s</th><th class="num">Δ</th>'
+        '<th>last 10 shifts</th></tr></thead><tbody>%s</tbody></table></div>'
+        % (num(prev.get("shift")) if prev else "—", num(shift), crows))
+    mid += C.panel(
+        "Every shift committed",
         '<div class="scroll"><table class="d"><thead><tr>'
         '<th class="num">shift</th><th>committed</th><th class="num">living</th>'
         '<th class="num">arose</th><th class="num">ended</th><th class="num">replicated</th>'
         '<th class="num">links</th><th class="num">classified</th>'
         '<th>categories coined</th><th>phase</th></tr></thead><tbody>%s</tbody></table></div>'
-        '<p class="note">Showing the most recent %d of %d shifts.</p>'
-        % (body, len(recent), len(rows)))
+        '<p class="note">Showing the most recent %d of %d.</p>'
+        % ("".join(
+            '<tr><td class="num">%s</td><td class="dim">%s</td>'
+            '<td class="num">%s</td><td class="num">%s</td>'
+            '<td class="num">%s</td><td class="num">%s</td><td class="num">%s</td>'
+            '<td class="num">%s</td><td class="dim">%s</td><td class="dim">%s</td></tr>'
+            % (esc(r.get("shift")), C.stamp(r.get("end_timestamp")),
+               num(r.get("living")), num(r.get("arose_this_shift")),
+               num(r.get("ended_this_shift")), num(r.get("replicated_this_shift")),
+               num(r.get("links_formed")), num(r.get("classified")),
+               esc(", ".join(r.get("new_categories") or []) or "—"), esc(r.get("phase")))
+            for r in reversed(rows[-100:])), min(100, len(rows)), len(rows)))
+
+    script = ("<script>document.querySelectorAll('[data-kind]').forEach(function(b){"
+              "if(b.tagName!=='INPUT')return;b.onchange=function(){"
+              "var on={};document.querySelectorAll('input[data-kind]').forEach(function(x){"
+              "on[x.dataset.kind]=x.checked});"
+              "document.querySelectorAll('#evt tbody tr[data-kind]').forEach(function(r){"
+              "r.style.display = on[r.dataset.kind]===false ? 'none' : ''})}});</script>")
 
     return C.page("%s — Shift Log" % d["name"], "SHIFT LOG", t,
                   [("TERRAINS", C.HUB + "/hub.html"),
                    (d["name"], "/%s/terrain.html" % t), ("SHIFT LOG", None)],
-                  d["shift"], d["committed_at"], mid, left, right, CSS,
-                  current="shiftlog")
+                  shift, d["committed_at"], mid, left, right,
+                  CSS + charts.CSS, current="shiftlog", scripts=script)
 
 
 # ===========================================================================
@@ -968,17 +1183,19 @@ def specimen_record(d: Dict[str, Any], sid: str, sightings: List[Dict[str, Any]]
 def lineage_record(d: Dict[str, Any], root: str) -> str:
     t = d["dir"]
     ind = d["individuals"]
+    ended = {e.get("id"): e for e in (d["world"].get("ended") or [])}
+    hue = charts.hue(t)
+
     kids_of: Dict[str, List[str]] = {}
-    for k, v in ind.items():
+    for k, v in list(ind.items()) + list(ended.items()):
         p = v.get("parent_id")
         if p:
             kids_of.setdefault(p, []).append(k)
 
-    # walk the tree from the root, breadth first, recording depth
     gens: Dict[int, List[str]] = {0: [root]}
     seen = {root}
     depth = 0
-    while gens.get(depth) and depth < 12:
+    while gens.get(depth) and depth < 14:
         nxt = []
         for node in gens[depth]:
             for kid in sorted(kids_of.get(node, [])):
@@ -990,294 +1207,783 @@ def lineage_record(d: Dict[str, Any], root: str) -> str:
         depth += 1
         gens[depth] = nxt
 
+    rec = lambda k: ind.get(k) or ended.get(k) or {}
     living = [k for k in seen if k in ind]
-    b = ind.get(root) or {}
+    extinct = [k for k in seen if k not in ind]
+    b = rec(root)
+    alive = root in ind
 
-    # trait drift by generation, against the root
+    # ---- ancestry, walked upward ----------------------------------------
+    chain, node = [], b.get("parent_id")
+    guard = 0
+    while node and guard < 30:
+        chain.append(node)
+        node = rec(node).get("parent_id")
+        guard += 1
+
+    # ---- the tree, one column per generation ----------------------------
+    def node_box(k, g):
+        r = rec(k)
+        is_live = k in ind
+        cat = (d["named"].get(k) or {}).get("category") or "not yet named"
+        linkable = k in d.get("_pages", ())
+        return ('<%s class="node%s%s"%s><span class="nid">%s</span>'
+                '<span class="c">%s</span>'
+                '<span class="c">gen %s · %s shift(s) · %s kid(s)</span>'
+                '<span class="ndot %s"></span></%s>'
+                % ("a" if linkable else "div", " root" if g == 0 else "",
+                   "" if is_live else " gone",
+                   ' href="/%s/specimens/%s.html"' % (t, esc(k)) if linkable else "",
+                   esc(k), esc(cat), num(r.get("generation")), num(r.get("age")),
+                   num(r.get("descendants")),
+                   "live" if is_live else "dead",
+                   "a" if linkable else "div"))
+
+    tree = '<div class="tree">%s</div>' % "".join(
+        '<div class="gen"><div class="genh">gen %d<span>%d</span></div>%s</div>'
+        % (g, len(gens[g]), "".join(node_box(k, g) for k in gens[g][:12]) +
+           ('<div class="node more">+ %d more</div>' % (len(gens[g]) - 12)
+            if len(gens[g]) > 12 else ""))
+        for g in sorted(gens))
+
+    tree_legend = ('<div class="chartlegend">'
+                   '<span class="lg"><i class="ndot live"></i>living</span>'
+                   '<span class="lg"><i class="ndot dead"></i>ended</span>'
+                   '<span class="lg"><i class="ndot" style="background:%s"></i>root</span>'
+                   '<span class="lg">a column is a generation; a box is one recorded '
+                   'parent_id away from the column to its left</span></div>' % hue)
+
+    # ---- trait drift ------------------------------------------------------
     def trait(k, path):
-        v = ind.get(k) or {}
-        return (v.get("structure") or {}).get(path) if path in ("extent", "junctions", "mass") \
-            else (v.get("traits") or {}).get(path)
+        v = rec(k)
+        if path in ("extent", "junctions", "mass"):
+            return (v.get("structure") or {}).get(path)
+        return (v.get("traits") or {}).get(path)
     base = {p: trait(root, p) for p in ("extent", "junctions", "mass",
                                         "cover", "residue", "links")}
-    drift_rows = []
-    for p, label in (("extent", "reach"), ("junctions", "junctions"), ("mass", "mass"),
-                     ("cover", "affinity: cover"), ("residue", "affinity: remains"),
-                     ("links", "affinity: links")):
-        cells = []
+    TRAITS = (("extent", "reach"), ("junctions", "junctions"), ("mass", "mass"),
+              ("cover", "affinity: cover"), ("residue", "affinity: remains"),
+              ("links", "affinity: links"))
+    drift_rows, drift_series = [], []
+    for p, label in TRAITS:
+        cells, pts = [], []
         for g in sorted(gens):
             if g == 0:
                 continue
             vals = [trait(k, p) for k in gens[g] if trait(k, p) is not None]
             if not vals or base.get(p) is None:
-                cells.append('<td class="absent">—</td>')
-            else:
-                delta = sum(vals) / float(len(vals)) - base[p]
-                cells.append('<td class="num %s">%+.3f</td>'
-                             % ("up" if delta > 0 else ("down" if delta < 0 else "dim"), delta))
+                cells.append('<td class="num absent">—</td>')
+                continue
+            delta = sum(vals) / float(len(vals)) - base[p]
+            pts.append((g, delta))
+            cells.append('<td class="num %s">%+.3f</td>'
+                         % ("up" if delta > 0 else ("down" if delta < 0 else "dim"), delta))
         drift_rows.append('<tr><td>%s</td>%s</tr>' % (label, "".join(cells)))
+        if len(pts) > 1:
+            drift_series.append({"name": label, "colour": charts.SERIES.get(
+                list(charts.SERIES)[len(drift_series) % 4]), "points": pts})
     genhdr = "".join('<th class="num">gen %d</th>' % g for g in sorted(gens) if g)
-    drift = ('<div class="scroll"><table class="d"><thead><tr><th>trait</th>%s</tr></thead>'
-             '<tbody>%s</tbody></table></div>'
-             '<p class="note">The mean of that generation minus the root\'s own value. '
-             'Traits are inherited with variation at replication, so this is drift as it '
-             'actually happened, not a model of it.</p>' % (genhdr, "".join(drift_rows))) \
-        if genhdr else '<p class="absent">this specimen has no recorded descendants</p>'
+    drift_table = ('<div class="scroll"><table class="d"><thead><tr><th>trait</th>%s</tr>'
+                   '</thead><tbody>%s</tbody></table></div>'
+                   '<p class="note">The mean of that generation minus the root\'s own '
+                   'value. Traits are inherited with variation at replication, so this is '
+                   'drift as it actually happened, not a model of it.</p>'
+                   % (genhdr, "".join(drift_rows))) if genhdr else \
+        '<p class="absent">this specimen has no recorded descendants</p>'
+    drift_chart = (charts.line_chart(drift_series, 520, 210, x_label="generation")
+                   + charts.legend([(s["name"], s["colour"]) for s in drift_series])) \
+        if len(drift_series) > 1 else ""
 
-    # the tree itself, one column per generation
-    tree = '<div class="tree">%s</div>' % "".join(
-        '<div class="gen"><div class="genh">gen %d · %d</div>%s</div>'
-        % (g, len(gens[g]), "".join(
-            '<%s class="node%s"%s>%s'
-            '<span class="c">%s<br>%s shift(s) · %s kid(s)</span></%s>'
-            % ("a" if k in d.get("_pages", ()) else "div", " root" if g == 0 else "",
-               ' href="/%s/specimens/%s.html"' % (t, esc(k))
-               if k in d.get("_pages", ()) else "", esc(k),
-               esc((d["named"].get(k) or {}).get("category") or "not yet named"),
-               num((ind.get(k) or {}).get("age")),
-               num((ind.get(k) or {}).get("descendants")),
-               "a" if k in d.get("_pages", ()) else "div")
-            for k in gens[g][:14]) +
-           ('<div class="node" style="border-style:dashed;color:var(--dim)">+ %d more</div>'
-            % (len(gens[g]) - 14) if len(gens[g]) > 14 else ""))
-        for g in sorted(gens))
+    # ---- timeline by generation ------------------------------------------
+    tl_rows = []
+    born = {g: [rec(k).get("arose_at_shift") for k in gens[g]
+                if rec(k).get("arose_at_shift") is not None] for g in sorted(gens)}
+    cum = 0
+    counts, first_shift, live_share = [], [], []
+    for g in sorted(gens):
+        cum += len(gens[g])
+        counts.append(cum)
+        first_shift.append(min(born[g]) if born[g] else None)
+        live_share.append(sum(1 for k in gens[g] if k in ind))
+    tl_rows.append('<tr><td>first appeared at shift</td>%s</tr>'
+                   % "".join('<td class="num">%s</td>' % (num(v) if v is not None else "—")
+                             for v in first_shift))
+    tl_rows.append('<tr><td>members in generation</td>%s</tr>'
+                   % "".join('<td class="num">%s</td>' % num(len(gens[g]))
+                             for g in sorted(gens)))
+    tl_rows.append('<tr><td>still living</td>%s</tr>'
+                   % "".join('<td class="num">%s</td>' % num(v) for v in live_share))
+    tl_rows.append('<tr><td>cumulative</td>%s</tr>'
+                   % "".join('<td class="num">%s</td>' % num(v) for v in counts))
+    tl_rows.append('<tr><td></td>%s</tr>'
+                   % "".join('<td>%s</td>' % C.bar(len(gens[g]) /
+                                                   float(max(len(v) for v in gens.values())),
+                                                   hue) for g in sorted(gens)))
+    timeline = ('<div class="scroll"><table class="d"><thead><tr><th></th>%s</tr></thead>'
+                '<tbody>%s</tbody></table></div>'
+                % ("".join('<th class="num">gen %d</th>' % g for g in sorted(gens)),
+                   "".join(tl_rows)))
+
+    # ---- notable events, read from the record ----------------------------
+    notable = []
+    if b.get("arose_at_shift") is not None:
+        notable.append((b["arose_at_shift"], "root first recorded"))
+    for g in sorted(gens):
+        if g and born[g]:
+            notable.append((min(born[g]), "generation %d first appears" % g))
+    for k in seen:
+        r = rec(k)
+        if k not in ind and r.get("last_seen_shift") is not None:
+            notable.append((r["last_seen_shift"], "%s ended" % k))
+    notable.sort()
+    nrows = "".join(
+        '<div class="mini"><span>shift %s</span><span></span>'
+        '<b style="text-align:left;color:var(--dim);font-size:10.5px">%s</b></div>'
+        % (num(s), esc(label)) for s, label in notable[:14]) or \
+        '<p class="absent">nothing dated on this line yet</p>'
+
+    ancestry = (C.panel("Ancestry", "".join(
+        '<div class="rowlink"><span class="sw" style="background:%s"></span>'
+        '<span>%s<span class="s">generation %s · %s</span></span>'
+        '<span class="n">%s</span></div>'
+        % (charts.hue(t) if i == len(chain) - 1 else "var(--rule)", esc(k),
+           num(rec(k).get("generation")),
+           "living" if k in ind else "ended",
+           num(rec(k).get("descendants")))
+        for i, k in enumerate(reversed(chain))) or
+        '<p class="absent">this specimen arose from the census. It has no parent, and this '
+        'line begins with it.</p>', flush=bool(chain)))
+
+    notes = C.panel("What is traced",
+                    '<p class="note">Only recorded parentage. Every box on this page is a '
+                    'parent_id the terrain wrote when a specimen replicated; nothing is '
+                    'inferred from similarity, position, or category. A specimen whose '
+                    'parent has ended still appears — the record of descent outlives the '
+                    'parent, and ended members are drawn dimmed rather than dropped.</p>'
+                    '<p class="note">The mockup this follows carries a NAMER\'S CONCLUSION '
+                    'about the line. The Namer writes about specimens, never about lineages, '
+                    'so there is nothing to quote and nothing is invented in its place. What '
+                    'it wrote about the root is on the root\'s own record.</p>')
+
+    tabs = [("tree", "Lineage tree", C.panel("Lineage tree", tree + tree_legend,
+                                             "%d traced, %d generations" % (len(seen), depth))),
+            ("anc", "Ancestry", ancestry),
+            ("drift", "Traits &amp; drift",
+             C.panel("Trait drift by generation", (drift_chart or "") + drift_table)),
+            ("time", "Lineage timeline", C.panel("By generation", timeline)),
+            ("notes", "Notes", notes)]
+    tabbar = '<div class="tabs">%s</div>' % "".join(
+        '<button data-tab="%s"%s>%s</button>' % (k, ' class="on"' if i == 0 else "", label)
+        for i, (k, label, _) in enumerate(tabs))
+    panes = "".join('<div class="tabpane%s" id="tab-%s">%s</div>'
+                    % (" on" if i == 0 else "", k, body)
+                    for i, (k, _, body) in enumerate(tabs))
 
     branch_lengths = [g for g in sorted(gens) for _ in gens[g]]
     mean_branch = (sum(branch_lengths) / float(len(branch_lengths))) if branch_lengths else 0
 
-    # A member of this lineage only gets a link if it founded a line of its own
-    # and therefore has a page; the rest are listed but not linked.
-    left = C.panel("Lineage", "".join(
-        '<%s class="rowlink%s"%s><span class="sw" '
-        'style="background:%s"></span><span>%s<span class="s">gen %s · %s kid(s)</span>'
-        '</span><span class="n">%s</span></%s>'
+    left = C.panel("Lineage navigation",
+        '<div class="pb" style="padding:9px 11px 4px"><input class="searchbox" id="q" '
+        'placeholder="search this lineage…"></div>' + "".join(
+        '<%s class="rowlink%s" data-n="%s"%s><span class="sw" style="background:%s"></span>'
+        '<span>%s<span class="s">gen %s · %s · %s kid(s)</span></span>'
+        '<span class="n">%s</span></%s>'
         % ("a" if k in d.get("_lineages", ()) else "div",
-           " on" if k == root else "",
+           " on" if k == root else "", esc(k.lower()),
            ' href="/%s/lineage/%s.html"' % (t, esc(k))
            if k in d.get("_lineages", ()) else "",
-           livelihood_of(ind[k])[1], esc(k),
-           num(ind[k].get("generation")), num(ind[k].get("descendants")),
-           num(ind[k].get("age")),
+           hue if k in ind else "var(--faint)", esc(k),
+           num(rec(k).get("generation")), "living" if k in ind else "ended",
+           num(rec(k).get("descendants")), num(rec(k).get("age")),
            "a" if k in d.get("_lineages", ()) else "div")
-        for k in sorted(seen, key=lambda x: ((ind.get(x) or {}).get("generation", 0),
-                                             x))[:40]
-        if k in d.get("_pages", ())), flush=True)
-
-    right = C.panel("Lineage summary", C.kv([
-        ("root specimen", esc(root)),
-        ("depth", "%d generation(s)" % depth),
-        ("members traced", num(len(seen))),
-        ("living now", num(len(living))),
-        ("no longer living", num(len(seen) - len(living))),
-        ("mean depth", "%.2f generations" % mean_branch),
-        ("root's own descendants", num(b.get("descendants"))),
-    ])) + C.panel("Members per generation", "".join(
-        '<div class="mini"><span>gen %d</span>%s<b>%d</b></div>'
-        % (g, C.bar(len(gens[g]) / float(max(len(v) for v in gens.values()))), len(gens[g]))
-        for g in sorted(gens))) + \
+        for k in sorted(seen, key=lambda x: (rec(x).get("generation", 0), x))[:60]),
+        flush=True) + \
         C.panel("Go to", C.nav([
             ("Specimen record", "/%s/specimens/%s.html" % (t, esc(root)),
              "the root of this line, on its own"),
             ("See it in the field",
              ("http://127.0.0.1:%d/index.html#%s" % (C.PORTS.get(t, 8731), esc(root)))
-             if root in ind else None,
-             "opens the deck with the root selected" if root in ind
+             if alive else None,
+             "opens the deck with the root selected" if alive
              else "no longer in the field"),
             ("Terrain record", "/%s/terrain.html" % t, "the terrain this line runs in"),
-        ])) + \
-        C.panel("What is traced",
-                '<p class="note">Only recorded parentage. Every edge on this page is a '
-                'parent_id the terrain wrote when a specimen replicated; nothing is '
-                'inferred from similarity, position, or category. A specimen whose parent '
-                'has ended still appears — the record of descent outlives the parent.</p>')
+        ]))
+
+    right = C.panel("Lineage summary", C.kv([
+        ("root specimen", esc(root)),
+        ("root state", "living" if alive else "ended"),
+        ("depth", "%d generation(s)" % depth),
+        ("members traced", num(len(seen))),
+        ("living now", num(len(living))),
+        ("ended", num(len(extinct))),
+        ("mean depth", "%.2f generations" % mean_branch),
+        ("root's own descendants", num(b.get("descendants"))),
+        ("first recorded", "shift %s" % num(b.get("arose_at_shift"))),
+    ])) + C.panel("Members per generation", "".join(
+        '<div class="mini"><span>gen %d</span>%s<b>%d</b></div>'
+        % (g, C.bar(len(gens[g]) / float(max(len(v) for v in gens.values())), hue),
+           len(gens[g])) for g in sorted(gens))) + \
+        C.panel("Notable events on this line", nrows) + \
+        C.panel("Export", C.nav([
+            ("Lineage (CSV)", "/%s/exports/lineage-%s.csv" % (t, esc(root)),
+             "every traced member, with its measurements"),
+        ]))
 
     mid = ('<div class="hdr"><div><p class="eyebrow">Lineage record</p>'
            '<h1 class="doc mono">%s</h1>'
-           '<p class="sub">%s · generation %s%s</p></div>'
+           '<p class="sub"><span class="chip %s">%s</span> %s · generation %s%s</p></div>'
            '<table class="doc">'
            '<tr><td class="k">TERRAIN</td><td class="v">%s</td></tr>'
            '<tr><td class="k">SHIFT</td><td class="v">%s</td></tr>'
            '<tr><td class="k">DEPTH</td><td class="v">%d GENERATION(S)</td></tr>'
            '<tr><td class="k">TRACED</td><td class="v">%s</td></tr></table></div>'
-           % (esc(root), esc((d["named"].get(root) or {}).get("category") or "not yet named"),
+           % (esc(root), "on" if alive else "off", "LIVING" if alive else "ENDED",
+              esc((d["named"].get(root) or {}).get("category") or "not yet named"),
               num(b.get("generation")), " (root)" if not b.get("parent_id") else "",
               esc(d["name"]), esc(d["shift"]), depth, num(len(seen))))
-
     mid += C.stats([
         (num(len(seen)), "traced", "from parentage"),
         (num(len(living)), "living now"),
+        (num(len(extinct)), "ended"),
         ("%d" % depth, "generations", "below the root"),
         (num(b.get("descendants")), "root's descendants"),
         ("%.1f" % mean_branch, "mean depth", "generations"),
     ])
-    mid += C.panel("Lineage tree", tree, "one column per generation")
-    mid += C.panel("Trait drift by generation", drift)
+    mid += tabbar + panes
+
+    script = ("<script>"
+              "document.querySelectorAll('.tabs button').forEach(function(t){"
+              "t.onclick=function(){"
+              "document.querySelectorAll('.tabs button').forEach(function(x){"
+              "x.classList.remove('on')});t.classList.add('on');"
+              "document.querySelectorAll('.tabpane').forEach(function(p){"
+              "p.classList.toggle('on', p.id==='tab-'+t.dataset.tab)})}});"
+              "var q=document.getElementById('q');if(q)q.oninput=function(){"
+              "var v=q.value.toLowerCase();"
+              "document.querySelectorAll('.rowlink[data-n]').forEach(function(r){"
+              "r.classList.toggle('hidden', r.dataset.n.indexOf(v)<0)})};"
+              "</script>")
+
     return C.page("%s — Lineage" % esc(root), "LINEAGE RECORD", t,
                   [("TERRAINS", C.HUB + "/hub.html"),
                    (d["name"], "/%s/terrain.html" % t),
                    ("SPECIMEN %s" % esc(root), "/%s/specimens/%s.html" % (t, esc(root))),
                    ("LINEAGE", None)],
-                  d["shift"], d["committed_at"], mid, left, right, CSS, current="lineage")
+                  d["shift"], d["committed_at"], mid, left, right,
+                  CSS + charts.CSS, current="lineage", scripts=script)
 
 
 # ===========================================================================
 # checkpoint report
 # ===========================================================================
-def checkpoint_report(d: Dict[str, Any], window: int = 14) -> str:
-    """A state comparison between two shifts, computed from the shift log.
+CHECKPOINT_EVERY = 14
 
-    The mockup this follows carries a report AUTHORITY, a CONFIDENCE, and an
-    AUTHENTIC RECORD seal. No such thing exists: nobody signs off on a terrain
-    and the department has no confidence scale. What it has is two rows of the
-    shift log and arithmetic between them, and that is what this shows.
+
+def checkpoints_for(d):
+    """Every window the record supports, at a fixed stride.
+
+    The mockup shows a list of checkpoints a user created. Nobody creates one
+    here: a checkpoint is a pair of shifts and the arithmetic between them, so
+    every window the log can support already exists and is simply listed.
     """
+    rows = d["shifts"]
+    if len(rows) < 2:
+        return []
+    out = []
+    i = CHECKPOINT_EVERY
+    while i < len(rows):
+        out.append((rows[i - CHECKPOINT_EVERY], rows[i]))
+        i += CHECKPOINT_EVERY
+    if not out or out[-1][1] is not rows[-1]:
+        out.append((rows[max(0, len(rows) - 1 - CHECKPOINT_EVERY)], rows[-1]))
+    return out
+
+
+def checkpoint_report(d: Dict[str, Any], window: int = CHECKPOINT_EVERY) -> str:
     t, m, rows = d["dir"], d["memory"], d["shifts"]
     if len(rows) < 2:
         return ""
+    hue = charts.hue(t)
     last = rows[-1]
     earlier = rows[max(0, len(rows) - 1 - window)]
     a, b = earlier.get("shift"), last.get("shift")
+    span = rows[max(0, len(rows) - 1 - window):]
 
-    def pair(key, label, fmt=num):
+    def pair(key):
         va, vb = earlier.get(key), last.get(key)
         if not isinstance(va, (int, float)) or not isinstance(vb, (int, float)):
-            return (label, None, None, None, None)
-        diff = vb - va
-        pct = (diff / va * 100.0) if va else None
-        return (label, va, vb, diff, pct)
+            return None
+        return (va, vb, vb - va, ((vb - va) / va * 100.0) if va else None)
 
-    metrics = [pair("living", "living specimens"),
-               pair("classified", "classified this shift"),
-               pair("arose_this_shift", "arose this shift"),
-               pair("ended_this_shift", "ended this shift"),
-               pair("replicated_this_shift", "replicated this shift"),
-               pair("links_formed", "links formed this shift"),
-               pair("resource_flow", "resource flow"),
-               pair("cumulative_cost_usd", "cumulative spend")]
+    HEAD = [("total shifts", None), ("living specimens", "living"),
+            ("native categories", None), ("descendant threads", None),
+            ("cover cells", None), ("active links", None),
+            ("resource flow", "resource_flow")]
 
-    def row(mt):
-        label, va, vb, diff, pct = mt
-        if va is None:
-            return ('<tr><td>%s</td><td colspan="4" class="absent">not recorded at both '
-                    'shifts</td></tr>' % label)
-        cls = "up" if (diff or 0) > 0 else ("down" if (diff or 0) < 0 else "dim")
-        return ('<tr><td>%s</td><td class="num">%s</td><td class="num">%s</td>'
-                '<td class="num %s">%+s</td><td class="num %s">%s</td></tr>'
-                % (label, num(va), num(vb), cls, num(diff), cls,
-                   ("%+.2f%%" % pct) if pct is not None else "—"))
+    cats_at = {}
+    seen = set()
+    for r in rows:
+        for cat in (r.get("new_categories") or []):
+            seen.add(cat)
+        cats_at[r.get("shift")] = len(seen)
+    cats_a, cats_b = cats_at.get(a, 0), cats_at.get(b, 0)
 
-    cats_now = len(m.get("category_stats") or {})
-    coined = sorted({c for r in rows[max(0, len(rows) - 1 - window):]
-                     for c in (r.get("new_categories") or [])})
-    anomalies = sum(r.get("anomalous", 0) or 0
-                    for r in rows[max(0, len(rows) - 1 - window):])
-    unresolved = sum(r.get("unresolved", 0) or 0
-                     for r in rows[max(0, len(rows) - 1 - window):])
-    pop = [r.get("living") for r in rows]
-    stab = dnt_data.coefficient_of_variation(pop[-window:])
+    kids = sum(1 for x in d["individuals"].values() if x.get("parent_id"))
+    cover_now = sum(1 for c in (d["world"].get("cells") or [])
+                    if c.get("census_density", 0) > 0)
+    links_now = len([1 for v in (d["world"].get("links") or {}).values()
+                     if v.get("formed_at_shift") is not None])
 
-    # the falsification checkpoint physics.md Section 11 actually names
+    def stat(value, label, delta=None, pct=None, sub=""):
+        s = sub
+        if delta is not None:
+            cls = "up" if delta > 0 else ("down" if delta < 0 else "dim")
+            s = ('<span class="%s">%+s%s</span>'
+                 % (cls, num(delta), (" (%+.2f%%)" % pct) if pct is not None else ""))
+        return (num(value), label, s)
+
+    liv = pair("living")
+    flow = pair("resource_flow")
+    strip = C.stats([
+        (num(b - a if isinstance(a, int) and isinstance(b, int) else "—"), "shifts in window",
+         "%s &rarr; %s" % (num(a), num(b))),
+        stat(last.get("living"), "living specimens",
+             liv[2] if liv else None, liv[3] if liv else None),
+        stat(cats_b, "native categories", cats_b - cats_a,
+             ((cats_b - cats_a) / cats_a * 100.0) if cats_a else None),
+        (num(kids), "descendant threads", "with a parent still living"),
+        (num(cover_now), "cover cells", "of %s" % num(len(d["world"].get("cells") or []))),
+        (num(links_now), "active links", "between specimens"),
+        stat(last.get("resource_flow"), "resource flow",
+             flow[2] if flow else None, flow[3] if flow else None),
+    ])
+
+    # ---- charts ---------------------------------------------------------
+    xs = [r.get("shift") for r in rows]
+    pop_series = [
+        {"name": "living specimens", "colour": hue,
+         "points": [(r.get("shift"), r.get("living")) for r in rows
+                    if r.get("living") is not None]},
+    ]
+    repl_run, total = [], 0
+    for r in rows:
+        total += (r.get("replicated_this_shift") or 0)
+        repl_run.append((r.get("shift"), total))
+    pop_series.append({"name": "replications, cumulative", "colour": "#B37BD6",
+                       "points": repl_run})
+    pop_chart = charts.line_chart(pop_series, 440, 220, x_label="shift",
+                                  markers=[(a, str(a)), (b, str(b))], y_zero=True)
+
+    cls_series = [
+        {"name": "native categories", "colour": hue,
+         "points": [(r.get("shift"), cats_at.get(r.get("shift"), 0)) for r in rows]},
+        {"name": "classified this shift", "colour": "#4FA3E3",
+         "points": [(r.get("shift"), r.get("classified") or 0) for r in rows]},
+    ]
+    cls_chart = charts.line_chart(cls_series, 440, 220, x_label="shift", y_zero=True)
+
+    flow_series = [
+        {"name": "resource flow", "colour": "#A8D45C",
+         "points": [(r.get("shift"), r.get("resource_flow")) for r in span
+                    if r.get("resource_flow") is not None]},
+        {"name": "arose", "colour": "#4FA3E3",
+         "points": [(r.get("shift"), r.get("arose_this_shift") or 0) for r in span]},
+        {"name": "ended", "colour": "#D4614A",
+         "points": [(r.get("shift"), r.get("ended_this_shift") or 0) for r in span]},
+    ]
+    flow_chart = charts.line_chart(flow_series, 440, 220, x_label="shift")
+
+    # ---- comparison tables ----------------------------------------------
+    def ctable(items):
+        out = []
+        for label, va, vb in items:
+            if not isinstance(va, (int, float)) or not isinstance(vb, (int, float)):
+                out.append('<tr><td>%s</td><td colspan="3" class="absent">not recorded at '
+                           'both shifts</td></tr>' % label)
+                continue
+            diff = vb - va
+            cls = "up" if diff > 0 else ("down" if diff < 0 else "dim")
+            pct = ("%+.2f%%" % (diff / va * 100.0)) if va else "—"
+            out.append('<tr><td>%s</td><td class="num">%s</td><td class="num">%s</td>'
+                       '<td class="num %s">%+s</td><td class="num %s">%s</td></tr>'
+                       % (label, num(va), num(vb), cls, num(diff), cls, pct))
+        return ('<div class="scroll"><table class="d"><thead><tr><th>metric</th>'
+                '<th class="num">shift %s</th><th class="num">shift %s</th>'
+                '<th class="num">change</th><th class="num">change %%</th></tr></thead>'
+                '<tbody>%s</tbody></table></div>' % (num(a), num(b), "".join(out)))
+
+    pop_table = ctable([
+        ("living specimens", earlier.get("living"), last.get("living")),
+        ("arose this shift", earlier.get("arose_this_shift"), last.get("arose_this_shift")),
+        ("ended this shift", earlier.get("ended_this_shift"), last.get("ended_this_shift")),
+        ("replicated this shift", earlier.get("replicated_this_shift"),
+         last.get("replicated_this_shift")),
+        ("links formed this shift", earlier.get("links_formed"), last.get("links_formed")),
+    ])
+    cls_table = ctable([
+        ("native categories", cats_a, cats_b),
+        ("classified this shift", earlier.get("classified"), last.get("classified")),
+        ("anomalous this shift", earlier.get("anomalous"), last.get("anomalous")),
+        ("unresolved this shift", earlier.get("unresolved"), last.get("unresolved")),
+    ])
+    ce, cl = earlier.get("census") or {}, last.get("census") or {}
+    res_table = ctable([
+        ("resource flow", earlier.get("resource_flow"), last.get("resource_flow")),
+        ("cells occupied", ce.get("cells_occupied"), cl.get("cells_occupied")),
+        ("total cover density", ce.get("total_density"), cl.get("total_density")),
+        ("residue pool", ce.get("residue_pool"), cl.get("residue_pool")),
+    ])
+
+    # ---- spatial distribution -------------------------------------------
+    cells = d["world"].get("cells") or []
+    width_cells = (m.get("landscape") or {}).get("width") or grid_width_of(d)
+    dens = [0.0] * (max((c.get("index", 0) for c in cells), default=-1) + 1)
+    for c in cells:
+        dens[c.get("index", 0)] = float(c.get("census_density", 0.0) or 0.0)
+    dmap = charts.density_map(dens, width_cells, 300, 210)
+
+    # ---- lineage depth distribution --------------------------------------
+    depth: Dict[int, int] = {}
+    for x in d["individuals"].values():
+        g = int(x.get("generation", 0) or 0)
+        depth[g] = depth.get(g, 0) + 1
+    tot = sum(depth.values()) or 1
+    drows = "".join(
+        '<tr><td class="num">%d%s</td><td class="num">%s</td><td class="num">%.1f%%</td>'
+        '<td>%s</td></tr>'
+        % (g, " (root)" if g == 0 else "", num(depth[g]), 100.0 * depth[g] / tot,
+           C.bar(depth[g] / float(max(depth.values()))))
+        for g in sorted(depth)) or \
+        '<tr><td colspan="4" class="absent">no living specimens</td></tr>'
+
+    # ---- what appeared in this window ------------------------------------
+    coined = []
+    for r in span:
+        for cat in (r.get("new_categories") or []):
+            coined.append((r.get("shift"), cat))
+    stats_map = m.get("category_stats") or {}
+    emerg = "".join(
+        '<tr><td><a href="/%s/categories/%s.html">%s</a></td>'
+        '<td class="num">%s</td><td class="num">%s</td><td class="dim">%s</td></tr>'
+        % (t, slug(cat), esc(cat), esc(sh),
+           num((stats_map.get(cat) or {}).get("count", 0)),
+           "still filed to" if (stats_map.get(cat) or {}).get("last_seen_shift") == b
+           else "last filed shift %s" % esc((stats_map.get(cat) or {}).get("last_seen_shift")))
+        for sh, cat in reversed(coined)) or \
+        '<tr><td colspan="4" class="absent">no category was coined in this window</td></tr>'
+
+    # ---- measured indicators, not grades ---------------------------------
+    pop_w = [r.get("living") for r in span if r.get("living") is not None]
+    slope = ((pop_w[-1] - pop_w[0]) / float(len(pop_w) - 1)) if len(pop_w) > 1 else 0.0
+    peak = max(pop_w) if pop_w else 0
+    trough_after = min(pop_w[pop_w.index(peak):]) if pop_w else 0
+    drawdown = (100.0 * (peak - trough_after) / peak) if peak else 0.0
+    cv = dnt_data.coefficient_of_variation(pop_w)
+    anom_w = sum(r.get("anomalous", 0) or 0 for r in span)
+    unres_w = sum(r.get("unresolved", 0) or 0 for r in span)
+    div = dnt_data.shannon_diversity([c.get("count", 0) for c in stats_map.values()])
+    indicators = C.kv([
+        ("population slope", "%+.1f living per shift" % slope),
+        ("largest drawdown", "%.1f%% from the window's peak" % drawdown),
+        ("steadiness (CV)", "—" if cv is None else "%.4f" % cv),
+        ("classification diversity", "—" if div is None else "%.4f" % div),
+        ("anomalous in window", num(anom_w)),
+        ("unresolved in window", num(unres_w)),
+    ])
+
     canon = [r for r in rows if (r.get("phase") or "") != "ollama"]
-    left = C.panel("Checkpoints", "".join(
-        '<a class="rowlink%s" href="/%s/checkpoint.html"><span></span>'
-        '<span>%s<span class="s">shift %s → %s</span></span><span></span></a>'
-        % (" on" if x == t else "", x, x.upper(), a, b) for x in [t]), flush=True) + \
+
+    findings = []
+    if liv:
+        findings.append("Living population %s by %s (%s) across the window."
+                        % ("rose" if liv[2] > 0 else ("fell" if liv[2] < 0 else "held"),
+                           num(abs(liv[2])),
+                           ("%+.2f%%" % liv[3]) if liv[3] is not None else "—"))
+    findings.append("%s category(ies) coined in this window; %s on the record in total."
+                    % (num(len(coined)), num(cats_b)))
+    findings.append("Deepest generation among the living is %s."
+                    % num(max(depth) if depth else 0))
+    findings.append("%s anomalous and %s unresolved. Anomalous is the Namer reporting "
+                    "something it could not place; unresolved is the model failing to "
+                    "answer." % (num(anom_w), num(unres_w)))
+    findings.append("Largest drawdown from the window's peak was %.1f%%." % drawdown)
+
+    ck_list = checkpoints_for(d)
+    left = C.panel("Terrain navigation", "".join(
+        '<a class="rowlink%s" href="/%s/checkpoint.html"><span class="sw" '
+        'style="background:%s"></span><span>%s<span class="s">shift %s</span></span>'
+        '<span></span></a>'
+        % (" on" if x == t else "", x, charts.hue(x), x.upper(),
+           esc((dnt_data.load(x) or {}).get("memory", {}).get("last_committed_shift", "—")))
+        for x in TERRAINS if os.path.exists(os.path.join(ROOT, x, "checkpoint.html"))),
+        flush=True) + \
+        C.panel("Windows the log supports", "".join(
+            '<div class="rowlink%s"><span></span><span>shift %s &rarr; %s'
+            '<span class="s">%s</span></span><span></span></div>'
+            % (" on" if (x[0] is earlier and x[1] is last) else "",
+               esc(x[0].get("shift")), esc(x[1].get("shift")),
+               esc((x[1].get("end_timestamp") or "")[:10]))
+            for x in reversed(ck_list[-8:])), flush=True) + \
+        C.panel("Report sections", "".join(
+            '<a class="rowlink" href="#%s"><span></span><span>%s</span><span></span></a>'
+            % (anchor, label) for label, anchor in
+            (("Summary", "top"), ("Population", "pop"), ("Classifications", "cls"),
+             ("Resources", "res"), ("Spatial distribution", "spatial"),
+             ("Lineage & descent", "lin"), ("Notable emergences", "emerg"),
+             ("Indicators", "ind"))), flush=True) + \
         C.panel("Go to", C.nav([
             ("Terrain record", "/%s/terrain.html" % t, "current state and conditions"),
             ("Shift log", "/%s/shiftlog.html" % t, "the rows this report reads"),
             ("Comparative study",
              "/study.html" if os.path.exists(os.path.join(ROOT, "study.html")) else None,
              "this terrain beside the others"),
-        ])) + \
-        C.panel("What a checkpoint is",
-                '<p class="note">Two rows of this terrain\'s own shift log and the '
-                'arithmetic between them. Nobody signs a checkpoint off, the department '
-                'has no confidence scale, and no assessment is recorded — those fields '
-                'exist in the design mockups and have no source here.</p>')
+        ]))
 
-    right = C.panel("Window", C.kv([
-        ("from shift", num(a)),
-        ("to shift", num(b)),
-        ("shifts in window", num(b - a if isinstance(a, int) and isinstance(b, int) else "—")),
-        ("canonical shifts", num(len(canon))),
-        ("falsification checkpoint", "15 canonical shifts"),
-        ("checkpoint reached",
-         "yes" if len(canon) >= 15 else "no — %d to go" % (15 - len(canon))),
-    ])) + C.panel("Population across the window",
-                  spark(pop[-window - 1:], 290, 64)) + \
-        C.panel("Classification", C.kv([
-            ("categories now", num(cats_now)),
-            ("coined in window", num(len(coined))),
-            ("anomalous in window", num(anomalies)),
-            ("unresolved in window", num(unresolved)),
-        ]) + ('<p class="note">Coined: %s</p>' % esc(", ".join(coined)) if coined else "")) + \
-        C.panel("Stability", C.kv([
-            ("coefficient of variation", "—" if stab is None else "%.4f" % stab),
-        ]) + '<p class="note">CV = σ / μ of the living population across this window. '
-             'Lower is steadier. It is a description, not a grade.</p>')
+    right = C.panel("Key findings",
+                    '<ul class="find">%s</ul>' % "".join('<li>%s</li>' % f for f in findings)) + \
+        C.panel("Comparative snapshot",
+                '<div class="scroll"><table class="d"><thead><tr><th></th>'
+                '<th class="num">%s</th><th class="num">%s</th><th class="num">Δ</th>'
+                '</tr></thead><tbody>%s</tbody></table></div>'
+                % (num(a), num(b), "".join(
+                    '<tr><td>%s</td><td class="num">%s</td><td class="num">%s</td>'
+                    '<td class="num %s">%+s</td></tr>'
+                    % (label, num(va), num(vb),
+                       "up" if vb - va > 0 else ("down" if vb - va < 0 else "dim"), num(vb - va))
+                    for label, va, vb in (
+                        ("living", earlier.get("living") or 0, last.get("living") or 0),
+                        ("categories", cats_a, cats_b),
+                        ("classified", earlier.get("classified") or 0,
+                         last.get("classified") or 0),
+                        ("links formed", earlier.get("links_formed") or 0,
+                         last.get("links_formed") or 0))))) + \
+        C.panel("Indicators", indicators +
+                '<p class="note">Measured, not graded. The mockup this follows carries an '
+                'assessment — trajectory, health, resilience, risk — and an authority who '
+                'signed it. DNT does not evaluate terrains and nobody signs a checkpoint '
+                'off, so what is reported is the arithmetic and its definitions.</p>') + \
+        C.panel("Falsification checkpoint", C.kv([
+            ("condition", "physics.md §11"),
+            ("canonical shifts run", num(len(canon))),
+            ("required", "15"),
+            ("status", "reached" if len(canon) >= 15 else
+             "not yet — %d to go" % (15 - len(canon))),
+        ]) + '<p class="note">Phase 1 shifts on the local model do not count toward it. '
+             'This reports whether the condition has been REACHED. Evaluating it is a '
+             'separate reading of the record and is not done here.</p>')
 
-    mid = ('<div class="hdr"><div><p class="eyebrow">%s · checkpoint</p>'
+    mid = ('<div class="hdr" id="top"><div><p class="eyebrow">%s · checkpoint</p>'
            '<h1 class="doc">Checkpoint Report</h1>'
-           '<p class="sub">Shift %s → shift %s. State comparison computed from the '
-           'shift log.</p></div><table class="doc">'
-           '<tr><td class="k">DOCUMENT</td><td class="v">DNT-CKP</td></tr>'
-           '<tr><td class="k">TERRAIN</td><td class="v">%s</td></tr>'
+           '<p class="sub"><b style="color:%s">%s</b> · shift %s &rarr; shift %s · '
+           'state comparison computed from the shift log.</p></div>'
+           '<table class="doc">'
+           '<tr><td class="k">CHECKPOINT</td><td class="v">%s-CKP-%s</td></tr>'
+           '<tr><td class="k">COMPUTED FROM</td><td class="v">SHIFT LOG</td></tr>'
            '<tr><td class="k">WINDOW</td><td class="v">%s SHIFTS</td></tr>'
-           '<tr><td class="k">SOURCE</td><td class="v">SHIFT LOG</td></tr></table></div>'
-           % (esc(d["name"]), num(a), num(b), esc(d["name"]),
-              num(b - a if isinstance(a, int) and isinstance(b, int) else "—")))
-
-    mid += C.stats([
-        (num(b - a if isinstance(a, int) and isinstance(b, int) else "—"), "shifts",
-         "%s → %s" % (num(a), num(b))),
-        (num(last.get("living")), "living", "at shift %s" % num(b)),
-        (num(cats_now), "native categories", "+%d in window" % len(coined)),
-        (num(anomalies), "anomalous", "in window"),
-        (num(unresolved), "unresolved", "harness failures"),
-        (num(len(canon)), "canonical shifts", "of 15 at the checkpoint"),
-    ])
-    mid += C.panel(
-        "What changed between the two shifts",
-        '<div class="scroll"><table class="d"><thead><tr><th>metric</th>'
-        '<th class="num">shift %s</th><th class="num">shift %s</th>'
-        '<th class="num">change</th><th class="num">change %%</th></tr></thead>'
-        '<tbody>%s</tbody></table></div>'
-        '<p class="note">Every figure is a value the shift itself wrote when it closed. '
-        'A metric absent at either end says so rather than being interpolated.</p>'
-        % (num(a), num(b), "".join(row(mt) for mt in metrics)))
-
-    mid += C.panel(
-        "The falsification checkpoint",
-        C.kv([("condition", "physics.md Section 11"),
-              ("canonical shifts run", num(len(canon))),
-              ("required", "15"),
-              ("status", "reached" if len(canon) >= 15 else "not yet reached")]) +
-        '<p class="note">Phase 1 shifts on the local model do not count toward it. This '
-        'panel reports whether the condition has been reached; it does not evaluate it. '
-        'Evaluating it is a separate reading of the record and is not done here.</p>')
-
-    return C.page("%s — Checkpoint" % d["name"], "CHECKPOINT REPORT", t,
+           '<tr><td class="k">PHYSICS</td><td class="v">%s</td></tr></table></div>'
+           % (esc(d["name"]), hue, esc(d["name"]), num(a), num(b),
+              esc(d["name"]), esc(b),
+              num(b - a if isinstance(a, int) and isinstance(b, int) else "—"),
+              esc(m.get("physics_document") or "—")))
+    mid += strip
+    mid += ('<div class="charts3" id="pop">%s%s%s</div>'
+            % ('<section class="p"><div class="ph"><b>Population over time</b></div>'
+               '<div class="pb">%s%s%s</div></section>'
+               % (pop_chart,
+                  charts.legend([("living", hue), ("replications, cumulative", "#B37BD6")]),
+                  pop_table),
+               '<section class="p"><div class="ph"><b>Classification growth</b></div>'
+               '<div class="pb">%s%s%s</div></section>'
+               % (cls_chart,
+                  charts.legend([("native categories", hue),
+                                 ("classified this shift", "#4FA3E3")]),
+                  cls_table),
+               '<section class="p"><div class="ph"><b>Flow, arrivals and endings</b></div>'
+               '<div class="pb">%s%s%s</div></section>'
+               % (flow_chart,
+                  charts.legend([("resource flow", "#A8D45C"), ("arose", "#4FA3E3"),
+                                 ("ended", "#D4614A")]),
+                  res_table)))
+    mid += ('<div class="charts3" id="spatial">%s%s%s</div>'
+            % (C.panel("Spatial distribution",
+                       dmap + '<p class="note">Cover density per cell at shift %s, drawn '
+                       'from the same grid the deck reads. Brighter is denser.</p>' % num(b)),
+               C.panel("Lineage depth distribution",
+                       '<div class="scroll"><table class="d"><thead><tr>'
+                       '<th class="num">generation</th><th class="num">living</th>'
+                       '<th class="num">share</th><th></th></tr></thead><tbody>%s</tbody>'
+                       '</table></div><p class="note">Generations from a root, walked from '
+                       'recorded parentage.</p>' % drows),
+               C.panel("Categories coined in this window",
+                       '<div class="scroll"><table class="d"><thead><tr><th>category</th>'
+                       '<th class="num">coined at</th><th class="num">filed</th>'
+                       '<th>since</th></tr></thead><tbody>%s</tbody></table></div>'
+                       % emerg)))
+    return C.page("%s — Checkpoint %s → %s" % (d["name"], num(a), num(b)),
+                  "CHECKPOINT REPORT", t,
                   [("TERRAINS", C.HUB + "/hub.html"),
                    (d["name"], "/%s/terrain.html" % t),
                    ("CHECKPOINT %s → %s" % (num(a), num(b)), None)],
-                  d["shift"], d["committed_at"], mid, left, right, CSS,
-                  current="checkpoint")
+                  d["shift"], d["committed_at"], mid, left, right,
+                  CSS + charts.CSS, current="checkpoint")
+
+
+def grid_width_of(d):
+    ls = (d["memory"].get("landscape") or {})
+    if ls.get("width"):
+        return int(ls["width"])
+    path = os.path.join(ROOT, d["dir"], "life.py")
+    try:
+        with open(path, encoding="utf-8") as stream:
+            found = re.search(r"^FIELD_WIDTH\s*=\s*(\d+)", stream.read(), re.M)
+        if found:
+            return int(found.group(1))
+    except IOError:
+        pass
+    return len(d["world"].get("cells") or []) or 1
 
 
 # ===========================================================================
 # comparative terrain study
 # ===========================================================================
+def _norm(points):
+    """Index a series to its own MEAN, so shapes compare and scales do not.
+
+    Indexing to the first value looks reasonable and is not: a terrain that
+    began with one living specimen indexes its own population to 10,589, and
+    the panel becomes a chart of how small each terrain started. The mean is
+    stable, puts every terrain around 1.0, and leaves the shape untouched.
+    """
+    vals = [v for v in points if v is not None]
+    if not vals:
+        return []
+    base = sum(vals) / float(len(vals))
+    if not base:
+        return []
+    return [(v / base) if v is not None else None for v in points]
+
+
+def _resample(series, n=26):
+    """Put a terrain's whole life on a 0..1 axis, so ages compare."""
+    vals = [v for v in series if v is not None]
+    if len(vals) < 2:
+        return []
+    out = []
+    for i in range(n):
+        f = i / float(n - 1)
+        pos = f * (len(vals) - 1)
+        a = int(math.floor(pos))
+        b = min(len(vals) - 1, a + 1)
+        frac = pos - a
+        out.append((f * 100.0, vals[a] + (vals[b] - vals[a]) * frac))
+    return out
+
+
+def _lineage_depth(d):
+    """Mean generations from a root, walked from recorded parentage."""
+    ind = d["individuals"]
+    gens = [b.get("generation", 0) or 0 for b in ind.values()]
+    return (sum(gens) / float(len(gens))) if gens else 0.0
+
+
+def _per_hundred(d, key):
+    rows = d["shifts"]
+    if not rows:
+        return 0.0
+    return sum(r.get(key, 0) or 0 for r in rows) * 100.0 / len(rows)
+
+
 def comparative_study(loaded: List[Dict[str, Any]]) -> str:
     """Every terrain side by side, on quantities all of them actually record."""
     shown = [d for d in loaded if d and d["shifts"]]
     if len(shown) < 2:
         return ""
+    for d in shown:
+        d["_hue"] = charts.hue(d["dir"])
 
-    def cell(d, key, fn=None):
+    # ---- trajectories: five panels, each terrain on its own life axis -----
+    def track(fn, normalise=True):
+        out = []
+        for d in shown:
+            raw = fn(d)
+            pts = _resample(_norm(raw) if normalise else raw)
+            if pts:
+                out.append({"name": d["name"], "colour": d["_hue"], "points": pts})
+        return out
+
+    def cumulative_categories(d):
+        seen, run = set(), []
+        for r in d["shifts"]:
+            for cat in (r.get("new_categories") or []):
+                seen.add(cat)
+            run.append(len(seen))
+        return run
+
+    def net_flow(d):
+        return [r.get("resource_flow") for r in d["shifts"]]
+
+    def stability_track(d):
+        pop = [r.get("living") for r in d["shifts"]]
+        out, win = [], 20
+        for i in range(len(pop)):
+            w = [v for v in pop[max(0, i - win):i + 1] if v is not None]
+            cv = dnt_data.coefficient_of_variation(w)
+            out.append(None if cv is None else 1.0 - min(1.0, cv))
+        return out
+
+    def lineage_track(d):
+        # mean generation among the living, shift by shift, is not logged;
+        # what IS logged is how many replicated each shift, cumulatively.
+        run, total = [], 0
+        for r in d["shifts"]:
+            total += (r.get("replicated_this_shift") or 0)
+            run.append(total)
+        return run
+
+    panels = [
+        ("Living population", "index", track(lambda d: [r.get("living") for r in d["shifts"]])),
+        ("Classification diversity", "cumulative index", track(cumulative_categories)),
+        ("Replication, cumulative", "index", track(lineage_track)),
+        ("Resource flow", "index", track(net_flow)),
+        ("Population steadiness", "1 − CV, 20-shift window", track(stability_track, False)),
+    ]
+    traj = "".join(
+        '<div><div class="ct">%s</div><div class="cs">%s</div>%s</div>'
+        % (title, sub, charts.line_chart(sers, 420, 210, x_label="terrain life (%)"))
+        for title, sub, sers in panels)
+
+    # ---- terrain cards, with the terrain itself as the picture -----------
+    cards = []
+    for d in shown:
+        gov = {g["label"]: g for g in dnt_data.governing_conditions(d["dir"])}
         rows = d["shifts"]
-        v = fn(d) if fn else (rows[-1].get(key) if rows else None)
-        return v
+        first = C.stamp(rows[0].get("end_timestamp"))
+        conds = []
+        for label in ("gravity", "temperature at stream", "light cycle",
+                      "wind strength", "subsurface rate"):
+            g = gov.get(label)
+            conds.append('<dt>%s</dt><dd%s>%s</dd>'
+                         % (label, "" if (g and g["present"]) else ' class="na"',
+                            esc(g["value"]) if (g and g["present"]) else "no mechanism"))
+        cards.append(
+            '<section class="tcard" style="border-color:%s">'
+            '<div class="tch"><b style="color:%s">%s</b>'
+            '<span class="chip on">ACTIVE</span></div>'
+            '%s'
+            '<div class="tcb"><dl class="kv"><dt>first committed</dt><dd>%s</dd>'
+            '<dt>age (shifts)</dt><dd>%s</dd><dt>cells</dt><dd>%s</dd>'
+            '<dt>physics</dt><dd>%s</dd></dl>'
+            '<div class="tcg">Governing conditions</div><dl class="kv">%s</dl>'
+            '<a class="nav" href="/%s/terrain.html"><span class="t">Terrain record'
+            '<span class="go">&rarr;</span></span></a></div></section>'
+            % (d["_hue"], d["_hue"], esc(d["name"]),
+               snapshot.isometric(d["dir"], 330, 132),
+               first, num(len(rows)),
+               num(len(d["world"].get("cells") or [])),
+               esc(d["memory"].get("physics_document") or "—"),
+               "".join(conds), d["dir"]))
 
+    # ---- aggregate metrics, with a median column -------------------------
     METRICS = [
         ("living specimens", lambda d: d["shifts"][-1].get("living")),
         ("shifts on record", lambda d: len(d["shifts"])),
@@ -1290,15 +1996,16 @@ def comparative_study(loaded: List[Dict[str, Any]]) -> str:
                                         if v.get("formed_at_shift") is not None])),
         ("descendant threads", lambda d: sum(1 for b in d["individuals"].values()
                                              if b.get("parent_id"))),
+        ("mean generation", _lineage_depth),
         ("classification diversity", lambda d: dnt_data.shannon_diversity(
             [c.get("count", 0) for c in (d["memory"].get("category_stats") or {}).values()])),
-        ("population stability", lambda d: dnt_data.coefficient_of_variation(
+        ("population stability (CV)", lambda d: dnt_data.coefficient_of_variation(
             [r.get("living") for r in d["shifts"][-40:]])),
         ("cumulative spend", lambda d: float(d["memory"].get("cumulative_cost_usd", 0.0))),
     ]
-
-    head = "".join('<th class="num">%s</th>' % esc(d["name"]) for d in shown)
-    body = []
+    head = "".join('<th class="num" style="color:%s">%s</th>' % (d["_hue"], esc(d["name"]))
+                   for d in shown)
+    agg, medians = [], {}
     for label, fn in METRICS:
         vals = []
         for d in shown:
@@ -1306,11 +2013,166 @@ def comparative_study(loaded: List[Dict[str, Any]]) -> str:
                 vals.append(fn(d))
             except Exception:
                 vals.append(None)
-        body.append('<tr><td>%s</td>%s</tr>'
-                    % (label, "".join('<td class="num">%s</td>'
-                                      % ("—" if v is None else num(v)) for v in vals)))
+        good = sorted(v for v in vals if isinstance(v, (int, float)))
+        med = (good[len(good) // 2] if len(good) % 2 else
+               (good[len(good) // 2 - 1] + good[len(good) // 2]) / 2.0) if good else None
+        medians[label] = (med, vals)
+        agg.append('<tr><td>%s</td>%s<td class="num dim">%s</td></tr>'
+                   % (label,
+                      "".join('<td class="num">%s</td>' % ("—" if v is None else num(v))
+                              for v in vals),
+                      "—" if med is None else num(med)))
 
-    # governing conditions, terrain by terrain — the actual point of comparison
+    # ---- how each terrain sits against the median of its peers -----------
+    KEY = ["living specimens", "native categories", "descendant threads",
+           "mean generation", "classification diversity", "population stability (CV)"]
+    keyrows = []
+    for label in KEY:
+        med, vals = medians.get(label, (None, []))
+        cells = []
+        for v in vals:
+            if med in (None, 0) or v is None:
+                cells.append('<td class="num absent">—</td>')
+                continue
+            pct = (v - med) / abs(med) * 100.0
+            cls = "up" if pct > 0 else ("down" if pct < 0 else "dim")
+            # Beyond a few hundred percent a percentage stops being readable.
+            # A multiple says the same thing and can be held in the head.
+            if abs(pct) >= 200 and med:
+                cells.append('<td class="num %s">×%.1f</td>' % (cls, v / float(med)))
+            else:
+                cells.append('<td class="num %s">%+.0f%%</td>' % (cls, pct))
+        keyrows.append('<tr><td>%s</td>%s</tr>' % (label, "".join(cells)))
+
+    # ---- event frequency, per hundred shifts -----------------------------
+    EVENTS = [("births / replications", "replicated_this_shift"),
+              ("arrivals", "arose_this_shift"),
+              ("endings", "ended_this_shift"),
+              ("links formed", "links_formed"),
+              ("classifications", "classified"),
+              ("anomalous", "anomalous"),
+              ("unresolved", "unresolved")]
+    evrows = "".join(
+        '<tr><td>%s</td>%s</tr>'
+        % (label, "".join('<td class="num">%.1f</td>' % _per_hundred(d, key)
+                          for d in shown))
+        for label, key in EVENTS)
+
+    # ---- persistence: how long things last ------------------------------
+    def persistence(d):
+        ages = [b.get("age", 0) or 0 for b in d["individuals"].values()]
+        ended = [e.get("age", 0) or 0 for e in (d["world"].get("ended") or [])]
+        both = ages + ended
+        if not both:
+            return (0.0, 0.0, 0.0)
+        both.sort()
+        over5 = 100.0 * sum(1 for a in both if a > 5) / len(both)
+        over20 = 100.0 * sum(1 for a in both if a > 20) / len(both)
+        return (both[len(both) // 2], over5, over20)
+    perс = [persistence(d) for d in shown]
+    prows = "".join(
+        '<tr><td>%s</td>%s</tr>'
+        % (label, "".join('<td class="num">%s</td>' % fmt(p[i]) for p in perс))
+        for i, (label, fmt) in enumerate((
+            ("median lifespan (shifts)", lambda v: num(v)),
+            ("lasted more than 5 shifts", lambda v: "%.0f%%" % v),
+            ("lasted more than 20 shifts", lambda v: "%.0f%%" % v))))
+
+    # ---- findings, computed rather than asserted -------------------------
+    findings = []
+    for label in ("living specimens", "native categories", "classification diversity",
+                  "population stability (CV)"):
+        med, vals = medians.get(label, (None, []))
+        pairs = [(v, d) for v, d in zip(vals, shown) if isinstance(v, (int, float))]
+        if not pairs:
+            continue
+        top = max(pairs, key=lambda p: p[0])
+        low = min(pairs, key=lambda p: p[0])
+        if label == "population stability (CV)":
+            findings.append('<li><b style="color:%s">%s</b> holds the steadiest population '
+                            '(CV %.4f); <b style="color:%s">%s</b> the least steady '
+                            '(%.4f).</li>'
+                            % (low[1]["_hue"], esc(low[1]["name"]), low[0],
+                               top[1]["_hue"], esc(top[1]["name"]), top[0]))
+        else:
+            findings.append('<li><b style="color:%s">%s</b> leads on %s (%s), against a '
+                            'median of %s across %d terrains.</li>'
+                            % (top[1]["_hue"], esc(top[1]["name"]), label, num(top[0]),
+                               num(med), len(pairs)))
+    findings.append('<li>These are the largest and smallest figures in the set. They are '
+                    'not rankings: the terrains run under different conditions and for '
+                    'different lengths of time.</li>')
+
+    NAVSECTIONS = [("Study overview", "top"), ("Terrain comparison", "cards"),
+                   ("Trajectories", "traj"), ("Aggregate metrics", "agg"),
+                   ("Against the median", "key"), ("Event frequency", "ev"),
+                   ("Persistence", "pers"), ("Method", "method")]
+    left = C.panel("Study navigation", "".join(
+        '<a class="rowlink" href="#%s"><span></span><span>%s</span><span></span></a>'
+        % (anchor, label) for label, anchor in NAVSECTIONS), flush=True) + \
+        C.panel("Terrains in study", "".join(
+            '<div class="rowlink"><span class="sw" style="background:%s"></span>'
+            '<span>%s<span class="s">shift %s · %s cells</span></span><span></span></div>'
+            % (d["_hue"], esc(d["name"]), num(d["shift"]),
+               num(len(d["world"].get("cells") or []))) for d in shown), flush=True) + \
+        C.panel("Study controls",
+                '<p class="note">There are none. Every terrain contributes every shift it '
+                'has committed. Trajectories are indexed to each terrain\'s own first value '
+                'and plotted against its own life as a percentage, which is what makes the '
+                'SHAPES comparable; the heights are not, and nothing is scaled to a common '
+                'age.</p>') + \
+        C.panel("What this is not",
+                '<p class="note">Not a ranking. A higher figure is a different outcome, not '
+                'a better one. DNT does not evaluate terrains. We observe.</p>')
+
+    right = C.panel("Study findings", '<ul class="find">%s</ul>' % "".join(findings)) + \
+        C.panel("Against the median",
+                '<div class="scroll"><table class="d"><thead><tr><th>metric</th>%s</tr>'
+                '</thead><tbody>%s</tbody></table></div>'
+                '<p class="note">Each terrain against the median of all %d. A sign says '
+                'direction, not merit; beyond 200%% the figure is shown as a multiple '
+                'because a percentage that large cannot be read.</p>'
+                % (head, "".join(keyrows), len(shown))) + \
+        C.panel("Read with care",
+                '<p class="note">BASIN-01 and BASIN-02 differ in exactly one seeded '
+                'variable and are a controlled comparison. BASIN-03 and BASIN-04 are not — '
+                'each took further amendments, so a difference between them and the first '
+                'two has more than one possible cause.</p>') + \
+        C.panel("Go to", C.nav(
+            [("%s" % d["name"], "/%s/terrain.html" % d["dir"],
+              "terrain record · shift %s" % num(d["shift"])) for d in shown] +
+            [("Department index", C.HUB + "/hub.html", "every terrain and document")]))
+
+    mid = ('<div class="hdr" id="top"><div><p class="eyebrow">Studies</p>'
+           '<h1 class="doc">Comparative Terrain Study</h1>'
+           '<p class="sub">Longitudinal comparison of active terrains under differing '
+           'governing conditions.</p></div><table class="doc">'
+           '<tr><td class="k">DOCUMENT</td><td class="v">DNT-STUDY</td></tr>'
+           '<tr><td class="k">TERRAINS</td><td class="v">%d</td></tr>'
+           '<tr><td class="k">DATA THROUGH</td><td class="v">SHIFT %s</td></tr>'
+           '<tr><td class="k">SOURCE</td><td class="v">EACH TERRAIN\'S OWN LOGS</td></tr>'
+           '</table></div>' % (len(shown), num(max(d["shift"] or 0 for d in shown))))
+
+    mid += '<div id="cards" class="tcards">%s</div>' % "".join(cards)
+    mid += C.panel("Trajectory over time",
+                   '<div class="charts3">%s</div>%s'
+                   '<p class="note">Each terrain is indexed to its own first recorded value '
+                   'and drawn against its own life as a percentage, so a terrain of 126 '
+                   'shifts and one of 217 can be compared by shape. Steadiness is plotted as '
+                   '1 − CV so that up means steadier on every panel.</p>'
+                   % (traj, charts.legend([(d["name"], d["_hue"]) for d in shown])),
+                   "indexed to each terrain's own mean")
+    mid = mid.replace('<section class="p"><div class="ph"><b>Trajectory over time</b>',
+                      '<section class="p" id="traj"><div class="ph"><b>Trajectory over time</b>')
+    mid += C.panel("Aggregate metrics at the latest shift",
+                   '<div class="scroll"><table class="d"><thead><tr><th>metric</th>%s'
+                   '<th class="num">median</th></tr></thead><tbody>%s</tbody></table></div>'
+                   '<p class="note">Read across a row, not down a column. Each terrain is at '
+                   'a different shift and under different conditions.</p>'
+                   % (head, "".join(agg)))
+    mid = mid.replace('<section class="p"><div class="ph"><b>Aggregate metrics',
+                      '<section class="p" id="agg"><div class="ph"><b>Aggregate metrics')
+
     labels = []
     for d in shown:
         for g in dnt_data.governing_conditions(d["dir"]):
@@ -1326,83 +2188,32 @@ def comparative_study(loaded: List[Dict[str, Any]]) -> str:
             else '<td class="num absent">absent</td>' for d in shown))
         for label in labels)
 
-    cards = "".join(
-        '<section class="p"><div class="ph"><b>%s</b><span class="r">shift %s</span></div>'
-        '<div class="pb">%s<p class="note">%s</p>'
-        '<p class="note"><a href="/%s/terrain.html">terrain record →</a></p></div></section>'
-        % (esc(d["name"]), num(d["shift"]),
-           C.kv([("living", num(d["shifts"][-1].get("living"))),
-                 ("categories", num(len(d["memory"].get("category_stats") or {}))),
-                 ("cells", num(len(d["world"].get("cells") or []))),
-                 ("spend", "$%.4f" % float(d["memory"].get("cumulative_cost_usd", 0.0)))]),
-           esc(d["memory"].get("physics_document") or ""), d["dir"])
-        for d in shown)
+    mid += ('<div class="cols2" id="ev">%s%s</div>'
+            % (C.panel("Event frequency, per hundred shifts",
+                       '<div class="scroll"><table class="d"><thead><tr><th>event</th>%s'
+                       '</tr></thead><tbody>%s</tbody></table></div>'
+                       '<p class="note">A rate, not a total, so terrains of different ages '
+                       'compare. Every figure is summed from the shift log.</p>'
+                       % (head, evrows)),
+               C.panel("Persistence",
+                       '<div class="scroll"><table class="d"><thead><tr><th>pattern</th>%s'
+                       '</tr></thead><tbody>%s</tbody></table></div>'
+                       '<p class="note">Across every specimen the terrain has held, living '
+                       'and ended alike.</p>' % (head, prows))))
 
-    trajectories = "".join(
-        '<div><div class="genh">%s · living</div>%s</div>'
-        % (esc(d["name"]), spark([r.get("living") for r in d["shifts"]], 300, 70))
-        for d in shown)
-
-    left = C.panel("Terrains in study", "".join(
-        '<div class="rowlink"><span class="sw" style="background:var(--moss2)"></span>'
-        '<span>%s<span class="s">shift %s</span></span><span></span></div>'
-        % (esc(d["name"]), num(d["shift"])) for d in shown), flush=True) + \
-        C.panel("Study controls",
-                '<p class="note">There are none. Every terrain on this page contributes '
-                'every shift it has committed; there is no window to choose and no '
-                'normalisation applied, because normalising terrains of different ages '
-                'against each other would invent a comparison the record does not '
-                'support.</p>') + \
-        C.panel("What this is not",
-                '<p class="note">Not a ranking. Terrains run under different conditions '
-                'and different numbers of shifts; a higher figure is a different outcome, '
-                'not a better one. DNT does not evaluate terrains. We observe.</p>')
-
-    right = C.panel("Study context",
-                    '<p class="note">All terrains are experimental systems. This is an '
-                    'observational comparison and implies no preference, success, or '
-                    'superiority.</p>') + \
-        C.panel("Read with care",
-                '<p class="note">BASIN-01 and BASIN-02 differ in exactly one seeded '
-                'variable and are a controlled comparison. BASIN-03 and BASIN-04 are not '
-                '— each took further amendments, so a difference between them and the '
-                'first two has more than one possible cause.</p>') + \
-        C.panel("Go to", C.nav(
-            [("%s" % d["name"], "/%s/terrain.html" % d["dir"],
-              "terrain record · shift %s" % num(d["shift"])) for d in shown] +
-            [("Department index", C.HUB + "/hub.html", "every terrain and document")]))
-
-    mid = ('<div class="hdr"><div><p class="eyebrow">Studies</p>'
-           '<h1 class="doc">Comparative Terrain Study</h1>'
-           '<p class="sub">Longitudinal comparison of active terrains under differing '
-           'governing conditions.</p></div><table class="doc">'
-           '<tr><td class="k">DOCUMENT</td><td class="v">DNT-STUDY</td></tr>'
-           '<tr><td class="k">TERRAINS</td><td class="v">%d</td></tr>'
-           '<tr><td class="k">SOURCE</td><td class="v">EACH TERRAIN\'S OWN LOGS</td></tr>'
-           '</table></div>' % len(shown))
-    mid += '<div class="cols3" style="margin-bottom:14px">%s</div>' % cards
-    mid += C.panel("Living population over time",
-                   '<div class="cols3">%s</div>'
-                   '<p class="note">Each line is drawn against its own range, so the shapes '
-                   'are comparable and the heights are not. A terrain runs for as long as it '
-                   'has run; none of these are normalised to a common age.</p>' % trajectories)
     mid += C.panel("Governing conditions, side by side",
                    '<div class="scroll"><table class="d"><thead><tr><th>condition</th>%s</tr>'
                    '</thead><tbody>%s</tbody></table></div>'
                    '<p class="note">This is the comparison that matters: the terrains differ '
                    'in what governs them, and a condition a terrain does not have is shown as '
                    'absent rather than as a zero.</p>' % (head, govrows))
-    mid += C.panel("Aggregate metrics at the latest shift",
-                   '<div class="scroll"><table class="d"><thead><tr><th>metric</th>%s</tr>'
-                   '</thead><tbody>%s</tbody></table></div>'
-                   '<p class="note">Read across a row, not down a column. Each terrain is at '
-                   'a different shift and under different conditions.</p>'
-                   % (head, "".join(body)))
+    mid = mid.replace('<section class="p"><div class="ph"><b>Governing conditions, side',
+                      '<section class="p" id="method"><div class="ph"><b>Governing conditions, side')
 
     return C.page("Comparative Terrain Study", "COMPARATIVE STUDY", shown[-1]["dir"],
                   [("STUDIES", None), ("COMPARATIVE TERRAIN STUDY", None)],
-                  shown[-1]["shift"], shown[-1]["committed_at"], mid, left, right, CSS,
-                  current="study")
+                  shown[-1]["shift"], shown[-1]["committed_at"], mid, left, right,
+                  CSS + charts.CSS + snapshot.CSS, current="study")
 
 
 # ===========================================================================
@@ -1423,6 +2234,67 @@ def write(path: str, html: str) -> None:
 # them from its category sheet, so each of them must exist.
 def specimen_targets(d):
     return set(d["named"])
+
+
+def export_csv(d, path) -> None:
+    """The shift log as a spreadsheet, from the same rows the page reads."""
+    rows = d["shifts"]
+    if not rows:
+        return
+    cols = ["shift", "end_timestamp", "living", "arose_this_shift", "ended_this_shift",
+            "replicated_this_shift", "links_formed", "classified", "anomalous",
+            "unresolved", "resource_flow", "phase", "model", "duration_seconds",
+            "estimated_cost_usd", "cumulative_cost_usd", "new_categories"]
+    folder = os.path.dirname(path)
+    if folder and not os.path.isdir(folder):
+        os.makedirs(folder)
+    with open(path, "w", encoding="utf-8") as stream:
+        stream.write(",".join(cols) + "\n")
+        for r in rows:
+            out = []
+            for col in cols:
+                v = r.get(col)
+                if isinstance(v, list):
+                    v = " ".join(str(x) for x in v)
+                v = "" if v is None else str(v)
+                out.append('"%s"' % v.replace('"', '""') if ("," in v or '"' in v) else v)
+            stream.write(",".join(out) + "\n")
+
+
+def export_lineage_csv(d, root, path) -> None:
+    """Every traced member of one line, with the measurements the record holds."""
+    ind = d["individuals"]
+    ended = {e.get("id"): e for e in (d["world"].get("ended") or [])}
+    rec = lambda k: ind.get(k) or ended.get(k) or {}
+    kids_of: Dict[str, List[str]] = {}
+    for k, v in list(ind.items()) + list(ended.items()):
+        if v.get("parent_id"):
+            kids_of.setdefault(v["parent_id"], []).append(k)
+    seen, frontier = {root}, [root]
+    while frontier:
+        nxt = []
+        for node in frontier:
+            for kid in kids_of.get(node, []):
+                if kid not in seen:
+                    seen.add(kid)
+                    nxt.append(kid)
+        frontier = nxt
+    folder = os.path.dirname(path)
+    if folder and not os.path.isdir(folder):
+        os.makedirs(folder)
+    with open(path, "w", encoding="utf-8") as stream:
+        stream.write("id,state,generation,parent_id,arose_at_shift,age,descendants,"
+                     "light,extent,junctions,mass,cover,residue,links,category\n")
+        for k in sorted(seen, key=lambda x: (rec(x).get("generation", 0), x)):
+            r = rec(k)
+            st, tr = (r.get("structure") or {}), (r.get("traits") or {})
+            stream.write(",".join(str(v) for v in [
+                k, "living" if k in ind else "ended", r.get("generation", ""),
+                r.get("parent_id", ""), r.get("arose_at_shift", ""), r.get("age", ""),
+                r.get("descendants", ""), r.get("light", ""),
+                st.get("extent", ""), st.get("junctions", ""), st.get("mass", ""),
+                tr.get("cover", ""), tr.get("residue", ""), tr.get("links", ""),
+                (d["named"].get(k) or {}).get("category", "")]) + "\n")
 
 
 def build(terrain: str) -> Optional[str]:
@@ -1464,6 +2336,11 @@ def build(terrain: str) -> Optional[str]:
 
     for sid in roots:
         write(os.path.join(base, "lineage", sid + ".html"), lineage_record(d, sid))
+
+    # A download link that downloads nothing is worse than no link.
+    export_csv(d, os.path.join(base, "exports", "shiftlog.csv"))
+    for sid in roots:
+        export_lineage_csv(d, sid, os.path.join(base, "exports", "lineage-%s.csv" % sid))
 
     ck = checkpoint_report(d)
     if ck:

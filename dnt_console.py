@@ -215,6 +215,8 @@ padding:11px 16px;background:var(--panel);border-top:1px solid var(--rule);
 font:9.5px var(--mono);letter-spacing:.1em;color:var(--faint);text-transform:uppercase}
 .bot svg{fill:var(--faint);display:block}
 .bot .mid_{letter-spacing:.16em;color:var(--dim)}
+.bot .tz{letter-spacing:.08em}
+.tstamp{white-space:nowrap}
 """
 
 
@@ -237,16 +239,59 @@ def crumbs(items: Sequence) -> str:
     return '<div class="crumbs">%s</div>' % "".join(out)
 
 
+def stamp(iso, fallback: str = "\u2014") -> str:
+    """A recorded UTC instant, rendered for whoever is reading it.
+
+    The record is written in UTC and stays in UTC — a research log whose
+    timestamps depended on where the reader sat would not be a record. What
+    changes is only the reading: this marks the instant so the page can show it
+    in the reader's own zone, keeps the UTC original in the title attribute,
+    and falls back to plain UTC if scripting is off.
+    """
+    if not iso:
+        return fallback
+    return ('<span class="tstamp" data-utc="%s" title="%s">%s UTC</span>'
+            % (iso, iso, str(iso).replace("T", " ").replace("Z", "")))
+
+
+LOCALTIME_JS = """
+<script>
+// Records are stored in UTC. This rewrites every marked instant into the
+// reader's own zone for display only; the UTC original stays in the title.
+(function(){
+  var zone = "";
+  try {
+    zone = new Intl.DateTimeFormat(undefined, {timeZoneName: "short"})
+      .formatToParts(new Date())
+      .filter(function(p){ return p.type === "timeZoneName"; })
+      .map(function(p){ return p.value; })[0] || "";
+  } catch (e) { return; }
+  var pad = function(n){ return (n < 10 ? "0" : "") + n; };
+  document.querySelectorAll(".tstamp[data-utc]").forEach(function(el){
+    var raw = el.getAttribute("data-utc");
+    if (!raw) return;
+    var d = new Date(raw.slice(-1) === "Z" ? raw : raw + "Z");
+    if (isNaN(d.getTime())) return;
+    el.textContent = d.getFullYear() + "-" + pad(d.getMonth()+1) + "-" + pad(d.getDate())
+      + " " + pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds())
+      + (zone ? " " + zone : "");
+  });
+  var note = document.getElementById("tznote");
+  if (note && zone) note.textContent = "shown in " + zone + " \u00b7 recorded in UTC";
+})();
+</script>
+"""
+
+
 def status(shift, committed_at: Optional[str]) -> str:
     """The true state of a terrain: a shift number and when it was committed.
 
     A terrain does not run continuously. It advances when a shift is run and is
     otherwise exactly still, so this says HOLDING rather than RUNNING.
     """
-    when = (committed_at or "").replace("T", " ").replace("Z", " UTC")
     return ('<div class="state"><span class="dot"></span>SHIFT <b>%s</b>'
             '<span class="arrow">·</span>%s<span class="arrow">·</span>HOLDING</div>'
-            % (shift, when or "never committed"))
+            % (shift, stamp(committed_at, "never committed")))
 
 
 def actions(terrain_dir: str, current: str = "") -> str:
@@ -287,15 +332,16 @@ def page(title: str, doc_name: str, terrain_dir: str, crumb_items: Sequence,
         '%s<main class="mid">%s</main>%s'
         '<footer class="bot"><span>DNT %s v1.0</span>'
         '<span class="mid_">We observe. We do not interfere.</span>'
+        '<span id="tznote" class="tz">recorded in UTC</span>'
         '<span>A branch of the Nonhuman Institute %s</span></footer>'
-        '</div>%s</body></html>'
+        '</div>%s%s</body></html>'
         % (title, SKIN, css, cls,
            HUB, mark(27),
            crumbs(crumb_items), status(shift, committed_at), actions(terrain_dir, current),
            ('<aside class="left rail">%s</aside>' % left) if left else "",
            mid,
            ('<aside class="right rail">%s</aside>' % right) if right else "",
-           doc_name, mark(13), scripts))
+           doc_name, mark(13), LOCALTIME_JS, scripts))
 
 
 def panel(head: str, body: str, right_note: str = "", flush: bool = False) -> str:

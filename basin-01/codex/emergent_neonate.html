@@ -43,6 +43,7 @@ a.nav.on{background:var(--moss);color:var(--paper);border-left-color:var(--moss)
 font:9px/1.7 var(--mono);color:var(--grey);display:flex;gap:10px;align-items:flex-start}
 .mk.small{fill:var(--moss);opacity:.8}
 .muted{color:var(--rule)}
+.tstamp{white-space:nowrap}
 main{padding:22px clamp(16px,2.4vw,30px) 40px;min-width:0}
 .foot{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;
 gap:20px;padding:12px 20px;border-top:1px solid var(--rule);background:var(--panel);
@@ -195,4 +196,30 @@ color:var(--grey);font:11.5px/1.6 var(--mono)}
   });
 })();
 </script>
-<p class="foot-note">Generated from state/specimen_log.jsonl, state/anomaly_log.jsonl and state/memory.json. Read-only: this tool writes HTML and changes no terrain record.</p></main><footer class="foot"><span>DNT FIELD MANUAL v1.0</span><span class="motto">WE OBSERVE. WE DO NOT INTERFERE.</span><span class="inst">A BRANCH OF THE NONHUMAN INSTITUTE <svg class="mk tiny" viewBox="0 0 100 120" width="14" height="16" aria-hidden="true"><path d="M0,0 H100 V120 H0 Z M7.3,7.3 H92.7 V111.2 H7.3 Z M18,111.2 H82 V120 H18 Z" fill-rule="evenodd"/></svg></span></footer></div></body></html>
+<p class="foot-note">Generated from state/specimen_log.jsonl, state/anomaly_log.jsonl and state/memory.json. Read-only: this tool writes HTML and changes no terrain record.</p></main><footer class="foot"><span>DNT FIELD MANUAL v1.0</span><span class="motto">WE OBSERVE. WE DO NOT INTERFERE.</span><span class="inst">A BRANCH OF THE NONHUMAN INSTITUTE <svg class="mk tiny" viewBox="0 0 100 120" width="14" height="16" aria-hidden="true"><path d="M0,0 H100 V120 H0 Z M7.3,7.3 H92.7 V111.2 H7.3 Z M18,111.2 H82 V120 H18 Z" fill-rule="evenodd"/></svg></span></footer></div>
+<script>
+// Records are stored in UTC. This rewrites every marked instant into the
+// reader's own zone for display only; the UTC original stays in the title.
+(function(){
+  var zone = "";
+  try {
+    zone = new Intl.DateTimeFormat(undefined, {timeZoneName: "short"})
+      .formatToParts(new Date())
+      .filter(function(p){ return p.type === "timeZoneName"; })
+      .map(function(p){ return p.value; })[0] || "";
+  } catch (e) { return; }
+  var pad = function(n){ return (n < 10 ? "0" : "") + n; };
+  document.querySelectorAll(".tstamp[data-utc]").forEach(function(el){
+    var raw = el.getAttribute("data-utc");
+    if (!raw) return;
+    var d = new Date(raw.slice(-1) === "Z" ? raw : raw + "Z");
+    if (isNaN(d.getTime())) return;
+    el.textContent = d.getFullYear() + "-" + pad(d.getMonth()+1) + "-" + pad(d.getDate())
+      + " " + pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds())
+      + (zone ? " " + zone : "");
+  });
+  var note = document.getElementById("tznote");
+  if (note && zone) note.textContent = "shown in " + zone + " · recorded in UTC";
+})();
+</script>
+</body></html>

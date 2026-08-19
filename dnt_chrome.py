@@ -145,7 +145,7 @@ a.nav.on{background:var(--moss);color:var(--paper);border-left-color:var(--moss)
 .manual{margin-top:auto;padding:14px 16px;border-top:1px solid var(--rule);
 font:9px/1.7 var(--mono);color:var(--grey);display:flex;gap:10px;align-items:flex-start}
 .mk.small{fill:var(--moss);opacity:.8}
-.muted{color:var(--rule)}
+.muted{color:var(--rule)}\n.tstamp{white-space:nowrap}
 main{padding:22px clamp(16px,2.4vw,30px) 40px;min-width:0}
 .foot{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;
 gap:20px;padding:12px 20px;border-top:1px solid var(--rule);background:var(--panel);
@@ -157,10 +157,22 @@ font:9.5px var(--mono);letter-spacing:.09em;color:var(--grey)}
 """
 
 
+import dnt_console as _console
+
+
+def stamp(iso, fallback: str = "\u2014") -> str:
+    """The same marked instant the console uses, so both skins agree."""
+    return _console.stamp(iso, fallback)
+
+
 def page(title: str, skin: str, css: str, body: str, crumbs: List[str],
          side: str, topright: str = "", footleft: str = "") -> str:
-    return ("<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\">"
-            "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">"
-            "<title>%s</title><style>%s%s%s</style></head><body><div class=\"shell\">"
-            "%s%s<main>%s</main>%s</div></body></html>"
-            % (title, skin, FRAME, css, topbar(crumbs, topright), side, body, footer(footleft)))
+    # The script is appended AFTER formatting. Concatenating it into the format
+    # string makes every character in it a candidate format spec.
+    shell = ("<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\">"
+             "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">"
+             "<title>%s</title><style>%s%s%s</style></head><body><div class=\"shell\">"
+             "%s%s<main>%s</main>%s</div>"
+             % (title, skin, FRAME, css, topbar(crumbs, topright), side, body,
+                footer(footleft)))
+    return shell + _console.LOCALTIME_JS + "</body></html>"
