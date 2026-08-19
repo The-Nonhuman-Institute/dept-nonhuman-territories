@@ -33,6 +33,11 @@ class NoCache(http.server.SimpleHTTPRequestHandler):
         return
 
 
+class ThreadedServer(socketserver.ThreadingTCPServer):
+    allow_reuse_address = True
+    daemon_threads = True
+
+
 def main():
     servers = []
     for name, port, path in TERRAINS:
@@ -41,8 +46,13 @@ def main():
             print("  %s: no viewer at %s — skipped" % (name, path))
             continue
         handler = functools.partial(NoCache, directory=directory)
+        # Threaded, one request at a time per thread. A single-threaded server
+        # serves one connection at a time, and a browser opening a page that
+        # pulls several files at once — or a client that holds a connection
+        # open — stalls every later request behind it. The hub now serves
+        # thousands of pages; it hung on exactly that.
         socketserver.TCPServer.allow_reuse_address = True
-        server = socketserver.TCPServer(("127.0.0.1", port), handler)
+        server = ThreadedServer(("127.0.0.1", port), handler)
         servers.append(server)
         threading.Thread(target=server.serve_forever, daemon=True).start()
         page = "hub.html" if name == "HUB" else "index.html"
