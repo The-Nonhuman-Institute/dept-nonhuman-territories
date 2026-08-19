@@ -275,10 +275,10 @@ text-decoration:none;font-size:13.5px;background:var(--panel)}
 a.go:hover{border-color:var(--moss)}
 """
 
-# The house style is written entirely against tokens, so the same rules set a
-# printed sheet or a console. Only the token block is dropped here; the console
-# skin from dnt_chrome supplies the replacement, and the frame supplies the
-# sidebar, the top bar, and the footer these pages previously drew themselves.
+# The house style already carries its own token block, so these sheets keep it
+# and the frame supplies the sidebar, the top bar, and the footer they used to
+# draw themselves. The tokens are dropped and re-supplied by the skin so that
+# every document in the sidebar resolves to the same palette.
 _ROOT_BLOCK = re.compile(r":root\{[^}]*\}\s*", re.S)
 BODY_CSS = _ROOT_BLOCK.sub("", dnt_style.CSS, count=1)
 
@@ -289,7 +289,7 @@ FOOT = ("Every figure is read from this terrain\u2019s own state and logs. Deriv
 
 def frame(title, terrain, page_file, crumbs, masthead, body, topright=""):
     return dnt_chrome.page(
-        title, dnt_chrome.CONSOLE, BODY_CSS + EXTRA + FRAME_CSS,
+        title, dnt_chrome.PAPER, BODY_CSS + EXTRA + FRAME_CSS,
         masthead + "".join(body) + ('<p class="foot-note">%s</p>' % FOOT),
         crumbs, dnt_chrome.sidebar(ROOT, terrain, page_file), topright,
         "DNT FIELD MANUAL v1.0")
