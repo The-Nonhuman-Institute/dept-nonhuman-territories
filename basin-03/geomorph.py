@@ -54,6 +54,7 @@ nothing to run.
 
 from __future__ import annotations
 
+import heapq
 import json
 import math
 import os
@@ -142,6 +143,53 @@ def neighbours(index: int, width: int, height: int) -> List[int]:
     return out
 
 
+
+def fill_depressions(ground: List[float], width: int, height: int) -> List[float]:
+    """A copy of the surface with every hollow raised to its spill level.
+
+    THE DEFECT THIS FIXES
+
+      Flow was routed over the bare ground, and a cell with no lower neighbour
+      simply terminated it. BASIN-05 carried 252 such cells, BASIN-04 514 and
+      BASIN-03 1,134, so the drainage network was not a network: it was
+      fragments, each ending in a hole. Peak flow reached 9% of the terrain
+      where a connected network gathers most of it.
+
+      Every landscape evolution model does this step. Its absence here was an
+      omission, not a design choice, which is why it is corrected in place
+      rather than made the premise of a new terrain.
+
+    WHAT IT DOES NOT DO
+
+      It does not raise the real ground. The returned surface is used for
+      ROUTING only, so water passes THROUGH a hollow instead of vanishing into
+      it, and the hollow stays a hollow. A hollow that water passes through and
+      stands in is a lake; 242 cells held water in the probe that measured this.
+
+      Priority flood: every cell is raised to the lowest level from which it can
+      still reach the boundary, working outward from the edge.
+    """
+    n = width * height
+    filled = list(ground)
+    closed = [False] * n
+    queue: List[Tuple[float, int]] = []
+    for i in range(n):
+        row, col = i // width, i % width
+        if row in (0, height - 1) or col in (0, width - 1):
+            heapq.heappush(queue, (ground[i], i))
+            closed[i] = True
+    while queue:
+        level, i = heapq.heappop(queue)
+        for j in neighbours(i, width, height):
+            if closed[j]:
+                continue
+            closed[j] = True
+            if filled[j] <= level:
+                filled[j] = level
+            heapq.heappush(queue, (filled[j], j))
+    return filled
+
+
 def initial_roughness(index: int, width: int, height: int) -> float:
     """A slightly uneven starting surface. Deterministic, and NOT a landscape.
 
@@ -217,7 +265,13 @@ def _run(ground: List[float], width: int, height: int, shifts: int,
 
         # 2. flow, accumulated downhill. Cells are processed high to low so a
         #    cell always passes on everything that reached it from above.
-        order = sorted(range(n), key=lambda i: -ground[i])
+        # Routed over a DEPRESSION-FILLED copy so that water crosses a hollow
+        # instead of terminating in it. The ground itself is untouched and is
+        # what gets eroded below; a hollow water crosses and stands in is a
+        # lake, and `lakes` counts the cells holding one.
+        route = fill_depressions(ground, width, height)
+        lakes = sum(1 for i in range(n) if route[i] > ground[i] + 1e-9)
+        order = sorted(range(n), key=lambda i: -route[i])
         flow = [RAIN_PER_CELL] * n
         steepest: List[Optional[int]] = [None] * n
         drop: List[float] = [0.0] * n
@@ -226,7 +280,7 @@ def _run(ground: List[float], width: int, height: int, shifts: int,
                 continue
             low, best = None, 0.0
             for j in neighbours(i, width, height):
-                diff = ground[i] - ground[j]
+                diff = route[i] - route[j]
                 if diff > best:
                     low, best = j, diff
             steepest[i], drop[i] = low, best
@@ -265,7 +319,7 @@ def _run(ground: List[float], width: int, height: int, shifts: int,
         if report and shift % max(1, shifts // 10) == 0:
             report(shift, ground, flow)
 
-    return {"width": width, "height": height, "shifts": shifts,
+    return {"width": width, "height": height, "shifts": shifts, "lakes": lakes,
             "ground": [round(g, 5) for g in ground],
             "flow": [round(f, 2) for f in flow]}
 

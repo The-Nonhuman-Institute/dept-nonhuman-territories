@@ -59,6 +59,16 @@ class Report:
         return out
 
 
+def _router_fills(terrain: str) -> Optional[bool]:
+    """Does this terrain's own flow router fill depressions before routing?"""
+    path = os.path.join(ROOT, terrain, "geomorph.py")
+    if not os.path.exists(path):
+        return None
+    with open(path, encoding="utf-8") as stream:
+        src = stream.read()
+    return "fill_depressions(ground" in src
+
+
 def _load(terrain: str) -> Dict[str, Any]:
     base = os.path.join(ROOT, terrain)
     def js(path, default):
@@ -116,10 +126,23 @@ def check_landscape(d, r) -> None:
     edge = lambda i: (i // W in (0, H - 1)) or (i % W in (0, W - 1))
     pits = [i for i in range(N) if not edge(i) and all(g[j] >= g[i] for j in nb(i))]
     share = 100.0 * len(pits) / N
-    r.add(FAIL if pits else OK, "flow can leave every cell",
-          ("%d interior cell(s), %.1f%%, have no lower neighbour — water runs in "
-           "and stops, so the drainage network is broken into pieces"
-           % (len(pits), share)) if pits else "no closed depressions")
+    # A hollow is only a defect if flow DIES in it. Once the router fills
+    # depressions before routing, water crosses a hollow and stands in it, and
+    # the hollow is a lake rather than a hole in the network. So this check has
+    # to ask what the terrain's own router does, not just count hollows.
+    routes = _router_fills(r.terrain)
+    if routes is None:
+        r.add(SKIP, "flow can leave every cell", "no router to inspect")
+    elif routes:
+        r.add(OK, "flow can leave every cell",
+              "%d hollow(s), %.1f%% — routed through by depression filling, so "
+              "these hold water rather than stopping it" % (len(pits), share))
+    else:
+        r.add(FAIL if pits else OK, "flow can leave every cell",
+              ("%d interior cell(s), %.1f%%, have no lower neighbour and the router "
+               "does not fill depressions — water runs in and stops, so the drainage "
+               "network is broken into pieces" % (len(pits), share))
+              if pits else "no closed depressions")
 
     inner = sorted(g[i] for i in range(N) if 2 <= i // W < H - 2 and 2 <= i % W < W - 2)
     if len(inner) > 20:

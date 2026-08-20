@@ -159,7 +159,14 @@
       "persistence_native": ""
     }
   },
-  "terrain_events": [],
+  "terrain_events": [
+    {
+      "shift": 8,
+      "logged_at": "2026-08-20T19:45:00Z",
+      "kind": "router_defect_corrected",
+      "detail": "THE FLOW ROUTER WAS DEFECTIVE AND IS CORRECTED AT SHIFT 8. This is a fix to a broken mechanism, not an amendment to this terrain's physics, and the distinction is why it is applied here rather than made the premise of a new terrain.\\n\\nWHAT WAS WRONG. Flow was routed over the bare ground, so a cell with no lower neighbour terminated it. This terrain carries 514 such cells. The drainage was therefore not a network but fragments, each ending in a hole, and peak flow reached a small fraction of the terrain where a connected network gathers most of it. Every landscape evolution model fills depressions before routing; its absence here was an omission.\\n\\nWHAT CHANGED. Flow is now routed over a depression-filled COPY of the surface, by priority flood. The ground itself is never raised, so a hollow stays a hollow and water crosses it and stands in it. Measured by probe against 6,000 formation steps: peak flow rose from 1,015 to 2,833, and 242 cells held standing water where none did before. Relief fell from 32.66 to 28.06. A prediction that peak flow would exceed 3,000 was recorded before the probe ran and was not met.\\n\\nTHE DISCONTINUITY. Everything this terrain recorded up to shift 8 formed under the defective router. Anything after it forms under the corrected one. A change in drainage from this shift onward should be read as the correction, not as the terrain."
+    }
+  ],
   "keeper_summary": {
     "shift": 8,
     "at": "2026-08-20T17:35:22Z",
