@@ -39,9 +39,10 @@ sys.path.insert(0, ROOT)
 import dnt_console as C
 import dnt_data
 import dnt_charts as charts
+import dnt_terrains
 import snapshot
 
-TERRAINS = ["basin-01", "basin-02", "basin-03", "basin-04"]
+TERRAINS = dnt_terrains.dirs()
 
 # The same hues the observation deck colours its population with, so a class
 # reads the same on the deck and in the record.

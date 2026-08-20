@@ -15,11 +15,10 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 # The hub is served from the project root so it can reach both codices and the
 # governance documents; each observation deck is served from its own viewer
 # directory so a terrain can only ever serve its own files.
-TERRAINS = (("HUB",      8730, "."),
-            ("BASIN-01", 8731, "basin-01/viewer"),
-            ("BASIN-02", 8732, "basin-02/viewer"),
-            ("BASIN-03", 8733, "basin-03/viewer"),
-            ("BASIN-04", 8734, "basin-04/viewer"))
+import dnt_terrains
+TERRAINS = tuple([("HUB", 8730, ".")]
+                 + [(t["name"], t["port"], t["dir"] + "/viewer")
+                    for t in dnt_terrains.all_terrains()])
 
 
 class NoCache(http.server.SimpleHTTPRequestHandler):

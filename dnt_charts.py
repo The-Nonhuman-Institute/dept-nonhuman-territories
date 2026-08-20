@@ -28,12 +28,8 @@ import math
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 # Fixed per terrain. Assigned by identity, never by position in a sorted list.
-SERIES = {
-    "basin-01": "#4FA3E3",   # blue
-    "basin-02": "#B37BD6",   # violet
-    "basin-03": "#A8D45C",   # lime
-    "basin-04": "#E0A44C",   # amber
-}
+import dnt_terrains
+SERIES = dnt_terrains.hues()
 REF = "#5A6356"              # the dashed reference line
 GRID = "#1D231B"
 AXIS = "#2C332A"
@@ -42,7 +38,8 @@ INK = "#D6DED2"
 
 
 def hue(terrain: str) -> str:
-    return SERIES.get(terrain, "#7C8879")
+    """By terrain identity, never by rank — a new terrain repaints nothing."""
+    return dnt_terrains.hue_of(terrain)
 
 
 def _nice(lo: float, hi: float, steps: int = 4) -> Tuple[float, float, float]:

@@ -16,18 +16,32 @@ from typing import Any, Dict, List, Optional
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, ROOT)
-import dnt_chrome, dnt_data
+import dnt_chrome, dnt_data, dnt_terrains
 
-TERRAINS = [
-    ("basin-01", "BASIN-01", 8731, "A line of 21 cells.",
-     "Control. Physics frozen at v1.4; not to be amended."),
-    ("basin-02", "BASIN-02", 8732, "A field 21 deep x 15 wide, with relief.",
-     "Controlled comparison through shift 140; exploratory since."),
-    ("basin-03", "BASIN-03", 8733, "An eroded landscape that grows at its margins.",
-     "Ground formed by process, not formula."),
-    ("basin-04", "BASIN-04", 8734, "An eroded landscape under six governing conditions.",
-     "Temperature, wind, gravity, subsurface water, light cycle, shift length."),
-]
+# The roster is discovered (see dnt_terrains); only the one-line description of
+# what each terrain IS is written by hand, and a terrain with no description
+# still appears, described by its own physics document.
+BLURBS = {
+    "basin-01": ("A line of 21 cells.",
+                 "Control. Physics frozen at v1.4; not to be amended."),
+    "basin-02": ("A field 21 deep x 15 wide, with relief.",
+                 "Controlled comparison through shift 140; exploratory since."),
+    "basin-03": ("An eroded landscape that grows at its margins.",
+                 "Ground formed by process, not formula."),
+    "basin-04": ("An eroded landscape under six governing conditions.",
+                 "Temperature, wind, gravity, subsurface water, light cycle, shift length."),
+}
+
+
+def roster():
+    out = []
+    for t in dnt_terrains.all_terrains():
+        shape, role = BLURBS.get(t["dir"], ("", ""))
+        out.append((t["dir"], t["name"], t["port"], shape, role))
+    return out
+
+
+TERRAINS = roster()
 
 
 def esc(v: Any) -> str:

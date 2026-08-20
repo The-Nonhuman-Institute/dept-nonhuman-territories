@@ -39,7 +39,8 @@ import dnt_style
 
 MARK = dnt_style.MARK_PATH
 
-PORTS = {"basin-01": 8731, "basin-02": 8732, "basin-03": 8733, "basin-04": 8734}
+import dnt_terrains
+PORTS = dnt_terrains.ports()
 HUB = "http://127.0.0.1:8730"
 
 

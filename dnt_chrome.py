@@ -30,8 +30,11 @@ def mark(size: int = 30, cls: str = "mk") -> str:
             '<path d="%s" fill-rule="evenodd"/></svg>' % (cls, size, int(size * 1.2), MARK))
 
 
-TERRAIN_NAV = [("basin-01", "BASIN-01"), ("basin-02", "BASIN-02"),
-               ("basin-03", "BASIN-03"), ("basin-04", "BASIN-04")]
+import dnt_terrains
+
+def TERRAIN_NAV():
+    """Discovered, not declared — see dnt_terrains."""
+    return dnt_terrains.nav()
 
 # The paper sidebar lists only the paper documents. The terrain record and the
 # shift log are console views of a running terrain, not reference sheets, and
@@ -46,7 +49,7 @@ def sidebar(root: str, current_terrain: Optional[str] = None,
             current_page: Optional[str] = None, extra: str = "") -> str:
     """Left navigation. Only links to pages that exist on disk."""
     items = []
-    for d, label in TERRAIN_NAV:
+    for d, label in TERRAIN_NAV():
         if not os.path.isdir(os.path.join(root, d)):
             continue
         cls = "on" if d == current_terrain else ""
