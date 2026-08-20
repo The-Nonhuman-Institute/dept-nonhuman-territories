@@ -246,14 +246,59 @@ def _system_prompt() -> str:
         '      "persistence": "<in your own words, how this specimen '
         'persists>"\n'
         "    }\n"
-        "  ],\n"
-        '  "taxonomy": { }\n'
+        "  ]\n"
         "}\n"
         "\n"
-        'The "taxonomy" object is your system in whatever structure you '
-        "choose. Return it in full each time, including any revision you are "
-        "making. It is stored exactly as you write it." % (MINIMUM_OBLIGATION,)
+        "Return the classifications and nothing else. You will be asked for "
+        "your system separately, in its own reply, so it is not competing "
+        "with these for room." % (MINIMUM_OBLIGATION,)
     )
+
+
+# ---------------------------------------------------------------------------
+# THE SYSTEM IS ASKED FOR SEPARATELY.
+#
+# It used to be the last object in the same reply as the classifications, and
+# an output ceiling cuts a reply from the end. So the Namer's account of its
+# own system was the first thing lost whenever a reply ran long, which was
+# often. BASIN-01 files specimens into 32 categories and its stored system
+# holds 10 nodes; BASIN-03, 12 categories and 5 nodes; BASIN-04, 2 and 1.
+#
+# The damage is not only to the archive. The stored system is handed back to
+# the Namer at the start of every shift as YOUR CURRENT SYSTEM, so it was
+# being given a mutilated copy of its own filing system every shift and asked
+# to work coherently from it. What looked like a Namer that could not build
+# much of a taxonomy was a Namer with induced amnesia.
+#
+# The question is unchanged. Only the room to answer it is.
+# ---------------------------------------------------------------------------
+def _system_prompt_taxonomy() -> str:
+    return (
+        "You maintain a classification system for a population you have been "
+        "observing.\n\n"
+        "Return your system IN FULL, in whatever structure you choose, "
+        "including any revision you are making to it now. It is stored exactly "
+        "as you write it and it is handed back to you next time as your own "
+        "record, so anything you leave out is lost to you as well.\n\n"
+        "Reply with JSON only, in this form:\n"
+        "{\n"
+        '  "taxonomy": { }\n'
+        "}\n"
+    )
+
+
+def _taxonomy_input(native, just_filed) -> str:
+    lines = ["YOUR CURRENT SYSTEM:",
+             json.dumps(native, indent=2) if native else "(empty)",
+             ""]
+    if just_filed:
+        lines.append("WHAT YOU FILED IN THIS INTERVAL:")
+        for entry in just_filed:
+            lines.append("- %s -> %s" % (entry.get("specimen_id"),
+                                         entry.get("category")))
+        lines.append("")
+    lines.append("Return your system in full, revised if you are revising it.")
+    return "\n".join(lines)
 
 
 def _build_input(
@@ -654,7 +699,30 @@ def run(
             outcome["aggregate_records"] += 1
 
     # The native taxonomy is stored exactly as authored, in whatever shape.
+    # Asked for in its own reply now, with its own room — see the note above
+    # _system_prompt_taxonomy. A failure here leaves the stored system exactly
+    # as it was rather than replacing it with nothing.
     authored = parsed.get("taxonomy")
+    if not (isinstance(authored, (dict, list)) and authored):
+        just_filed = [{"specimen_id": k, "category": (v or {}).get("category"),
+                       "decision": (v or {}).get("decision")}
+                      for k, v in by_id.items()]
+        try:
+            tax_result = config.generate(
+                prompt=_taxonomy_input(native, just_filed),
+                role=ROLE,
+                system=_system_prompt_taxonomy(),
+                ledger=ledger,
+            )
+            tax_parsed = extract_json(tax_result.text)
+            if isinstance(tax_parsed, dict):
+                candidate = tax_parsed.get("taxonomy")
+                if isinstance(candidate, (dict, list)) and candidate:
+                    authored = candidate
+                    outcome["taxonomy_asked_separately"] = True
+        except Exception as exc:
+            outcome["taxonomy_call_failed"] = str(exc)[:120]
+
     if isinstance(authored, (dict, list)) and authored:
         writer.replace_taxonomy_native(authored)
         writer.note_revision(

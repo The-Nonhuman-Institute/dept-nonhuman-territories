@@ -105,6 +105,10 @@ position:sticky;top:0;z-index:2}
 .row.on{background:var(--rule)}
 .row .rid{font:11px var(--mono);color:var(--ink)}
 .row .rcat{font:10.5px/1.4 var(--mono);color:var(--moss);word-break:break-word}
+.row .rcat:before{content:"named  ";color:var(--faint);letter-spacing:.08em}
+.src-us{color:var(--ink);font-weight:400}
+.src-namer{color:var(--moss);font-weight:400}
+.gh .who{margin-left:6px;color:var(--faint);font:8.5px var(--mono);letter-spacing:.08em}
 .row .rmeta{font:9.5px var(--mono);color:var(--grey)}
 .swatch{display:inline-block;width:8px;height:8px;margin-right:6px;vertical-align:middle;
 border-radius:2px}
@@ -253,9 +257,15 @@ z-index:30;font:12px var(--mono);color:var(--grey)}
 <section class="rail" id="list">
   <div class="blk" style="border-bottom:1px solid var(--rule)">
     <div class="bh"><span>Specimens</span><span class="n" id="l-count"></span></div>
-    <p class="note" style="margin:0">Grouped by how each one makes its living —
-      derived from where its light actually came from, not from its name. The
-      cover layer is counted, not listed (physics.md §8).</p>
+    <p class="note" style="margin:0"><b class="src-us">THE GROUPS ARE OURS.</b>
+      Each heading below is computed by this deck from where a specimen's light
+      actually came from. The Namer never said them.</p>
+    <p class="note" style="margin:6px 0 0"><b class="src-namer">THE GREEN LINE IS
+      THE NAMER'S.</b> That is its own name for the specimen, in its own words.
+      The two are different systems and they can disagree — when they do, that
+      disagreement is the observation, not an error.</p>
+    <p class="note" style="margin:6px 0 0">The cover layer is counted, not listed
+      (physics.md §8).</p>
   </div>
   <div id="l-key" style="display:none"></div>
   <div id="l-body"></div>
@@ -1022,6 +1032,7 @@ function buildList(w, byId) {
     const g = groups[k], l = LIVELIHOOD[k];
     const head = '<div class="gh" data-group="' + k + '">'
       + '<i style="background:#' + l.hue.getHexString() + '"></i>' + l.name
+      + '<span class="who">measured</span>'
       + '<span class="c">' + g.length + '</span></div>';
     const rows = g.slice(0, PAGE).map(rowHtml).join('');
     const more = g.length > PAGE
