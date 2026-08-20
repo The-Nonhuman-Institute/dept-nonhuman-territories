@@ -4713,6 +4713,12 @@
       "logged_at": "2026-08-20T05:51:14Z",
       "kind": "classifier_degraded",
       "detail": "MEASURED AFTER THE SWITCH, AND RECORDED SO THE GAP IS NOT LATER READ AS A FINDING. On the local model the Namer resolved 2 classification attempts and failed 6 \u2014 a 75% harness failure rate. Against claude-haiku-4-5 on this same terrain the rate was 14% (460 resolved, 77 failed), and on BASIN-02 and BASIN-03 it was effectively 0% across 1,800 classifications. Shift 127 took 1,548 seconds and produced no classification at all: five specimens went to the record as UNRESOLVED, which is the model returning nothing readable, not the Namer declining to place them. gemma3:4b is resident wholly on CPU here and cannot carry this terrain's 32-category taxonomy in a prompt and still answer in a parseable form. Anyone reading a thinning of classifications from shift 126 onward should read it as the harness, not the terrain. The records stand; nothing is removed."
+    },
+    {
+      "shift": 127,
+      "logged_at": "2026-08-20T16:57:41Z",
+      "kind": "diagnosis_corrected",
+      "detail": "CORRECTING THE EVENT LOGGED AT THIS SAME SHIFT. The classifier_degraded event above states that gemma3:4b 'cannot carry this terrain's 32-category taxonomy in a prompt and still answer in a parseable form'. That explanation is wrong and is corrected here rather than edited, because the record is append-only.\\n\\nMeasured afterwards on a single specimen and a three-category prompt \u2014 a fraction of this terrain's context \u2014 gemma3:4b returned 0 of 3 parseable responses, hitting the 420-token output ceiling on every attempt. gemma3:1b on the identical prompt returned 3 of 3, each complete at 157 to 195 tokens.\\n\\nThe failure is therefore in the RESPONSE, not the prompt: the model writes past the output cap and the JSON is cut off mid-object. Prompt size is not the cause, and the 32-category taxonomy is not the cause. The same mechanism explains why the taxonomy object is sparse on every terrain in the department \u2014 the Namer emits it last, so truncation takes it first.\\n\\nWhat the earlier event reports as MEASURED remains true: 2 classifications resolved against 6 failures on the local model here. Only its explanation was wrong."
     }
   ],
   "keeper_summary": {

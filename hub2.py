@@ -30,6 +30,9 @@ BLURBS = {
                  "Ground formed by process, not formula."),
     "basin-04": ("An eroded landscape under six governing conditions.",
                  "Temperature, wind, gravity, subsurface water, light cycle, shift length."),
+    "basin-05": ("Ground that rises unevenly, and drains into channels.",
+                 "BASIN-04 plus tectonic uplift, saturating erosion and a thermal "
+                 "gradient that holds still in space."),
 }
 
 
