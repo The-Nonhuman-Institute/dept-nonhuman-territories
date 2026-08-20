@@ -1,0 +1,8 @@
+shift,end_timestamp,living,arose_this_shift,ended_this_shift,replicated_this_shift,links_formed,classified,anomalous,unresolved,resource_flow,phase,model,duration_seconds,estimated_cost_usd,cumulative_cost_usd,new_categories
+0,2026-08-20T16:54:18Z,0,0,0,0,0,0,0,0,0.6,ollama,gemma3:1b,7.1,0.0,0.0,
+1,2026-08-20T16:58:35Z,0,0,0,0,0,0,0,0,0.775,ollama,gemma3:1b,82.8,0.0,0.0,
+2,2026-08-20T17:04:58Z,1,1,0,0,0,1,0,0,0.9031,ollama,gemma3:1b,381.1,0.0,0.0,unknown
+3,2026-08-20T17:15:31Z,3,1,0,1,0,3,0,0,0.95,ollama,gemma3:1b,630.8,0.0,0.0,structural_complexity_low
+4,2026-08-20T17:28:38Z,5,1,0,1,0,2,0,3,0.9031,ollama,gemma3:1b,784.4,0.0,0.0,
+5,2026-08-20T17:42:20Z,6,0,0,1,0,1,0,4,0.775,ollama,gemma3:1b,819.9,0.0,0.0,
+6,2026-08-20T17:54:04Z,6,0,0,0,1,4,0,1,0.6,ollama,gemma3:1b,702.1,0.0,0.0,

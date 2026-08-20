@@ -2,6 +2,15 @@
   "authored_by": "namer",
   "seeded_at": "2026-08-20T16:30:17Z",
   "container_note": "The object under 'native' is authored entirely by this terrain's Namer. It is not issued a template, a structure, or a vocabulary. Its only obligation is that for any two specimens it can state whether they are more or less alike, and why (DNT-CLS-001 Section 1).",
-  "native": {},
-  "revisions": []
+  "native": {
+    "category": "structural_complexity_low",
+    "description": "Low structural complexity, consistent with simple, relatively static forms."
+  },
+  "revisions": [
+    {
+      "shift": 2,
+      "at": "2026-08-20T17:04:58Z",
+      "note": "native system rewritten by the Namer during shift 2"
+    }
+  ]
 }
