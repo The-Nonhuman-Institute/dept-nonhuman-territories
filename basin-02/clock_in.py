@@ -799,6 +799,62 @@ def _abort(
     return 1
 
 
+
+# ---------------------------------------------------------------------------
+# ONE SHIFT AT A TIME, ENFORCED.
+#
+# Two batches were started against BASIN-05 without the first being stopped.
+# Both read the same next shift number, both ran it, and both committed:
+# shifts 8 and 9 each appear twice in that terrain's shift log, with different
+# figures, and its specimen log carries records from a run whose state was then
+# overwritten by the other. The terrain's state stayed internally coherent —
+# atomic commit did its job — but the RECORD now contains work that did not
+# produce the state beside it.
+#
+# Nothing in the harness prevented that, so nothing stopped it happening. This
+# does: a shift takes an exclusive lock on the terrain directory and refuses to
+# start if another already holds it. The lock is advisory and self-clearing —
+# a stale one from a killed process is detected by checking whether that pid is
+# still alive, so a crash does not wedge the terrain.
+# ---------------------------------------------------------------------------
+def _acquire_shift_lock():
+    """Refuse to run if another shift is already running on this terrain."""
+    path = os.path.join(config.TERRAIN_ROOT, ".shift.lock")
+    if os.path.exists(path):
+        try:
+            with open(path, encoding="utf-8") as stream:
+                holder = int((stream.read().strip() or "0"))
+        except (ValueError, IOError):
+            holder = 0
+        alive = False
+        if holder:
+            try:
+                os.kill(holder, 0)
+                alive = True
+            except OSError:
+                alive = False
+        if alive:
+            print(RULE)
+            print("REFUSED — a shift is already running on this terrain (pid %d)" % holder)
+            print(RULE)
+            print("Two shifts running at once both read the same next shift number,")
+            print("both run it, and both commit. Wait for that one to finish, or stop")
+            print("it. Nothing has been read or written by this attempt.")
+            return None
+        os.remove(path)      # stale: the holder is gone
+    with open(path, "w", encoding="utf-8") as stream:
+        stream.write(str(os.getpid()))
+    return path
+
+
+def _release_shift_lock(path):
+    if path and os.path.exists(path):
+        try:
+            os.remove(path)
+        except OSError:
+            pass
+
+
 def main(argv: List[str]) -> int:
     flags = set(argv[1:])
     unknown = flags - {"--status", "--dry-run"}
@@ -808,8 +864,17 @@ def main(argv: List[str]) -> int:
         return 2
     if "--status" in flags:
         return show_status()
-    return run_shift(dry_run="--dry-run" in flags)
+    lock = None
+    if "--dry-run" not in flags:
+        lock = _acquire_shift_lock()
+        if lock is None:
+            return 3
+    try:
+        return run_shift(dry_run="--dry-run" in flags)
 
+
+    finally:
+        _release_shift_lock(lock)
 
 if __name__ == "__main__":
     raise SystemExit(main(sys.argv))
