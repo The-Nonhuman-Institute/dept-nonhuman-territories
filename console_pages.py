@@ -536,7 +536,9 @@ def shift_log(d: Dict[str, Any]) -> str:
             "up" if diff > 0 else "down", num(diff))
 
     strip = C.stats([
-        (num(len(rows)), "shifts", "since %s" % esc((rows[0].get("end_timestamp") or "")[:10])),
+        (num(len(rows)), "shifts",
+         ("since %s" % esc((rows[0].get("end_timestamp") or "")[:10])) if rows
+         else "none committed yet"),
         (num(last.get("living")), "living", delta("living")),
         (num(len(m.get("category_stats") or {})), "native categories",
          "+%s this shift" % num(len(last.get("new_categories") or []))),
@@ -1667,10 +1669,18 @@ def checkpoint_report(d: Dict[str, Any], window: int = CHECKPOINT_EVERY) -> str:
         '<tr><td colspan="4" class="absent">no living specimens</td></tr>'
 
     # ---- what appeared in this window ------------------------------------
-    coined = []
+    # Deduped on read. BASIN-01 through BASIN-04 record a category as newly
+    # coined every time the Namer declares it new, including when it had coined
+    # it already — so counting the raw field inflates the figure. Their records
+    # stand as written; the count shown here is of DISTINCT categories.
+    coined, already = [], set()
+    for r in rows[:len(rows) - len(span)]:
+        already.update(r.get("new_categories") or [])
     for r in span:
         for cat in (r.get("new_categories") or []):
-            coined.append((r.get("shift"), cat))
+            if cat not in already:
+                already.add(cat)
+                coined.append((r.get("shift"), cat))
     stats_map = m.get("category_stats") or {}
     emerg = "".join(
         '<tr><td><a href="/%s/categories/%s.html">%s</a></td>'
@@ -1911,7 +1921,12 @@ def labels_all(shown):
 
 def comparative_study(loaded: List[Dict[str, Any]]) -> str:
     """Every terrain side by side, on quantities all of them actually record."""
-    shown = [d for d in loaded if d and d["shifts"]]
+    # Every terrain that exists is listed. Only those that have committed a
+    # shift can be plotted or compared — but a founded terrain silently missing
+    # from the department's own comparison is worse than one shown as unrun.
+    everything = [d for d in loaded if d]
+    shown = [d for d in everything if d["shifts"]]
+    unrun = [d for d in everything if not d["shifts"]]
     if len(shown) < 2:
         return ""
     for d in shown:
@@ -2069,7 +2084,7 @@ def comparative_study(loaded: List[Dict[str, Any]]) -> str:
     for d in shown:
         gov = {g["label"]: g for g in dnt_data.governing_conditions(d["dir"])}
         rows = d["shifts"]
-        first = C.stamp(rows[0].get("end_timestamp"))
+        first = C.stamp(rows[0].get("end_timestamp")) if rows else "not yet committed"
         conds = []
         for label in ("gravity", "temperature at stream", "light cycle",
                       "wind strength", "subsurface rate"):
@@ -2097,7 +2112,7 @@ def comparative_study(loaded: List[Dict[str, Any]]) -> str:
 
     # ---- aggregate metrics, with a median column -------------------------
     METRICS = [
-        ("living specimens", lambda d: d["shifts"][-1].get("living")),
+        ("living specimens", lambda d: d["shifts"][-1].get("living") if d["shifts"] else 0),
         ("shifts on record", lambda d: len(d["shifts"])),
         ("native categories", lambda d: len(d["memory"].get("category_stats") or {})),
         ("classified specimens", lambda d: len(d["named"])),
@@ -2219,6 +2234,11 @@ def comparative_study(loaded: List[Dict[str, Any]]) -> str:
                    ("Trajectories", "traj"), ("Aggregate metrics", "agg"),
                    ("Against the median", "key"), ("Event frequency", "ev"),
                    ("Persistence", "pers"), ("Method", "method")]
+    unrun_note = "".join(
+        '<div class="rowlink"><span class="sw" style="background:%s;opacity:.45"></span>'
+        '<span>%s<span class="s">founded, no shift committed</span></span>'
+        '<span></span></div>' % (charts.hue(d["dir"]), esc(d["name"])) for d in unrun)
+
     left = C.panel("Study navigation",
                    C.section_nav(NAVSECTIONS[:1]) +
                    '<a class="rowlink mdl-open" data-modal="mdl-terrains" '
@@ -2231,7 +2251,8 @@ def comparative_study(loaded: List[Dict[str, Any]]) -> str:
             '<div class="rowlink"><span class="sw" style="background:%s"></span>'
             '<span>%s<span class="s">shift %s · %s cells</span></span><span></span></div>'
             % (d["_hue"], esc(d["name"]), num(d["shift"]),
-               num(len(d["world"].get("cells") or []))) for d in shown), flush=True) + \
+               num(len(d["world"].get("cells") or []))) for d in shown)
+            + unrun_note, flush=True) + \
         C.panel("Study controls",
                 '<p class="note">There are none. Every terrain contributes every shift it '
                 'has committed. Trajectories are indexed to each terrain\'s own MEAN and '
@@ -2279,10 +2300,12 @@ def comparative_study(loaded: List[Dict[str, Any]]) -> str:
                        for d in shown)
     cmp_rows = []
     for label, fn in (
-            ("first committed", lambda d: C.stamp(d["shifts"][0].get("end_timestamp"))),
+            ("first committed", lambda d: C.stamp(d["shifts"][0].get("end_timestamp"))
+              if d["shifts"] else "not yet committed"),
             ("shifts committed", lambda d: num(len(d["shifts"]))),
             ("cells in the terrain", lambda d: num(len(d["world"].get("cells") or []))),
-            ("living now", lambda d: num(d["shifts"][-1].get("living"))),
+            ("living now", lambda d: num(d["shifts"][-1].get("living"))
+              if d["shifts"] else "0"),
             ("native categories", lambda d: num(len(d["memory"].get("category_stats") or {}))),
             ("classified specimens", lambda d: num(len(d["named"]))),
             ("physics document", lambda d: esc(d["memory"].get("physics_document") or "—")),
@@ -2329,6 +2352,22 @@ def comparative_study(loaded: List[Dict[str, Any]]) -> str:
                  "lengths of time.",
                  "Not a ranking. DNT does not evaluate terrains."])]))))
 
+    for d in unrun:
+        cards.append(
+            '<section class="tcard" style="border-color:%s;opacity:.72">'
+            '<div class="tch"><b style="color:%s">%s</b>'
+            '<span class="chip">FOUNDED</span></div>%s'
+            '<div class="tcb"><dl class="kv"><dt>first committed</dt>'
+            '<dd class="na">no shift yet</dd><dt>age (shifts)</dt><dd>0</dd>'
+            '<dt>cells</dt><dd>%s</dd><dt>physics</dt><dd>%s</dd></dl>'
+            '<p class="note">Founded and seeded. It has ground, and nothing has '
+            'lived in it yet, so it carries no trajectory to compare.</p>'
+            '<a class="nav" href="/%s/terrain.html"><span class="t">Terrain record'
+            '<span class="go">&rarr;</span></span></a></div></section>'
+            % (charts.hue(d["dir"]), charts.hue(d["dir"]), esc(d["name"]),
+               snapshot.isometric(d["dir"], 330, 132),
+               num(len(d["world"].get("cells") or [])),
+               esc(d["memory"].get("physics_document") or "—"), d["dir"]))
     mid += '<div id="cards" class="tcards">%s</div>' % "".join(cards)
     mid += C.panel("Trajectory over time",
                    '<div class="charts3">%s</div>%s'
@@ -2538,7 +2577,7 @@ def main(argv: List[str]) -> int:
             print("  " + line)
     # The study is one document for the department, written last so that every
     # terrain it reads has already been rebuilt.
-    study = comparative_study([load(t) for t in TERRAINS
+    study = comparative_study([load(t) for t in dnt_terrains.dirs()
                                if os.path.exists(os.path.join(ROOT, t, "state",
                                                               "memory.json"))])
     if study:

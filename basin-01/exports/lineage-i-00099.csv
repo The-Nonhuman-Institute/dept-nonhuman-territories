@@ -1,5 +1,5 @@
 id,state,generation,parent_id,arose_at_shift,age,descendants,light,extent,junctions,mass,cover,residue,links,category
-i-00099,living,0,None,111,15,2,1.0324347273046732,0.863,0.528,1.693,1.5953,0.3242,1.0805,emergent_minimal
+i-00099,living,0,None,111,16,2,0.37215306931558434,0.863,0.528,1.693,1.5953,0.3242,1.0805,emergent_minimal
 i-00104,ended,1,i-00099,112,12,1,-0.6886069685317415,0.477,0.472,1.775,1.7344,0.2151,1.0505,descendant_minimal
 i-00119,ended,1,i-00099,122,2,0,-0.7978430375910704,0.509,0.992,1.652,1.3724,0.3352,1.2923,emergent_descendant_compact
 i-00117,ended,2,i-00104,121,3,0,-1.0071557246948573,0.989,0.533,1.88,1.5459,0.142,1.312,emergent_descendant_ultra_compact

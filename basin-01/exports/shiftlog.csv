@@ -127,3 +127,4 @@ shift,end_timestamp,living,arose_this_shift,ended_this_shift,replicated_this_shi
 124,2026-08-17T20:31:57Z,20,2,4,3,2,5,0,0,0.9031,claude,claude-haiku-4-5,48.8,0.03545,2.261695,emergent_descendant_mid emergent_descendant_compact emergent_neonate_compact
 125,2026-08-17T20:33:00Z,22,2,2,2,0,5,0,0,0.775,claude,claude-haiku-4-5,61.0,0.03473,2.296425,emergent_descendant_neonate
 126,2026-08-17T20:33:59Z,21,0,2,1,5,5,0,0,0.6,claude,claude-haiku-4-5,54.9,0.041192,2.337617,emergent_descendant_neonate_variant
+127,2026-08-20T05:49:12Z,17,0,4,0,3,0,0,5,0.425,ollama,gemma3:4b,1548.1,0.0,2.337617,

@@ -1,0 +1,312 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BASIN-05 — Shift Log</title><style>
+:root{--ink:#D6DED2;--dim:#7C8879;--faint:#4E574C;--rule:#1D231B;--rule2:#2A322704;
+--bg:#080A07;--panel:#0D100C;--panel2:#111510;--moss:#8FC96B;--moss2:#5F8F45;
+--amber:#C9A227;--rose:#D4614A;--violet:#8F7FBE;--cyan:#5FA9A0;--slate:#5A6B78;
+--serif:Georgia,'Iowan Old Style',serif;
+--sans:ui-sans-serif,system-ui,-apple-system,sans-serif;
+--mono:ui-monospace,SFMono-Regular,Menlo,'DejaVu Sans Mono',monospace}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);
+font:13px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:var(--moss)}
+::selection{background:var(--moss2);color:var(--bg)}
+
+/* ---- shell ---- */
+.app{display:grid;min-height:100vh;
+grid-template-columns:var(--lw,236px) minmax(0,1fr) var(--rw,318px);
+grid-template-rows:auto minmax(0,1fr) auto;
+grid-template-areas:"top top top" "left mid right" "bot bot bot"}
+.app.norail{--rw:0px;grid-template-areas:"top top top" "left mid mid" "bot bot bot"}
+.app.noleft{--lw:0px;grid-template-areas:"top top top" "mid mid right" "bot bot bot"}
+
+/* ---- top bar ---- */
+.top{grid-area:top;display:flex;align-items:center;gap:18px;padding:9px 16px;
+background:var(--panel);border-bottom:1px solid var(--rule);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--ink);
+flex:0 0 auto}
+/* The mark is a bracket with a gap in its base. The wordmark belongs in that
+   gap — below the frame, tucked between its two feet — not beside it. */
+.glyph{display:flex;flex-direction:column;align-items:center;flex:0 0 auto}
+.glyph svg{fill:var(--moss);display:block}
+/* The base of the bracket has a gap across its middle 64%. The wordmark is
+   pulled up into that gap and masks the line behind it, so the letters read as
+   part of the mark rather than as a caption under it. */
+.glyph .w{font:700 7.5px/1 var(--mono);letter-spacing:0;color:var(--ink);
+margin-top:-6px;background:var(--panel);padding:0}
+.brand .d{font:600 8px/1.4 var(--sans);letter-spacing:.13em;text-transform:uppercase;
+color:var(--dim)}
+.crumbs{display:flex;align-items:center;gap:7px;font:11px var(--mono);letter-spacing:.06em;
+flex-wrap:wrap}
+.crumbs a{color:var(--moss);text-decoration:none}
+.crumbs a:hover{text-decoration:underline}
+.crumbs .cur{color:var(--moss)}
+.crumbs .arrow{color:var(--faint)}
+.state{display:flex;align-items:center;gap:9px;font:11px var(--mono);color:var(--dim);
+margin-left:8px;white-space:nowrap}
+.state b{color:var(--ink);font-weight:400}
+.state .dot{width:6px;height:6px;border-radius:50%;background:var(--moss);display:block}
+.acts{margin-left:auto;display:flex;gap:7px;flex-wrap:wrap}
+.acts a{font:10.5px var(--mono);letter-spacing:.03em;color:var(--ink);text-decoration:none;
+border:1px solid var(--rule);background:var(--bg);padding:6px 11px;white-space:nowrap}
+.acts a:hover{border-color:var(--moss2);color:var(--moss)}
+.acts a.pri{border-color:var(--moss2)}
+
+/* ---- rails ---- */
+.left{grid-area:left;background:var(--panel);border-right:1px solid var(--rule)}
+.right{grid-area:right;background:var(--panel);border-left:1px solid var(--rule)}
+.mid{grid-area:mid;min-width:0;padding:16px;scroll-behavior:smooth}
+section.p[id],div[id]{scroll-margin-top:18px}
+.rowlink.jump.on{background:var(--rule);color:var(--moss)}
+.left,.right{overflow-y:auto;min-height:0}
+.app.norail .right{display:none}
+.app.noleft .left{display:none}
+
+/* ---- panels ---- */
+.p{border:1px solid var(--rule);background:var(--panel);margin-bottom:14px}
+.mid>.p:last-child,.rail .p:last-child{margin-bottom:0}
+.rail{padding:13px}
+.ph{display:flex;align-items:baseline;gap:9px;padding:10px 13px;
+border-bottom:1px solid var(--rule);font:9.5px var(--mono);letter-spacing:.13em;
+text-transform:uppercase;color:var(--dim)}
+.ph b{color:var(--ink);font-weight:400;letter-spacing:.06em}
+.ph .r{margin-left:auto;color:var(--faint);text-transform:none;letter-spacing:.04em}
+.ph a{color:var(--moss);text-decoration:none;font-size:9.5px}
+.pb{padding:13px}
+.pb.flush{padding:0}
+
+/* ---- key/value ---- */
+dl.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0;
+font:11.5px/1.6 var(--mono);font-variant-numeric:tabular-nums}
+dl.kv dt{color:var(--dim)}
+dl.kv dd{margin:0;text-align:right;color:var(--ink);word-break:break-word}
+dl.kv dd.na{color:var(--faint);font-style:italic}
+
+/* ---- stat strip ---- */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));
+border:1px solid var(--rule);border-left:none;background:var(--panel);margin-bottom:14px}
+.stat{border-left:1px solid var(--rule);padding:13px 15px}
+.stat .v{font:400 26px/1.05 var(--serif);font-variant-numeric:tabular-nums}
+.stat .l{font:9px var(--mono);letter-spacing:.11em;text-transform:uppercase;
+color:var(--dim);margin-top:7px}
+.stat .s{font:10px var(--mono);color:var(--faint);margin-top:3px}
+.up{color:var(--moss)}.down{color:var(--rose)}
+
+/* ---- tables ---- */
+table.d{border-collapse:collapse;width:100%;font:11.5px/1.5 var(--mono);
+font-variant-numeric:tabular-nums}
+table.d th{text-align:left;font:9px var(--mono);letter-spacing:.11em;text-transform:uppercase;
+color:var(--dim);border-bottom:1px solid var(--rule);padding:0 12px 8px 0;font-weight:400}
+table.d td{padding:7px 12px 7px 0;border-bottom:1px solid var(--rule);vertical-align:top;
+color:var(--ink)}
+table.d td.dim{color:var(--dim)}
+table.d td.num,table.d th.num{text-align:right;padding-right:14px}
+table.d tr:last-child td{border-bottom:none}
+.scroll{overflow-x:auto}
+
+/* ---- bars ---- */
+.bar{height:5px;background:var(--rule);position:relative;min-width:52px}
+.bar span{display:block;height:5px;background:var(--moss)}
+.mini{display:grid;grid-template-columns:1fr 54px auto;gap:9px;align-items:center;
+font:11px var(--mono);color:var(--dim);padding:4px 0}
+.mini b{color:var(--ink);font-weight:400;text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---- chips ---- */
+.chip{display:inline-block;font:9px var(--mono);letter-spacing:.09em;text-transform:uppercase;
+padding:2px 7px;border:1px solid var(--rule);color:var(--dim)}
+.chip.on{color:var(--moss);border-color:var(--moss2)}
+.chip.warn{color:var(--amber);border-color:var(--amber)}
+.chip.off{color:var(--faint)}
+.sw{width:9px;height:9px;border-radius:2px;display:inline-block;flex:0 0 auto;
+vertical-align:middle}
+
+/* ---- tabs ---- */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--rule);margin-bottom:14px;
+flex-wrap:wrap}
+.tabs button{font:9.5px var(--mono);letter-spacing:.11em;text-transform:uppercase;
+background:none;border:none;border-bottom:2px solid transparent;color:var(--dim);
+padding:9px 14px;cursor:pointer}
+.tabs button:hover{color:var(--ink)}
+.tabs button.on{color:var(--moss);border-bottom-color:var(--moss)}
+.tabpane{display:none}
+.tabpane.on{display:block}
+
+/* ---- navigation ---- */
+.nav{display:block;border:1px solid var(--rule);background:var(--bg);text-decoration:none;
+color:var(--ink);padding:11px 13px;margin-bottom:8px}
+.nav:last-child{margin-bottom:0}
+.nav:hover{border-color:var(--moss2);background:var(--panel2)}
+.nav .t{font:11.5px var(--mono);letter-spacing:.04em;display:flex;
+justify-content:space-between;align-items:center;gap:10px}
+.nav .t .go{color:var(--moss)}
+.nav .s{display:block;font:9.5px/1.5 var(--mono);color:var(--dim);margin-top:4px}
+.nav.dead{border-style:dashed;background:none;cursor:default}
+.nav.dead .t,.nav.dead .t .go{color:var(--faint)}
+.nav.dead:hover{border-color:var(--rule);background:none}
+
+/* ---- misc ---- */
+.note{font:10.5px/1.6 var(--mono);color:var(--dim);margin:9px 0 0}
+.note:first-child{margin-top:0}
+.absent{color:var(--faint);font-style:italic}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cols3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:1250px){.cols3{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){.cols2,.cols3{grid-template-columns:1fr}
+.app,.app.norail,.app.noleft{grid-template-columns:1fr;
+grid-template-areas:"top" "mid" "left" "right" "bot"}}
+h1.doc{font:400 clamp(23px,2.6vw,32px)/1.1 var(--serif);margin:0 0 6px;letter-spacing:.01em}
+h1.doc.mono{font-family:var(--mono);text-transform:uppercase;letter-spacing:.02em;
+font-size:clamp(19px,2.2vw,26px)}
+.sub{color:var(--dim);font:11.5px/1.6 var(--mono);margin:0}
+.hdr{border-bottom:1px solid var(--rule);padding-bottom:14px;margin-bottom:16px;
+display:grid;grid-template-columns:1fr auto;gap:26px;align-items:start}
+.hdr table.doc{border-collapse:collapse;font:10.5px/1.75 var(--mono);color:var(--dim)}
+.hdr table.doc td{padding:0 0 0 16px;white-space:nowrap;border:none}
+.hdr table.doc td.k{padding:0}
+.hdr table.doc td.v{color:var(--ink)}
+.eyebrow{font:9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;
+color:var(--dim);margin:0 0 9px}
+
+/* ---- foot ---- */
+.bot{grid-area:bot;display:flex;align-items:center;justify-content:space-between;gap:20px;
+padding:11px 16px;background:var(--panel);border-top:1px solid var(--rule);
+font:9.5px var(--mono);letter-spacing:.1em;color:var(--faint);text-transform:uppercase}
+.bot svg{fill:var(--faint);display:block}
+.bot .mid_{letter-spacing:.16em;color:var(--dim)}
+.bot .tz{letter-spacing:.08em}
+.tstamp{white-space:nowrap}
+
+.spark{width:100%;height:auto;display:block}
+.dq{border-bottom:1px solid var(--rule);padding:0 0 14px;margin-bottom:14px}
+.dq:last-of-type{border-bottom:none;padding-bottom:0;margin-bottom:0}
+.dqh{display:flex;justify-content:space-between;align-items:baseline;gap:14px}
+.dqn{font:11px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--dim)}
+.dqv{font:400 25px/1 var(--serif);font-variant-numeric:tabular-nums;color:var(--ink)}
+.dqp{font:12.5px/1.65 var(--sans);color:var(--ink);margin:9px 0 0;max-width:74ch}
+.dqp b{color:var(--moss);font-weight:400;font-family:var(--mono)}
+.dqp i{color:var(--dim);font-style:normal;font-family:var(--mono);font-size:11.5px}
+.dqf{font:10.5px/1.6 var(--mono);color:var(--faint);margin:7px 0 0}
+.rowlink{display:grid;grid-template-columns:auto 1fr auto;gap:9px;align-items:center;
+padding:7px 13px;border-bottom:1px solid var(--rule);text-decoration:none;color:var(--ink);
+font:11px var(--mono)}
+.rowlink:last-child{border-bottom:none}
+.rowlink:hover{background:var(--panel2)}
+.rowlink.on{background:var(--rule)}
+.rowlink .n{color:var(--dim);font-variant-numeric:tabular-nums}
+.rowlink .s{display:block;color:var(--dim);font-size:9.5px}
+.say{font:11.5px/1.7 var(--mono);color:var(--ink);margin:0;
+border-left:2px solid var(--rule);padding-left:11px}
+.searchbox{width:100%;background:var(--bg);border:1px solid var(--rule);color:var(--ink);
+font:11px var(--mono);padding:7px 9px;margin-bottom:2px}
+.searchbox::placeholder{color:var(--faint)}
+.hidden{display:none}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font:10px var(--mono);color:var(--dim);
+align-items:center}
+.legend span{display:flex;gap:6px;align-items:center}
+.tree{display:flex;gap:26px;overflow-x:auto;padding-bottom:6px}
+.gen{min-width:150px}
+.genh{font:9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--dim);
+border-bottom:1px solid var(--rule);padding-bottom:6px;margin-bottom:9px;
+display:flex;justify-content:space-between;gap:8px}
+.genh span{color:var(--ink);letter-spacing:.04em}
+.node{border:1px solid var(--rule);background:var(--panel2);padding:8px 10px;margin-bottom:8px;
+font:10.5px var(--mono);text-decoration:none;color:var(--ink);display:block}
+.node:hover{border-color:var(--moss2)}
+.node.root{border-color:var(--moss2)}
+.node{position:relative}
+.node .nid{font:11px var(--mono);color:var(--ink);display:block}
+.node .c{color:var(--dim);font-size:9px;display:block;margin-top:2px;line-height:1.4}
+.node.gone{opacity:.55;border-style:dashed}
+.node.more{border-style:dashed;color:var(--dim);text-align:center;font-size:9.5px}
+.ndot{width:6px;height:6px;border-radius:50%;display:inline-block}
+.node .ndot{position:absolute;top:8px;right:8px}
+.ndot.live{background:#7FCB8A}
+.ndot.dead{background:#4E574C}
+.gen{min-width:172px}
+.tl{position:relative;height:34px;background:var(--bg);border:1px solid var(--rule)}
+.tl i{position:absolute;top:4px;width:2px;height:26px;display:block}
+.tlx{display:flex;justify-content:space-between;font:9.5px var(--mono);color:var(--dim);
+margin-top:6px}
+.ann{border-bottom:1px solid var(--rule);padding:9px 0}
+.ann:last-child{border-bottom:none}
+.annh{display:flex;justify-content:space-between;gap:10px;font:11px var(--mono);
+color:var(--ink)}
+.annh span{color:var(--dim);font-size:9.5px;white-space:nowrap}
+.annb{font:9.5px var(--mono);color:var(--dim);margin-top:3px}
+.filters{display:flex;flex-direction:column;gap:4px}
+.filt{display:flex;align-items:center;gap:8px;font:10.5px var(--mono);color:var(--ink);
+cursor:pointer}
+.filt input{accent-color:var(--moss);margin:0}
+.filt .c{margin-left:auto;color:var(--dim);font-variant-numeric:tabular-nums}
+.tj{cursor:zoom-in}
+.tj .ct{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.tj:hover .ct{color:var(--moss)}
+.cmpshots{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.cmpshot{margin:0}
+.cmpshot figcaption{font:12px var(--mono);letter-spacing:.05em;margin-bottom:7px}
+.cmpshot span{display:block;font:9.5px var(--mono);color:var(--dim);margin-top:6px}
+.tcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:14px;margin-bottom:14px}
+.tcard{border:1px solid var(--rule);background:var(--panel);
+display:flex;flex-direction:column}
+.tch{display:flex;justify-content:space-between;align-items:center;padding:11px 13px;
+border-bottom:1px solid var(--rule)}
+.tch b{font:14px var(--mono);letter-spacing:.05em}
+.tcb{padding:12px 13px;display:flex;flex-direction:column;flex:1}
+.tcg{font:9px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--dim);
+margin:13px 0 7px;border-top:1px solid var(--rule);padding-top:11px}
+.tcb .nav{margin-top:auto}
+.tcb > dl.kv:last-of-type{margin-bottom:26px}
+ul.find{list-style:none;margin:0;padding:0}
+ul.find li{font:11.5px/1.65 var(--mono);color:var(--dim);padding:8px 0;
+border-bottom:1px solid var(--rule)}
+ul.find li:last-child{border-bottom:none;color:var(--faint)}
+ul.find b{font-weight:400}
+.hist{display:flex;gap:2px;align-items:flex-end;height:44px}
+.hist i{flex:1;background:var(--moss2);display:block;min-height:1px}
+
+.chart{width:100%;height:auto;display:block}
+.chartlegend{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;
+font:9.5px ui-monospace,monospace;color:#7C8879;margin-top:7px}
+.chartlegend .lg{display:flex;align-items:center;gap:5px}
+.trend{width:74px;height:20px;display:block}
+.dmap{width:100%;height:auto;display:block;border:1px solid #1D231B}
+.brow{display:grid;grid-template-columns:1fr 90px auto;gap:10px;align-items:center;
+font:10.5px ui-monospace,monospace;color:#7C8879;padding:3px 0}
+.brow .bt{height:6px;background:#1D231B;display:block}
+.brow .bt span{display:block;height:6px}
+.brow b{color:#D6DED2;font-weight:400;font-variant-numeric:tabular-nums;text-align:right}
+.charts3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.charts5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+@media(max-width:1400px){.charts5{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:1100px){.charts3,.charts5{grid-template-columns:1fr 1fr}}
+.ct{font:9px ui-monospace,monospace;letter-spacing:.11em;text-transform:uppercase;
+color:#7C8879;margin-bottom:2px}
+.ct b{color:#D6DED2;font-weight:400}
+.cs{font:8.5px ui-monospace,monospace;color:#4E574C;margin-bottom:7px}
+</style></head><body><div class="app"><header class="top"><a class="brand" href="http://127.0.0.1:8730/hub.html"><span class="glyph"><svg viewBox="0 0 100 120" width="27" height="32" aria-hidden="true"><path d="M0,0 H100 V120 H0 Z M7.3,7.3 H92.7 V111.2 H7.3 Z M18,111.2 H82 V120 H18 Z" fill-rule="evenodd"/></svg><span class="w">DNT</span></span><span class="d">Department of<br>Nonhuman Territories</span></a><div class="crumbs"><a href="http://127.0.0.1:8730/hub.html">TERRAINS</a><span class="arrow">&rsaquo;</span><a href="/basin-05/terrain.html">BASIN-05</a><span class="arrow">&rsaquo;</span><span class="cur">SHIFT LOG</span></div><div class="state"><span class="dot"></span>SHIFT <b>None</b><span class="arrow">·</span>never committed<span class="arrow">·</span>HOLDING</div><div class="acts"><a class="pri" href="http://127.0.0.1:8735/index.html">Back to observation deck</a></div></header><aside class="left rail"><section class="p"><div class="ph"><b>Select terrain</b></div><div class="pb flush"><a class="rowlink" href="/basin-01/shiftlog.html"><span class="sw" style="background:#4FA3E3"></span><span>BASIN-01<span class="s">shift 127</span></span><span></span></a><a class="rowlink" href="/basin-02/shiftlog.html"><span class="sw" style="background:#B37BD6"></span><span>BASIN-02<span class="s">shift 217</span></span><span></span></a><a class="rowlink" href="/basin-03/shiftlog.html"><span class="sw" style="background:#A8D45C"></span><span>BASIN-03<span class="s">shift 149</span></span><span></span></a><a class="rowlink" href="/basin-04/shiftlog.html"><span class="sw" style="background:#E0A44C"></span><span>BASIN-04<span class="s">shift 6</span></span><span></span></a><a class="rowlink on" href="/basin-05/shiftlog.html"><span class="sw" style="background:#4FC9B0"></span><span>BASIN-05<span class="s">shift -1</span></span><span></span></a></div></section><section class="p"><div class="ph"><b>Show</b></div><div class="pb"><div class="filters"></div><p class="note">Filters hide rows. They change nothing in the record, and the counts above stay what the shift wrote.</p></div></section><section class="p"><div class="ph"><b>Go to</b></div><div class="pb"><a class="nav" href="/basin-05/terrain.html"><span class="t">Terrain record<span class="go">&rarr;</span></span><span class="s">governing conditions and current state</span></a><a class="nav" href="http://127.0.0.1:8735/index.html"><span class="t">Observation deck<span class="go">&rarr;</span></span><span class="s">walk the terrain in 3D</span></a><div class="nav dead"><span class="t">Checkpoint report<span class="go">&mdash;</span></span><span class="s">state compared across a window</span></div></div></section></aside><main class="mid"><div class="hdr" id="top"><div><p class="eyebrow">BASIN-05 · shift log</p><h1 class="doc">Shift Log <span style="color:#4FC9B0">BASIN-05</span></h1><p class="sub">Chronological record of observed changes and system events.</p></div><table class="doc"><tr><td class="k">DOCUMENT</td><td class="v">DNT-SHL</td></tr><tr><td class="k">TERRAIN</td><td class="v">BASIN-05</td></tr><tr><td class="k">SHIFTS</td><td class="v">0</td></tr><tr><td class="k">THROUGH</td><td class="v">—</td></tr></table></div><div class="stats"><div class="stat"><div class="v">0</div><div class="l">shifts</div><div class="s">none committed yet</div></div><div class="stat"><div class="v">—</div><div class="l">living</div></div><div class="stat"><div class="v">0</div><div class="l">native categories</div><div class="s">+0 this shift</div></div><div class="stat"><div class="v">—</div><div class="l">arose</div></div><div class="stat"><div class="v">—</div><div class="l">ended</div></div><div class="stat"><div class="v">—</div><div class="l">replicated</div></div><div class="stat"><div class="v">—</div><div class="l">links formed</div></div></div><section class="p"><div class="ph"><b>Shift events, newest first</b><span class="r">shift — · 0 event(s)</span></div><div class="pb"><div class="scroll"><table class="d" id="evt"><thead><tr><th class="num">shift</th><th>time (UTC)</th><th>event</th><th>details</th><th class="num">impact</th><th class="num">affected</th></tr></thead><tbody><tr><td colspan="6" class="absent">nothing individually logged for this shift</td></tr></tbody></table></div><p class="note">Classifications carry their own timestamp and are placed in real time. The others are known to the shift but not to the second, and say so rather than being given an invented clock time.</p></div></section><section class="p"><div class="ph"><b>Activity across shift —</b><span class="r">0 seconds elapsed</span></div><div class="pb"><p class="absent">this shift recorded no start and end time</p></div></section><section class="p"><div class="ph"><b>Shift summary comparison</b></div><div class="pb"><div class="scroll"><table class="d"><thead><tr><th>metric</th><th class="num">shift —</th><th class="num">shift —</th><th class="num">Δ</th><th>last 10 shifts</th></tr></thead><tbody><tr><td>living specimens</td><td class="num">—</td><td class="num">—</td><td class="num dim">—</td><td><span style="color:#4E574C">—</span></td></tr><tr><td>arose</td><td class="num">—</td><td class="num">—</td><td class="num dim">—</td><td><span style="color:#4E574C">—</span></td></tr><tr><td>ended</td><td class="num">—</td><td class="num">—</td><td class="num dim">—</td><td><span style="color:#4E574C">—</span></td></tr><tr><td>replicated</td><td class="num">—</td><td class="num">—</td><td class="num dim">—</td><td><span style="color:#4E574C">—</span></td></tr><tr><td>classified</td><td class="num">—</td><td class="num">—</td><td class="num dim">—</td><td><span style="color:#4E574C">—</span></td></tr><tr><td>links formed</td><td class="num">—</td><td class="num">—</td><td class="num dim">—</td><td><span style="color:#4E574C">—</span></td></tr><tr><td>anomalous</td><td class="num">—</td><td class="num">—</td><td class="num dim">—</td><td><span style="color:#4E574C">—</span></td></tr><tr><td>unresolved</td><td class="num">—</td><td class="num">—</td><td class="num dim">—</td><td><span style="color:#4E574C">—</span></td></tr><tr><td>resource flow</td><td class="num">—</td><td class="num">—</td><td class="num dim">—</td><td><span style="color:#4E574C">—</span></td></tr></tbody></table></div></div></section><section class="p"><div class="ph"><b>Every shift committed</b></div><div class="pb"><div class="scroll"><table class="d"><thead><tr><th class="num">shift</th><th>committed</th><th class="num">living</th><th class="num">arose</th><th class="num">ended</th><th class="num">replicated</th><th class="num">links</th><th class="num">classified</th><th>categories coined</th><th>phase</th></tr></thead><tbody></tbody></table></div><p class="note">Showing the most recent 0 of 0.</p></div></section></main><aside class="right rail"><section class="p"><div class="ph"><b>Shift context</b></div><div class="pb"><dl class="kv"><dt>current shift</dt><dd>—</dd><dt>started</dt><dd>—</dd><dt>committed</dt><dd>—</dd><dt>took</dt><dd>0.0s</dd><dt>phase</dt><dd>—</dd><dt>model</dt><dd>—</dd><dt>model calls</dt><dd>—</dd><dt>cost this shift</dt><dd>$0.000000</dd><dt>cumulative</dt><dd>$0.0000</dd></dl></div></section><section class="p"><div class="ph"><b>Annotations</b><span class="r">0 on record</span></div><div class="pb"><p class="absent">no annotations recorded</p></div></section><section class="p"><div class="ph"><b>Event impact key</b></div><div class="pb"><div class="mini"><span><span class="chip">minimal</span></span><span></span><b style="text-align:left;color:var(--dim);font-size:10px">observable but low system effect</b></div><div class="mini"><span><span class="chip">low</span></span><span></span><b style="text-align:left;color:var(--dim);font-size:10px">localised or contained change</b></div><div class="mini"><span><span class="chip">moderate</span></span><span></span><b style="text-align:left;color:var(--dim);font-size:10px">noticeable terrain-scale effect</b></div><div class="mini"><span><span class="chip">high</span></span><span></span><b style="text-align:left;color:var(--dim);font-size:10px">significant, wide-reaching effect</b></div><div class="mini"><span><span class="chip">critical</span></span><span></span><b style="text-align:left;color:var(--dim);font-size:10px">system-altering or rare</b></div><p class="note">A band, not a judgement: how many things the record says the event touched.</p></div></section><section class="p"><div class="ph"><b>Export</b></div><div class="pb"><a class="nav" href="/basin-05/exports/shiftlog.csv"><span class="t">Shift log (CSV)<span class="go">&rarr;</span></span><span class="s">every shift, every column the log wrote</span></a><a class="nav" href="/basin-05/shifts/shift_log.jsonl"><span class="t">Shift log (JSON)<span class="go">&rarr;</span></span><span class="s">the raw append-only record</span></a></div></section></aside><footer class="bot"><span>DNT SHIFT LOG v1.0</span><span class="mid_">We observe. We do not interfere.</span><span id="tznote" class="tz">recorded in UTC</span><span>A branch of the Nonhuman Institute <svg viewBox="0 0 100 120" width="13" height="15" aria-hidden="true"><path d="M0,0 H100 V120 H0 Z M7.3,7.3 H92.7 V111.2 H7.3 Z M18,111.2 H82 V120 H18 Z" fill-rule="evenodd"/></svg></span></footer></div>
+<script>
+// Records are stored in UTC. This rewrites every marked instant into the
+// reader's own zone for display only; the UTC original stays in the title.
+(function(){
+  var zone = "";
+  try {
+    zone = new Intl.DateTimeFormat(undefined, {timeZoneName: "short"})
+      .formatToParts(new Date())
+      .filter(function(p){ return p.type === "timeZoneName"; })
+      .map(function(p){ return p.value; })[0] || "";
+  } catch (e) { return; }
+  var pad = function(n){ return (n < 10 ? "0" : "") + n; };
+  document.querySelectorAll(".tstamp[data-utc]").forEach(function(el){
+    var raw = el.getAttribute("data-utc");
+    if (!raw) return;
+    var d = new Date(raw.slice(-1) === "Z" ? raw : raw + "Z");
+    if (isNaN(d.getTime())) return;
+    el.textContent = d.getFullYear() + "-" + pad(d.getMonth()+1) + "-" + pad(d.getDate())
+      + " " + pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds())
+      + (zone ? " " + zone : "");
+  });
+  var note = document.getElementById("tznote");
+  if (note && zone) note.textContent = "shown in " + zone + " · recorded in UTC";
+})();
+</script>
+<script>document.querySelectorAll('[data-kind]').forEach(function(b){if(b.tagName!=='INPUT')return;b.onchange=function(){var on={};document.querySelectorAll('input[data-kind]').forEach(function(x){on[x.dataset.kind]=x.checked});document.querySelectorAll('#evt tbody tr[data-kind]').forEach(function(r){r.style.display = on[r.dataset.kind]===false ? 'none' : ''})}});</script></body></html>

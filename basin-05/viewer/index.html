@@ -1,0 +1,1834 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Observation Deck</title>
+<style>
+:root{--paper:#0A0C09;--ink:#D8E0D4;--moss:#8FC96B;--grey:#6E7A6B;--rule:#1E241C;
+--panel:#0F120E;--amber:#C9A227;
+--serif:Georgia,'Iowan Old Style',serif;
+--sans:ui-sans-serif,system-ui,-apple-system,sans-serif;
+--mono:ui-monospace,SFMono-Regular,Menlo,'DejaVu Sans Mono',monospace}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--paper);color:var(--ink);
+font:13px/1.55 var(--sans)}
+canvas{display:block}
+a{color:var(--moss)}
+
+/* ---- the frame ---------------------------------------------------------- */
+#deck{display:grid;height:100vh;
+grid-template-columns:262px minmax(0,1fr) 254px 0px;
+grid-template-rows:auto minmax(0,1fr) auto;
+grid-template-areas:"top top top top" "left stage list record" "legend legend legend legend";
+transition:grid-template-columns .18s ease}
+#deck.showing{grid-template-columns:262px minmax(0,1fr) 254px 330px}
+
+/* ---- top bar ------------------------------------------------------------ */
+#top{grid-area:top;display:flex;align-items:center;gap:20px;padding:9px 18px;
+border-bottom:1px solid var(--rule);background:var(--panel)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.mk{fill:var(--moss);display:block}
+.bt{font:600 9px/1.25 var(--sans);letter-spacing:.13em;text-transform:uppercase}
+.trail{flex:1;font:11px var(--mono);letter-spacing:.05em;color:var(--grey);
+display:flex;gap:8px;align-items:center}
+.crumb.on{color:var(--moss)}
+.sep{color:var(--rule)}
+#top .chips{display:flex;gap:7px;font:10.5px var(--mono)}
+#top .chip{border:1px solid var(--rule);padding:4px 9px;color:var(--grey);white-space:nowrap}
+#top .chip b{color:var(--ink);font-weight:400}
+#top a.act{border:1px solid var(--rule);padding:5px 10px;font:11px var(--mono);
+color:var(--ink);text-decoration:none;background:var(--paper)}
+#top a.act:hover{border-color:var(--moss)}
+
+/* ---- rails -------------------------------------------------------------- */
+aside.rail,section.rail{background:var(--panel);overflow-y:auto;overflow-x:hidden;
+display:flex;flex-direction:column;min-height:0}
+#left{grid-area:left;border-right:1px solid var(--rule)}
+#list{grid-area:list;border-right:1px solid var(--rule)}
+#record{grid-area:record;border-left:1px solid var(--rule);display:none}
+#deck.showing #record{display:flex}
+.blk{border-bottom:1px solid var(--rule);padding:13px 15px}
+.blk:last-child{border-bottom:none}
+.bh{font:9px var(--mono);letter-spacing:.15em;text-transform:uppercase;color:var(--grey);
+margin:0 0 9px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.bh .n{color:var(--ink);letter-spacing:.06em}
+dl.kv{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;margin:0;
+font:11.5px/1.65 var(--mono);font-variant-numeric:tabular-nums}
+dl.kv dt{color:var(--grey)}
+dl.kv dd{margin:0;text-align:right;color:var(--ink);word-break:break-word}
+h1#h-terrain{font:400 19px/1.15 var(--serif);margin:0 0 2px;color:var(--ink);
+letter-spacing:.02em}
+#hud .sub{color:var(--grey);font-size:10.5px;margin-bottom:10px}
+.btn{background:var(--paper);color:var(--ink);border:1px solid var(--rule);
+font:10.5px var(--mono);padding:4px 9px;cursor:pointer}
+.btn:hover:not(:disabled){border-color:var(--moss)}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.on{background:var(--moss);border-color:var(--moss);color:var(--paper)}
+
+/* ---- resource flow ------------------------------------------------------ */
+.flowbar{height:6px;background:var(--rule);margin:2px 0 7px}
+.flowbar span{display:block;height:6px;background:var(--moss)}
+.note{font:10px/1.55 var(--mono);color:var(--grey);margin:8px 0 0}
+
+/* ---- filters ------------------------------------------------------------ */
+.filters{display:flex;flex-direction:column;gap:5px}
+.filt{display:flex;align-items:center;gap:8px;font:11px var(--mono);color:var(--ink);
+cursor:pointer;padding:2px 0}
+.filt input{accent-color:var(--moss);margin:0}
+.filt i{width:9px;height:9px;border-radius:2px;display:inline-block;flex:0 0 auto}
+.filt .c{margin-left:auto;color:var(--grey);font-variant-numeric:tabular-nums}
+
+/* ---- time --------------------------------------------------------------- */
+.trow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#t-scrub{flex:1 1 100%;accent-color:var(--moss);min-width:0}
+.tlab{color:var(--grey);font:10.5px var(--mono);white-space:nowrap}
+.tlab b{color:var(--ink);font-weight:400}
+
+/* ---- stage -------------------------------------------------------------- */
+#stage{grid-area:stage;position:relative;min-width:0;min-height:0;overflow:hidden;
+background:#06070b}
+#stage canvas{width:100%;height:100%}
+#help{position:absolute;left:12px;bottom:12px;background:rgba(10,12,9,.8);
+border:1px solid var(--rule);padding:7px 10px;font:10.5px var(--mono);color:var(--grey)}
+#help b{color:var(--ink);font-weight:400}
+
+/* ---- specimen list ------------------------------------------------------ */
+.grp{border-bottom:1px solid var(--rule)}
+.gh{display:flex;align-items:center;gap:8px;padding:8px 15px;background:var(--paper);
+font:10px var(--mono);letter-spacing:.07em;color:var(--ink);cursor:pointer;
+position:sticky;top:0;z-index:2}
+.gh i{width:9px;height:9px;border-radius:2px;display:inline-block;flex:0 0 auto}
+.gh .c{margin-left:auto;color:var(--grey);font-variant-numeric:tabular-nums}
+.row{padding:7px 15px;border-top:1px solid var(--rule);cursor:pointer}
+.row:hover{background:#141712}
+.row.on{background:var(--rule)}
+.row .rid{font:11px var(--mono);color:var(--ink)}
+.row .rcat{font:10.5px/1.4 var(--mono);color:var(--moss);word-break:break-word}
+.row .rmeta{font:9.5px var(--mono);color:var(--grey)}
+.swatch{display:inline-block;width:8px;height:8px;margin-right:6px;vertical-align:middle;
+border-radius:2px}
+.more{padding:8px 15px;font:10.5px var(--mono);color:var(--grey);cursor:pointer;
+border-top:1px solid var(--rule)}
+.more:hover{color:var(--moss)}
+
+/* ---- record ------------------------------------------------------------- */
+#record h2{font:400 15px/1.25 var(--serif);margin:0 0 3px;color:var(--ink)}
+#record .id{color:var(--grey);font:10.5px var(--mono);margin-bottom:11px}
+#record dl{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;margin:0 0 10px;
+font:11px/1.6 var(--mono);font-variant-numeric:tabular-nums}
+#record dt{color:var(--grey)}
+#record dd{margin:0;text-align:right}
+#record pre{white-space:pre-wrap;word-break:break-word;font:10.5px/1.6 var(--mono);
+background:var(--paper);border:1px solid var(--rule);padding:9px;margin:0;color:#A9B3A6;
+max-height:210px;overflow:auto}
+.rsec{font:9px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--grey);
+margin:11px 0 4px}
+.bar{height:4px;background:var(--rule);margin:2px 0 5px}
+.bar span{display:block;height:4px;background:var(--moss)}
+.close{float:right;cursor:pointer;color:var(--grey);font:10px var(--mono);
+letter-spacing:.08em}
+.close:hover{color:var(--moss)}
+
+/* ---- legend strip ------------------------------------------------------- */
+#legend{grid-area:legend;border-top:1px solid var(--rule);background:var(--panel);
+display:flex;align-items:center;gap:16px;padding:7px 18px;
+font:10px var(--mono);letter-spacing:.05em;color:var(--grey);white-space:nowrap;
+overflow:hidden}
+#legend .lg{display:flex;align-items:center;gap:6px;flex:0 0 auto}
+#legend .lg.how{flex:0 1 auto;overflow:hidden;text-overflow:ellipsis;display:block}
+#legend .lg i{width:9px;height:9px;border-radius:2px;display:inline-block}
+#legend .lg b{color:var(--ink);font-weight:400}
+#legend .tail{margin-left:auto;color:var(--grey);letter-spacing:.13em;flex:0 0 auto}
+
+#loading{position:fixed;inset:0;display:grid;place-items:center;background:var(--paper);
+z-index:30;font:12px var(--mono);color:var(--grey)}
+</style>
+</head>
+<body>
+<div id="loading">loading terrain…</div>
+
+<div id="deck">
+
+<header id="top">
+  <a class="brand" href="http://127.0.0.1:8730/hub.html">
+    <svg class="mk" viewBox="0 0 100 120" width="22" height="26" aria-hidden="true"><path d="M0,0 H100 V120 H0 Z M7.3,7.3 H92.7 V111.2 H7.3 Z M18,111.2 H82 V120 H18 Z" fill-rule="evenodd"/></svg>
+    <span class="bt">Department of<br>Nonhuman Territories</span></a>
+  <div class="trail"><a class="crumb" style="color:inherit;text-decoration:none"
+      href="http://127.0.0.1:8730/hub.html">DEPARTMENT INDEX</a><span class="sep">/</span>
+    <span class="crumb" id="c-terrain">—</span><span class="sep">/</span>
+    <span class="crumb on">OBSERVATION DECK</span></div>
+  <div class="chips">
+    <span class="chip">SHIFT <b id="c-shift">—</b></span>
+    <span class="chip">LIVING <b id="c-living">—</b></span>
+    <span class="chip" id="c-when">—</span>
+  </div>
+  <a class="act" id="c-record" href="http://127.0.0.1:8730/hub.html">Terrain record</a>
+</header>
+
+<aside class="rail" id="left">
+
+  <div class="blk" id="hud">
+    <h1 id="h-terrain">—</h1>
+    <div class="sub">Observation deck · what the terrain holds right now</div>
+    <dl class="kv">
+      <dt>shift</dt><dd id="h-shift">—</dd>
+      <dt>living</dt><dd id="h-living">—</dd>
+      <dt>cover</dt><dd id="h-cover">—</dd>
+      <dt>links</dt><dd id="h-links">—</dd>
+      <dt>descent</dt><dd id="h-lineage">—</dd>
+      <dt>watercourse</dt><dd id="h-stream">—</dd>
+      <dt>flow</dt><dd id="h-flow">—</dd>
+      <dt>ended</dt><dd id="h-ended">—</dd>
+    </dl>
+    <div class="bh" style="margin-top:12px"><span>The field</span></div>
+    <dl class="kv">
+      <dt>patches</dt><dd id="f-patches">—</dd>
+      <dt>largest</dt><dd id="f-largest">—</dd>
+      <dt>spread</dt><dd id="f-extent">—</dd>
+      <dt>spacing</dt><dd id="f-spacing">—</dd>
+    </dl>
+  </div>
+
+  <div class="blk" id="flowpanel">
+    <div class="bh"><span>Resource flow</span><span class="n" id="rf-value">—</span></div>
+    <div class="flowbar"><span id="rf-bar" style="width:0%"></span></div>
+    <dl class="kv">
+      <dt>reaching cover</dt><dd id="rf-influx">—</dd>
+      <dt>held by the living</dt><dd id="rf-held">—</dd>
+      <dt>lying as residue</dt><dd id="rf-residue">—</dd>
+      <dt>moved along links</dt><dd id="rf-moved">—</dd>
+    </dl>
+    <p class="note">The flow logged at this shift, and where the light in the
+      terrain currently sits. Summed from the same cells the deck draws.</p>
+  </div>
+
+  <div class="blk" id="filters">
+    <div class="bh"><span>View filters</span>
+      <button class="btn" id="v-toggle" title="M">overhead</button></div>
+    <div class="filters" id="fl-class"></div>
+    <div class="bh" style="margin-top:12px"><span>Layers</span></div>
+    <div class="filters">
+      <label class="filt"><input type="checkbox" id="fl-links" checked> light between specimens</label>
+      <label class="filt"><input type="checkbox" id="fl-lineage" checked> lines of descent</label>
+      <label class="filt"><input type="checkbox" id="fl-cover" checked> the cover layer</label>
+    </div>
+    <p class="note">Filters hide marks. They change nothing in the record, and
+      the counts beside each class stay what the terrain reports.</p>
+  </div>
+
+  <div class="blk" id="time">
+    <div class="bh"><span>Time</span><span class="n"><span id="t-mode">now</span></span></div>
+    <div class="trow">
+      <button class="btn" id="t-play">▶ play</button>
+      <button class="btn" id="t-now">return to now</button>
+      <span class="tlab">shift <b id="t-shift">—</b></span>
+    </div>
+    <div class="trow" style="margin-top:7px">
+      <input id="t-scrub" type="range" min="0" max="1" step="0.01" value="0">
+    </div>
+    <label class="filt" style="margin-top:6px"><input type="checkbox" id="t-follow" checked> follow live</label>
+    <p class="note" id="t-note"></p>
+    <p class="note"><b style="color:var(--ink)">M</b> switches between walking the
+      field and looking down on it.</p>
+  </div>
+
+  <div class="blk" id="selinfo">
+    <div class="bh"><span>Selection</span></div>
+    <p class="note" id="sel-note">Nothing selected. Click a specimen in the field,
+      or a row in the list.</p>
+  </div>
+
+  <div class="blk" id="viewmode" style="margin-top:auto">
+    <div class="bh"><span>View</span><span class="n" id="v-mode">in the field</span></div>
+  </div>
+
+</aside>
+
+<main id="stage">
+  <div id="help"><b>W A S D</b> move &nbsp; <b>mouse</b> look &nbsp; <b>shift</b> faster
+    &nbsp; <b>M</b> overhead &nbsp; <b>esc</b> release</div>
+</main>
+
+<section class="rail" id="list">
+  <div class="blk" style="border-bottom:1px solid var(--rule)">
+    <div class="bh"><span>Specimens</span><span class="n" id="l-count"></span></div>
+    <p class="note" style="margin:0">Grouped by how each one makes its living —
+      derived from where its light actually came from, not from its name. The
+      cover layer is counted, not listed (physics.md §8).</p>
+  </div>
+  <div id="l-key" style="display:none"></div>
+  <div id="l-body"></div>
+</section>
+
+<aside class="rail" id="record">
+  <div class="blk">
+    <span class="close" onclick="closeRecord()">CLOSE ✕</span>
+    <h2 id="r-title">—</h2>
+    <div class="id" id="r-id">—</div>
+    <dl id="r-fields"></dl>
+    <div id="r-trace"></div>
+  </div>
+</aside>
+
+<footer id="legend"></footer>
+
+</div>
+
+<script type="module">
+import * as THREE from './three.module.js';
+
+// BASIN-02 is a field. Both axes below are the terrain's own coordinates —
+// depth is position on the light gradient, lateral is a real place specimens
+// move along. Nothing here is invented; contrast BASIN-01, whose across-valley
+// axis had to be fabricated because a line has no second dimension.
+const CELL_SPACING = 3.0;     // world units per cell, both axes
+let FIELD_DEPTH = 21, FIELD_WIDTH = 15;
+let RELIEF = 9.0;             // world units the field falls; scaled to terrain size
+
+// Height IS the gradient. The far margin stands high; the ground falls away
+// toward the data-stream. Same number the light economy runs on.
+// Height was a stand-in derived from depth. The terrain now has real
+// elevation, independent of the light gradient, and residue runs down it —
+// so this reads the recorded value and the ground you walk is the ground the
+// physics uses. Depth still contributes the overall fall toward the stream.
+const elevations = {};
+let ELEV_RANGE = 6.0;
+function relief(depth, cellIndex) {
+  const t = Math.max(0, Math.min(1, depth / (FIELD_DEPTH - 1)));
+  const base = RELIEF * (1 - Math.pow(t, 1.15));
+  const e = cellIndex === undefined ? 0.5 : (elevations[cellIndex] !== undefined
+    ? elevations[cellIndex] : 0.5);
+  return base + e * ELEV_RANGE;
+}
+
+let scene, camera, renderer, raycaster;
+let beingMeshes = [];
+let world = null;
+const residueMeshes = {};
+const animated = [];
+const coverCells = {};
+let coverField = null;
+const struts = [];
+const lineage = [];
+let firstBuild = true;
+let clockStart = null;
+let follow = true;
+let livingGroup = null;
+
+// --- what the viewer is currently showing ----------------------------------
+//
+// A filter changes what is DRAWN. It never changes what is recorded, and every
+// count on the page is taken from the whole population regardless of it.
+let CLASS_FILTER = null;
+const LAYERS = { links: true, lineage: true, cover: true };
+let selected = null;
+
+const stageW = () => {
+  const el = document.getElementById('stage');
+  return Math.max(1, el ? el.clientWidth : innerWidth);
+};
+const stageH = () => {
+  const el = document.getElementById('stage');
+  return Math.max(1, el ? el.clientHeight : innerHeight);
+};
+function fitStage() {
+  if (!renderer || !camera) return;
+  // The grid animates the record rail open, so the canvas is re-fitted on the
+  // next two frames as well; a single measurement lands mid-transition and
+  // leaves the view stretched.
+  const apply = () => {
+    camera.aspect = stageW() / stageH();
+    camera.updateProjectionMatrix();
+    renderer.setSize(stageW(), stageH());
+  };
+  apply();
+  requestAnimationFrame(apply);
+  setTimeout(apply, 220);
+}
+
+function refreshView() {
+  if (!world) return;
+  const byId = {};
+  syncLive(world, byId);
+  drawLinks(world, byId);
+  drawLineage(world, byId);
+  for (const st of struts) st.visible = LAYERS.links;
+  for (const t of lineage) t.visible = LAYERS.lineage;
+  if (coverField) coverField.visible = LAYERS.cover;
+  buildList(world, byId);
+  updateCounts();
+}
+
+const keys = {};
+const velocity = new THREE.Vector3();
+let yaw = 0, pitch = 0, pointerLocked = false;
+
+init();
+
+async function init() {
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x06070b);
+  scene.fog = new THREE.FogExp2(0x06070b, 0.0125);
+
+  const stage = document.getElementById('stage');
+  camera = new THREE.PerspectiveCamera(62, stageW()/stageH(), 0.1, 500);
+  camera.position.set(0, 20, 40);   // provisional; placed properly once the
+                                    // landscape is loaded and its height known
+
+  renderer = new THREE.WebGLRenderer({ antialias:true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(stageW(), stageH());
+  stage.appendChild(renderer.domElement);
+  raycaster = new THREE.Raycaster();
+
+  // Lighting follows the terrain's own economy: light enters at the stream and
+  // falls off with distance, so the field is lit from that edge and the far
+  // margin is genuinely dim. The ambient is only enough to keep form readable.
+  scene.add(new THREE.AmbientLight(0x36435c, 0.85));
+  const key = new THREE.DirectionalLight(0xbfd0e8, 0.75);
+  key.position.set(-24, 34, 14); scene.add(key);
+  const rim = new THREE.DirectionalLight(0x6fa8dc, 0.30);
+  rim.position.set(0, 12, -40); scene.add(rim);
+
+  try {
+    world = await (await fetch('./world.json?t=' + Date.now())).json();
+  } catch (e) {
+    document.getElementById('loading').textContent =
+      'could not load world.json — run:  python3 world_export.py';
+    return;
+  }
+  normaliseWorld(world);
+  FIELD_DEPTH = world.field_depth || 21;
+  FIELD_WIDTH = world.field_width || 15;
+
+  // Every one of these was a constant tuned for a 21-cell terrain, and each
+  // broke silently when the terrain became 8,316 cells: the fog reached full
+  // opacity before the overhead camera could see the ground, and the relief
+  // was 4% of the terrain's width, so a landscape with canyons 23 deep read as
+  // a flat plate. They are now derived from the terrain's own extent, so a
+  // terrain that grows stays legible as it grows.
+  const span = Math.max(FIELD_DEPTH, FIELD_WIDTH) * CELL_SPACING;
+  RELIEF = span * 0.10;                 // the fall toward the stream
+  ELEV_RANGE = span * 0.055;            // ridge-to-hollow, on top of the fall
+  scene.fog.density = 0.9 / span;       // haze that suits the distances here
+  camera.far = span * 3.0;
+  camera.updateProjectionMatrix();
+  for (const c of world.cells) elevations[c.index] = c.elevation;
+  build(world);
+
+  // Spawn above the highest ground there is, now that there IS ground. The
+  // spawn height used to be a fixed multiple of the fall toward the stream and
+  // ignored elevation entirely, so on a terrain whose high country stood above
+  // that figure the observer started buried inside the hill. Placing it before
+  // the fetch resolved was worse still — world was null and the page never
+  // finished loading.
+  let peak = 0;
+  for (const c of world.cells) peak = Math.max(peak, relief(c.depth, c.index));
+  camera.position.set(0, peak + RELIEF * 0.3 + 6, CELL_SPACING * 14);
+  pitch = -0.34;   // the terrain is below the spawn height; look at it
+
+  let history = { frames: [] };
+  try { history = await (await fetch('./history.json?t=' + Date.now())).json(); }
+  catch (e) { /* a terrain with no recorded movement yet is a valid terrain */ }
+  initTimeline(history, world);
+  const asked = decodeURIComponent(location.hash.slice(1));
+  if (asked) {
+    const b = world.beings.find(x => x.id === asked);
+    if (b) showRecord(b);
+  }
+  document.getElementById('loading').style.display = 'none';
+  bindControls();
+  bindTimeline();
+  bindOverhead();
+  watchForShifts();
+  animate();
+}
+
+// --- one deck, four terrains ----------------------------------------------
+//
+// The terrains do not all have the same geometry, and their exporters were
+// written at different times. BASIN-01 is a LINE: it has no lateral axis, no
+// relief, and no landscape record, so its export carries none of those fields.
+// Rather than keep four decks in step by hand — which is how the deck came to
+// be titled BASIN-01 on every terrain — the missing geometry is filled in here
+// from what a line actually is: its depth IS its index, it has one column, and
+// its ground is flat because nothing ever cut it.
+//
+// Nothing is invented. Every value below is either read from the export or is
+// the only value the terrain's own physics could give it.
+function normaliseWorld(w) {
+  const line = w.field_depth === undefined;
+  if (line) { w.field_depth = w.cell_count; w.field_width = 1; }
+  for (const c of w.cells) {
+    if (c.depth === undefined) c.depth = c.index;
+    if (c.lateral === undefined) c.lateral = 0;
+    if (c.elevation === undefined) c.elevation = 0.5;   // a line has no relief
+  }
+  for (const b of w.beings) {
+    if (b.depth === undefined) b.depth = b.cell;
+    if (b.elevation === undefined) b.elevation = 0.5;
+    if (line) b.lateral = 0;                            // there is nowhere sideways to be
+    if (b.jitter === undefined) b.jitter = hash(idSeed(b.id) * 17) - 0.5;
+  }
+}
+
+// The data-stream is an EDGE along the far side. Depth runs toward it.
+function depthZ(depth) {
+  return (FIELD_DEPTH - 1 - depth) * CELL_SPACING - (FIELD_DEPTH - 1) * CELL_SPACING / 2;
+}
+function lateralX(lateral) {
+  return (lateral - (FIELD_WIDTH - 1) / 2) * CELL_SPACING;
+}
+function cellZ(index) { return depthZ(Math.floor(index / FIELD_WIDTH)); }
+function cellX(index) { return lateralX(index % FIELD_WIDTH); }
+
+function build(w) {
+  const n = w.cell_count;
+
+  // --- the ground -------------------------------------------------------
+  //
+  // The whole field is built as THREE merged geometries rather than 315 tiles
+  // plus 315 cover objects. That is not a cosmetic decision: batching is what
+  // makes density affordable. Drawn per cell, the field could carry about 26
+  // strands before the frame rate went; merged, it carries thousands, which is
+  // the difference between a field that looks sparse and one that looks like
+  // there is something growing in it.
+  //
+  // The relief is the light gradient. Depth already determines how much light
+  // arrives, and here it also determines height — the far margin sits high and
+  // dry and the ground falls away toward the data-stream. That is the same
+  // number `influx` is computed from, drawn as terrain. No elevation data is
+  // invented; there is only ever one gradient in this terrain.
+  // The ground is ONE surface.
+  //
+  // It was previously drawn as an independent flat quad per cell, each using
+  // its own cell's height for all four corners — so two neighbouring cells at
+  // different heights shared no edge and left a vertical step between them.
+  // At any distance that reads as floating plates, which is a rendering
+  // artefact and not a property of the terrain: the heights were always
+  // continuous data.
+  //
+  // Now vertices sit at cell CORNERS and each one takes the mean height of the
+  // cells that touch it, so every cell shares its edges with its neighbours and
+  // the surface is connected. Slope is then real slope rather than a stack of
+  // steps, and lighting reads across it.
+  const waterCells = [];
+  const cellAt = {};
+  for (const c of w.cells) cellAt[c.index] = c;
+  const gw = w.field_width, gd = w.field_depth;
+  const cornerY = (d, l) => {
+    let sum = 0, n = 0;
+    for (const [dd, ll] of [[d - 1, l - 1], [d - 1, l], [d, l - 1], [d, l]]) {
+      if (dd < 0 || ll < 0 || dd >= gd || ll >= gw) continue;
+      const c = cellAt[dd * gw + ll];
+      if (c) { sum += relief(c.depth, c.index); n++; }
+    }
+    return n ? sum / n : 0;
+  };
+  const cornerCache = new Float32Array((gd + 1) * (gw + 1));
+  for (let d = 0; d <= gd; d++)
+    for (let l = 0; l <= gw; l++) cornerCache[d * (gw + 1) + l] = cornerY(d, l);
+  const cy = (d, l) => cornerCache[d * (gw + 1) + l];
+  const px = (l) => lateralX(l) - CELL_SPACING / 2;
+  const pz = (d) => depthZ(d) + CELL_SPACING / 2;
+
+  const groundGeo = [], groundCol = [];
+  const bladePts = [], bladeCol = [];
+  const structuralHue = new THREE.Color(0x5f8f7a), fragmentHue = new THREE.Color(0x6f7f4f);
+
+  for (const cell of w.cells) {
+    const z = depthZ(cell.depth), x = lateralX(cell.lateral);
+    // Ground beneath the water level is stream, not standing ground.
+    // Submerged ground is still ground. The stream lies over it rather than
+    // replacing it, so the surface stays unbroken beneath the water.
+    if (cell.land === false) waterCells.push(cell);
+
+    // THE GROUND ITSELF. Two triangles per cell, on corners shared with every
+    // neighbour, so the surface is one connected sheet.
+    const cd = cell.depth, cl = cell.lateral;
+    const e = cell.elevation === undefined ? 0.5 : cell.elevation;
+    const shade = 0.22 + e * 0.62 + cell.influx * 0.008;
+    const base = new THREE.Color(shade * 0.74, shade * 0.80, shade * 0.66);
+    const corners = [
+      [px(cl),     cy(cd,     cl),     pz(cd)],
+      [px(cl + 1), cy(cd,     cl + 1), pz(cd)],
+      [px(cl + 1), cy(cd + 1, cl + 1), pz(cd + 1)],
+      [px(cl),     cy(cd + 1, cl),     pz(cd + 1)],
+    ];
+    for (const tri of [[0, 1, 2], [0, 2, 3]]) {
+      for (const idx of tri) {
+        groundGeo.push(corners[idx][0], corners[idx][1], corners[idx][2]);
+        groundCol.push(base.r, base.g, base.b);
+      }
+    }
+    if (cell.cover > 0.001) {
+      const hue = cell.substrate === 'structural' ? structuralHue : fragmentHue;
+      // Strand count scales inversely with terrain size, so a small terrain
+      // stays dense and a large one stays drawable. Density is still the
+      // measurement; this is how many marks it is worth spending on it.
+      const budget = Math.max(6, Math.round(1600000 / Math.max(1, w.cells.length)));
+      const strands = Math.max(2, Math.round(cell.cover * budget));
+      for (let i = 0; i < strands; i++) {
+        const bx = x + (hash(cell.index * 977 + i) - 0.5) * CELL_SPACING * 0.95;
+        const bz = z + (hash(cell.index * 31 + i * 7) - 0.5) * CELL_SPACING * 0.95;
+        const by = relief(cell.depth, cell.index);
+        const th = 0.18 + cell.cover * 1.25 * (0.45 + hash(i * 13 + cell.index) * 1.0);
+        const lean = (hash(i * 5 + cell.index) - 0.5) * 0.32;
+        bladePts.push(bx, by, bz, bx + lean, by + th, bz + lean * 0.6);
+        const tip = 0.35 + cell.cover * 0.55;
+        bladeCol.push(hue.r * 0.35, hue.g * 0.35, hue.b * 0.35, hue.r * tip, hue.g * tip, hue.b * tip);
+      }
+      coverCells[cell.index] = cell.cover;
+    }
+
+    if (cell.residue > 0.05) {
+      const glow = new THREE.Mesh(
+        new THREE.PlaneGeometry(CELL_SPACING * 0.92, CELL_SPACING * 0.92),
+        new THREE.MeshBasicMaterial({
+          color: 0x8a6a32, transparent: true, depthWrite: false,
+          blending: THREE.AdditiveBlending,
+          opacity: Math.min(0.34, cell.residue * 0.04),
+        }));
+      glow.rotation.x = -Math.PI / 2;
+      glow.position.set(x, relief(cell.depth, cell.index) + 0.03, z);
+      glow.userData.baseResidue = cell.residue;
+      residueMeshes[cell.index] = glow;
+      scene.add(glow);
+    }
+  }
+
+  // the stream, as one surface laid over the ground it covers
+  if (waterCells.length) {
+    const wg = [], wc = [];
+    const tint = new THREE.Color(0x3d78a6);
+    for (const cell of waterCells) {
+      const d = cell.depth, l = cell.lateral;
+      const lift = 0.12;
+      const corners = [
+        [px(l), cy(d, l) + lift, pz(d)], [px(l + 1), cy(d, l + 1) + lift, pz(d)],
+        [px(l + 1), cy(d + 1, l + 1) + lift, pz(d + 1)], [px(l), cy(d + 1, l) + lift, pz(d + 1)],
+      ];
+      for (const [a, b, c] of [[0, 1, 2], [0, 2, 3]]) {
+        for (const idx of [a, b, c]) {
+          wg.push(corners[idx][0], corners[idx][1], corners[idx][2]);
+          wc.push(tint.r, tint.g, tint.b);
+        }
+      }
+    }
+    const wgeo = new THREE.BufferGeometry();
+    wgeo.setAttribute('position', new THREE.Float32BufferAttribute(wg, 3));
+    wgeo.setAttribute('color', new THREE.Float32BufferAttribute(wc, 3));
+    wgeo.computeVertexNormals();
+    scene.add(new THREE.Mesh(wgeo, new THREE.MeshStandardMaterial({
+      vertexColors: true, transparent: true, opacity: 0.55,
+      roughness: 0.25, metalness: 0.3 })));
+  }
+
+  const gg = new THREE.BufferGeometry();
+  gg.setAttribute('position', new THREE.Float32BufferAttribute(groundGeo, 3));
+  gg.setAttribute('color', new THREE.Float32BufferAttribute(groundCol, 3));
+  gg.computeVertexNormals();
+  scene.add(new THREE.Mesh(gg, new THREE.MeshStandardMaterial({
+    vertexColors: true, roughness: 1, metalness: 0, flatShading: false })));
+
+  const bg = new THREE.BufferGeometry();
+  bg.setAttribute('position', new THREE.Float32BufferAttribute(bladePts, 3));
+  bg.setAttribute('color', new THREE.Float32BufferAttribute(bladeCol, 3));
+  coverField = new THREE.LineSegments(bg, new THREE.LineBasicMaterial({
+    vertexColors: true, transparent: true, opacity: 0.75 }));
+  scene.add(coverField);
+  console.log('cover strands drawn:', bladePts.length / 6);
+
+  // --- the data-stream: where light enters the terrain --------------------
+  const streamZ = depthZ(FIELD_DEPTH - 1) - CELL_SPACING * 1.1;
+  const streamY = relief(FIELD_DEPTH - 1, undefined);
+  const fieldWidth = FIELD_WIDTH * CELL_SPACING;
+  const stream = new THREE.Mesh(
+    new THREE.PlaneGeometry(fieldWidth * 1.1, CELL_SPACING * 1.6),
+    new THREE.MeshBasicMaterial({ color: 0x6fa8dc, transparent: true, opacity: 0.55 }));
+  stream.rotation.x = -Math.PI / 2;
+  stream.position.set(0, streamY + 0.03, streamZ);
+  scene.add(stream);
+  const streamLight = new THREE.PointLight(0x86b9ff, 2.4, 90, 1.6);
+  streamLight.position.set(0, streamY + 3, streamZ);
+  scene.add(streamLight);
+
+  livingGroup = new THREE.Group();
+  scene.add(livingGroup);
+
+  const byId = {};
+  syncLive(w, byId);
+
+  // --- links: light moving between things ---------------------------------
+  drawLinks(w, byId);
+  drawLineage(w, byId);
+  tallyClasses(w);
+  buildFilters(w);
+  buildLegend(w);
+  showFlow(w);
+  buildList(w, byId);
+  document.getElementById('h-terrain').textContent = w.terrain;
+  document.title = w.terrain + ' — Observation Deck';
+  document.getElementById('h-shift').textContent = w.shift;
+  document.getElementById('h-living').textContent = w.totals.living;
+  document.getElementById('h-cover').textContent =
+    w.totals.cover_cells + ' of ' + w.cell_count + ' cells';
+  document.getElementById('h-links').textContent = w.links.length;
+  document.getElementById('h-lineage').textContent =
+    w.beings.filter(b => b.parent_id && w.beings.some(x => x.id === b.parent_id)).length
+    + ' threads';
+  document.getElementById('h-flow').textContent = w.flow;
+  document.getElementById('h-ended').textContent = w.totals.ever_ended + ' ever';
+  const st = document.getElementById('h-stream');
+  if (st) st.textContent = (w.watercourse_cells !== undefined)
+    ? w.watercourse_cells + ' cells · ' + w.land_cells + ' land' : '—';
+  showField(w);
+}
+
+function showField(w) {
+  const f = w.field || {}, sp = w.spread || {};
+  const e = f.occupied_extent || {};
+  document.getElementById('f-patches').textContent = f.patches !== undefined ? f.patches : '—';
+  document.getElementById('f-largest').textContent =
+    f.largest_patch_cells !== undefined ? f.largest_patch_cells + ' cells' : '—';
+  document.getElementById('f-extent').textContent =
+    (e.min_depth === null || e.min_depth === undefined) ? 'none'
+      : 'depth ' + e.min_depth + '–' + e.max_depth + ', col ' + e.min_lateral + '–' + e.max_lateral;
+  document.getElementById('f-spacing').textContent =
+    sp.mean_nearest_distance === null || sp.mean_nearest_distance === undefined
+      ? '—' : sp.mean_nearest_distance + ' steps apart, ' + sp.distinct_cells_occupied + ' cells';
+}
+
+// ---------------------------------------------------------------------------
+// Living in the present.
+//
+// The terrain changes only when a shift runs, so "live" is not a stream — it
+// is the current record, held, until the next shift replaces it. What this
+// does is make that replacement visible: a specimen that survived moves to
+// where it now is, one that arrived grows in from nothing, one that ended
+// dissolves. Nothing is interpolated that the terrain did not record; the
+// travel between two shifts is a way of seeing a change, and the panel says so.
+// ---------------------------------------------------------------------------
+const liveForms = {};
+// Below this, every specimen is built as its own group of meshes — rich, and
+// clickable part by part. Above it, the same measurements are drawn through
+// three batched objects instead of eighty thousand loose ones. The visual
+// vocabulary is identical; only the number of draw calls changes.
+const DETAIL_LIMIT = 350;
+let batched = null;
+
+function buildBatched(w, byId) {
+  // Three objects for the whole population:
+  //   cores   one InstancedMesh, scaled and coloured per specimen
+  //   spokes  one LineSegments carrying every arm and anchor
+  //   halos   one Points sprite field
+  if (batched) { for (const o of batched) livingGroup.remove(o); }
+  batched = [];
+  // Batching flattened every specimen to one shape. The measurements that
+  // used to distinguish them — substrate, generation, offspring, age, what a
+  // build costs — were still recorded and simply stopped being drawn, so a
+  // population with a tenfold spread in every trait rendered as one object
+  // repeated. Four instanced meshes restore the distinctions that cost
+  // nothing per frame: shape by substrate, facet count by generation.
+  const n = w.beings.length;
+  const shapes = [
+    new THREE.IcosahedronGeometry(1, 0),   // structural, generation 0
+    new THREE.IcosahedronGeometry(1, 1),   // structural, later generations
+    new THREE.OctahedronGeometry(1, 0),    // fragment substrate
+    new THREE.DodecahedronGeometry(1, 0),  // long-standing, many offspring
+  ];
+  const bucketOf = (b) => {
+    if (b.substrate === 'fragment') return 2;
+    if ((b.descendants || 0) >= 2 && (b.age || 0) >= 14) return 3;
+    return (b.generation || 0) > 0 ? 1 : 0;
+  };
+  const buckets = [[], [], [], []];
+  w.beings.forEach((b, i) => buckets[bucketOf(b)].push(b));
+  const geo = shapes[0];
+  // vertexColors:true on a geometry that has NO colour attribute makes every
+  // instance render black — which is what turned the whole population into
+  // dark blobs. An InstancedMesh carries its colour on instanceColor, and that
+  // is applied without the vertexColors flag.
+  const mat = new THREE.MeshStandardMaterial({
+    roughness: 0.42, metalness: 0.12, transparent: true, opacity: 0.92,
+    emissive: new THREE.Color(0x0a0f0a), emissiveIntensity: 0.6 });
+  const dummy = new THREE.Object3D();
+  const ccol = new THREE.Color();
+  const spokePts = [], spokeCol = [], haloPts = [], haloCol = [], haloSize = [];
+  const ringPts = [], ringCol = [];
+  const meshes = shapes.map((g, k) =>
+    new THREE.InstancedMesh(g, mat.clone(), Math.max(1, buckets[k].length)));
+  const counters = [0, 0, 0, 0];
+  const instanceOwner = [[], [], [], []];
+
+  w.beings.forEach((b, gi) => {
+    const bk = bucketOf(b);
+    const cores = meshes[bk];
+    const i = counters[bk]++;
+    instanceOwner[bk].push(b);
+    const st = b.structure || {}, aff = b.affinities || {};
+    const mass = Math.max(0.25, st.mass || 1);
+    const size = 0.26 + mass * 0.42;
+    const held = Math.max(0, Math.min(1, (b.capacity ? b.light / b.capacity : b.light / 9)));
+    const x = lateralX(b.lateral) + hash(idSeed(b.id) * 3) * CELL_SPACING * 0.5 - CELL_SPACING * 0.25;
+    const z = depthZ(b.depth) + b.jitter * CELL_SPACING * 0.3;
+    const y = relief(b.depth, b.cell) + 0.7 + size;
+    ccol.copy(livelihoodOf(b).hue).offsetHSL(0, 0, (held - 0.5) * 0.18);
+
+    dummy.position.set(x, y, z);
+    dummy.scale.setScalar(size);
+    dummy.updateMatrix();
+    cores.setMatrixAt(i, dummy.matrix);
+    cores.setColorAt(i, ccol);
+
+    // offspring, drawn as rings — a measurement that was being dropped
+    const kids = Math.min(3, b.descendants || 0);
+    for (let k = 0; k < kids; k++) {
+      const rr = size * (1.5 + k * 0.45);
+      let prev = null;
+      for (let a = 0; a <= 14; a++) {
+        const th = (a / 14) * Math.PI * 2;
+        const pt = [x + Math.cos(th) * rr, y + k * size * 0.25, z + Math.sin(th) * rr];
+        if (prev) {
+          ringPts.push(prev[0], prev[1], prev[2], pt[0], pt[1], pt[2]);
+          ringCol.push(0.79, 0.64, 0.16, 0.79, 0.64, 0.16);
+        }
+        prev = pt;
+      }
+    }
+
+    const arms = 1 + Math.round(st.junctions || 0);
+    const reach = (0.35 + (st.extent || 1) * 1.5) * (0.7 + (aff.links || 0) * 0.5);
+    for (let a = 0; a < arms; a++) {
+      const ang = (a / arms) * Math.PI * 2 + (st.extent || 1);
+      spokePts.push(x, y, z,
+        x + Math.cos(ang) * reach, y + (0.25 + hash(a * 41 + arms) * 0.7) * reach * 0.7,
+        z + Math.sin(ang) * reach);
+      spokeCol.push(ccol.r*.5, ccol.g*.5, ccol.b*.5, ccol.r, ccol.g, ccol.b);
+    }
+    const anchors = Math.round((aff.cover || 0) * 3);
+    for (let k = 0; k < anchors; k++) {
+      const ang = (k / Math.max(1, anchors)) * Math.PI * 2 + 0.6;
+      const rr = size * (0.8 + (aff.cover || 0) * 0.9);
+      spokePts.push(x, y - size * 0.2, z,
+                    x + Math.cos(ang) * rr, y - size * 1.4, z + Math.sin(ang) * rr);
+      spokeCol.push(ccol.r*.35, ccol.g*.35, ccol.b*.35, ccol.r*.6, ccol.g*.6, ccol.b*.6);
+    }
+    haloPts.push(x, y, z);
+    haloCol.push(ccol.r, ccol.g, ccol.b);
+    haloSize.push(size * (5.5 + held * 6.0));
+    byId[b.id] = { position: new THREE.Vector3(x, y, z), userData: { record: b },
+                   height: size * 2 };
+  });
+
+  beingMeshes.length = 0;
+  meshes.forEach((cores, k) => {
+    cores.count = counters[k];
+    cores.instanceMatrix.needsUpdate = true;
+    if (cores.instanceColor) cores.instanceColor.needsUpdate = true;
+    cores.userData.beings = instanceOwner[k];
+    livingGroup.add(cores); batched.push(cores); beingMeshes.push(cores);
+  });
+
+  if (ringPts.length) {
+    const rg = new THREE.BufferGeometry();
+    rg.setAttribute('position', new THREE.Float32BufferAttribute(ringPts, 3));
+    rg.setAttribute('color', new THREE.Float32BufferAttribute(ringCol, 3));
+    const rings = new THREE.LineSegments(rg, new THREE.LineBasicMaterial({
+      vertexColors: true, transparent: true, opacity: 0.5 }));
+    livingGroup.add(rings); batched.push(rings);
+  }
+
+  const sg = new THREE.BufferGeometry();
+  sg.setAttribute('position', new THREE.Float32BufferAttribute(spokePts, 3));
+  sg.setAttribute('color', new THREE.Float32BufferAttribute(spokeCol, 3));
+  const spokes = new THREE.LineSegments(sg, new THREE.LineBasicMaterial({
+    vertexColors: true, transparent: true, opacity: 0.55 }));
+  livingGroup.add(spokes); batched.push(spokes);
+
+  const hg = new THREE.BufferGeometry();
+  hg.setAttribute('position', new THREE.Float32BufferAttribute(haloPts, 3));
+  hg.setAttribute('color', new THREE.Float32BufferAttribute(haloCol, 3));
+  hg.setAttribute('size', new THREE.Float32BufferAttribute(haloSize, 1));
+  const halos = new THREE.Points(hg, new THREE.PointsMaterial({
+    map: haloTexture(), vertexColors: true, size: 3.4, sizeAttenuation: true,
+    transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending,
+    depthWrite: false }));
+  livingGroup.add(halos); batched.push(halos);
+  console.log('batched %d specimens into %d objects', n, batched.length);
+}
+
+function syncLive(w, byId) {
+  // A filter hides marks; it never edits the record. Everything downstream of
+  // this line draws the subset, and every count reported anywhere on the page
+  // is still taken from the full population.
+  if (CLASS_FILTER && CLASS_FILTER.size < Object.keys(LIVELIHOOD).length) {
+    w = Object.assign({}, w, {
+      beings: w.beings.filter(b => CLASS_FILTER.has(livelihoodOf(b).name)) });
+  }
+  if (w.beings.length > DETAIL_LIMIT) {
+    for (const id in liveForms) { livingGroup.remove(liveForms[id]); delete liveForms[id]; }
+    buildBatched(w, byId);
+    firstBuild = false;
+    return;
+  }
+  const n = w.cell_count;
+  const present = {};
+
+  for (const b of w.beings) {
+    present[b.id] = true;
+    // Real coordinates. The jitter is the only cosmetic part — it keeps two
+    // specimens standing in one cell from occupying the same point.
+    const z = depthZ(b.depth) + b.jitter * CELL_SPACING * 0.3;
+    const x = lateralX(b.lateral) + hash(idSeed(b.id) * 3) * CELL_SPACING * 0.5
+              - CELL_SPACING * 0.25;
+    const y = relief(b.depth, b.cell);
+    const held = Math.max(0, Math.min(1, b.light / 9));
+    // Hue carries where its light comes from. It is a measurement, not a
+    // kind — nothing here decides what anything is.
+    // Hue is what it lives by; brightness is how full it is. Both measured.
+    const colour = livelihoodOf(b).hue.clone().offsetHSL(
+      0, (b.from_residue || 0) * 0.10 - 0.05, (held - 0.5) * 0.16);
+
+    let group = liveForms[b.id];
+    if (!group) {
+      const spec = {
+        extent: (b.structure || {}).extent || 1,
+        junctions: (b.structure || {}).junctions || 1,
+        mass: (b.structure || {}).mass || 1,
+        generation: b.generation, descendants: b.descendants, age: b.age,
+        from_residue: b.from_residue, colour: colour, held: held,
+        light: b.light, capacity: b.capacity, moves: b.moves,
+        cover: (b.affinities || {}).cover, residue: (b.affinities || {}).residue,
+        links: (b.affinities || {}).links, upkeep: b.upkeep,
+        substrate: b.substrate,
+      };
+      group = makeForm(spec);
+      group.userData.pulse = pulseParamsFor(spec, b.id);
+      group.position.set(x, y + group.userData.rise, z);
+      group.userData.home = group.position.clone();
+      group.userData.emerging = firstBuild ? 1 : 0;   // arrivals grow in
+      animated.push(group);
+      livingGroup.add(group);
+      group.children.forEach(o => { if (o.isMesh) beingMeshes.push(o); });
+      liveForms[b.id] = group;
+    }
+    group.userData.record = b;
+    group.traverse(o => { if (o.isMesh) o.userData.record = b; });
+    group.userData.home = new THREE.Vector3(x, y + group.userData.rise, z);
+    byId[b.id] = group;
+  }
+
+  for (const id in liveForms) {
+    if (present[id]) continue;
+    liveForms[id].userData.ending = true;    // dissolves over the next second
+    delete liveForms[id];
+  }
+  firstBuild = false;
+}
+
+// Descent, drawn. 58 of the 181 living have a parent still standing in the
+// field, and until now that was recorded and never shown. Each thread runs
+// from a specimen to the thing it came from — so a lineage that stayed
+// together reads as a cluster of threads, and one that dispersed reads as a
+// long reach across the field. This is parent_id, nothing else.
+function drawLineage(w, byId) {
+  for (const t of lineage) livingGroup.remove(t);
+  lineage.length = 0;
+  // One merged object, not one Line per thread. At 1,451 threads the loose
+  // version cost 1,451 draw calls to draw something with no per-thread state.
+  const pts = [];
+  for (const b of w.beings) {
+    if (!b.parent_id) continue;
+    const child = byId[b.id], parent = byId[b.parent_id];
+    if (!child || !parent) continue;
+    pts.push(child.position.x, child.position.y, child.position.z,
+             parent.position.x, parent.position.y, parent.position.z);
+  }
+  if (pts.length) {
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3));
+    const threads = new THREE.LineSegments(geo, new THREE.LineBasicMaterial({
+      color: 0x7f6fae, transparent: true, opacity: 0.22, depthWrite: false }));
+    lineage.push(threads);
+    livingGroup.add(threads);
+  }
+}
+
+function drawLinks(w, byId) {
+  for (const strut of struts) livingGroup.remove(strut);
+  struts.length = 0;
+  for (const link of w.links) {
+    const a = byId[link.a], b = byId[link.b];
+    if (!a || !b) continue;
+    // Thickness and brightness are the light actually moving along this link
+    // last shift, not a fixed colour. A line cannot carry thickness in most
+    // browsers, so this is a drawn strut rather than a line primitive.
+    const flow = Math.max(0, link.light_moved);
+    const from = a.position.clone(), to = b.position.clone();
+    from.y += a.userData.height * 0.5; to.y += b.userData.height * 0.5;
+    const span = from.distanceTo(to);
+    const strut = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.012 + flow * 0.075, 0.012 + flow * 0.075, span, 6),
+      new THREE.MeshBasicMaterial({
+        color: new THREE.Color(0xc9a227).lerp(new THREE.Color(0xfff0b0),
+                                              Math.min(1, flow * 1.4)),
+        transparent: true, opacity: Math.min(0.9, 0.18 + flow * 0.9),
+        blending: THREE.AdditiveBlending, depthWrite: false,
+      }));
+    strut.position.copy(from).lerp(to, 0.5);
+    strut.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0),
+      to.clone().sub(from).normalize());
+    strut.userData.flow = flow;
+    animated.push(strut);
+    struts.push(strut);
+    livingGroup.add(strut);
+  }
+}
+
+function buildList(w, byId) {
+  // Ten thousand rows in one flat list is not a list; it is a wall. The
+  // population is grouped by how each specimen makes its living, each group
+  // reports its TRUE size, and only the first slice of each is drawn until
+  // asked for. Nothing is dropped from the record — only from the DOM.
+  document.getElementById('l-count').textContent = '(' + w.beings.length + ')';
+  const body = document.getElementById('l-body');
+  const order = Object.keys(LIVELIHOOD);
+  const groups = {};
+  for (const k of order) groups[k] = [];
+  for (const b of w.beings) {
+    const name = livelihoodOf(b).name;
+    const k = order.find(x => LIVELIHOOD[x].name === name) || 'grazer';
+    groups[k].push(b);
+  }
+  // Heaviest first, so a group of four is not buried under a group of nine
+  // thousand.
+  const shown = order.filter(k => groups[k].length)
+                     .sort((a, b) => groups[b].length - groups[a].length);
+  const PAGE = 40;
+  const rowHtml = (b) => {
+    const nm = b.named || {};
+    const c = livelihoodOf(b).hue;
+    return '<div class="row' + (b.id === selected ? ' on' : '') + '" data-id="' + b.id + '">'
+      + '<div class="rid"><span class="swatch" style="background:#'
+      + c.getHexString() + '"></span>' + b.id + '</div>'
+      + '<div class="rcat">' + escapeHtml(nm.category || 'not yet named') + '</div>'
+      + '<div class="rmeta">' + b.age + ' shift(s) \u00b7 ' + b.sightings
+      + ' sighting(s) \u00b7 holding ' + b.light.toFixed(1) + ' \u00b7 cell ' + b.cell
+      + '</div></div>';
+  };
+  body.innerHTML = shown.map(k => {
+    const g = groups[k], l = LIVELIHOOD[k];
+    const head = '<div class="gh" data-group="' + k + '">'
+      + '<i style="background:#' + l.hue.getHexString() + '"></i>' + l.name
+      + '<span class="c">' + g.length + '</span></div>';
+    const rows = g.slice(0, PAGE).map(rowHtml).join('');
+    const more = g.length > PAGE
+      ? '<div class="more" data-group="' + k + '">show the other '
+        + (g.length - PAGE) + ' \u2193</div>' : '';
+    return '<div class="grp" id="grp-' + k + '">' + head
+      + '<div class="gbody">' + rows + '</div>' + more + '</div>';
+  }).join('') || '<div class="blk"><p class="note">Nothing living in this terrain '
+                 + 'at this shift, or everything is filtered out.</p></div>';
+
+  const wire = (scope) => scope.querySelectorAll('.row').forEach(row => {
+    row.onclick = () => {
+      const b = w.beings.find(x => x.id === row.dataset.id);
+      if (!b) return;
+      const target = byId[b.id];
+      if (target) {
+        camera.position.set(target.position.x + 3, target.position.y + 2.2,
+                            target.position.z + 5);
+        yaw = Math.atan2(camera.position.x - target.position.x,
+                         camera.position.z - target.position.z);
+        pitch = -0.22;
+      }
+      showRecord(b);
+    };
+  });
+  wire(body);
+
+  body.querySelectorAll('.more').forEach(btn => {
+    btn.onclick = () => {
+      const k = btn.dataset.group;
+      const holder = document.querySelector('#grp-' + k + ' .gbody');
+      holder.innerHTML = groups[k].map(rowHtml).join('');
+      wire(holder);
+      btn.remove();
+    };
+  });
+
+  body.querySelectorAll('.gh').forEach(head => {
+    head.onclick = () => {
+      const holder = head.parentElement.querySelector('.gbody');
+      const hidden = holder.style.display === 'none';
+      holder.style.display = hidden ? '' : 'none';
+      const more = head.parentElement.querySelector('.more');
+      if (more) more.style.display = hidden ? '' : 'none';
+    };
+  });
+}
+
+// --- what the page reports about itself -----------------------------------
+//
+// Every figure below is summed from the export the deck is already drawing.
+// None of it is a status light, and none of it is a target.
+
+let CLASS_TALLY = {};
+
+function tallyClasses(w) {
+  CLASS_TALLY = {};
+  for (const b of (world ? world.beings : w.beings)) {
+    const nm = livelihoodOf(b).name;
+    CLASS_TALLY[nm] = (CLASS_TALLY[nm] || 0) + 1;
+  }
+}
+
+function buildFilters(w) {
+  const holder = document.getElementById('fl-class');
+  if (!holder || holder.dataset.built) return;
+  holder.dataset.built = '1';
+  holder.innerHTML = Object.keys(LIVELIHOOD).map(k => {
+    const l = LIVELIHOOD[k];
+    return '<label class="filt"><input type="checkbox" data-class="' + l.name
+      + '" checked><i style="background:#' + l.hue.getHexString() + '"></i>'
+      + l.name + '<span class="c" data-count="' + l.name + '">'
+      + (CLASS_TALLY[l.name] || 0) + '</span></label>';
+  }).join('');
+  holder.querySelectorAll('input').forEach(box => {
+    box.onchange = () => {
+      CLASS_FILTER = new Set(
+        Array.from(holder.querySelectorAll('input:checked')).map(i => i.dataset.class));
+      refreshView();
+    };
+  });
+  const layer = (id, apply) => {
+    const box = document.getElementById(id);
+    if (box) box.onchange = () => apply(box.checked);
+  };
+  layer('fl-links', on => { for (const st of struts) st.visible = on; LAYERS.links = on; });
+  layer('fl-lineage', on => { for (const t of lineage) t.visible = on; LAYERS.lineage = on; });
+  layer('fl-cover', on => { if (coverField) coverField.visible = on; LAYERS.cover = on; });
+}
+
+function updateCounts() {
+  document.querySelectorAll('[data-count]').forEach(el => {
+    el.textContent = CLASS_TALLY[el.dataset.count] || 0;
+  });
+}
+
+function buildLegend(w) {
+  const strip = document.getElementById('legend');
+  if (!strip) return;
+  strip.innerHTML = Object.values(LIVELIHOOD).map(l =>
+      '<span class="lg"><i style="background:#' + l.hue.getHexString() + '"></i>'
+      + l.name + ' <b>' + (CLASS_TALLY[l.name] || 0) + '</b></span>').join('')
+    + '<span class="lg how">colour is where a specimen\u2019s '
+    + 'light came from \u00b7 size is the mass it carries \u00b7 arms are the links '
+    + 'it can hold \u00b7 rings are offspring left</span>'
+    + '<span class="tail">WE OBSERVE. WE DO NOT INTERFERE.</span>';
+}
+
+function showFlow(w) {
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  set('rf-value', w.flow);
+  const bar = document.getElementById('rf-bar');
+  // The flow has no declared ceiling, so the bar is drawn against the largest
+  // flow this terrain has actually logged, and says so.
+  if (bar) bar.style.width = Math.max(0, Math.min(1, w.flow)) * 100 + '%';
+  let influx = 0, residue = 0;
+  for (const c of w.cells) { influx += c.influx || 0; residue += c.residue || 0; }
+  let held = 0;
+  for (const b of w.beings) held += b.light || 0;
+  let moved = 0;
+  for (const l of w.links) moved += l.light_moved || 0;
+  set('rf-influx', influx.toFixed(1));
+  set('rf-held', held.toFixed(1));
+  set('rf-residue', residue.toFixed(1));
+  set('rf-moved', moved.toFixed(1));
+  set('c-shift', w.shift);
+  set('c-living', w.totals.living);
+  set('c-when', w.totals.cover_cells + ' cover cells');
+  set('c-terrain', w.terrain);
+  const rec = document.getElementById('c-record');
+  if (rec) rec.href = 'http://127.0.0.1:8730/' + w.terrain.toLowerCase() + '/terrain.html';
+}
+
+// ---------------------------------------------------------------------------
+// A form is its build.
+//
+// Nothing here decides what a specimen should look like. Every part below is
+// one of the numbers the terrain inherits, charges for, and selects on:
+//
+//   core size        mass — how much light it can hold, and what resists others
+//   stacked segments how many shifts it has been present
+//   core facets      its generation
+//   radiating arms   junctions — how many links it can carry at once
+//   arm length       extent — how far it reaches into the ground it stands on
+//   rings            descendants it has left
+//   warm disc        how much of its living comes from residue
+//   colour           where its light comes from
+//   brightness       how full it is, against what it can hold
+//
+// Two specimens look different because they ARE built differently, and they are
+// built differently because different builds could be paid for in different
+// parts of the valley. That is the whole of it.
+// ---------------------------------------------------------------------------
+let _haloTexture = null;
+function haloTexture() {
+  // A soft radial falloff, drawn once. Additive halos stand in for a bloom
+  // pass: the postprocessing modules are not vendored here, and shipping them
+  // to make the terrain glow prettier is not worth the weight.
+  if (_haloTexture) return _haloTexture;
+  const c = document.createElement('canvas');
+  c.width = c.height = 128;
+  const g = c.getContext('2d').createRadialGradient(64, 64, 0, 64, 64, 64);
+  g.addColorStop(0.00, 'rgba(255,255,255,1)');
+  g.addColorStop(0.18, 'rgba(255,255,255,0.55)');
+  g.addColorStop(0.45, 'rgba(255,255,255,0.16)');
+  g.addColorStop(1.00, 'rgba(255,255,255,0)');
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, 128, 128);
+  _haloTexture = new THREE.CanvasTexture(c);
+  return _haloTexture;
+}
+
+// Motion is presentation, not record.
+//
+// The terrain has no sub-shift state: nothing in physics.md happens between
+// ticks, and none of the movement below is a behaviour the terrain observed.
+// What IS measured is the amplitude and the rate. A specimen holding light
+// near its capacity pulses fast and wide; one running near empty barely moves.
+// A specimen that has moved often in the record drifts more than one that has
+// stayed put. So the motion carries real quantities and invents no events.
+function pulseParamsFor(spec, id) {
+  const fullness = Math.max(0, Math.min(1, spec.capacity > 0
+    ? spec.light / spec.capacity : spec.held));
+  return {
+    phase: hash(idSeed(id)) * Math.PI * 2,     // stable per specimen, not random
+    rate: 0.35 + fullness * 1.9,               // light held against what it can hold
+    amplitude: 0.012 + fullness * 0.075,
+    drift: 0.02 + Math.min(0.16, (spec.moves || 0) * 0.012),
+    fullness: fullness,
+  };
+}
+
+function idSeed(id) {
+  let t = 0;
+  for (let i = 0; i < id.length; i++) t = (t * 131 + id.charCodeAt(i) + i) % 100003;
+  return t;
+}
+
+// ---------------------------------------------------------------------------
+// HOW A SPECIMEN MAKES ITS LIVING, MADE LEGIBLE
+//
+// Colour was a blend of three intake fractions, which produced 150 distinct
+// shades that no observer could read as anything but "greenish". The single
+// most behaviourally meaningful fact about a specimen — whether it grazes,
+// scavenges, takes from others, or gives to them — was the least visible thing
+// about it.
+//
+// Each livelihood now has its own hue. The assignment is a computed comparison
+// of recorded intake and outflow, not a label anyone applied: a specimen is
+// whatever it actually does most of. No shape, no role and no name is implied
+// — the Namer's word for it is still the only classification that counts.
+// ---------------------------------------------------------------------------
+const LIVELIHOOD = {
+  taker:     { hue: new THREE.Color(0xd4614a), name: 'draws from others' },
+  donor:     { hue: new THREE.Color(0x7f6fae), name: 'gives to others' },
+  scavenger: { hue: new THREE.Color(0xc9a227), name: 'lives on remains' },
+  grazer:    { hue: new THREE.Color(0x6f9f5f), name: 'grazes the mat' },
+  nascent:   { hue: new THREE.Color(0x5a6b78), name: 'not yet feeding' },
+};
+
+function livelihoodOf(b) {
+  const took = (b.drawn_from_links !== undefined)
+    ? b.drawn_from_links : (b.from_links || 0);
+  const gave = b.given_to_links || 0;
+  const total = (b.from_cover || 0) + (b.from_residue || 0) + (b.from_links || 0);
+  if (total <= 0) return LIVELIHOOD.nascent;
+  if ((b.from_links || 0) > 0.20) return LIVELIHOOD.taker;
+  if (gave > 0.8 && (b.from_links || 0) < 0.05) return LIVELIHOOD.donor;
+  if ((b.from_residue || 0) > 0.45) return LIVELIHOOD.scavenger;
+  return LIVELIHOOD.grazer;
+}
+
+function makeForm(spec) {
+  const group = new THREE.Group();
+  const mass = Math.max(0.2, spec.mass);
+  const size = 0.26 + mass * 0.42;
+  const held = Math.max(0, Math.min(1, spec.held));
+  const colour = spec.colour;
+
+  const material = new THREE.MeshStandardMaterial({
+    color: colour, emissive: colour,
+    emissiveIntensity: 0.20 + held * 1.7,
+    roughness: 0.4, metalness: 0.15,
+    transparent: true, opacity: 0.42 + held * 0.5,
+  });
+
+  // Time spent present accumulates as repeated segments.
+  const segments = 1 + Math.min(4, Math.floor(spec.age / 7));
+  let top = 0;
+  for (let i = 0; i < segments; i++) {
+    const r = size * (1 - i * 0.14);
+    const seg = new THREE.Mesh(
+      spec.substrate === 'fragment'
+        ? new THREE.OctahedronGeometry(r * 1.1, Math.min(1, spec.generation))
+        : new THREE.IcosahedronGeometry(r, Math.min(2, spec.generation)), material);
+    seg.position.y = top;
+    group.add(seg);
+    top += r * 1.35;
+  }
+  const height = Math.max(size, top);
+
+  // How it makes its living, drawn downward: cover-affinity anchors it to the
+  // ground it stands on. A high-cover specimen is visibly rooted; one living
+  // off links barely touches down.
+  const anchors = Math.round((spec.cover || 0) * 4);
+  for (let i = 0; i < anchors; i++) {
+    const a = (i / Math.max(1, anchors)) * Math.PI * 2 + 0.6;
+    const reach = size * (0.8 + (spec.cover || 0) * 0.9);
+    const geo = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(0, -size * 0.2, 0),
+      new THREE.Vector3(Math.cos(a) * reach, -size * 1.4, Math.sin(a) * reach)]);
+    group.add(new THREE.Line(geo, new THREE.LineBasicMaterial({
+      color: colour, transparent: true, opacity: 0.22 + (spec.cover || 0) * 0.3 })));
+  }
+
+  // What the build costs every shift, drawn as internal structure. An
+  // expensive form carries visible bracing; a cheap one is bare.
+  const bracing = Math.min(5, Math.round((spec.upkeep || 0) * 3));
+  for (let i = 0; i < bracing; i++) {
+    const r = size * (0.55 + i * 0.13);
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(r, size * 0.022, 4, 14), material);
+    ring.rotation.x = Math.PI / 2;
+    ring.rotation.z = i * 0.7;
+    ring.position.y = height * (0.15 + i * 0.13);
+    group.add(ring);
+  }
+
+  // Junctions are places it can hold a link. Extent is how far each one goes.
+  const arms = 1 + Math.round(spec.junctions);
+  const reach = (0.35 + spec.extent * 1.5) * (0.7 + (spec.links || 0) * 0.5);
+  for (let i = 0; i < arms; i++) {
+    const angle = (i / arms) * Math.PI * 2 + spec.extent;
+    const lift = 0.25 + hash(i * 41 + arms) * 0.7;
+    const tip = new THREE.Vector3(Math.cos(angle) * reach, lift * reach * 0.7,
+                                  Math.sin(angle) * reach);
+    const from = new THREE.Vector3(0, height * 0.55, 0);
+    const arm = new THREE.Mesh(
+      new THREE.CylinderGeometry(size * 0.06, size * 0.13, from.distanceTo(tip), 5),
+      material);
+    arm.position.copy(from).lerp(tip, 0.5);
+    arm.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0),
+      tip.clone().sub(from).normalize());
+    group.add(arm);
+    const node = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(size * 0.17, 0), material);
+    node.position.copy(tip);
+    group.add(node);
+  }
+
+  for (let r = 0; r < Math.min(3, spec.descendants); r++) {
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(size * (1.5 + r * 0.5), size * 0.05, 6, 24),
+      new THREE.MeshBasicMaterial({ color: colour, transparent: true, opacity: 0.38 }));
+    ring.rotation.x = Math.PI / 2 + (hash(r * 7 + arms) - 0.5) * 0.6;
+    ring.position.y = height * (0.3 + r * 0.25);
+    group.add(ring);
+  }
+
+  if (spec.from_residue > 0.15) {
+    const base = new THREE.Mesh(
+      new THREE.CircleGeometry(size * (1.2 + spec.from_residue * 2.4), 20),
+      new THREE.MeshBasicMaterial({ color: 0xb08b4a, transparent: true,
+                                    opacity: 0.10 + spec.from_residue * 0.30 }));
+    base.rotation.x = -Math.PI / 2;
+    base.position.y = -size * 0.9;
+    group.add(base);
+  }
+
+  // A hot centre, so a specimen reads as holding light rather than being
+  // painted with it. Brightness is how full it is against its own capacity.
+  const fullness = Math.max(0, Math.min(1, spec.capacity > 0
+    ? spec.light / spec.capacity : held));
+  const hot = new THREE.Mesh(
+    new THREE.IcosahedronGeometry(size * 0.42, 1),
+    new THREE.MeshBasicMaterial({
+      color: colour.clone().lerp(new THREE.Color(0xffffff), 0.55 + fullness * 0.35),
+      transparent: true, opacity: 0.35 + fullness * 0.6,
+      blending: THREE.AdditiveBlending, depthWrite: false,
+    }));
+  group.add(hot);
+
+  const halo = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: haloTexture(), color: colour,
+    transparent: true, opacity: 0.16 + fullness * 0.42,
+    blending: THREE.AdditiveBlending, depthWrite: false,
+  }));
+  const haloSize = size * (3.4 + fullness * 3.6);
+  halo.scale.set(haloSize, haloSize, 1);
+  halo.position.y = height * 0.4;
+  group.add(halo);
+
+  group.userData.rise = 0.7 + size;
+  group.userData.height = height;
+  group.userData.body = material;
+  group.userData.hot = hot;
+  group.userData.halo = halo;
+  group.userData.baseOpacity = material.opacity;
+  group.userData.baseEmissive = material.emissiveIntensity;
+  group.userData.baseHalo = halo.material.opacity;
+  group.userData.baseHaloSize = haloSize;
+  return group;
+}
+
+// ---------------------------------------------------------------------------
+// The timeline.
+//
+// The terrain records where everything was, shift by shift. This plays that
+// record back. Positions between two recorded shifts are drawn between them —
+// the terrain has no sub-shift state and none is invented; the in-between is a
+// way of seeing a move happen rather than a claim that it was continuous.
+// ---------------------------------------------------------------------------
+const timeline = { frames: [], forms: {}, group: null, t: 0, playing: false,
+                   speed: 1.6, live: true, loop: false };
+
+function initTimeline(hist, w) {
+  timeline.frames = hist.frames || [];
+  const bar = document.getElementById('time');
+  bar.style.display = 'block';
+  if (timeline.frames.length < 2) {
+    document.getElementById('t-note').textContent =
+      'no movement recorded yet — run more shifts and it will fill in';
+    document.getElementById('t-play').disabled = true;
+    document.getElementById('t-scrub').disabled = true;
+    return;
+  }
+  timeline.group = new THREE.Group();
+  timeline.group.visible = false;
+  scene.add(timeline.group);
+
+  // One form per specimen that ever appears, built from its own record.
+  const seen = {};
+  for (const f of timeline.frames) {
+    for (const id in f.beings) {
+      if (seen[id]) continue;
+      const b = f.beings[id];
+      seen[id] = true;
+      const known = w.beings.find(x => x.id === id);
+      const colour = known
+        ? new THREE.Color().setRGB(0.28 + known.from_links * 0.62,
+            0.55 + known.from_cover * 0.35, 0.42 + known.from_residue * 0.45)
+        : new THREE.Color().setRGB(0.42, 0.62, 0.55);
+      const form = makeForm({
+        extent: b.extent || 1, junctions: b.junctions || 1, mass: b.mass || 1,
+        generation: b.generation || 0, descendants: b.descendants || 0,
+        age: b.age || 0, from_residue: known ? known.from_residue : 0,
+        colour: colour, held: Math.min(1, (b.light || 0) / 9),
+      });
+      form.userData.id = id;
+      form.userData.lateral = lateralOf(id);
+      form.userData.pulse = pulseParamsFor({
+        light: b.light || 0, capacity: (b.mass || 1) * 11.0,
+        held: Math.min(1, (b.light || 0) / 9), moves: 0,
+      }, id);
+      form.userData.home = null;   // the replay places this form, not the drift
+      animated.push(form);
+      form.visible = false;
+      timeline.group.add(form);
+      timeline.forms[id] = form;
+    }
+  }
+  document.getElementById('t-scrub').max = String(timeline.frames.length - 1);
+  // A shift is a tick, not a moment — the terrain is genuinely still between
+  // them. So the replay runs by default and loops, rather than opening on a
+  // frozen instant that looks broken.
+  // Open on the present, not in a replay loop. The replay is for looking
+  // back; what the terrain is doing now is the default view.
+  timeline.playing = false;
+  timeline.loop = true;
+  setLive(true);
+  document.getElementById('t-note').textContent =
+    timeline.frames.length + ' shifts recorded (' + hist.first_shift
+    + '–' + hist.last_shift + ')';
+  bar.style.display = 'block';
+}
+
+function lateralOf(id) {
+  // Same stable across-valley offset the export uses. Display only.
+  let total = 0;
+  for (let i = 0; i < id.length; i++) total = (total * 131 + id.charCodeAt(i) + i) % 100003;
+  return (total % 2001) / 1000.0 - 1.0;
+}
+
+function setLive(live) {
+  timeline.live = live;
+  if (timeline.group) timeline.group.visible = !live;
+  livingGroup.visible = live;
+  document.getElementById('t-mode').textContent = live ? 'now' : 'replay';
+  if (live) restoreCover();
+}
+
+function restoreCover() {
+  if (coverField) coverField.material.opacity = 0.75;
+  for (const i in residueMeshes) {
+    residueMeshes[i].material.opacity =
+      Math.min(0.30, residueMeshes[i].userData.baseResidue * 0.035);
+  }
+}
+
+function applyFrame(t) {
+  const n = world.cell_count;
+  const i = Math.max(0, Math.min(timeline.frames.length - 2, Math.floor(t)));
+  const k = Math.max(0, Math.min(1, t - i));
+  const a = timeline.frames[i], b = timeline.frames[i + 1];
+  const ease = k * k * (3 - 2 * k);
+
+  for (const id in timeline.forms) {
+    const form = timeline.forms[id];
+    const pa = a.beings[id], pb = b.beings[id];
+    if (!pa && !pb) { form.visible = false; continue; }
+    form.visible = true;
+    const from = pa || pb, to = pb || pa;
+    const z = cellZ(from.cell) + (cellZ(to.cell) - cellZ(from.cell)) * ease;
+    const x = cellX(from.cell) + (cellX(to.cell) - cellX(from.cell)) * ease;
+    form.position.set(x, form.userData.rise, z);
+    // Arriving and ending are shown as the record has them: present or not.
+    const fade = (!pa ? ease : (!pb ? 1 - ease : 1));
+    form.traverse(o => { if (o.material) o.material.opacity =
+      (o.material.userData.base === undefined
+        ? (o.material.userData.base = o.material.opacity)
+        : o.material.userData.base) * fade; });
+  }
+
+  // Cover is one merged field. Replaying it as total density means the whole
+  // field thins and thickens together, which is honest about what is being
+  // shown: the per-cell shape of past shifts is in state/field_log.jsonl, not
+  // rebuilt here every frame.
+  if (coverField) {
+    let now = 0, base = 0;
+    for (let ci = 0; ci < a.cover.length; ci++) {
+      now += (a.cover[ci] || 0) + ((b.cover[ci] || 0) - (a.cover[ci] || 0)) * ease;
+      base += coverCells[ci] || 0;
+    }
+    coverField.material.opacity = base > 0
+      ? Math.max(0.18, Math.min(0.95, 0.75 * (now / base))) : 0.75;
+  }
+  for (const ci in residueMeshes) {
+    const now = (a.residue[ci] || 0) + ((b.residue[ci] || 0) - (a.residue[ci] || 0)) * ease;
+    residueMeshes[ci].material.opacity = Math.min(0.30, now * 0.035);
+  }
+  document.getElementById('t-shift').textContent = a.shift;
+  document.getElementById('t-scrub').value = String(t);
+}
+
+// The terrain only changes when a shift runs. Rather than make the observer
+// reload by hand, watch the exported record and say so when it moves on.
+function watchForShifts() {
+  setInterval(async () => {
+    if (!follow || !timeline.live) return;
+    try {
+      const w = await (await fetch('./world.json?t=' + Date.now())).json();
+      if (w.shift === world.shift) return;
+      world = w;
+      const byId = {};
+      syncLive(w, byId);
+      drawLinks(w, byId);
+      drawLineage(w, byId);
+      buildList(w, byId);
+      document.getElementById('h-shift').textContent = w.shift;
+      document.getElementById('h-living').textContent = w.totals.living;
+      document.getElementById('h-cover').textContent =
+        w.totals.cover_cells + ' of ' + w.cell_count + ' cells';
+      document.getElementById('h-links').textContent = w.links.length;
+  document.getElementById('h-lineage').textContent =
+    w.beings.filter(b => b.parent_id && w.beings.some(x => x.id === b.parent_id)).length
+    + ' threads';
+      document.getElementById('h-flow').textContent = w.flow;
+      document.getElementById('h-ended').textContent = w.totals.ever_ended + ' ever';
+      // Cover is one merged object now, so a shift-to-shift change in total
+      // density shows as the field brightening or thinning rather than as
+      // per-cell rescaling. A full rebuild happens on reload.
+      let now = 0, was = 0;
+      for (const cell of w.cells) {
+        now += cell.cover; was += coverCells[cell.index] || 0;
+        const res = residueMeshes[cell.index];
+        if (res) res.material.opacity = Math.min(0.34, cell.residue * 0.04);
+      }
+      if (coverField && was > 0) {
+        coverField.material.opacity = Math.max(0.25, Math.min(0.95, 0.75 * (now / was)));
+      }
+      showField(w);
+      document.getElementById('t-note').textContent =
+        'following the terrain — shift ' + w.shift + ' just landed';
+    } catch (e) { /* the server going away is not an error worth showing */ }
+  }, 5000);
+}
+
+function hash(n) {
+  const x = Math.sin(n * 12.9898) * 43758.5453;
+  return x - Math.floor(x);
+}
+
+// --- the field record -----------------------------------------------------
+function showRecord(b) {
+  const named = b.named || {};
+  document.getElementById('r-title').textContent =
+    named.category || 'SPECIMEN FIELD RECORD';
+  document.getElementById('r-id').textContent =
+    b.id + ' · ' + (b.substrate || '—')
+    + (named.record_tier ? ' · ' + named.record_tier + ' tier' : '');
+  const rows = [
+    ['present for', b.age + ' shift(s)'],
+    ['sightings', b.sightings],
+    ['position', b.position.toFixed(2) + ' on the gradient'],
+    ['holding', b.light.toFixed(2) + ' light'],
+    ['moved', b.moves + ' time(s)'],
+    ['arrived by', (b.origin || '').replace(/_/g, ' ')],
+    ['generation', b.generation],
+    ['descendants', b.descendants],
+  ];
+  if (b.parent_id) rows.push(['descended from', b.parent_id]);
+  let html = rows.map(r => '<dt>' + r[0] + '</dt><dd>' + r[1] + '</dd>').join('');
+  html += '<dt>from cover</dt><dd>' + pct(b.from_cover) + bar(b.from_cover) + '</dd>';
+  html += '<dt>from residue</dt><dd>' + pct(b.from_residue) + bar(b.from_residue) + '</dd>';
+  html += '<dt>along links</dt><dd>' + pct(b.from_links) + bar(b.from_links) + '</dd>';
+  const a = b.affinities || {};
+  html += '<dt>affinities</dt><dd>cover ' + fx(a.cover) + ' · residue ' + fx(a.residue)
+        + ' · links ' + fx(a.links) + '</dd>';
+  document.getElementById('r-fields').innerHTML = html;
+  const st = b.structure || {};
+  let extra = '';
+  if (st.extent !== undefined) extra +=
+    '<div style="color:var(--structural-grey);margin:8px 0 3px">how it is built</div>'
+    + '<pre>reach ' + st.extent.toFixed(2)
+    + '\ncarries ' + st.mass.toFixed(2) + ' — can hold ' + (b.capacity || 0).toFixed(1) + ' light'
+    + '\nholds up to ' + (1 + Math.floor(st.junctions)) + ' link(s) at once'
+    + '\ncosts ' + (b.upkeep || 0).toFixed(2) + ' light every shift to maintain</pre>';
+  if (named.persistence) extra +=
+    '<div style="color:var(--structural-grey);margin:8px 0 3px">how it persists — the Namer\'s words</div>'
+    + '<pre>' + escapeHtml(named.persistence) + '</pre>';
+  if (named.reasoning) extra +=
+    '<div style="color:var(--structural-grey);margin:8px 0 3px">why it was filed here</div>'
+    + '<pre>' + escapeHtml(named.reasoning) + '</pre>';
+  if (b.trace) extra +=
+    '<div style="color:var(--structural-grey);margin:8px 0 3px">substrate as recorded</div>'
+    + '<pre>' + escapeHtml(b.trace) + '</pre>';
+  document.getElementById('r-trace').innerHTML = extra;
+  document.getElementById('deck').classList.add('showing');
+  if (location.hash !== '#' + b.id) history.replaceState(null, '', '#' + b.id);
+  fitStage();
+  selected = b.id;
+  document.getElementById('sel-note').innerHTML =
+    '<b style="color:var(--ink)">' + b.id + '</b><br>'
+    + (named.category || 'not yet named') + '<br>'
+    + livelihoodOf(b).name + ' \u00b7 cell ' + b.cell
+    + ' \u00b7 holding ' + b.light.toFixed(1);
+  document.querySelectorAll('#l-body .row').forEach(r =>
+    r.classList.toggle('on', r.dataset.id === b.id));
+}
+const pct = v => Math.round(v * 100) + '%';
+const fx = v => (v === undefined ? '—' : Number(v).toFixed(2));
+const bar = v => '<div class="bar"><span style="width:' + (v * 100) + '%"></span></div>';
+const escapeHtml = s => s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+window.closeRecord = () => {
+  document.getElementById('deck').classList.remove('showing');
+  history.replaceState(null, '', location.pathname);
+  fitStage();
+  selected = null;
+  document.getElementById('sel-note').textContent =
+    'Nothing selected. Click a specimen in the field, or a row in the list.';
+  document.querySelectorAll('#l-body .row.on').forEach(r => r.classList.remove('on'));
+};
+
+// --- moving through it ----------------------------------------------------
+function bindControls() {
+  addEventListener('keydown', e => keys[e.code] = true);
+  addEventListener('keyup', e => keys[e.code] = false);
+  renderer.domElement.addEventListener('click', ev => {
+    if (!pointerLocked) { renderer.domElement.requestPointerLock(); return; }
+    raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
+    const hit = raycaster.intersectObjects(beingMeshes)[0];
+    if (hit) {
+      // An InstancedMesh reports which instance was hit; map that back to the
+      // specimen it was built from.
+      const rec = (hit.instanceId !== undefined && hit.object.userData.beings)
+        ? hit.object.userData.beings[hit.instanceId]
+        : hit.object.userData.record;
+      if (rec) showRecord(rec);
+    }
+  });
+  document.addEventListener('pointerlockchange', () => {
+    pointerLocked = document.pointerLockElement === renderer.domElement;
+  });
+  addEventListener('mousemove', e => {
+    if (!pointerLocked) return;
+    yaw -= e.movementX * 0.0022;
+    pitch = Math.max(-1.4, Math.min(1.4, pitch - e.movementY * 0.0022));
+  });
+  addEventListener('resize', fitStage);
+  addEventListener('resize', () => {
+    camera.aspect = stageW() / stageH();
+    camera.updateProjectionMatrix();
+    renderer.setSize(stageW(), stageH());
+  });
+}
+
+function bindOverhead() {
+  addEventListener('keydown', (e) => {
+    if (e.code === 'KeyM' || e.code === 'Tab') { e.preventDefault(); toggleOverhead(); }
+  });
+  document.getElementById('v-toggle').onclick = toggleOverhead;
+}
+
+function bindTimeline() {
+  const play = document.getElementById('t-play');
+  const scrub = document.getElementById('t-scrub');
+  play.onclick = () => {
+    timeline.playing = !timeline.playing;
+    play.textContent = timeline.playing ? '❚❚ pause' : '▶ play';
+    if (timeline.playing) setLive(false);
+  };
+  scrub.oninput = () => {
+    timeline.playing = false; play.textContent = '▶ play';
+    setLive(false);
+    timeline.t = parseFloat(scrub.value);
+    applyFrame(timeline.t);
+  };
+  document.getElementById('t-follow').onchange = (e) => { follow = e.target.checked; };
+  document.getElementById('t-now').onclick = () => {
+    timeline.playing = false; play.textContent = '▶ play';
+    setLive(true);
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Two ways of standing in the field.
+//
+// Walking through it shows you what a specimen is. Looking down on it shows
+// you where everything is in relation to everything else — and in a terrain
+// built to test whether dimensionality produces clustering, spacing or held
+// ground, that second view is the one the experiment is actually about. From
+// inside the field you cannot see a pattern you are standing in.
+// ---------------------------------------------------------------------------
+let overhead = false;
+let groundCamera = null;
+let fogWas = null;
+
+function toggleOverhead() {
+  overhead = !overhead;
+  if (overhead) {
+    groundCamera = {
+      position: camera.position.clone(), yaw: yaw, pitch: pitch,
+    };
+    const span = Math.max(FIELD_DEPTH, FIELD_WIDTH) * CELL_SPACING;
+    // Enough height to hold the whole terrain in a 62-degree field of view,
+    // and the haze pulled back so distance does not erase it.
+    camera.position.set(0, span * 0.78 + RELIEF, 0.001);
+    yaw = 0; pitch = -Math.PI / 2;
+    fogWas = scene.fog.density;
+    scene.fog.density = 0.00018;
+  } else if (groundCamera) {
+    camera.position.copy(groundCamera.position);
+    yaw = groundCamera.yaw; pitch = groundCamera.pitch;
+    if (fogWas !== null) scene.fog.density = fogWas;
+  }
+  document.getElementById('v-mode').textContent = overhead ? 'overhead' : 'in the field';
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+  const speed = (keys['ShiftLeft'] || keys['ShiftRight']) ? 0.62 : 0.24;
+  camera.rotation.set(pitch, yaw, 0, 'YXZ');
+  velocity.set(0, 0, 0);
+  if (keys['KeyW']) velocity.z -= 1;
+  if (keys['KeyS']) velocity.z += 1;
+  if (keys['KeyA']) velocity.x -= 1;
+  if (keys['KeyD']) velocity.x += 1;
+  velocity.normalize().applyEuler(camera.rotation).multiplyScalar(speed);
+  if (keys['Space']) velocity.y += speed;
+  if (keys['KeyC']) velocity.y -= speed;
+  camera.position.add(velocity);
+  camera.position.y = Math.max(overhead ? 8.0 : 1.0, camera.position.y);
+
+  if (clockStart === null) clockStart = performance.now();
+  const t = (performance.now() - clockStart) / 1000;
+  // Nothing per-specimen is animated in the batched path — a pulse applied to
+  // 4,600 instances every frame is the same cost problem in another form. The
+  // measured values still drive size, colour and halo, which are baked in.
+  for (const obj of animated) {
+    if (obj.userData.dead) continue;
+    const p = obj.userData.pulse;
+    if (p) {
+      // breathing — scale, emissive and halo all follow the same beat
+      const beat = Math.sin(t * p.rate + p.phase);
+      const swell = 1 + beat * p.amplitude;
+      obj.scale.setScalar(swell);
+      if (obj.userData.body) {
+        obj.userData.body.emissiveIntensity =
+          obj.userData.baseEmissive * (0.75 + 0.45 * (beat * 0.5 + 0.5));
+      }
+      if (obj.userData.halo) {
+        obj.userData.halo.material.opacity =
+          obj.userData.baseHalo * (0.7 + 0.55 * (beat * 0.5 + 0.5));
+        const hs = obj.userData.baseHaloSize * (1 + beat * p.amplitude * 2.2);
+        obj.userData.halo.scale.set(hs, hs, 1);
+      }
+      if (obj.userData.ending) {
+        // resolving to an end-state (physics.md Section 7) — it dissolves
+        obj.userData.fade = (obj.userData.fade === undefined ? 1 : obj.userData.fade) - 0.012;
+        obj.traverse(o => { if (o.material) {
+          if (o.material.userData.base === undefined) o.material.userData.base = o.material.opacity;
+          o.material.opacity = o.material.userData.base * Math.max(0, obj.userData.fade);
+        }});
+        obj.scale.multiplyScalar(0.998);
+        if (obj.userData.fade <= 0) { livingGroup.remove(obj); obj.userData.dead = true; }
+        continue;
+      }
+      if (obj.userData.emerging > 0) {
+        obj.userData.emerging = Math.max(0, obj.userData.emerging - 0.02);
+      }
+      if (obj.userData.home === null) continue;
+      if (obj.userData.home === undefined) obj.userData.home = obj.position.clone();
+      if (!obj.userData.at) obj.userData.at = obj.userData.home.clone();
+      // Glide to where the record now puts it, rather than snapping there.
+      obj.userData.at.lerp(obj.userData.home, 0.045);
+      // drift — amplitude is how often this specimen has actually moved
+      obj.position.set(
+        obj.userData.at.x + Math.sin(t * 0.31 + p.phase) * p.drift,
+        obj.userData.at.y + Math.sin(t * 0.47 + p.phase * 1.7) * p.drift * 0.7,
+        obj.userData.at.z + Math.cos(t * 0.26 + p.phase * 0.6) * p.drift);
+      if (obj.userData.emerging > 0) {
+        const grow = 1 - obj.userData.emerging;
+        obj.scale.multiplyScalar(grow * grow);
+      }
+    } else if (obj.userData.flow !== undefined) {
+      // a strut glimmers in proportion to what is moving along it
+      obj.material.opacity = Math.min(0.95,
+        (0.18 + obj.userData.flow * 0.9) * (0.72 + 0.4 * Math.sin(t * 1.5)));
+    }
+  }
+
+  if (timeline.playing && timeline.frames.length > 1) {
+    timeline.t += 0.016 * timeline.speed;
+    if (timeline.t >= timeline.frames.length - 1) {
+      if (timeline.loop) {
+        timeline.t = 0;
+      } else {
+        timeline.t = timeline.frames.length - 1;
+        timeline.playing = false;
+        document.getElementById('t-play').textContent = '▶ play';
+      }
+    }
+    applyFrame(timeline.t);
+  }
+
+  renderer.render(scene, camera);
+}
+</script>
+</body>
+</html>
