@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 U3 Labs, LLC
+# SPDX-License-Identifier: Apache-2.0
 """Serve both terrain viewers locally, with caching turned off.
 
 A browser will happily hold on to a cached index.html while still fetching a

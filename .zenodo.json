@@ -1,0 +1,29 @@
+{
+  "title": "Department of Nonhuman Territories: bounded terrains with a pre-declared falsification condition",
+  "upload_type": "software",
+  "access_right": "open",
+  "creators": [
+    {
+      "name": "Jaylon",
+      "affiliation": "Department of Nonhuman Territories, The Nonhuman Institute"
+    }
+  ],
+  "description": "<p>A bounded digital environment seeded with fixed mechanical rules, in which autonomous agent roles run over time. What emerges is recorded and classified but never authored, corrected, or steered.</p><p>The distinguishing feature is procedural rather than technical. A falsification condition is declared before the experiment runs. A written protocol binds the operator against correcting the output. Deleting an inconvenient record is forbidden, and operator contamination of the record is logged as an event <em>in</em> the record rather than repaired. The terrain logs are append-only and committed to git after every shift, so the version history is the provenance for every claim made about what these terrains produced.</p><p><strong>Licensing is split three ways</strong> and is described in full in LICENSING.md: the software is Apache-2.0, the governance documents are CC BY 4.0, and the terrain record itself is dedicated to the public domain under CC0. The record is CC0 deliberately — a project that declares a falsification condition in advance has to be checkable by someone who does not trust it.</p><p><strong>The record is published as it was produced, including its errors.</strong> An audit in August 2026 found substantial faults in the physics, the reporting layer, and the harness. Several are documented in the record rather than removed from it, because Founding Charter Section 3 forbids deleting an inconvenient record.</p>",
+  "license": "other-open",
+  "keywords": [
+    "artificial life",
+    "agent-based simulation",
+    "research governance",
+    "falsifiability",
+    "open data",
+    "emergent classification",
+    "large language models"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/The-Nonhuman-Institute/dept-nonhuman-territories",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ]
+}

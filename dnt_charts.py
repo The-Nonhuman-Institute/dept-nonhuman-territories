@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 U3 Labs, LLC
+# SPDX-License-Identifier: Apache-2.0
 """
 Charts, drawn from real series. No library, no fabricated points.
 

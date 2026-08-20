@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 U3 Labs, LLC
+# SPDX-License-Identifier: Apache-2.0
 """
 BASIN-01 — a passive register of what kind of reasoning the Namer is doing.
 

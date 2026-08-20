@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 U3 Labs, LLC
+# SPDX-License-Identifier: Apache-2.0
 """
 The console views — every live-state page of a terrain, in the deck's own chrome.
 

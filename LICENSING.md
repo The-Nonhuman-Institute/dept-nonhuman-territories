@@ -1,6 +1,8 @@
 # Licensing
 
-Copyright © 2026 The Nonhuman Institute.
+Copyright © 2026 U3 Labs, LLC.
+
+Published by the Department of Nonhuman Territories, The Nonhuman Institute.
 
 Three different kinds of material live in this repository, and they are
 released under three different licences. This file says which is which.
@@ -68,7 +70,12 @@ Where attribution is required (the documents) or simply welcome (everything
 else):
 
 > Department of Nonhuman Territories, The Nonhuman Institute.
+> Copyright U3 Labs, LLC.
 > https://github.com/The-Nonhuman-Institute/dept-nonhuman-territories
+
+The three names are three different slots, not three options. Work is authored
+by a person, held by a company, and published under an institution — the same
+shape as any paper with an author and an affiliation.
 
 See [`CITATION.cff`](CITATION.cff) for a formatted citation.
 

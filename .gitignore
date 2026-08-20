@@ -11,10 +11,15 @@ venv/
 # These are never part of the record — terrain_io.verify_integrity() reports
 # them so the steward can see an interrupted commit rather than have it
 # silently cleaned up.
-basin-01/state/.stage-*.tmp
-basin-01/shifts/.stage-*.tmp
+basin-*/state/.stage-*.tmp
+basin-*/shifts/.stage-*.tmp
+
+# The shift lock. Held by the kernel for the life of a running shift; it is a
+# runtime artifact of one machine, never part of the record. It was covered by
+# nothing, so a stale one could be committed into the terrain.
 
 # Credentials — never committed. Phase 2 reads ANTHROPIC_API_KEY from the
 # environment or an `ant auth login` profile, never from a file in the repo.
 .env
 *.key
+basin-*/.shift.lock

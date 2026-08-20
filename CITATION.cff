@@ -3,16 +3,17 @@ title: >-
   Department of Nonhuman Territories: bounded terrains with a
   pre-declared falsification condition
 message: If you refer to this work, please cite it as below.
-type: dataset
+type: software
 
+# A person is the author; the company holds the copyright; the institute is
+# the affiliation. Reference lists credit people, so the person comes first.
 authors:
-  - name: The Nonhuman Institute
-    website: "https://github.com/The-Nonhuman-Institute"
   # Steward. Add your family name here and this becomes a full personal
   # citation — CFF accepts a given name alone, but a surname is what makes
-  # the credit unambiguous in a reference list.
+  # the credit unambiguous in someone else's reference list.
   - given-names: Jaylon
-    affiliation: The Nonhuman Institute
+    affiliation: >-
+      Department of Nonhuman Territories, The Nonhuman Institute
 
 repository-code: >-
   https://github.com/The-Nonhuman-Institute/dept-nonhuman-territories
@@ -43,3 +44,7 @@ license:
 
 version: 0.1.0
 date-released: "2026-08-20"
+
+# Once Zenodo mints a DOI for the first release, uncomment and paste it here.
+# It becomes the permanent identifier people cite instead of the repo URL.
+# doi: 10.5281/zenodo.XXXXXXX

@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 U3 Labs, LLC
+# SPDX-License-Identifier: Apache-2.0
 """
 DNT — the Linnaean crosswalk, made readable.
 
