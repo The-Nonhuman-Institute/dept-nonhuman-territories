@@ -472,6 +472,13 @@ def run_shift(dry_run: bool = False) -> int:
             if emissions:
                 traces[identifier] = emissions[0]["content"]
 
+        # Cover as it stands now, so the next shift can tell the Namer which
+        # way the mat under each specimen is going rather than only how much.
+        transaction.memory["cover_last_shift"] = {
+            str(c["index"]): round(float(c.get("census_density", 0.0)), 3)
+            for c in world["cells"] if (c.get("census_density") or 0) > 0
+        }
+
         # -- Namer: observes what is living ----------------------------------
         observed_before = transaction.memory.setdefault("observed_ids", [])
         chosen = observer.select_for_observation(
@@ -481,8 +488,30 @@ def run_shift(dry_run: bool = False) -> int:
         for being in chosen:
             record = observer.describe_individual(
                 being, shift_number, traces.get(being["id"]))
-            record["residue_where_it_stands"] = round(
-                float(world["cells"][int(being.get("cell", 0))]["residue"]), 2)
+            here = world["cells"][int(being.get("cell", 0))]
+            record["residue_where_it_stands"] = round(float(here["residue"]), 2)
+            # THE MAT IT STANDS IN.
+            #
+            # The Namer has always been told where its light came FROM — "100%
+            # from the cover layer" — while never being shown the cover layer
+            # itself. It knew a mat existed, knew things fed on it, and had
+            # never seen one. That was not a rule; it followed from the mat
+            # being counted in bulk rather than listed, a decision made when
+            # the terrain was 21 cells.
+            #
+            # This shows it the mat in the one cell the specimen occupies:
+            # how much, what it is made of, and which way it is going. It is
+            # not asked to classify the mat — physics.md Section 8 still counts
+            # the cover rather than listing it — only to see the thing its
+            # subject is living on.
+            record["cover_where_it_stands"] = round(float(here.get("census_density", 0.0)), 3)
+            record["cover_substrate_where_it_stands"] = here.get("census_substrate")
+            prev = (transaction.memory.get("cover_last_shift") or {}).get(str(here["index"]))
+            if prev is not None:
+                delta = record["cover_where_it_stands"] - float(prev)
+                record["cover_trend_where_it_stands"] = (
+                    "thickening" if delta > 0.005 else
+                    "thinning" if delta < -0.005 else "holding steady")
             observations.append({
                 "specimen_id": record["specimen_id"],
                 "source_role": "terrain",

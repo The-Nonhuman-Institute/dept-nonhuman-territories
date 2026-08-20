@@ -76,6 +76,9 @@ def describe_individual(being: Dict[str, Any], shift: int,
         "position_across_field": life.cell_lateral(int(being.get("cell", 0))),
         "elevation": life.cell_elevation(int(being.get("cell", 0))),
         "residue_where_it_stands": None,   # filled by describe_individual's caller
+        "cover_where_it_stands": None,     # the mat in that cell, same caller
+        "cover_substrate_where_it_stands": None,
+        "cover_trend_where_it_stands": None,
         "light_held": round(float(being.get("light", 0.0)), 2),
         "light_taken_total": round(total, 2),
         "light_from_cover_pct": _share(drawn_census, total),
@@ -131,6 +134,14 @@ def observation_text(record: Dict[str, Any]) -> str:
     if record.get("residue_where_it_stands") is not None:
         lines.append("residue lying in the cell it occupies: %.2f"
                      % record["residue_where_it_stands"])
+    if record.get("cover_where_it_stands") is not None:
+        made_of = record.get("cover_substrate_where_it_stands")
+        trend = record.get("cover_trend_where_it_stands")
+        lines.append(
+            "the cover layer in the cell it occupies: %.3f%s%s"
+            % (record["cover_where_it_stands"],
+               (", made of %s" % made_of) if made_of else "",
+               (", %s" % trend) if trend else ""))
     structure = record.get("structure") or {}
     if structure:
         lines.append(
