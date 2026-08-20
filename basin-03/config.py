@@ -235,7 +235,22 @@ MAX_OUTPUT_TOKENS_BY_ROLE: Dict[str, int] = {
 # than minutes. Phase 1 raised this to 1600 and shifts stopped finishing; the
 # governance requirement and the local hardware were in direct conflict, and
 # only the hardware side is negotiable.
-OLLAMA_OUTPUT_CEILING = 420
+# The Namer answers about every specimen in the batch in one reply, so what it
+# needs is proportional to the batch — a flat number is the one shape this
+# ceiling cannot be. It was flat at 420 against a batch of 5 needing roughly
+# 930, and the reply was cut off in 26 of 31 records.
+#
+# The damage was not evenly spread. observer.select_for_observation orders the
+# batch "never seen first, then longest present", and a truncated reply loses
+# its tail — so the specimens with the longest history were the ones dropped,
+# every single time. Measured on BASIN-05: mean age 0.84 shifts among the
+# classified, 4.64 among the unresolved; i-00000 was observed twelve times and
+# classified three. Continuity of observation is the Namer's whole purpose, and
+# it was exactly what the ceiling removed.
+#
+# Both numbers below are measured from real replies, not guessed.
+OLLAMA_OUTPUT_PER_SPECIMEN = 200   # one specimen's classification object
+OLLAMA_OUTPUT_OVERHEAD = 320       # the taxonomy block and JSON scaffolding
 
 # Ceiling on total tokens (input + output) a single shift may consume.
 # A shift that would cross this ends early rather than running unbounded
@@ -382,6 +397,14 @@ ARCHIVIST_PERSISTENCE_WINDOW = 8
 # looked at every interval.
 MAX_TRACES_PER_SHIFT = 3        # newly arisen things given a substrate trace
 MAX_OBSERVATIONS_PER_SHIFT = 5  # individuals the Namer looks at per shift
+
+# Derived, never hand-set: whatever the batch is, the reply has room to answer
+# for all of it. check_output_ceiling() below verifies this many tokens can
+# actually be generated inside the timeout at the local model's real speed.
+OLLAMA_OUTPUT_CEILING = (
+    OLLAMA_OUTPUT_OVERHEAD + OLLAMA_OUTPUT_PER_SPECIMEN * MAX_OBSERVATIONS_PER_SHIFT
+)
+
 
 
 def namer_window() -> int:
@@ -937,3 +960,28 @@ if __name__ == "__main__":
     print("  returned : %r" % (probe.text.strip()[:80],))
     print("  tokens   : in=%d out=%d" % (probe.input_tokens, probe.output_tokens))
     print("  cost     : $%.6f" % probe.cost_usd)
+
+
+def check_output_ceiling(tokens_per_second: float = 1.0) -> Optional[str]:
+    """Warn if the reply the Namer is allowed cannot be produced in time.
+
+    Returns None when there is room, or a sentence naming the conflict. This
+    exists because the previous ceiling was lowered until shifts stopped timing
+    out, which fixed the timeout by silently truncating the record instead —
+    the conflict was resolved in favour of the hardware without anyone being
+    told it had been resolved at all.
+    """
+    if PHASE != "ollama":
+        return None
+    needed = OLLAMA_OUTPUT_CEILING / max(0.01, tokens_per_second)
+    if needed <= OLLAMA_TIMEOUT_SECONDS:
+        return None
+    return (
+        "the Namer is allowed %d output tokens, which at %.2f tokens/second "
+        "needs about %.0fs — longer than OLLAMA_TIMEOUT_SECONDS (%ds). Either "
+        "lower MAX_OBSERVATIONS_PER_SHIFT or raise the timeout. Do not lower "
+        "the ceiling on its own: that does not make the reply shorter, it "
+        "makes it stop mid-sentence."
+        % (OLLAMA_OUTPUT_CEILING, tokens_per_second, needed,
+           OLLAMA_TIMEOUT_SECONDS)
+    )

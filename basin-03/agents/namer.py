@@ -344,7 +344,7 @@ def _build_input(
                 record["specimen_id"],
                 record["substrate"],
                 record["complexity"],
-                _clip(str(record.get("content", "")), 600),
+                _clip_observation(str(record.get("content", ""))),
             )
         )
     return "\n".join(lines)
@@ -355,6 +355,42 @@ def _clip(text: str, limit: int) -> str:
     if len(text) <= limit:
         return text
     return text[:limit] + " ...[clipped]"
+
+
+# The line observer.py writes immediately before a specimen's substrate.
+_SUBSTRATE_MARKER = "its substrate as recorded:"
+
+# Measured across every observation the five terrains have ever recorded:
+# the measurement block runs to 911 characters at its longest, and a substrate
+# budget of 1200 keeps 98.8% of substrates whole.
+_MEASUREMENT_CEILING = 1400
+_SUBSTRATE_BUDGET = 1200
+
+
+def _clip_observation(text: str) -> str:
+    """Clip an observation without removing what it is being classified on.
+
+    An observation is written in two parts: everything the terrain measured
+    (position, light, intake, how the specimen is built, how it arose), then
+    the substrate the Generator emitted. Only the second part is unbounded.
+
+    A single clip across the whole thing therefore removed exactly the wrong
+    end. At the previous 600-character limit only 8.7% of observations
+    survived whole, and what fell off every one of the rest was the structure,
+    the lineage and the substrate — while position and light were always kept.
+    The Namer is asked to classify by what a specimen does; what it does was
+    the part being cut, and it has never once seen a substrate.
+
+    So the measurements are kept whole and the model's own output carries the
+    budget, which is the only part that can run away.
+    """
+    text = text.strip()
+    split = text.find(_SUBSTRATE_MARKER)
+    if split < 0:
+        return _clip(text, _MEASUREMENT_CEILING + _SUBSTRATE_BUDGET)
+    return _clip(text[:split], _MEASUREMENT_CEILING) + _clip(
+        text[split:], _SUBSTRATE_BUDGET
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -583,11 +619,20 @@ def run(
         decision = normalise_decision((entry or {}).get("decision"))
 
         if entry is None or decision is None:
+            # When entry is None the specimen was not in the reply at all,
+            # which is what truncation looks like from here. Recording None
+            # for the raw response threw away the only evidence of why —
+            # it was null in 33 of 33 unresolved records. Keep the reply.
             _record_unresolved(
                 writer,
                 record,
-                "no readable decision returned for this specimen",
-                raw_response=json.dumps(entry) if entry else None,
+                ("this specimen was absent from the reply — the reply ended "
+                 "before reaching it"
+                 if entry is None else
+                 "no readable decision returned for this specimen"),
+                raw_response=(json.dumps(entry) if entry
+                              else getattr(result, "text", None)),
+                truncated=(entry is None),
             )
             outcome["unresolved"] += 1
             continue
@@ -596,7 +641,9 @@ def run(
         category = str(category).strip() if isinstance(category, str) and category.strip() else None
         if decision != "anomalous" and category is None:
             _record_unresolved(
-                writer, record, "a filing decision was returned with no category label"
+                writer, record,
+                "a filing decision was returned with no category label",
+                raw_response=json.dumps(entry),
             )
             outcome["unresolved"] += 1
             continue
@@ -670,7 +717,14 @@ def run(
                 "generation": int(record.get("generation", 0) or 0),
                 "content": record.get("content"),
                 "classification": classification,
-                "generation": {
+                # Named "emission", not "generation". It used to be the second
+                # of two keys both called "generation" in this same literal, so
+                # it silently overwrote the lineage integer four lines above and
+                # the specimen's generation never once reached the record — a
+                # dict is what sits in that field in all 2,262 rows written
+                # before this fix. This describes the model call; the integer
+                # above describes descent.
+                "emission": {
                     "model": record.get("model"),
                     "output_tokens": record.get("output_tokens"),
                     "truncated": record.get("truncated"),
@@ -686,7 +740,7 @@ def run(
 
     # The native taxonomy is stored exactly as authored, in whatever shape.
     # Asked for in its own reply now, with its own room — see the note above
-    # _system_prompt_taxonomy. A failure here leaves the stored system exactly
+    # _system_prompt_taxonomy. A failure here keeps the stored system exactly
     # as it was rather than replacing it with nothing.
     authored = parsed.get("taxonomy")
     if not (isinstance(authored, (dict, list)) and authored):
@@ -734,6 +788,7 @@ def _record_unresolved(
     record: Dict[str, Any],
     reason: str,
     raw_response: Optional[str] = None,
+    truncated: bool = False,
 ) -> None:
     """Log a mechanism failure as unresolved — explicitly not an anomaly.
 
@@ -753,6 +808,10 @@ def _record_unresolved(
             "resolution": "unresolved",
             "is_classification_outcome": False,
             "mechanism_failure": reason,
+            # Whether the reply was cut off rather than merely unreadable.
+            # The two need telling apart: one is a ceiling that is too low,
+            # the other is a model that answered badly, and the fix differs.
+            "reply_truncated": bool(truncated),
             "raw_response": _clip(raw_response, 1200) if raw_response else None,
             "note": (
                 "Harness failure, not a Namer classification decision. This "

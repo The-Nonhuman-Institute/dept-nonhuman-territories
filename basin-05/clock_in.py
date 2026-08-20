@@ -765,6 +765,8 @@ def run_shift(dry_run: bool = False) -> int:
         or halts
         or warnings
         or outcome.get("parse_failed")
+        or outcome.get("response_truncated")
+        or outcome.get("salvaged_from_truncated_response")
     )
 
     ended_timestamp = _utc_now()
@@ -800,6 +802,15 @@ def run_shift(dry_run: bool = False) -> int:
             "aggregate_records": outcome["aggregate_records"],
             "anomalous": outcome["anomalous"],
             "unresolved": outcome["unresolved"],
+            # How the reply arrived. The Namer has always computed these three;
+            # nothing wrote them down, so the shift log recorded 26 of 31
+            # specimen records as ordinary classifications when they had in
+            # fact been salvaged out of a reply that stopped mid-sentence.
+            # Whether a classification came from a complete answer is part of
+            # what that classification is worth.
+            "reply_truncated": bool(outcome.get("response_truncated")),
+            "reply_salvaged": bool(outcome.get("salvaged_from_truncated_response")),
+            "reply_unparseable": bool(outcome.get("parse_failed")),
             "new_categories": outcome["new_categories"],
             "recoined_categories": outcome.get("recoined_categories") or [],
             "taxonomy_structure": outcome.get("taxonomy_structure"),
