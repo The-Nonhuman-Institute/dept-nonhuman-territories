@@ -54,7 +54,9 @@ border:1px solid var(--rule);background:var(--bg);padding:6px 11px;white-space:n
 /* ---- rails ---- */
 .left{grid-area:left;background:var(--panel);border-right:1px solid var(--rule)}
 .right{grid-area:right;background:var(--panel);border-left:1px solid var(--rule)}
-.mid{grid-area:mid;min-width:0;padding:16px}
+.mid{grid-area:mid;min-width:0;padding:16px;scroll-behavior:smooth}
+section.p[id],div[id]{scroll-margin-top:18px}
+.rowlink.jump.on{background:var(--rule);color:var(--moss)}
 .left,.right{overflow-y:auto;min-height:0}
 .app.norail .right{display:none}
 .app.noleft .left{display:none}

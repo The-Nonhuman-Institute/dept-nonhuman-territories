@@ -99,7 +99,9 @@ border:1px solid var(--rule);background:var(--bg);padding:6px 11px;white-space:n
 /* ---- rails ---- */
 .left{grid-area:left;background:var(--panel);border-right:1px solid var(--rule)}
 .right{grid-area:right;background:var(--panel);border-left:1px solid var(--rule)}
-.mid{grid-area:mid;min-width:0;padding:16px}
+.mid{grid-area:mid;min-width:0;padding:16px;scroll-behavior:smooth}
+section.p[id],div[id]{scroll-margin-top:18px}
+.rowlink.jump.on{background:var(--rule);color:var(--moss)}
 .left,.right{overflow-y:auto;min-height:0}
 .app.norail .right{display:none}
 .app.noleft .left{display:none}
@@ -344,11 +346,49 @@ def page(title: str, doc_name: str, terrain_dir: str, crumb_items: Sequence,
            doc_name, mark(13), LOCALTIME_JS, scripts))
 
 
-def panel(head: str, body: str, right_note: str = "", flush: bool = False) -> str:
-    return ('<section class="p"><div class="ph"><b>%s</b>%s</div>'
+def panel(head: str, body: str, right_note: str = "", flush: bool = False,
+          anchor: str = "") -> str:
+    """A titled block. `anchor` makes it a real jump target for the rails."""
+    return ('<section class="p"%s><div class="ph"><b>%s</b>%s</div>'
             '<div class="pb%s">%s</div></section>'
-            % (head, ('<span class="r">%s</span>' % right_note) if right_note else "",
+            % (' id="%s"' % anchor if anchor else "",
+               head, ('<span class="r">%s</span>' % right_note) if right_note else "",
                " flush" if flush else "", body))
+
+
+def section_nav(items, current: str = "") -> str:
+    """Jump links into the page, with the section you are in marked."""
+    return "".join(
+        '<a class="rowlink jump" href="#%s" data-jump="%s"><span></span>'
+        '<span>%s</span><span></span></a>' % (anchor, anchor, label)
+        for label, anchor in items)
+
+
+SECTION_JS = """
+<script>
+// Mark the section the reader is actually in. Without this the rail lists
+// eight destinations and never says which one you are looking at.
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll("a.jump"));
+  if (!links.length) return;
+  var targets = links.map(function(a){
+    return {a: a, el: document.getElementById(a.getAttribute("data-jump"))};
+  }).filter(function(t){ return t.el; });
+  var mark = function(){
+    var best = null, bestTop = -1e9;
+    targets.forEach(function(t){
+      var top = t.el.getBoundingClientRect().top - 90;
+      if (top <= 0 && top > bestTop) { bestTop = top; best = t; }
+    });
+    links.forEach(function(a){ a.classList.remove("on"); });
+    if (best) best.a.classList.add("on");
+  };
+  addEventListener("scroll", mark, {passive: true});
+  addEventListener("resize", mark);
+  mark();
+})();
+</script>
+"""
 
 
 def kv(pairs: Sequence[Tuple]) -> str:

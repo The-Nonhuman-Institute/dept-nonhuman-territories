@@ -1724,13 +1724,9 @@ def checkpoint_report(d: Dict[str, Any], window: int = CHECKPOINT_EVERY) -> str:
                esc(x[0].get("shift")), esc(x[1].get("shift")),
                esc((x[1].get("end_timestamp") or "")[:10]))
             for x in reversed(ck_list[-8:])), flush=True) + \
-        C.panel("Report sections", "".join(
-            '<a class="rowlink" href="#%s"><span></span><span>%s</span><span></span></a>'
-            % (anchor, label) for label, anchor in
-            (("Summary", "top"), ("Population", "pop"), ("Classifications", "cls"),
-             ("Resources", "res"), ("Spatial distribution", "spatial"),
-             ("Lineage & descent", "lin"), ("Notable emergences", "emerg"),
-             ("Indicators", "ind"))), flush=True) + \
+        C.panel("Report sections", C.section_nav(
+            (("Summary", "top"), ("Population and flow", "pop"),
+             ("Spatial and descent", "spatial"))), flush=True) + \
         C.panel("Go to", C.nav([
             ("Terrain record", "/%s/terrain.html" % t, "current state and conditions"),
             ("Shift log", "/%s/shiftlog.html" % t, "the rows this report reads"),
@@ -1825,7 +1821,7 @@ def checkpoint_report(d: Dict[str, Any], window: int = CHECKPOINT_EVERY) -> str:
                    (d["name"], "/%s/terrain.html" % t),
                    ("CHECKPOINT %s → %s" % (num(a), num(b)), None)],
                   d["shift"], d["committed_at"], mid, left, right,
-                  CSS + charts.CSS, current="checkpoint")
+                  CSS + charts.CSS, current="checkpoint", scripts=C.SECTION_JS)
 
 
 def grid_width_of(d):
@@ -2107,9 +2103,7 @@ def comparative_study(loaded: List[Dict[str, Any]]) -> str:
                    ("Trajectories", "traj"), ("Aggregate metrics", "agg"),
                    ("Against the median", "key"), ("Event frequency", "ev"),
                    ("Persistence", "pers"), ("Method", "method")]
-    left = C.panel("Study navigation", "".join(
-        '<a class="rowlink" href="#%s"><span></span><span>%s</span><span></span></a>'
-        % (anchor, label) for label, anchor in NAVSECTIONS), flush=True) + \
+    left = C.panel("Study navigation", C.section_nav(NAVSECTIONS), flush=True) + \
         C.panel("Terrains in study", "".join(
             '<div class="rowlink"><span class="sw" style="background:%s"></span>'
             '<span>%s<span class="s">shift %s · %s cells</span></span><span></span></div>'
@@ -2117,22 +2111,24 @@ def comparative_study(loaded: List[Dict[str, Any]]) -> str:
                num(len(d["world"].get("cells") or []))) for d in shown), flush=True) + \
         C.panel("Study controls",
                 '<p class="note">There are none. Every terrain contributes every shift it '
-                'has committed. Trajectories are indexed to each terrain\'s own first value '
-                'and plotted against its own life as a percentage, which is what makes the '
-                'SHAPES comparable; the heights are not, and nothing is scaled to a common '
-                'age.</p>') + \
+                'has committed. Trajectories are indexed to each terrain\'s own MEAN and '
+                'plotted against its own life as a percentage, which is what makes the '
+                'SHAPES comparable; the heights are not, and nothing is scaled to a '
+                'common age.</p>') + \
         C.panel("What this is not",
                 '<p class="note">Not a ranking. A higher figure is a different outcome, not '
                 'a better one. DNT does not evaluate terrains. We observe.</p>')
 
+    against = C.panel(
+        "Against the median",
+        '<div class="scroll"><table class="d"><thead><tr><th>metric</th>%s</tr>'
+        '</thead><tbody>%s</tbody></table></div>'
+        '<p class="note">Each terrain against the median of all %d. A sign says direction, '
+        'not merit; beyond 200%% the figure is shown as a multiple because a percentage '
+        'that large cannot be read.</p>'
+        % (head, "".join(keyrows), len(shown)), anchor="key")
+
     right = C.panel("Study findings", '<ul class="find">%s</ul>' % "".join(findings)) + \
-        C.panel("Against the median",
-                '<div class="scroll"><table class="d"><thead><tr><th>metric</th>%s</tr>'
-                '</thead><tbody>%s</tbody></table></div>'
-                '<p class="note">Each terrain against the median of all %d. A sign says '
-                'direction, not merit; beyond 200%% the figure is shown as a multiple '
-                'because a percentage that large cannot be read.</p>'
-                % (head, "".join(keyrows), len(shown))) + \
         C.panel("Read with care",
                 '<p class="note">BASIN-01 and BASIN-02 differ in exactly one seeded '
                 'variable and are a controlled comparison. BASIN-03 and BASIN-04 are not — '
@@ -2156,22 +2152,22 @@ def comparative_study(loaded: List[Dict[str, Any]]) -> str:
     mid += '<div id="cards" class="tcards">%s</div>' % "".join(cards)
     mid += C.panel("Trajectory over time",
                    '<div class="charts3">%s</div>%s'
-                   '<p class="note">Each terrain is indexed to its own first recorded value '
-                   'and drawn against its own life as a percentage, so a terrain of 126 '
-                   'shifts and one of 217 can be compared by shape. Steadiness is plotted as '
-                   '1 − CV so that up means steadier on every panel.</p>'
+                   '<p class="note">Each terrain is indexed to its own mean and drawn '
+                   'against its own life as a percentage, so a terrain of 128 shifts and '
+                   'one of 218 can be compared by shape. Indexing to the FIRST value '
+                   'looks reasonable and is not: a terrain that began with one living '
+                   'specimen would index its population to ten thousand, and the panel '
+                   'would become a chart of how small each terrain started. Steadiness '
+                   'is plotted as 1 − CV so that up means steadier on every panel.</p>'
                    % (traj, charts.legend([(d["name"], d["_hue"]) for d in shown])),
-                   "indexed to each terrain's own mean")
-    mid = mid.replace('<section class="p"><div class="ph"><b>Trajectory over time</b>',
-                      '<section class="p" id="traj"><div class="ph"><b>Trajectory over time</b>')
+                   "indexed to each terrain's own mean", anchor="traj")
     mid += C.panel("Aggregate metrics at the latest shift",
                    '<div class="scroll"><table class="d"><thead><tr><th>metric</th>%s'
                    '<th class="num">median</th></tr></thead><tbody>%s</tbody></table></div>'
                    '<p class="note">Read across a row, not down a column. Each terrain is at '
                    'a different shift and under different conditions.</p>'
-                   % (head, "".join(agg)))
-    mid = mid.replace('<section class="p"><div class="ph"><b>Aggregate metrics',
-                      '<section class="p" id="agg"><div class="ph"><b>Aggregate metrics')
+                   % (head, "".join(agg)), anchor="agg")
+    mid += against
 
     labels = []
     for d in shown:
@@ -2188,32 +2184,31 @@ def comparative_study(loaded: List[Dict[str, Any]]) -> str:
             else '<td class="num absent">absent</td>' for d in shown))
         for label in labels)
 
-    mid += ('<div class="cols2" id="ev">%s%s</div>'
+    mid += ('<div class="cols2">%s%s</div>'
             % (C.panel("Event frequency, per hundred shifts",
                        '<div class="scroll"><table class="d"><thead><tr><th>event</th>%s'
                        '</tr></thead><tbody>%s</tbody></table></div>'
                        '<p class="note">A rate, not a total, so terrains of different ages '
                        'compare. Every figure is summed from the shift log.</p>'
-                       % (head, evrows)),
+                       % (head, evrows), anchor="ev"),
                C.panel("Persistence",
                        '<div class="scroll"><table class="d"><thead><tr><th>pattern</th>%s'
                        '</tr></thead><tbody>%s</tbody></table></div>'
                        '<p class="note">Across every specimen the terrain has held, living '
-                       'and ended alike.</p>' % (head, prows))))
+                       'and ended alike.</p>' % (head, prows), anchor="pers")))
 
     mid += C.panel("Governing conditions, side by side",
                    '<div class="scroll"><table class="d"><thead><tr><th>condition</th>%s</tr>'
                    '</thead><tbody>%s</tbody></table></div>'
                    '<p class="note">This is the comparison that matters: the terrains differ '
                    'in what governs them, and a condition a terrain does not have is shown as '
-                   'absent rather than as a zero.</p>' % (head, govrows))
-    mid = mid.replace('<section class="p"><div class="ph"><b>Governing conditions, side',
-                      '<section class="p" id="method"><div class="ph"><b>Governing conditions, side')
+                   'absent rather than as a zero.</p>' % (head, govrows), anchor="method")
 
     return C.page("Comparative Terrain Study", "COMPARATIVE STUDY", shown[-1]["dir"],
                   [("STUDIES", None), ("COMPARATIVE TERRAIN STUDY", None)],
                   shown[-1]["shift"], shown[-1]["committed_at"], mid, left, right,
-                  CSS + charts.CSS + snapshot.CSS, current="study")
+                  CSS + charts.CSS + snapshot.CSS, current="study",
+                  scripts=C.SECTION_JS)
 
 
 # ===========================================================================
