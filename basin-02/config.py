@@ -33,7 +33,7 @@ from typing import Dict, List, Optional, Tuple
 #    runs. Nothing else in the terrain needs to change to swap phases.
 # ---------------------------------------------------------------------------
 
-PHASE = "claude"          # "ollama" (Phase 1, zero cost) | "claude" (Phase 2)
+PHASE = "ollama"          # "ollama" (Phase 1, zero cost) | "claude" (Phase 2)
 
 
 # ---------------------------------------------------------------------------
