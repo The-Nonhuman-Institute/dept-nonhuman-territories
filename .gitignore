@@ -23,3 +23,15 @@ basin-*/shifts/.stage-*.tmp
 .env
 *.key
 basin-*/.shift.lock
+
+# Per-shift snapshots of the whole field: one row per shift, each holding
+# every cell's density, light, residue and substrate. Nothing in the project
+# reads these back, and no governance document requires them — not the Shift
+# Log Policy, the Charter, physics.md, or the Stewardship Protocol.
+#
+# They are kept, not discarded: they are the only frame-by-frame record of how
+# a terrain's field evolved and cannot be recovered by re-running, since the
+# harness has changed. They are archived to Zenodo with the terrain release,
+# which gives them a DOI and better provenance than a path in a repository.
+# See LICENSING.md.
+basin-*/state/field_log.jsonl
