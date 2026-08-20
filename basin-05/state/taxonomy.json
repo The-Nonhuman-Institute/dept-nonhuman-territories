@@ -4,13 +4,51 @@
   "container_note": "The object under 'native' is authored entirely by this terrain's Namer. It is not issued a template, a structure, or a vocabulary. Its only obligation is that for any two specimens it can state whether they are more or less alike, and why (DNT-CLS-001 Section 1).",
   "native": {
     "category": "structural_complexity_low",
-    "description": "Low structural complexity, consistent with simple, relatively static forms."
+    "elements": [
+      {
+        "name": "Species",
+        "type": "Animal",
+        "description": "Common domestic breeds of dogs and cats, primarily focused on companionship and relatively predictable behaviors.",
+        "attributes": {
+          "size": "Medium",
+          "color": "Varied",
+          "activity_level": "Moderate",
+          "temperament": "Affectionate, playful, loyal"
+        }
+      },
+      {
+        "name": "Breed_Variation",
+        "type": "Breed",
+        "description": "Specifically, variations within the 'Golden Retriever' and 'Labrador Retriever' breeds, focusing on consistent physical characteristics.",
+        "attributes": {
+          "height": "Medium",
+          "weight": "Medium",
+          "coat_length": "Medium",
+          "body_shape": "Round"
+        }
+      },
+      {
+        "name": "Behavioral_Pattern",
+        "type": "Behavior",
+        "description": "Consistent patterns of movement and interaction, primarily focused on retrieving and cuddling.",
+        "attributes": {
+          "activity_level": "High",
+          "social_interaction": "High",
+          "play_style": "Interactive"
+        }
+      }
+    ]
   },
   "revisions": [
     {
       "shift": 2,
       "at": "2026-08-20T17:04:58Z",
       "note": "native system rewritten by the Namer during shift 2"
+    },
+    {
+      "shift": 13,
+      "at": "2026-08-20T21:32:39Z",
+      "note": "native system rewritten by the Namer during shift 13"
     }
   ]
 }
