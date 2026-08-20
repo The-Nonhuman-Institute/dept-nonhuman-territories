@@ -79,7 +79,16 @@ TERRAIN_NAME = "BASIN-02"
 
 OLLAMA_MODEL = "gemma3:4b"          # steward-selected; see build notes
 OLLAMA_ENDPOINT = "http://127.0.0.1:11434/api/generate"
-OLLAMA_TIMEOUT_SECONDS = 900      # CPU inference on the local model is slow;
+OLLAMA_TIMEOUT_SECONDS = 3000     # Raised from 900. gemma3:4b is resident with
+                                  # 0.0GB in VRAM on this machine — it runs wholly
+                                  # on an i7-9750H at roughly one token a second,
+                                  # so a call at the 420-token ceiling needs ~420s
+                                  # of generation before prefill is counted. Any
+                                  # terrain with an accumulated taxonomy blew
+                                  # through 900s regardless of how many specimens
+                                  # were alive; BASIN-01 failed at 21 living. This
+                                  # buys wall-clock and nothing else: what the
+                                  # model is shown and what it writes are unchanged.
                                   # this is a hardware allowance, not terrain physics
 
 CLAUDE_ROUTINE_MODEL = "claude-haiku-4-5"

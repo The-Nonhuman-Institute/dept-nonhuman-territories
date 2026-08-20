@@ -4701,6 +4701,12 @@
       "logged_at": "2026-08-20T04:17:30Z",
       "kind": "classifier_changed",
       "detail": "BASIN-01 moves from Phase 2 (claude-haiku-4-5) to Phase 1 (gemma3:4b) at shift 126, by steward decision, because the API credits this terrain was running on are exhausted. The change is recorded rather than made quietly because it changes WHO IS DOING THE CLASSIFYING, and that is not a neutral detail. Everything on this terrain's record up to this shift was named by claude-haiku-4-5 across 127 canonical shifts; everything after it is named by a 4B local model. The taxonomy therefore has two authors, and any change in its character after this point has at least two possible causes \u2014 the terrain, or the classifier. Per STARTUP_GUIDE Section 2.5 and physics.md Section 11, Phase 1 shifts do not count toward the 15-shift falsification checkpoint, so this terrain's canonical count is frozen at 127 for that purpose."
+    },
+    {
+      "shift": 127,
+      "logged_at": "2026-08-20T04:40:22Z",
+      "kind": "shift_aborted",
+      "detail": "Shift 127 began at 2026-08-20T04:18:55Z and failed before clock-out: model backend unavailable: local model exceeded the 900s timeout generating up to 420 tokens. On CPU this is a hardware limit, not a fault: either raise OLLAMA_TIMEOUT_SECONDS or lower the role's output cap.. No specimen or classification records were written. 1 model call(s) had been made, $0.000000 spent."
     }
   ],
   "keeper_summary": {
