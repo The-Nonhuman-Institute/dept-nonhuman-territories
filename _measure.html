@@ -1,0 +1,30 @@
+<style>html,body{margin:0;background:#080A07;color:#cfe;font:13px monospace}
+iframe{border:0;width:1700px;height:1500px;position:absolute;left:-9999px;top:0}
+pre{padding:14px;white-space:pre-wrap}</style>
+<iframe id="f" src="/study.html"></iframe>
+<pre id="out">measuring…</pre>
+<script>
+document.getElementById('f').addEventListener('load', function(){
+  var d = this.contentDocument, rows = [];
+  d.querySelectorAll('.tcard').forEach(function(card){
+    var btn = card.querySelector('.nav'), cr = card.getBoundingClientRect(),
+        br = btn.getBoundingClientRect();
+    rows.push({name: card.querySelector('.tch b').textContent.trim(),
+               cardBottom: Math.round(cr.bottom), btnTop: Math.round(br.top),
+               gapBelow: Math.round(cr.bottom - br.bottom)});
+  });
+  var groups = {};
+  rows.forEach(function(r){ (groups[r.cardBottom] = groups[r.cardBottom] || []).push(r.btnTop); });
+  var txt = rows.map(function(r){
+    return (r.name + '          ').slice(0,10) + ' btnTop=' + ('     '+r.btnTop).slice(-5)
+      + '  cardBottom=' + ('     '+r.cardBottom).slice(-5)
+      + '  gapBelowButton=' + ('    '+r.gapBelow).slice(-4);
+  }).join('\n');
+  var per = Object.keys(groups).map(function(k){
+    var g = groups[k];
+    return 'row ending @' + k + ' : button-top spread = '
+      + (Math.max.apply(null,g) - Math.min.apply(null,g)) + 'px';
+  }).join('\n');
+  document.getElementById('out').textContent = txt + '\n\n' + per;
+});
+</script>
