@@ -43,6 +43,7 @@ Python 3.9 compatible.
 from __future__ import annotations
 
 import datetime
+import fcntl
 import os
 import sys
 import time
@@ -265,7 +266,21 @@ def resolve_end_states(memory: Dict[str, Any], shift_number: int) -> int:
 
 
 def show_status() -> int:
-    terrain_io.initialize_terrain()
+    # Deliberately does not initialise. --status is documented as read-only,
+    # and seeding a half-present terrain would replace the Namer's taxonomy
+    # with an empty one while memory.json still describes the real thing.
+    absent = terrain_io.missing_terrain_files()
+    if absent:
+        print(RULE)
+        print("%s (%s) — NOT INITIALISED" % (config.TERRAIN_NAME, config.TERRAIN_ID))
+        print(RULE)
+        print("missing: %s" % ", ".join(absent))
+        print("")
+        print("Nothing has been created. Run a shift to seed a new terrain, or")
+        print("restore the missing file(s) if this terrain has run before.")
+        print(RULE)
+        return 1
+
     memory = terrain_io.read_memory()
     taxonomy = terrain_io.read_taxonomy()
     clean, findings = terrain_io.verify_integrity()
@@ -321,22 +336,44 @@ def run_shift(dry_run: bool = False) -> int:
     started_monotonic = time.time()
     start_timestamp = _utc_now()
 
-    terrain_io.initialize_terrain()
+    if dry_run:
+        # --dry-run promises it writes nothing, so it may not seed either.
+        absent = terrain_io.missing_terrain_files()
+        if absent:
+            print("--dry-run: this terrain is not initialised (missing %s)."
+                  % ", ".join(absent))
+            print("Nothing was run, nothing was written.")
+            return 1
+    else:
+        terrain_io.initialize_terrain()
 
     # An interrupted commit leaves records from a shift that never closed. A new
     # shift would reuse that shift number and make the record ambiguous, so the
     # loop refuses to start and hands the decision to the steward rather than
     # quietly writing over the question.
-    clean, findings = terrain_io.verify_integrity()
-    if not clean:
+    findings = terrain_io.integrity_findings()
+    blocking = [m for severity, m in findings if severity == "blocking"]
+    standing = [m for severity, m in findings if severity == "standing"]
+
+    if blocking:
         print("REFUSING TO START — terrain integrity findings:")
-        for finding in findings:
+        for finding in blocking:
             print("  - %s" % finding)
         print("")
         print("These records stand; they are not corruption. Read them, decide")
         print("how the interrupted shift should be treated, and note the")
         print("decision. The loop will not overwrite the question for you.")
         return 1
+
+    # Standing findings describe damage this record already carries — a past
+    # concurrency incident, a lost update. They do not make the next shift
+    # ambiguous, so they do not stop one, but they are printed on every single
+    # run rather than being quietly tolerated once and forgotten.
+    if standing:
+        print("STANDING INTEGRITY FINDINGS — this record already carries:")
+        for finding in standing:
+            print("  - %s" % finding)
+        print("")
 
     memory = terrain_io.read_memory()
     shift_number = int(memory.get("last_committed_shift", -1)) + 1
@@ -890,47 +927,61 @@ def _abort(
 # produce the state beside it.
 #
 # Nothing in the harness prevented that, so nothing stopped it happening. This
-# does: a shift takes an exclusive lock on the terrain directory and refuses to
-# start if another already holds it. The lock is advisory and self-clearing —
-# a stale one from a killed process is detected by checking whether that pid is
-# still alive, so a crash does not wedge the terrain.
+# does: a shift takes an exclusive kernel lock on the terrain directory and
+# refuses to start if another already holds it.
+#
+# The lock is held by the kernel, not by a file we write and check. An earlier
+# version looked for a pid file and then created one, which is two separate
+# steps with a gap in between: four processes released together took the lock
+# simultaneously in 60 trials out of 60, because all four looked before any of
+# them wrote. It also read a live process owned by another user as dead, and a
+# recycled pid as alive. flock has none of those failure modes, and the kernel
+# drops it on every exit path including SIGKILL and power loss, so a crash
+# cannot wedge the terrain either.
 # ---------------------------------------------------------------------------
 def _acquire_shift_lock():
-    """Refuse to run if another shift is already running on this terrain."""
+    """Refuse to run if another shift is already running on this terrain.
+
+    Returns an open file descriptor that must stay open for the whole shift —
+    the lock lives on the descriptor, and closing it releases the terrain.
+    """
     path = os.path.join(config.TERRAIN_ROOT, ".shift.lock")
-    if os.path.exists(path):
+    handle = os.open(path, os.O_CREAT | os.O_RDWR, 0o644)
+    try:
+        fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except (IOError, OSError):
         try:
             with open(path, encoding="utf-8") as stream:
-                holder = int((stream.read().strip() or "0"))
-        except (ValueError, IOError):
-            holder = 0
-        alive = False
-        if holder:
-            try:
-                os.kill(holder, 0)
-                alive = True
-            except OSError:
-                alive = False
-        if alive:
-            print(RULE)
-            print("REFUSED — a shift is already running on this terrain (pid %d)" % holder)
-            print(RULE)
-            print("Two shifts running at once both read the same next shift number,")
-            print("both run it, and both commit. Wait for that one to finish, or stop")
-            print("it. Nothing has been read or written by this attempt.")
-            return None
-        os.remove(path)      # stale: the holder is gone
-    with open(path, "w", encoding="utf-8") as stream:
-        stream.write(str(os.getpid()))
-    return path
+                holder = stream.read().strip() or "unknown"
+        except IOError:
+            holder = "unknown"
+        os.close(handle)
+        print(RULE)
+        print("REFUSED — a shift is already running on this terrain (pid %s)" % holder)
+        print(RULE)
+        print("Two shifts running at once both read the same next shift number,")
+        print("both run it, and both commit. Wait for that one to finish, or stop")
+        print("it. Nothing has been read or written by this attempt.")
+        return None
+
+    os.ftruncate(handle, 0)
+    os.write(handle, str(os.getpid()).encode("utf-8"))
+    os.fsync(handle)
+    return handle
 
 
-def _release_shift_lock(path):
-    if path and os.path.exists(path):
-        try:
-            os.remove(path)
-        except OSError:
-            pass
+def _release_shift_lock(handle):
+    """Release the terrain. Closing the descriptor is what drops the lock."""
+    if handle is None:
+        return
+    try:
+        fcntl.flock(handle, fcntl.LOCK_UN)
+    except (IOError, OSError):
+        pass
+    try:
+        os.close(handle)
+    except OSError:
+        pass
 
 
 def main(argv: List[str]) -> int:

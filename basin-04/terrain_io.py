@@ -170,12 +170,63 @@ def _seed_taxonomy() -> Dict[str, Any]:
     }
 
 
+def terrain_files() -> Tuple[str, ...]:
+    """Every file a terrain must have. Read-only."""
+    paths = [
+        config.MEMORY_FILE,
+        config.TAXONOMY_FILE,
+        config.SPECIMEN_LOG,
+        config.ANOMALY_LOG,
+        config.SHIFT_LOG,
+    ]
+    field_log = getattr(config, "FIELD_LOG", None)
+    if field_log:
+        paths.append(field_log)
+    return tuple(paths)
+
+
+def missing_terrain_files() -> List[str]:
+    """Which terrain files are absent. Reads only — creates nothing.
+
+    Exists so that --status can report an uninitialised terrain instead of
+    quietly seeding one, which is a write, and which on a half-present terrain
+    means replacing the Namer's taxonomy with an empty one.
+    """
+    return [os.path.basename(p) for p in terrain_files() if not os.path.exists(p)]
+
+
 def initialize_terrain() -> Dict[str, bool]:
     """Create any missing terrain file with a valid empty structure.
 
-    Never overwrites. Running this against a live terrain is a no-op, which
-    makes it safe for clock_in.py to call on every shift.
+    Never overwrites, and refuses to seed a terrain that is only partly there.
+
+    That second rule matters more than it looks. taxonomy.json holds the
+    Namer's authored classification — the research data. If it alone goes
+    missing (an aborted restore, a stray checkout), seeding it writes {} over
+    a system that memory.json still describes as having dozens of nodes, and
+    nothing downstream can tell the difference between "the Namer has not
+    started" and "the Namer's work was destroyed". A partly-present terrain is
+    a finding for the steward, not a gap to fill in.
     """
+    present = [p for p in terrain_files() if os.path.exists(p)]
+    absent = [p for p in terrain_files() if not os.path.exists(p)]
+    if absent and present:
+        populated = [
+            os.path.basename(p) for p in present if os.path.getsize(p) > 0
+        ]
+        if populated:
+            raise TerrainStateError(
+                "this terrain is only partly present: %s missing, while %s "
+                "already hold(s) data. Seeding the missing file(s) would write "
+                "an empty structure beside a live record — if taxonomy.json is "
+                "among them that discards the Namer's classification. Restore "
+                "the missing file or start a new terrain; this will not guess."
+                % (
+                    ", ".join(os.path.basename(p) for p in absent),
+                    ", ".join(populated),
+                )
+            )
+
     created: Dict[str, bool] = {}
     for directory in (config.STATE_DIR, config.SHIFTS_DIR):
         if not os.path.isdir(directory):
@@ -228,13 +279,38 @@ def _write_json_atomic(path: str, payload: Any) -> None:
         raise
 
 
-def _append_lines_atomic(path: str, records: Iterable[Dict[str, Any]]) -> int:
-    """Append records to an append-only log without risking a torn line.
+def _fsync_directory(directory: str) -> None:
+    """Flush a directory entry so a rename or creation survives power loss.
 
-    The existing content is copied into a staged file, the new records are
-    appended to the copy, and the copy is swapped in. Append-only is a property
-    of the content — no line is ever rewritten or removed — while the swap
-    keeps a crash from leaving a partial record behind.
+    Fsyncing a file guarantees its contents; it says nothing about whether the
+    name pointing at it has reached the disk.
+    """
+    try:
+        handle = os.open(directory, os.O_RDONLY)
+    except OSError:
+        return
+    try:
+        os.fsync(handle)
+    except OSError:
+        pass
+    finally:
+        os.close(handle)
+
+
+def _append_lines_atomic(path: str, records: Iterable[Dict[str, Any]]) -> int:
+    """Append records to an append-only log.
+
+    The file is opened O_APPEND, so the kernel positions every write at the
+    current end of the file as one indivisible step. A second process
+    committing at the same moment lands its records *after* these; it cannot
+    overwrite them. The whole payload goes out in a single write() call, so a
+    record can never be split in half by another writer.
+
+    This deliberately does not copy the file. An earlier version staged a
+    rewritten copy and renamed it over the top, which is a read-modify-write:
+    two overlapping commits each read N lines and each replaced the file, so
+    whichever landed second silently deleted the other's records while
+    reporting success. Append-only has to be enforced by the write itself.
     """
     resolved = _guard(path)
     if resolved not in {os.path.realpath(p) for p in _APPEND_ONLY_FILES}:
@@ -244,24 +320,25 @@ def _append_lines_atomic(path: str, records: Iterable[Dict[str, Any]]) -> int:
     if not records:
         return 0
 
-    directory = os.path.dirname(resolved)
-    handle, temp_path = tempfile.mkstemp(dir=directory, prefix=".stage-", suffix=".tmp")
+    payload = "".join(
+        json.dumps(record, sort_keys=False) + "\n" for record in records
+    ).encode("utf-8")
+
+    handle = os.open(resolved, os.O_WRONLY | os.O_CREAT | os.O_APPEND, 0o644)
     try:
-        with os.fdopen(handle, "w", encoding="utf-8") as stream:
-            if os.path.exists(resolved):
-                with open(resolved, "r", encoding="utf-8") as existing:
-                    for line in existing:
-                        if line.strip():
-                            stream.write(line if line.endswith("\n") else line + "\n")
-            for record in records:
-                stream.write(json.dumps(record, sort_keys=False) + "\n")
-            stream.flush()
-            os.fsync(stream.fileno())
-        os.replace(temp_path, resolved)
-    except BaseException:
-        if os.path.exists(temp_path):
-            os.unlink(temp_path)
-        raise
+        written = os.write(handle, payload)
+        if written != len(payload):
+            raise TerrainStateError(
+                "short write appending to %s: %d of %d bytes reached the disk. "
+                "The log may end in a torn record; do not run another shift "
+                "until it has been inspected."
+                % (os.path.basename(resolved), written, len(payload))
+            )
+        os.fsync(handle)
+    finally:
+        os.close(handle)
+
+    _fsync_directory(os.path.dirname(resolved))
     return len(records)
 
 
@@ -618,22 +695,44 @@ def writer_for_role(transaction: Transaction, role: str):
 # ---------------------------------------------------------------------------
 
 
-def verify_integrity() -> Tuple[bool, List[str]]:
-    """Check state/ for the signature of an interrupted commit.
+def integrity_findings() -> List[Tuple[str, str]]:
+    """Every integrity finding, each tagged "blocking" or "standing".
 
-    Returns (clean, findings). Findings are reported, never auto-repaired —
-    silently rewriting terrain records is exactly what DNT-STW-001 Section 3
-    forbids.
+    The distinction is what a finding means for the *next* shift, not how
+    serious it is:
+
+      blocking  the next shift number is ambiguous, or a commit is in flight.
+                Running would write over an open question.
+      standing  a fact about what has already happened to this record. It is
+                reported every time and never quietly dropped, but it does not
+                make the next shift ambiguous, so it does not stop one.
+
+    Duplicate shifts are the case that forced the split. They are permanent
+    scars from a past concurrency incident — already logged as terrain events —
+    and treating them as blocking would wedge three terrains for good.
+
+    Findings are reported, never auto-repaired: silently rewriting terrain
+    records is exactly what DNT-STW-001 Section 3 forbids.
     """
-    findings: List[str] = []
+    findings: List[Tuple[str, str]] = []
+
+    def note(severity: str, message: str) -> None:
+        findings.append((severity, message))
+
     try:
         memory = read_memory()
         read_taxonomy()
     except TerrainStateError as exc:
-        return False, [str(exc)]
+        return [("blocking", str(exc))]
 
     committed = int(memory.get("last_committed_shift", -1))
-    for path in (config.SPECIMEN_LOG, config.ANOMALY_LOG, config.SHIFT_LOG):
+
+    logs = [config.SPECIMEN_LOG, config.ANOMALY_LOG, config.SHIFT_LOG]
+    field_log = getattr(config, "FIELD_LOG", None)
+    if field_log:
+        logs.append(field_log)
+
+    for path in logs:
         try:
             records = read_log(path)
         except TerrainStateError as exc:
@@ -641,25 +740,98 @@ def verify_integrity() -> Tuple[bool, List[str]]:
             continue
         orphans = [r for r in records if int(r.get("shift", -1)) > committed]
         if orphans:
-            findings.append(
+            note('blocking',
                 "%s holds %d record(s) from a shift beyond the last committed "
                 "shift (%d) — an interrupted commit, not corruption. The "
                 "records stand; the shift did not close."
                 % (os.path.basename(path), len(orphans), committed)
             )
 
-    stale = [
-        name
-        for name in os.listdir(config.STATE_DIR)
-        if name.startswith(".stage-") and name.endswith(".tmp")
-    ]
+    # The three checks below all read the shift log, which is the one file with
+    # exactly one record per shift. Everything above asks whether the logs have
+    # run ahead of memory; these ask the other three questions that can be asked
+    # of the same pair, and that an earlier version of this function could not
+    # see at all.
+    try:
+        shift_rows = read_log(config.SHIFT_LOG)
+    except TerrainStateError:
+        shift_rows = None
+
+    if shift_rows is not None:
+        numbers = [int(r.get("shift", -1)) for r in shift_rows if r.get("shift") is not None]
+        distinct = sorted(set(numbers))
+
+        # (a) memory ahead of the record. The orphan test above only looks the
+        # other way, so a shift log that has lost records to a bad commit reads
+        # as clean while its history silently disappears.
+        if distinct and committed > distinct[-1]:
+            note('blocking',
+                "memory.json says shift %d was committed, but the shift log ends "
+                "at %d — %d shift(s) are missing from the record. Do not run "
+                "another shift; the next one would be numbered over the gap."
+                % (committed, distinct[-1], committed - distinct[-1])
+            )
+
+        # (b) the same shift committed twice. This is the exact condition two
+        # concurrent shifts produce, and it was invisible here until now.
+        repeats = sorted(n for n in distinct if numbers.count(n) > 1)
+        if repeats:
+            note('standing',
+                "%d shift number(s) appear more than once in the shift log: %s. "
+                "Two shifts ran at the same time and both committed. The "
+                "duplicate records stand — they are part of the record — but "
+                "every count taken over this log is inflated."
+                % (len(repeats), ", ".join(str(n) for n in repeats))
+            )
+
+        # (c) the counter and the record disagreeing. shifts_completed is
+        # incremented once per commit, so it should equal the number of distinct
+        # shifts. Where it does not, memory.json lost a write.
+        completed = memory.get("shifts_completed")
+        if completed is not None and numbers and int(completed) != len(numbers):
+            note('standing',
+                "memory.json counts %d shift(s) completed but the shift log "
+                "holds %d record(s). The counter is incremented once per commit "
+                "and each commit appends exactly one record, so these cannot "
+                "legitimately differ. The counter travels in the same snapshot "
+                "as the rest of memory, so this is the visible edge of a lost "
+                "update — other fields were overwritten the same way."
+                % (int(completed), len(numbers))
+            )
+
+    # Staged temp files are left in the directory of the file being written, so
+    # looking only in state/ misses every interrupted shift-log commit.
+    stage_dirs = [config.STATE_DIR]
+    shifts_dir = os.path.dirname(config.SHIFT_LOG)
+    if os.path.realpath(shifts_dir) != os.path.realpath(config.STATE_DIR):
+        stage_dirs.append(shifts_dir)
+
+    stale = []
+    for directory in stage_dirs:
+        if not os.path.isdir(directory):
+            continue
+        for name in os.listdir(directory):
+            if name.startswith(".stage-") and name.endswith(".tmp"):
+                stale.append(os.path.join(os.path.basename(directory), name))
     if stale:
-        findings.append(
+        note('blocking',
             "%d staged temp file(s) left behind by an interrupted commit: %s"
             % (len(stale), ", ".join(sorted(stale)))
         )
 
-    return (not findings), findings
+    return findings
+
+
+def verify_integrity() -> Tuple[bool, List[str]]:
+    """Returns (clean, findings) over every finding, blocking or standing."""
+    findings = integrity_findings()
+    return (not findings), [message for _, message in findings]
+
+
+def blockingintegrity_findings() -> List[str]:
+    """Only the findings that make the next shift unsafe to run."""
+    return [message for severity, message in integrity_findings()
+            if severity == "blocking"]
 
 
 # ---------------------------------------------------------------------------
