@@ -212,33 +212,27 @@ def plate(entry: Dict[str, Any], size: int = 168) -> str:
                            for k in range(sides))
             parts.append('<polygon points="%s" class="core"/>' % pts)
 
-    # descendants — one tick each, along a baseline beneath the form.
+    # wide rings — one for each descendant it has produced.
     #
-    # This was drawn as concentric rings AROUND the core, and it was wrong in
-    # three ways at once. It read as offspring orbiting their parent, and the
-    # terrain does no such thing: a descendant settles in a NEIGHBOURING cell,
-    # holds its own light, moves on its own, and often outlives the parent.
-    # Nothing is attached to anything. It also capped at three, so a specimen
-    # with fourteen descendants drew exactly what one with three drew — a mark
-    # that cannot be counted is not a measurement. And rings around a core
-    # imply the descendants are part of the specimen, when they are separate
-    # individuals with their own records.
+    # These are a TALLY kept on the parent's own record, not a picture of the
+    # offspring. A descendant settles in a NEIGHBOURING cell at replication,
+    # holds its own light, moves on its own and often outlives the parent, so
+    # nothing is actually circling anything — the ring counts, it does not
+    # depict. The key on the compendium says so in as many words.
     #
-    # A tick per descendant is a count that stays a count at any number, and
-    # sits below the form rather than around it.
+    # They used to stop at three, which meant a specimen with fourteen
+    # descendants drew exactly what one with three drew, and a mark that cannot
+    # be counted is not a measurement. They are uncapped now; the spacing is
+    # fitted to the frame instead, so a long line of descent reads as a dense
+    # sheaf of rings and still resolves into a count.
     if descendants:
-        span = min(r * 3.2, size * 0.62)
-        base = min(cy + r * 2.05, size - 13.0)
-        if descendants == 1:
-            xs = [cx]
-        else:
-            step = span / float(descendants - 1)
-            xs = [cx - span / 2.0 + i * step for i in range(descendants)]
-        parts.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" class="tallybase"/>'
-                     % (cx - span / 2.0 - 2, base, cx + span / 2.0 + 2, base))
-        for x in xs:
-            parts.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" class="tally"/>'
-                         % (x, base, x, base + max(3.0, r * 0.28)))
+        inner = r * 1.55
+        outer = min(size * 0.46, inner + descendants * r * 0.42)
+        gap = ((outer - inner) / float(descendants - 1)) if descendants > 1 else 0.0
+        for i in range(descendants):
+            rr = inner + i * gap
+            parts.append('<ellipse cx="%.1f" cy="%.1f" rx="%.1f" ry="%.1f" class="orbit"/>'
+                         % (cx, cy, rr, rr * 0.30))
 
     return ('<svg viewBox="0 0 %d %d" class="plate" role="img" aria-label="%s">%s</svg>'
             % (size, size, entry["id"], "".join(parts)))
@@ -488,8 +482,7 @@ font:9px var(--mono);letter-spacing:.1em;color:#6E7A6B;z-index:2}
 .plate .node{fill:#8FC96B;opacity:.9}
 .plate .anchor{stroke:#7d8f6e;stroke-width:.9;opacity:.55}
 .plate .brace{fill:none;stroke:#9CB584;stroke-width:.6;opacity:.45}
-.plate .tally{stroke:#C9A227;stroke-width:1.4;opacity:.9}
-.plate .tallybase{stroke:#C9A227;stroke-width:.7;opacity:.4}
+.plate .orbit{fill:none;stroke:#C9A227;stroke-width:.9;opacity:.55}
 .plate .disc{fill:#C9A227;opacity:.22}
 .plate.empty{background:#0B0D0A}
 .plate .none{fill:#4A5046;font:11px ui-monospace,monospace;text-anchor:middle;letter-spacing:.1em}
@@ -587,10 +580,11 @@ def drawing_key(ordered, port) -> str:
     aff = lambda e: (m(e).get("affinities") or {})
 
     CONTRASTS = [
-        ("Tally beneath — descendants produced",
-         "One tick for every descendant it has produced, at any number. No tally means "
-         "it produced none. They are counted, not drawn: each descendant is a separate "
-         "individual living in a neighbouring cell with a record of its own.",
+        ("Wide rings — descendants produced",
+         "The broad amber rings standing clear of the body: one for every descendant it "
+         "has produced, at any number. A specimen that produced none has none. They are a "
+         "tally kept on this specimen\'s record rather than a picture of its offspring — "
+         "each descendant settles in a neighbouring cell and lives on its own.",
          lambda e: e.get("descendants"),
          lambda e: "%s descendant(s) produced" % (e.get("descendants") or 0)),
         ("Bracing rings — what its build costs",
@@ -660,10 +654,11 @@ def drawing_key(ordered, port) -> str:
              "one arm per link, arm length from reach and its pull toward links"),
             ("dots at the arm ends", "the far end of a link it could hold", "—"),
             ("fine rings inside the core", "upkeep — what the build costs every shift",
-             "one ring per third of a light, up to five"),
-            ("tally beneath the form", "descendants it has produced",
-             "one tick each, no cap; the count never decreases, so it still counts "
-             "descendants that have since ended"),
+             "one ring per third of a light, up to five; these are the tight rings within "
+             "the body, not the wide ones standing outside it"),
+            ("wide rings, clear of the body", "descendants it has produced",
+             "one ring each, no cap, spaced to fit the frame; the count never decreases, "
+             "so it still counts descendants that have since ended"),
             ("lines angling down", "how much it drew on the cover layer",
              "one line per quarter of its cover affinity"),
             ("the disc beneath", "how much it lived off remains",
