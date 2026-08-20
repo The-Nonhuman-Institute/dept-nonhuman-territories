@@ -192,6 +192,13 @@ color:var(--ink)}
 cursor:pointer}
 .filt input{accent-color:var(--moss);margin:0}
 .filt .c{margin-left:auto;color:var(--dim);font-variant-numeric:tabular-nums}
+.tj{cursor:zoom-in}
+.tj .ct{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.tj:hover .ct{color:var(--moss)}
+.cmpshots{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.cmpshot{margin:0}
+.cmpshot figcaption{font:12px var(--mono);letter-spacing:.05em;margin-bottom:7px}
+.cmpshot span{display:block;font:9.5px var(--mono);color:var(--dim);margin-top:6px}
 .tcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
 gap:14px;margin-bottom:14px}
 .tcard{border:1px solid var(--rule);background:var(--panel);
@@ -1891,6 +1898,16 @@ def _per_hundred(d, key):
     return sum(r.get(key, 0) or 0 for r in rows) * 100.0 / len(rows)
 
 
+def labels_all(shown):
+    """Every governing-condition label any terrain in the set declares."""
+    out = []
+    for d in shown:
+        for g in dnt_data.governing_conditions(d["dir"]):
+            if g["label"] not in out:
+                out.append(g["label"])
+    return out
+
+
 def comparative_study(loaded: List[Dict[str, Any]]) -> str:
     """Every terrain side by side, on quantities all of them actually record."""
     shown = [d for d in loaded if d and d["shifts"]]
@@ -1938,17 +1955,113 @@ def comparative_study(loaded: List[Dict[str, Any]]) -> str:
             run.append(total)
         return run
 
+    # The panel titled "classification diversity" was counting CATEGORIES
+    # COINED, which is not diversity — diversity is the Shannon figure in the
+    # aggregate table, and a terrain can coin many categories while remaining
+    # concentrated in one. Renamed to what it actually plots.
     panels = [
-        ("Living population", "index", track(lambda d: [r.get("living") for r in d["shifts"]])),
-        ("Classification diversity", "cumulative index", track(cumulative_categories)),
-        ("Replication, cumulative", "index", track(lineage_track)),
-        ("Resource flow", "index", track(net_flow)),
-        ("Population steadiness", "1 − CV, 20-shift window", track(stability_track, False)),
+        ("Living population", "index",
+         track(lambda d: [r.get("living") for r in d["shifts"]]),
+         "living",
+         [("What this shows",
+           ["The count of living specimens each shift recorded when it closed, "
+            "for every shift the terrain has committed.",
+            "Source: the <code>living</code> field on each row of that terrain's "
+            "own shift log. Nothing is smoothed or interpolated."]),
+          ("How to read it",
+           ["Each line is indexed to <b>that terrain's own mean</b>, so 1.0 is its "
+            "own average population and 2.0 is twice it. Heights are NOT comparable "
+            "between terrains — BASIN-01 holds 21 living and BASIN-03 holds 10,589.",
+            "The x axis is each terrain's own life as a percentage, so a terrain of "
+            "128 shifts and one of 218 sit on the same axis. <b>Compare the shapes, "
+            "never the heights.</b>"]),
+          ("What it does not show",
+           ["It is not a population size. A line at 4.0 means four times that "
+            "terrain's own average, not four times another terrain's.",
+            "A terrain that has run one shift has no shape to draw and is absent "
+            "from the panel rather than drawn flat."])]),
+
+        ("Native categories, cumulative", "running count of categories coined",
+         track(cumulative_categories), "categories",
+         [("What this shows",
+           ["The running total of distinct categories the Namer has coined, "
+            "accumulated shift by shift and never decreasing.",
+            "Source: the <code>new_categories</code> list each shift wrote."]),
+          ("How to read it",
+           ["A step means the Namer met something it decided needed a new name. "
+            "A long flat stretch means it kept filing into names it already had.",
+            "Indexed to each terrain's own mean, like the other panels."]),
+          ("What it does not show",
+           ["This is a <b>count</b>, not diversity. A terrain can coin twelve "
+            "categories and still file 82% of everything into one of them — "
+            "BASIN-03 does exactly that. The diversity figure that accounts for "
+            "how full each category is (Shannon entropy) is in the aggregate "
+            "metrics table below, not here."])]),
+
+        ("Replication, cumulative", "running total of replications",
+         track(lineage_track), "replication",
+         [("What this shows",
+           ["Every replication the terrain has recorded, accumulated over its life.",
+            "Source: the <code>replicated_this_shift</code> field per shift."]),
+          ("How to read it",
+           ["Slope is the replication rate. A steepening curve means replication is "
+            "accelerating; a straightening one means it has settled.",
+            "Replication is how a specimen leaves descendants, so this is the raw "
+            "material every lineage record is built from."]),
+          ("What it does not show",
+           ["Not survival. A replication that ended the next shift still counts "
+            "here. What lasted is in the persistence table."])]),
+
+        ("Resource flow", "index", track(net_flow), "flow",
+         [("What this shows",
+           ["The resource flow logged at each shift — the light entering the "
+            "terrain and driving its entire economy.",
+            "Source: the <code>resource_flow</code> field per shift."]),
+          ("How to read it",
+           ["This is an input, not an outcome. It oscillates by design where a "
+            "terrain has a light cycle, and the sawtooth on these lines is that "
+            "oscillation, not noise.",
+            "BASIN-03 and BASIN-04 run a 12-shift light cycle; BASIN-01 and "
+            "BASIN-02 have no such mechanism."]),
+          ("What it does not show",
+           ["Not what the population actually took in. Light that arrives can go "
+            "uncollected, and what was collected is in the composition figures on "
+            "each specimen record."])]),
+
+        ("Population steadiness", "1 − CV over a trailing 20-shift window",
+         track(stability_track, False), "steadiness",
+         [("What this shows",
+           ["How steady the population has been, measured over the previous 20 "
+            "shifts at every point in the terrain's life.",
+            "Computed as <b>1 − CV</b>, where CV is the coefficient of variation "
+            "(σ / μ) of the living count across that window."]),
+          ("How to read it",
+           ["Higher is steadier. It is subtracted from 1 so that <b>up means "
+            "steadier on this panel as on every other</b> — raw CV runs the other "
+            "way and reading a panel backwards is easy to do.",
+            "The rise every terrain shows early on is a terrain finding its "
+            "footing from a near-empty start, not a trend."]),
+          ("What it does not show",
+           ["Not health, and not a grade. A steady terrain is not a better one; "
+            "DNT does not evaluate terrains.",
+            "This panel is NOT indexed to the mean — it is the raw figure, because "
+            "it is already a ratio."])]),
     ]
     traj = "".join(
-        '<div><div class="ct">%s</div><div class="cs">%s</div>%s</div>'
-        % (title, sub, charts.line_chart(sers, 420, 210, x_label="terrain life (%)"))
-        for title, sub, sers in panels)
+        '<div class="tj mdl-open" data-modal="mdl-%s" data-modal-title="%s" '
+        'data-modal-sub="%s"><div class="ct">%s<span class="mdl-hint">enlarge</span></div>'
+        '<div class="cs">%s</div>%s</div>'
+        % (key, title, sub, title, sub,
+           charts.line_chart(sers, 420, 210, x_label="terrain life (%)"))
+        for title, sub, sers, key, _ in panels)
+
+    # the enlarged figure and its explanation, held in the page
+    store = [("mdl-%s" % key,
+              '<div class="mdl-fig">%s%s</div>%s'
+              % (charts.line_chart(sers, 1040, 420, x_label="terrain life (%)"),
+                 charts.legend([(d["name"], d["_hue"]) for d in shown]),
+                 C.readable(read)))
+             for title, sub, sers, key, read in panels]
 
     # ---- terrain cards, with the terrain itself as the picture -----------
     cards = []
@@ -2101,11 +2214,18 @@ def comparative_study(loaded: List[Dict[str, Any]]) -> str:
                     'not rankings: the terrains run under different conditions and for '
                     'different lengths of time.</li>')
 
-    NAVSECTIONS = [("Study overview", "top"), ("Terrain comparison", "cards"),
+    NAVSECTIONS = [("Study overview", "top"),
                    ("Trajectories", "traj"), ("Aggregate metrics", "agg"),
                    ("Against the median", "key"), ("Event frequency", "ev"),
                    ("Persistence", "pers"), ("Method", "method")]
-    left = C.panel("Study navigation", C.section_nav(NAVSECTIONS), flush=True) + \
+    left = C.panel("Study navigation",
+                   C.section_nav(NAVSECTIONS[:1]) +
+                   '<a class="rowlink mdl-open" data-modal="mdl-terrains" '
+                   'data-modal-title="Terrain comparison" '
+                   'data-modal-sub="all four terrains, side by side"><span></span>'
+                   '<span>Terrain comparison</span>'
+                   '<span class="mdl-hint">open</span></a>' +
+                   C.section_nav(NAVSECTIONS[1:]), flush=True) + \
         C.panel("Terrains in study", "".join(
             '<div class="rowlink"><span class="sw" style="background:%s"></span>'
             '<span>%s<span class="s">shift %s · %s cells</span></span><span></span></div>'
@@ -2151,6 +2271,63 @@ def comparative_study(loaded: List[Dict[str, Any]]) -> str:
            '<tr><td class="k">SOURCE</td><td class="v">EACH TERRAIN\'S OWN LOGS</td></tr>'
            '</table></div>' % (len(shown), num(max(d["shift"] or 0 for d in shown))))
 
+    # "Terrain comparison" used to scroll to the cards already on screen. It
+    # now opens the comparison those cards cannot make: all four terrains on
+    # one row per quantity, including the conditions that differ.
+    cmp_head = "".join('<th class="num" style="color:%s">%s</th>' % (d["_hue"], esc(d["name"]))
+                       for d in shown)
+    cmp_rows = []
+    for label, fn in (
+            ("first committed", lambda d: C.stamp(d["shifts"][0].get("end_timestamp"))),
+            ("shifts committed", lambda d: num(len(d["shifts"]))),
+            ("cells in the terrain", lambda d: num(len(d["world"].get("cells") or []))),
+            ("living now", lambda d: num(d["shifts"][-1].get("living"))),
+            ("native categories", lambda d: num(len(d["memory"].get("category_stats") or {}))),
+            ("classified specimens", lambda d: num(len(d["named"]))),
+            ("physics document", lambda d: esc(d["memory"].get("physics_document") or "—")),
+            ("cumulative spend",
+             lambda d: "$%.4f" % float(d["memory"].get("cumulative_cost_usd", 0.0)))):
+        cmp_rows.append('<tr><td>%s</td>%s</tr>'
+                        % (label, "".join('<td class="num">%s</td>' % fn(d) for d in shown)))
+    for label in labels_all(shown):
+        gm = {d["dir"]: {g["label"]: g for g in dnt_data.governing_conditions(d["dir"])}
+              for d in shown}
+        cmp_rows.append(
+            '<tr><td>%s</td>%s</tr>'
+            % (esc(label), "".join(
+                ('<td class="num">%s</td>' % esc(gm[d["dir"]][label]["value"]))
+                if gm[d["dir"]].get(label, {}).get("present")
+                else '<td class="num absent">no mechanism</td>' for d in shown)))
+    cmp_shots = "".join(
+        '<figure class="cmpshot"><figcaption style="color:%s">%s</figcaption>%s'
+        '<span>%s cells · shift %s</span></figure>'
+        % (d["_hue"], esc(d["name"]), snapshot.isometric(d["dir"], 300, 130),
+           num(len(d["world"].get("cells") or [])), num(d["shift"]))
+        for d in shown)
+    store.append(("mdl-terrains",
+        '<div class="mdl-fig"><div class="cmpshots">%s</div></div>'
+        '<div class="scroll"><table class="d"><thead><tr><th></th>%s</tr></thead>'
+        '<tbody>%s</tbody></table></div>%s'
+        % (cmp_shots, cmp_head, "".join(cmp_rows),
+           C.readable([
+               ("What this compares",
+                ["Every terrain on one row per quantity, which the cards on the page "
+                 "cannot do because each card only knows itself.",
+                 "Each picture is that terrain's own elevation and cover grid, drawn "
+                 "from the same export the observation deck reads. None is an "
+                 "illustration and none is a photograph."]),
+               ("Why the conditions matter most",
+                ["The bottom rows are the reason the terrains differ at all. A "
+                 "condition a terrain does not have reads <b>no mechanism</b> rather "
+                 "than zero, because absent and zero are not the same claim.",
+                 "BASIN-01 and BASIN-02 have none of them and differ from each other "
+                 "in exactly one seeded variable."]),
+               ("How to read it",
+                ["Across a row, not down a column. The terrains are at different "
+                 "shifts, under different conditions, and have run for different "
+                 "lengths of time.",
+                 "Not a ranking. DNT does not evaluate terrains."])]))))
+
     mid += '<div id="cards" class="tcards">%s</div>' % "".join(cards)
     mid += C.panel("Trajectory over time",
                    '<div class="charts3">%s</div>%s'
@@ -2162,7 +2339,7 @@ def comparative_study(loaded: List[Dict[str, Any]]) -> str:
                    'would become a chart of how small each terrain started. Steadiness '
                    'is plotted as 1 − CV so that up means steadier on every panel.</p>'
                    % (traj, charts.legend([(d["name"], d["_hue"]) for d in shown])),
-                   "indexed to each terrain's own mean", anchor="traj")
+                   "click any panel to enlarge", anchor="traj")
     mid += C.panel("Aggregate metrics at the latest shift",
                    '<div class="scroll"><table class="d"><thead><tr><th>metric</th>%s'
                    '<th class="num">median</th></tr></thead><tbody>%s</tbody></table></div>'
@@ -2199,6 +2376,7 @@ def comparative_study(loaded: List[Dict[str, Any]]) -> str:
                        '<p class="note">Across every specimen the terrain has held, living '
                        'and ended alike.</p>' % (head, prows), anchor="pers")))
 
+    mid += C.MODAL_FRAME + C.modal_store(store)
     mid += C.panel("Governing conditions, side by side",
                    '<div class="scroll"><table class="d"><thead><tr><th>condition</th>%s</tr>'
                    '</thead><tbody>%s</tbody></table></div>'
@@ -2209,8 +2387,8 @@ def comparative_study(loaded: List[Dict[str, Any]]) -> str:
     return C.page("Comparative Terrain Study", "COMPARATIVE STUDY", shown[-1]["dir"],
                   [("STUDIES", None), ("COMPARATIVE TERRAIN STUDY", None)],
                   shown[-1]["shift"], shown[-1]["committed_at"], mid, left, right,
-                  CSS + charts.CSS + snapshot.CSS, current="study",
-                  scripts=C.SECTION_JS)
+                  CSS + charts.CSS + snapshot.CSS + C.MODAL_CSS, current="study",
+                  scripts=C.SECTION_JS + C.MODAL_JS)
 
 
 # ===========================================================================

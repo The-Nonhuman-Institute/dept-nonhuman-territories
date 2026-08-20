@@ -346,13 +346,126 @@ def page(title: str, doc_name: str, terrain_dir: str, crumb_items: Sequence,
            doc_name, mark(13), LOCALTIME_JS, scripts))
 
 
+MODAL_CSS = """
+.mdl-open{cursor:zoom-in}
+.mdl-open:hover .ph b{color:var(--moss)}
+.mdl-hint{margin-left:auto;font:9px var(--mono);letter-spacing:.09em;color:var(--faint);
+text-transform:none}
+.mdl-open:hover .mdl-hint{color:var(--moss)}
+.mdl-store{display:none}
+.mdl-back{position:fixed;inset:0;background:rgba(4,6,4,.86);z-index:100;
+display:none;padding:28px;overflow:auto}
+.mdl-back.on{display:block}
+.mdl{max-width:1180px;margin:0 auto;background:var(--panel);border:1px solid var(--rule);
+box-shadow:0 24px 70px rgba(0,0,0,.6)}
+.mdl-h{display:flex;align-items:center;gap:14px;padding:14px 18px;
+border-bottom:1px solid var(--rule);position:sticky;top:0;background:var(--panel);z-index:2}
+.mdl-h b{font:400 17px/1.2 var(--serif);color:var(--ink)}
+.mdl-h .sub{font:10px var(--mono);letter-spacing:.11em;text-transform:uppercase;
+color:var(--dim)}
+.mdl-x{margin-left:auto;background:var(--bg);border:1px solid var(--rule);color:var(--ink);
+font:10.5px var(--mono);letter-spacing:.08em;padding:6px 12px;cursor:pointer}
+.mdl-x:hover{border-color:var(--moss);color:var(--moss)}
+.mdl-b{padding:18px}
+.mdl-fig{border:1px solid var(--rule);background:var(--bg);padding:16px;margin-bottom:18px}
+.mdl-read{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.mdl-read section h4{font:9px var(--mono);letter-spacing:.13em;text-transform:uppercase;
+color:var(--moss);margin:0 0 8px}
+.mdl-read section p{font:11.5px/1.7 var(--mono);color:var(--dim);margin:0 0 9px}
+.mdl-read section p:last-child{margin-bottom:0}
+.mdl-read section p b{color:var(--ink);font-weight:400}
+.mdl-read section p code{color:var(--ink);background:var(--bg);border:1px solid var(--rule);
+padding:1px 4px}
+@media(max-width:900px){.mdl-back{padding:10px}}
+"""
+
+MODAL_JS = """
+<script>
+// A panel that opens. The enlarged figure and its explanation are already in
+// the page; this only moves them into view, so nothing is fetched and nothing
+// can be out of step with the panel it came from.
+(function(){
+  var back = document.getElementById("mdl-back");
+  if (!back) return;
+  var slot = document.getElementById("mdl-slot");
+  var title = document.getElementById("mdl-title");
+  var sub = document.getElementById("mdl-sub");
+  var lastFocus = null;
+  function open(id, heading, subheading){
+    var src = document.getElementById(id);
+    if (!src) return;
+    lastFocus = document.activeElement;
+    slot.innerHTML = src.innerHTML;
+    title.textContent = heading || "";
+    sub.textContent = subheading || "";
+    back.classList.add("on");
+    document.body.style.overflow = "hidden";
+    back.scrollTop = 0;
+    var x = document.getElementById("mdl-x");
+    if (x) x.focus();
+  }
+  function close(){
+    back.classList.remove("on");
+    slot.innerHTML = "";
+    document.body.style.overflow = "";
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  document.querySelectorAll("[data-modal]").forEach(function(el){
+    el.setAttribute("tabindex", "0");
+    el.setAttribute("role", "button");
+    var go = function(){
+      open(el.getAttribute("data-modal"), el.getAttribute("data-modal-title"),
+           el.getAttribute("data-modal-sub"));
+    };
+    el.addEventListener("click", go);
+    el.addEventListener("keydown", function(e){
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); }
+    });
+  });
+  document.getElementById("mdl-x").addEventListener("click", close);
+  back.addEventListener("click", function(e){ if (e.target === back) close(); });
+  addEventListener("keydown", function(e){ if (e.key === "Escape") close(); });
+})();
+</script>
+"""
+
+MODAL_FRAME = ('<div class="mdl-back" id="mdl-back" role="dialog" aria-modal="true">'
+               '<div class="mdl"><div class="mdl-h"><b id="mdl-title"></b>'
+               '<span class="sub" id="mdl-sub"></span>'
+               '<button class="mdl-x" id="mdl-x">CLOSE  ESC</button></div>'
+               '<div class="mdl-b" id="mdl-slot"></div></div></div>')
+
+
+def readable(sections) -> str:
+    """The 'what am I looking at' block that rides with an enlarged figure.
+
+    sections: (heading, [paragraph, ...])
+    """
+    return '<div class="mdl-read">%s</div>' % "".join(
+        '<section><h4>%s</h4>%s</section>'
+        % (head, "".join('<p>%s</p>' % p for p in paras))
+        for head, paras in sections)
+
+
+def modal_store(entries) -> str:
+    """Hidden bodies the modal pulls from. entries: (id, html)."""
+    return '<div class="mdl-store">%s</div>' % "".join(
+        '<div id="%s">%s</div>' % (i, html) for i, html in entries)
+
+
 def panel(head: str, body: str, right_note: str = "", flush: bool = False,
-          anchor: str = "") -> str:
+          anchor: str = "", modal: str = "", modal_title: str = "",
+          modal_sub: str = "") -> str:
     """A titled block. `anchor` makes it a real jump target for the rails."""
-    return ('<section class="p"%s><div class="ph"><b>%s</b>%s</div>'
+    opens = ""
+    if modal:
+        opens = (' class="p mdl-open" data-modal="%s" data-modal-title="%s" '
+                 'data-modal-sub="%s"' % (modal, modal_title or head, modal_sub or ""))
+    return ('<section%s%s><div class="ph"><b>%s</b>%s%s</div>'
             '<div class="pb%s">%s</div></section>'
-            % (' id="%s"' % anchor if anchor else "",
+            % (opens or ' class="p"', ' id="%s"' % anchor if anchor else "",
                head, ('<span class="r">%s</span>' % right_note) if right_note else "",
+               '<span class="mdl-hint">click to enlarge</span>' if modal else "",
                " flush" if flush else "", body))
 
 

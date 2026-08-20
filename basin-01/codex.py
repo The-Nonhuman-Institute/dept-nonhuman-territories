@@ -396,6 +396,26 @@ color:var(--ink);margin:0 0 10px}
 .gloss dd{margin:0;color:var(--ink);font-size:13.5px;line-height:1.55}
 .howto .tail{font-size:12.5px;color:var(--grey);line-height:1.6;margin:0;
 border-top:1px solid var(--rule);padding-top:13px}
+.keyblock{margin-top:22px}
+table.keytab{border-collapse:collapse;width:100%;font:12px/1.6 var(--mono);margin-bottom:6px}
+table.keytab th{text-align:left;font:9.5px var(--mono);letter-spacing:.11em;
+text-transform:uppercase;color:var(--grey);border-bottom:1px solid var(--rule);
+padding:0 16px 7px 0;font-weight:400}
+table.keytab td{padding:6px 16px 6px 0;border-bottom:1px solid var(--rule);
+vertical-align:top}
+table.keytab td.dim{color:var(--grey);font-size:11px}
+.keyh{font:9.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--moss);
+margin:26px 0 12px;border-top:1px solid var(--rule);padding-top:16px}
+.keyrow{display:grid;grid-template-columns:1fr 330px;gap:22px;align-items:center;
+padding:13px 0;border-bottom:1px solid var(--rule)}
+.keyt b{display:block;font:12.5px var(--mono);color:var(--ink);margin-bottom:5px}
+.keyt span{font-size:12.5px;color:var(--grey);line-height:1.6}
+.keypair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.keypair figure{margin:0}
+.keypair .plate{height:150px;background:#0B0D0A;border:1px solid var(--rule)}
+.keypair figcaption{font:10.5px var(--mono);color:var(--ink);margin-top:6px}
+.keypair figcaption span{display:block;color:var(--grey);font-size:9.5px;margin-top:2px}
+@media(max-width:900px){.keyrow{grid-template-columns:1fr}}
 
 /* the category index */
 ul.cats{list-style:none;margin:0;padding:0}
@@ -515,6 +535,128 @@ SORT_JS = """
 </script>
 """
 
+def drawing_key(ordered, port) -> str:
+    """What every mark in a specimen drawing encodes, shown on real specimens.
+
+    The compendium had one sentence about the drawing, and it was incomplete —
+    it said "the rings are offspring", when there are two kinds of ring meaning
+    different things and five other marks it never mentioned. A reader could
+    see that two drawings differed and had no way to learn what differed.
+
+    Nothing here is a diagram of an invented specimen. Each example is a real
+    record, picked because it sits at one end of the measurement that mark is
+    driven by, and captioned with its own numbers.
+    """
+    have = [e for e in ordered if (e.get("measurements") or {}).get("structure")]
+    if not have:
+        return ""
+
+    def pick(fn, biggest=True):
+        vals = [(fn(e), e) for e in have if fn(e) is not None]
+        if not vals:
+            return None
+        vals.sort(key=lambda p: p[0])
+        return vals[-1][1] if biggest else vals[0][1]
+
+    m = lambda e: (e.get("measurements") or {})
+    st = lambda e: (m(e).get("structure") or {})
+    aff = lambda e: (m(e).get("affinities") or {})
+
+    CONTRASTS = [
+        ("Orbit rings — descendants left",
+         "One wide ring for each descendant, up to three. No rings means it left none.",
+         lambda e: e.get("descendants"),
+         lambda e: "%s descendant(s)" % (e.get("descendants") or 0)),
+        ("Bracing rings — what its build costs",
+         "Fine rings stacked inside the core, one for every third of a light of upkeep.",
+         lambda e: m(e).get("upkeep"),
+         lambda e: "upkeep %.2f light per shift" % (m(e).get("upkeep") or 0)),
+        ("Radiating arms — links it can hold",
+         "One arm per link it can carry at once. Their length is its reach.",
+         lambda e: st(e).get("junctions"),
+         lambda e: "holds %d link(s) · reach %.2f"
+                   % (1 + int(st(e).get("junctions", 0) or 0), st(e).get("extent", 0) or 0)),
+        ("The disc beneath — living off remains",
+         "A shadow on the ground, drawn only where it drew meaningfully on remains.",
+         lambda e: aff(e).get("residue"),
+         lambda e: "residue affinity %.2f" % (aff(e).get("residue") or 0)),
+        ("Core size — what it carries",
+         "The core grows with mass: more to store light in, more to hold together.",
+         lambda e: st(e).get("mass"),
+         lambda e: "carries %.2f" % (st(e).get("mass") or 0)),
+        ("Stacked segments — how long it stood",
+         "The core stacks another segment for roughly every seven shifts survived.",
+         lambda e: e.get("shifts_present"),
+         lambda e: "%s shift(s)" % (e.get("shifts_present") or 0)),
+    ]
+
+    rows = []
+    for title, blurb, driver, caption in CONTRASTS:
+        lo, hi = pick(driver, False), pick(driver, True)
+        if not lo or not hi or lo["id"] == hi["id"]:
+            continue
+        rows.append(
+            '<div class="keyrow"><div class="keyt"><b>%s</b><span>%s</span></div>'
+            '<div class="keypair">%s%s</div></div>'
+            % (esc(title), esc(blurb),
+               '<figure>%s<figcaption>%s<span>%s</span></figcaption></figure>'
+               % (plate(lo, 150), esc(lo["id"]), esc(caption(lo))),
+               '<figure>%s<figcaption>%s<span>%s</span></figcaption></figure>'
+               % (plate(hi, 150), esc(hi["id"]), esc(caption(hi)))))
+
+    # shape is categorical, not a range
+    frag = next((e for e in have if m(e).get("substrate") == "fragment"), None)
+    struct = next((e for e in have if m(e).get("substrate") == "structural"), None)
+    if frag and struct:
+        rows.append(
+            '<div class="keyrow"><div class="keyt"><b>Core shape — what it is made of</b>'
+            '<span>A four-sided core is fragment substrate; a many-sided one is '
+            'structural. The number of sides rises with generation — six at the root, '
+            'eight at the next, twelve beyond that.</span></div>'
+            '<div class="keypair">%s%s</div></div>'
+            % ('<figure>%s<figcaption>%s<span>fragment · generation %s</span>'
+               '</figcaption></figure>'
+               % (plate(frag, 150), esc(frag["id"]), esc(m(frag).get("generation") or 0)),
+               '<figure>%s<figcaption>%s<span>structural · generation %s</span>'
+               '</figcaption></figure>'
+               % (plate(struct, 150), esc(struct["id"]),
+                  esc(m(struct).get("generation") or 0))))
+
+    table = "".join(
+        '<tr><td>%s</td><td>%s</td><td class="dim">%s</td></tr>' % r for r in (
+            ("core size", "what it carries (mass)",
+             "radius grows with mass"),
+            ("core shape", "its substrate, and its generation",
+             "four-sided = fragment; six, eight or twelve = structural, by generation"),
+            ("stacked segments", "how many shifts it stood",
+             "one more segment per seven shifts, up to five"),
+            ("radiating arms", "how many links it can hold at once",
+             "one arm per link, arm length from reach and its pull toward links"),
+            ("dots at the arm ends", "the far end of a link it could hold", "—"),
+            ("fine rings inside the core", "upkeep — what the build costs every shift",
+             "one ring per third of a light, up to five"),
+            ("wide rings around it", "descendants it left",
+             "one ring each, up to three"),
+            ("lines angling down", "how much it drew on the cover layer",
+             "one line per quarter of its cover affinity"),
+            ("the disc beneath", "how much it lived off remains",
+             "drawn only above a residue affinity of 0.15; widens with it")))
+
+    return (
+        '<section class="howto keyblock"><h3>What the drawings mean</h3>'
+        '<p class="sub">Every mark in a specimen drawing is one of that specimen\'s own '
+        'measurements. Nothing is stylistic, and no two drawings differ unless the numbers '
+        'behind them differ. This is the whole vocabulary.</p>'
+        '<div class="scroll"><table class="keytab"><thead><tr><th>mark</th>'
+        '<th>what it encodes</th><th>the rule</th></tr></thead><tbody>%s</tbody></table></div>'
+        '<h4 class="keyh">The same mark, on real specimens at either extreme</h4>'
+        '%s'
+        '<p class="tail">Each pair above is drawn from this terrain\'s own record: the '
+        'specimen with the least of that measurement beside the one with the most. They are '
+        'records, not diagrams — which is why some of them differ in other ways too.</p>'
+        '</section>' % (table, "".join(rows)))
+
+
 HOWTO = """
 <section class="howto"><h3>How to read an entry</h3>
 <p class="sub">Every figure on a specimen sheet is a measurement the terrain recorded. None of
@@ -535,9 +677,10 @@ this, it dies. Everything else has to be earned on top of it.</dd>
 <dt>can hold</dt><dd>The most light it can store at once. Anything beyond this is lost.</dd>
 <dt>lasted</dt><dd>How many shifts it was alive. A shift is one tick of the terrain.</dd>
 </dl>
-<p class="tail">The drawing is built from those same numbers: the core is what it carries, the
-spokes are its links, their length is its reach, the rings are offspring, and the disc beneath
-is how much it lived off remains.</p></section>
+<p class="tail">The drawing is built from those same numbers. It said so in one sentence
+here for a long time, and that sentence was wrong in a way worth naming: it called the rings
+offspring, when there are two kinds of ring meaning different things, and it left five other
+marks undocumented. The full vocabulary is below.</p></section>
 """
 
 FOOT = ("Generated from state/specimen_log.jsonl, state/anomaly_log.jsonl and state/memory.json. "
@@ -618,7 +761,8 @@ def render_index(data, by_cat, ordered, port) -> str:
         '<ul class="cats">%s</ul>'
         '<h2 class="sec">Related documents</h2><ul class="docs">%s</ul>'
         % (terrain, esc(data.get("shift")), len(ordered), living, plated, len(by_cat),
-           terrain, esc(data.get("shift")), HOWTO, cats, "".join(related)))
+           terrain, esc(data.get("shift")), HOWTO + drawing_key(ordered, port),
+           cats, "".join(related)))
 
     return _shell("Field Compendium — " + terrain,
                   [terrain, "FIELD COMPENDIUM"], "codex.html", body,
