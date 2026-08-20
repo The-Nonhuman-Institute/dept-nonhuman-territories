@@ -7,24 +7,28 @@ pre{padding:14px;white-space:pre-wrap}</style>
 document.getElementById('f').addEventListener('load', function(){
   var d = this.contentDocument, rows = [];
   d.querySelectorAll('.tcard').forEach(function(card){
-    var btn = card.querySelector('.nav'), cr = card.getBoundingClientRect(),
-        br = btn.getBoundingClientRect();
+    var btn = card.querySelector('.nav'),
+        lists = card.querySelectorAll('.tcb dl.kv'),
+        lastList = lists[lists.length-1],
+        cr = card.getBoundingClientRect(), br = btn.getBoundingClientRect(),
+        lr = lastList.getBoundingClientRect();
     rows.push({name: card.querySelector('.tch b').textContent.trim(),
-               cardBottom: Math.round(cr.bottom), btnTop: Math.round(br.top),
+               btnTop: Math.round(br.top), cardBottom: Math.round(cr.bottom),
+               gapAbove: Math.round(br.top - lr.bottom),
                gapBelow: Math.round(cr.bottom - br.bottom)});
   });
   var groups = {};
-  rows.forEach(function(r){ (groups[r.cardBottom] = groups[r.cardBottom] || []).push(r.btnTop); });
+  rows.forEach(function(r){ (groups[r.cardBottom]=groups[r.cardBottom]||[]).push(r.btnTop); });
   var txt = rows.map(function(r){
-    return (r.name + '          ').slice(0,10) + ' btnTop=' + ('     '+r.btnTop).slice(-5)
-      + '  cardBottom=' + ('     '+r.cardBottom).slice(-5)
-      + '  gapBelowButton=' + ('    '+r.gapBelow).slice(-4);
+    return (r.name+'          ').slice(0,10)
+      + ' btnTop='+('     '+r.btnTop).slice(-5)
+      + '  gapAboveButton='+('   '+r.gapAbove).slice(-3)
+      + '  gapBelowButton='+('   '+r.gapBelow).slice(-3);
   }).join('\n');
   var per = Object.keys(groups).map(function(k){
-    var g = groups[k];
-    return 'row ending @' + k + ' : button-top spread = '
-      + (Math.max.apply(null,g) - Math.min.apply(null,g)) + 'px';
+    var g=groups[k];
+    return 'row ending @'+k+' : button-top spread = '+(Math.max.apply(null,g)-Math.min.apply(null,g))+'px';
   }).join('\n');
-  document.getElementById('out').textContent = txt + '\n\n' + per;
+  document.getElementById('out').textContent = txt+'\n\n'+per;
 });
 </script>
