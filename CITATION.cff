@@ -1,0 +1,45 @@
+cff-version: 1.2.0
+title: >-
+  Department of Nonhuman Territories: bounded terrains with a
+  pre-declared falsification condition
+message: If you refer to this work, please cite it as below.
+type: dataset
+
+authors:
+  - name: The Nonhuman Institute
+    website: "https://github.com/The-Nonhuman-Institute"
+  # Steward. Add your family name here and this becomes a full personal
+  # citation — CFF accepts a given name alone, but a surname is what makes
+  # the credit unambiguous in a reference list.
+  - given-names: Jaylon
+    affiliation: The Nonhuman Institute
+
+repository-code: >-
+  https://github.com/The-Nonhuman-Institute/dept-nonhuman-territories
+
+abstract: >-
+  A bounded digital environment seeded with fixed mechanical rules, in which
+  autonomous agent roles run over time. What emerges is recorded and classified
+  but never authored, corrected, or steered. The project's distinguishing
+  feature is procedural rather than technical: a falsification condition is
+  declared before the experiment runs, a written protocol binds the operator
+  against correcting the output, and deleting an inconvenient record is
+  forbidden. Operator contamination of the record is logged as an event in the
+  record rather than repaired. The terrain logs are append-only and committed
+  after every shift, so the git history is the provenance.
+
+keywords:
+  - artificial life
+  - agent-based simulation
+  - research governance
+  - falsifiability
+  - open data
+  - emergent classification
+
+license:
+  - Apache-2.0
+  - CC-BY-4.0
+  - CC0-1.0
+
+version: 0.1.0
+date-released: "2026-08-20"

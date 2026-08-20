@@ -210,3 +210,25 @@ governance questions.
   the containment exception.
 - Nothing here claims or implies sentience. Observed complexity is not evidence of
   experience.
+
+---
+
+## 10. Licensing and citation
+
+Three kinds of material, three licences. [`LICENSING.md`](LICENSING.md) is the
+map; the short version:
+
+| What | Licence |
+|---|---|
+| The software (`*.py`) | Apache License 2.0 — [`LICENSE`](LICENSE) |
+| The governance documents (`docs/`, `physics.md`, this file) | CC BY 4.0 — [`LICENSE-DOCS`](LICENSE-DOCS) |
+| The terrain record (`basin-*/state/`, `basin-*/shifts/`) | CC0 1.0, public domain — [`LICENSE-DATA`](LICENSE-DATA) |
+
+The record is public domain deliberately. A project that declares a
+falsification condition in advance has to be checkable by someone who does not
+trust it, and requiring permission to check would defeat the point. It is also
+the honest position: machine output without human authorship is not
+copyrightable, so claiming rights over the Namer's classifications would be
+claiming something we may not hold.
+
+To cite this work, see [`CITATION.cff`](CITATION.cff).
