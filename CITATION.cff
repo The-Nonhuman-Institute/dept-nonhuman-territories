@@ -8,10 +8,8 @@ type: software
 # A person is the author; the company holds the copyright; the institute is
 # the affiliation. Reference lists credit people, so the person comes first.
 authors:
-  # Steward. Add your family name here and this becomes a full personal
-  # citation — CFF accepts a given name alone, but a surname is what makes
-  # the credit unambiguous in someone else's reference list.
-  - given-names: Jaylon
+  - family-names: Ballard
+    given-names: Jaylon
     affiliation: >-
       Department of Nonhuman Territories, The Nonhuman Institute
 
