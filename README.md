@@ -1,4 +1,7 @@
 # DNT — Terrain BASIN-01 — Build Spec
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22039265.svg)](https://doi.org/10.5281/zenodo.22039265)
+
 ## Kickoff brief for Claude Code
 
 This is the working instruction file for building the first DNT terrain. It sits
@@ -232,3 +235,14 @@ copyrightable, so claiming rights over the Namer's classifications would be
 claiming something we may not hold.
 
 To cite this work, see [`CITATION.cff`](CITATION.cff).
+
+### Citing this work
+
+The archived record has a permanent identifier:
+
+- **10.5281/zenodo.22039265** — cite this. It always resolves to the most recent version.
+- 10.5281/zenodo.22039266 — this exact release (v0.1.0), if you need to pin a version.
+
+Every release is archived independently of GitHub by Zenodo, so the record
+survives the repository. See [`CITATION.cff`](CITATION.cff) for a formatted
+citation.

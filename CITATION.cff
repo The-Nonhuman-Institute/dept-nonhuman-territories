@@ -45,6 +45,7 @@ license:
 version: 0.1.0
 date-released: "2026-08-20"
 
-# Once Zenodo mints a DOI for the first release, uncomment and paste it here.
-# It becomes the permanent identifier people cite instead of the repo URL.
-# doi: 10.5281/zenodo.XXXXXXX
+# The concept DOI: it always resolves to the most recent version, which is
+# what someone citing the project as a whole should use. The DOI for this
+# exact release is 10.5281/zenodo.22039266.
+doi: 10.5281/zenodo.22039265
