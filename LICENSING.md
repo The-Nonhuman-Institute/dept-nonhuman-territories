@@ -38,8 +38,15 @@ does not need to be. Attribution is the only condition.
 ## The terrain record — CC0 1.0
 
 Everything under `basin-*/state/` and `basin-*/shifts/`: the specimen logs, the
-anomaly logs, the shift logs, the field logs, the taxonomy the Namer authored,
-and each terrain's memory.
+anomaly logs, the shift logs, the taxonomy the Namer authored, and each
+terrain's memory.
+
+The per-shift **field logs** are not in this repository — 133 MB of them would
+not fit, and nothing in the project reads one back. They are archived instead at
+**[10.5281/zenodo.22039882](https://doi.org/10.5281/zenodo.22039882)**, under the same CC0
+dedication, with SHA-256 checksums and the schema written out. They are kept,
+not discarded: they cannot be recovered by re-running, because the harness
+changed in August 2026 and a fresh run no longer produces the same field.
 
 This is dedicated to the public domain, and the reason is verification.
 
@@ -78,6 +85,17 @@ by a person, held by a company, and published under an institution — the same
 shape as any paper with an author and an affiliation.
 
 See [`CITATION.cff`](CITATION.cff) for a formatted citation.
+
+## Where the record lives
+
+| | |
+|---|---|
+| software, documents, classification record | [10.5281/zenodo.22039265](https://doi.org/10.5281/zenodo.22039265) |
+| terrain field logs | [10.5281/zenodo.22039882](https://doi.org/10.5281/zenodo.22039882) |
+
+Both are archived by Zenodo independently of GitHub. The provenance argument
+below rests on the history being checkable by someone who does not trust us, and
+that should not depend on one company continuing to host it.
 
 ## Provenance
 
